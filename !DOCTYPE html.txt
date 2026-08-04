@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trends by AK | Sustainable Luxury. Made Affordable.</title>
+
+  <meta name="description" content="Discover handcrafted scrunchies, waterproof jewellery, gift hampers and stylish accessories from Trends by AK.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+<div class="container">
+
+<div class="logo">
+<img src="assets/logo.png" alt="Trends by AK Logo">
+</div>
+
+<nav>
+
+<a href="#">Home</a>
+<a href="#collections">Collections</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+
+</nav>
+
+</div>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-content">
+
+<h1>Beautiful Accessories.<br>Thoughtfully Curated.</h1>
+
+<p>
+Handcrafted scrunchies, elegant waterproof jewellery and curated gift hampers designed to make every day feel a little more special.
+</p>
+
+<div class="buttons">
+
+<a href="#collections" class="primary-btn">Shop Collection</a>
+
+<a href="https://wa.me/91XXXXXXXXXX" class="secondary-btn">
+WhatsApp Us
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="collections" class="collections">
+
+<h2>Shop by Collection</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>🎀 Scrunchies</h3>
+<p>Luxury satin & everyday styles.</p>
+</div>
+
+<div class="card">
+<h3>💎 Jewellery</h3>
+<p>Elegant waterproof jewellery.</p>
+</div>
+
+<div class="card">
+<h3>🎁 Gift Hampers</h3>
+<p>Thoughtfully curated gifts.</p>
+</div>
+
+<div class="card">
+<h3>✨ Accessories</h3>
+<p>Complete your everyday look.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="about" class="about">
+
+<h2>About Trends by AK</h2>
+
+<p>
+
+At Trends by AK, we believe style should feel effortless, elegant and accessible. Every accessory is thoughtfully selected or handcrafted to bring beauty to everyday moments.
+
+</p>
+
+</section>
+
+<section class="cta">
+
+<h2>Ready to Elevate Your Style?</h2>
+
+<a href="https://wa.me/91XXXXXXXXXX" class="primary-btn">
+
+Order on WhatsApp
+
+</a>
+
+</section>
+
+<footer id="contact">
+
+<h3>Trends by AK</h3>
+
+<p>Sustainable Luxury. Made Affordable.</p>
+
+<p>Instagram: @trendsbyak</p>
+
+</footer>
+
+</body>
+
+</html>
