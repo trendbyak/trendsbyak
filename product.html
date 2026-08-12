@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Product | Trends by AK</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>Trends by AK</h1>
+    </div>
+
+    <nav>
+        <a href="index.html#collections">Collections</a>
+        <a href="index.html#products">Products</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+        <a
+            class="shop-btn"
+            href="https://wa.me/918433998962"
+            target="_blank"
+        >
+            WhatsApp
+        </a>
+    </nav>
+</header>
+
+<main
+    id="productPage"
+    style="
+        max-width:1100px;
+        margin:60px auto;
+        padding:0 20px;
+    "
+>
+    <div class="card" style="padding:30px;text-align:center;">
+        <h2>Loading product...</h2>
+    </div>
+</main>
+
+<script>
+const SUPABASE_URL =
+    "https://ltxrycmreumoqfpcbwnb.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+async function loadProduct() {
+
+    const container =
+        document.getElementById("productPage");
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const productId =
+        params.get("id");
+
+
+    if (!productId) {
+
+        container.innerHTML = `
+            <div class="card" style="padding:40px;text-align:center;">
+                <h2>Product not found</h2>
+                <p>No product was selected.</p>
+                <a href="index.html#products" class="btn">
+                    Back to Products
+                </a>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const { data: products, error } =
+        await supabaseClient
+            .from("products")
+            .select("*");
+
+    console.log("Products returned from Supabase:", products);
+    console.log("Supabase error:", error);
+
+    const product = (products || []).find(
+        item => String(item.id) === String(productId)
+    );
+
+
+    if (error || !product) {
+
+        console.error("Product error:", error);
+
+        container.innerHTML = `
+            <div class="card" style="padding:40px;text-align:center;">
+                <h2>Product not found</h2>
+                <p>We couldn't find this product.</p>
+                <a href="index.html#products" class="btn">
+                    Back to Products
+                </a>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const imageUrl =
+        product.image_url || "";
+
+    const productName =
+        product.name || "Product";
+
+    const category =
+        product.category || "";
+
+    const description =
+        product.description || "";
+
+    const price =
+        product.price || 0;
+
+    const salePrice =
+        product.sale_price || "";
+
+    const stock =
+        Number(product.stock || 0);
+
+    const isOutOfStock =
+        stock <= 0;
+
+
+    document.title =
+        productName + " | Trends by AK";
+
+
+    container.innerHTML = `
+
+        <div
+            style="
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:50px;
+                align-items:start;
+            "
+        >
+
+            <div
+                style="
+                    background:#f8f4ef;
+                    border-radius:18px;
+                    overflow:hidden;
+                "
+            >
+
+                <img
+                    src="${imageUrl}"
+                    alt="${productName}"
+                    style="
+                        width:100%;
+                        display:block;
+                        max-height:600px;
+                        object-fit:cover;
+                    "
+                >
+
+            </div>
+
+
+            <div>
+
+                ${
+                    category
+                        ? `
+                            <p
+                                style="
+                                    color:#b08a50;
+                                    text-transform:uppercase;
+                                    letter-spacing:1px;
+                                    font-size:13px;
+                                    font-weight:600;
+                                    margin:0 0 10px;
+                                "
+                            >
+                                ${category}
+                            </p>
+                        `
+                        : ""
+                }
+
+
+                <h1
+                    style="
+                        font-size:36px;
+                        margin:0 0 15px;
+                    "
+                >
+                    ${productName}
+                </h1>
+
+
+                <div
+                    style="
+                        font-size:25px;
+                        margin:15px 0 20px;
+                    "
+                >
+
+                    ${
+                        salePrice
+                            ? `
+                                <span
+                                    style="
+                                        color:#999;
+                                        text-decoration:line-through;
+                                        font-size:18px;
+                                        margin-right:10px;
+                                    "
+                                >
+                                    ₹${price}
+                                </span>
+
+                                <strong>
+                                    ₹${salePrice}
+                                </strong>
+                            `
+                            : `
+                                <strong>
+                                    ₹${price}
+                                </strong>
+                            `
+                    }
+
+                </div>
+
+
+                ${
+                    description
+                        ? `
+                            <p
+                                style="
+                                    color:#666;
+                                    line-height:1.8;
+                                    font-size:15px;
+                                "
+                            >
+                                ${description}
+                            </p>
+                        `
+                        : ""
+                }
+
+
+                <div
+                    style="
+                        margin:25px 0;
+                        padding:15px;
+                        background:#faf8f5;
+                        border-radius:10px;
+                    "
+                >
+
+                    ${
+                        isOutOfStock
+                            ? `
+                                <strong style="color:#b85c5c;">
+                                    Currently sold out
+                                </strong>
+                            `
+                            : `
+                                <strong style="color:#62815f;">
+                                    ✓ In stock
+                                </strong>
+                                <br>
+                                <small style="color:#777;">
+                                    ${stock} available
+                                </small>
+                            `
+                    }
+
+                </div>
+
+
+                ${
+                    !isOutOfStock
+                        ? `
+                            <a
+                                href="https://wa.me/918433998962?text=${encodeURIComponent(
+                                    "Hi Trends by AK, I would like to order: " +
+                                    productName
+                                )}"
+                                target="_blank"
+                                class="btn"
+                                style="
+                                    display:block;
+                                    text-align:center;
+                                    margin-bottom:12px;
+                                "
+                            >
+                                Order on WhatsApp
+                            </a>
+                        `
+                        : `
+                            <button
+                                disabled
+                                style="
+                                    width:100%;
+                                    padding:14px;
+                                    border:none;
+                                    border-radius:9px;
+                                    background:#ddd;
+                                    color:#777;
+                                "
+                            >
+                                Sold Out
+                            </button>
+                        `
+                }
+
+
+                <a
+                    href="index.html#products"
+                    style="
+                        display:block;
+                        text-align:center;
+                        padding:12px;
+                        text-decoration:none;
+                        color:#555;
+                    "
+                >
+                    ← Back to Products
+                </a>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    if (window.innerWidth < 700) {
+
+        container.firstElementChild.style.gridTemplateColumns =
+            "1fr";
+
+    }
+}
+
+
+loadProduct();
+</script>
+
+</body>
+</html>
