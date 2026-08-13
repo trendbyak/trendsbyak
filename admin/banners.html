@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Banners | Trends by AK</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f5f0;
+    color: #292929;
+}
+
+.header {
+    background: #292929;
+    color: white;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    color: #d1ad72;
+    font-size: 22px;
+}
+
+.back {
+    color: white;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.form-box,
+.manager {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.field {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+}
+
+textarea {
+    min-height: 90px;
+}
+
+.preview {
+    width: 100%;
+    max-width: 700px;
+    height: 250px;
+    object-fit: cover;
+    margin-top: 12px;
+    border-radius: 10px;
+    display: none;
+}
+
+.save-btn {
+    background: #292929;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #d1ad72;
+}
+
+.banner-card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.banner-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.banner-info {
+    padding: 20px;
+}
+
+.banner-info h3 {
+    margin-bottom: 8px;
+}
+
+.banner-info p {
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 9px 16px;
+    border-radius: 7px;
+    color: white;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: #d1ad72;
+}
+
+.delete-btn {
+    background: #b85c5c;
+}
+
+.empty {
+    padding: 30px;
+    text-align: center;
+    background: #faf8f5;
+    color: #777;
+    border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <h1>Trends by AK</h1>
+
+    <a href="index.html" class="back">
+        ← Back to Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- ADD BANNER -->
+
+    <div class="form-box">
+
+        <h2>Homepage Banner</h2>
+
+        <p class="subtitle">
+            Add or change your homepage promotional banners.
+        </p>
+
+
+        <form id="bannerForm">
+
+
+            <div class="field">
+
+                <label>Banner Image</label>
+
+                <input
+                    type="file"
+                    id="bannerImage"
+                    accept="image/*"
+                    required
+                >
+
+                <img
+                    id="preview"
+                    class="preview"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Headline</label>
+
+                <input
+                    type="text"
+                    id="headline"
+                    placeholder="Beautiful Accessories. Thoughtfully Curated."
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Subheading</label>
+
+                <textarea
+                    id="subheading"
+                    placeholder="Handcrafted accessories made with love."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+                Save Banner
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- BANNER MANAGER -->
+
+    <div class="manager">
+
+        <h2>Banner Manager</h2>
+
+        <p class="subtitle">
+            Banners saved for your website.
+        </p>
+
+        <div id="bannerList"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let selectedImage = "";
+
+let editingBannerIndex = undefined;
+
+
+document
+.getElementById("bannerImage")
+.addEventListener("change", function() {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    const img = new Image();
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+
+        img.onload = function() {
+
+            const canvas = document.createElement("canvas");
+
+            const maxWidth = 1200;
+
+            const scale =
+                Math.min(1, maxWidth / img.width);
+
+            canvas.width =
+                img.width * scale;
+
+            canvas.height =
+                img.height * scale;
+
+            const ctx =
+                canvas.getContext("2d");
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            selectedImage =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.7
+                );
+
+            document.getElementById("preview").src =
+                selectedImage;
+
+            document.getElementById("preview").style.display =
+                "block";
+
+        };
+
+        img.src = event.target.result;
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+/* SAVE BANNER */
+
+document.getElementById("bannerForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const headline = document.getElementById("headline").value.trim();
+    const subheading = document.getElementById("subheading").value.trim();
+
+    if (!selectedImage) {
+        alert("Please select a banner image first.");
+        return;
+    }
+
+    const banner = {
+        id: Date.now(),
+        image: selectedImage,
+        headline: headline,
+        subheading: subheading
+    };
+
+    let banners = JSON.parse(
+        localStorage.getItem("trendsbyakBanners")
+    ) || [];
+
+    if (editingBannerIndex !== undefined) {
+
+        banners[editingBannerIndex] = banner;
+        editingBannerIndex = undefined;
+
+    } else {
+
+        banners.push(banner);
+
+    }
+
+    try {
+
+        localStorage.setItem(
+            "trendsbyakBanners",
+            JSON.stringify(banners)
+        );
+
+    } catch (error) {
+
+        alert("The banner image is too large for browser storage. Please use a smaller image.");
+        console.error(error);
+        return;
+
+    }
+
+    alert("Banner saved successfully!");
+
+    this.reset();
+
+    selectedImage = "";
+
+    document.getElementById("preview").src = "";
+    document.getElementById("preview").style.display = "none";
+
+    document.querySelector(".save-btn").textContent = "Save Banner";
+
+    loadBanners();
+
+});
+
+/* LOAD BANNERS */
+
+function loadBanners() {
+
+    const banners =
+        JSON.parse(
+            localStorage.getItem("trendsbyakBanners")
+        ) || [];
+
+
+    const list =
+        document.getElementById("bannerList");
+
+
+    if (banners.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                No banners added yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = banners.map((banner, index) => {
+
+        return `
+
+        <div class="banner-card">
+
+            <img
+                src="${banner.image}"
+                alt="${banner.headline || 'Banner'}"
+            >
+
+            <div class="banner-info">
+
+                <h3>
+                    ${banner.headline || "No headline"}
+                </h3>
+
+                <p>
+                    ${banner.subheading || ""}
+                </p>
+
+                <div class="buttons">
+
+                    <button
+                        class="edit-btn"
+                        onclick="editBanner(${index})"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteBanner(${index})"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* EDIT */
+
+function editBanner(index) {
+
+    const banners =
+        JSON.parse(
+            localStorage.getItem("trendsbyakBanners")
+        ) || [];
+
+
+    const banner = banners[index];
+
+
+    document.getElementById("headline").value =
+        banner.headline || "";
+
+
+    document.getElementById("subheading").value =
+        banner.subheading || "";
+
+
+    selectedImage = banner.image;
+
+
+    document.getElementById("preview").src =
+        banner.image;
+
+
+    document.getElementById("preview").style.display =
+        "block";
+
+
+    editingBannerIndex = index;
+
+
+    document.querySelector(".save-btn").textContent =
+        "Update Banner";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* DELETE */
+
+function deleteBanner(index) {
+
+    const banners =
+        JSON.parse(
+            localStorage.getItem("trendsbyakBanners")
+        ) || [];
+
+
+    if (
+        confirm("Delete this banner?")
+    ) {
+
+        banners.splice(index, 1);
+
+        localStorage.setItem(
+            "trendsbyakBanners",
+            JSON.stringify(banners)
+        );
+
+        loadBanners();
+
+    }
+
+}
+
+
+loadBanners();
+
+</script>
+
+</body>
+</html>

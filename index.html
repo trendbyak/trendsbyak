@@ -3,151 +3,143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trends by AK | Handmade Accessories & Gift Hampers</title>
-
+<title>Trends by AK | Handmade Accessories, Jewellery & Gift Hampers</title>
 <link rel="stylesheet" href="style.css">
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
 
 <header>
-
-<div class="logo">
-<h1>Trends by AK V2</h1>
-</div>
-
+<div class="logo"><h1>Trends by AK</h1></div>
 <nav>
-
 <a href="#collections">Collections</a>
-
+<a href="#products">Products</a>
 <a href="#about">About</a>
-
 <a href="#contact">Contact</a>
-
-<a class="shop-btn" href="https://wa.me/91XXXXXXXXXX">
-WhatsApp
-</a>
-
+<a class="shop-btn" href="https://wa.me/918433998962" target="_blank">WhatsApp</a>
 </nav>
-
 </header>
 
 <section class="hero">
-
 <div class="hero-content">
-
 <h2>Luxury Accessories<br>Made for Everyday Elegance</h2>
-
-<p>
-Handmade scrunchies, waterproof jewellery,
-beautiful gift hampers and timeless accessories,
-crafted with love.
-</p>
-
+<p>Handmade scrunchies, waterproof jewellery, beautiful gift hampers and timeless accessories, crafted with love.</p>
 <div class="hero-buttons">
-
-<a href="#collections" class="btn">
-Shop Collection
-</a>
-
-<a href="https://wa.me/91XXXXXXXXXX" class="btn secondary">
-Chat on WhatsApp
-</a>
-
+<a href="#collections" class="btn">Shop Collection</a>
+<a href="https://wa.me/918433998962" class="btn secondary" target="_blank">Chat on WhatsApp</a>
 </div>
-
 </div>
-
 </section>
 
 <section class="trust">
-
-<div>🚚 Fast Shipping</div>
-
-<div>💎 Premium Quality</div>
-
-<div>🎁 Perfect for Gifting</div>
-
-<div>❤️ Handmade with Love</div>
-
+<div>🚚 Fast Shipping</div><div>💎 Premium Quality</div><div>🎁 Perfect for Gifting</div><div>❤️ Handmade with Love</div>
 </section>
 
 <section id="collections">
-
 <h2>Shop by Category</h2>
-
-<div class="grid">
-
-<div class="card">
-<img src="images/scrunchies.jpg">
-<h3>Scrunchies</h3>
-</div>
-
-<div class="card">
-<img src="images/jewellery.jpg">
-<h3>Jewellery</h3>
-</div>
-
-<div class="card">
-<img src="images/hamper.jpg">
-<h3>Gift Hampers</h3>
-</div>
-
-<div class="card">
-<img src="images/cushion.jpg">
-<h3>Home Decor</h3>
-</div>
-
-</div>
-
+<div class="grid" id="homepageCollections"><div class="card"><h3>Loading collections...</h3></div></div>
 </section>
 
+<section id="products">
+<h2>Featured Products</h2>
+<div class="grid" id="homepageProducts"><div class="card"><h3>Loading products...</h3></div></div>
+</section>
+
+<script>
+const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
+const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+async function loadHomepageProducts(){
+ const container=document.getElementById("homepageProducts");
+ if(!container)return;
+ const {data:products,error}=await supabaseClient.from("products").select("*").order("id",{ascending:false});
+ if(error){
+  console.error("Product loading error:",error);
+  container.innerHTML='<div class="card"><h3>Unable to load products</h3><p>Please try again later.</p></div>';
+  return;
+ }
+ if(!products||products.length===0){
+  container.innerHTML='<div class="card"><h3>Products coming soon</h3></div>';
+  return;
+ }
+ container.innerHTML=products.map(product=>{
+  const imageUrl=product.image_url||"";
+  const name=product.name||"Product";
+  const price=product.price||0;
+  const sale=product.sale_price||"";
+  const category=product.category||"";
+  const description=product.description||"";
+  const productLink="product.html?id="+encodeURIComponent(product.id);
+  const whatsapp="https://wa.me/918433998962?text="+encodeURIComponent("Hi Trends by AK, I would like to order: "+name);
+  return `
+  <div class="card" style="overflow:hidden;">
+   <img src="${imageUrl}" alt="${name}" style="width:100%;height:260px;object-fit:cover;display:block;">
+   <div style="padding:15px;">
+    <h3>${name}</h3>
+    ${category?`<p style="color:#777;margin:5px 0;">${category}</p>`:""}
+    ${description?`<p style="margin:8px 0;color:#777;">${description}</p>`:""}
+    <div style="margin:10px 0;font-size:18px;">
+     ${sale?`<span style="text-decoration:line-through;color:#999;margin-right:8px;">₹${price}</span><strong>₹${sale}</strong>`:`<strong>₹${price}</strong>`}
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+     <a href="${productLink}" class="btn" style="display:inline-block;text-decoration:none;">View Product</a>
+     <a href="${whatsapp}" target="_blank" class="btn secondary" style="display:inline-block;text-decoration:none;">Order on WhatsApp</a>
+    </div>
+   </div>
+  </div>`;
+ }).join("");
+}
+
+async function loadHomepageCollections(){
+ const container=document.getElementById("homepageCollections");
+ if(!container)return;
+ const collections=JSON.parse(localStorage.getItem("trendsbyakCollections"))||[];
+ if(!collections.length){
+  container.innerHTML='<div class="card"><h3>Collections coming soon</h3></div>';
+  return;
+ }
+ container.innerHTML=collections.map(c=>`
+  <div class="card">
+   <img src="${c.image||""}" alt="${c.name||"Collection"}">
+   <h3>${c.name||"Collection"}</h3>
+   ${c.description?`<p>${c.description}</p>`:""}
+  </div>`).join("");
+}
+
+function loadLatestBanner(){
+ const banners=JSON.parse(localStorage.getItem("trendsbyakBanners"))||[];
+ if(!banners.length)return;
+ const b=banners[banners.length-1],hero=document.querySelector(".hero");
+ if(hero&&b.image){hero.style.backgroundImage=`url("${b.image}")`;hero.style.backgroundSize="cover";hero.style.backgroundPosition="center";}
+ const h=document.querySelector(".hero h2"),p=document.querySelector(".hero p");
+ if(h&&b.headline)h.innerHTML=b.headline;
+ if(p&&b.subheading)p.textContent=b.subheading;
+}
+
+loadHomepageProducts();
+loadHomepageCollections();
+loadLatestBanner();
+</script>
+
 <section id="about">
-
 <h2>About Trends by AK</h2>
-
-<p>
-At Trends by AK, every product is thoughtfully curated to
-bring elegance, comfort, and timeless style into everyday
-life. From luxurious satin scrunchies to handcrafted gift
-hampers, our collections are designed to make every
-occasion special.
-</p>
-
+<p>At Trends by AK, every product is thoughtfully curated to bring elegance, comfort, and timeless style into everyday life. From luxurious satin scrunchies to handcrafted gift hampers, our collections are designed to make every occasion special.</p>
 </section>
 
 <section class="cta">
-
 <h2>Looking for Bulk Orders?</h2>
-
-<p>
-Custom gift hampers, return gifts and wholesale scrunchies available.
-</p>
-
-<a href="https://wa.me/91XXXXXXXXXX" class="btn">
-Contact Us
-</a>
-
+<p>Custom gift hampers, return gifts and wholesale scrunchies available.</p>
+<a href="https://wa.me/918433998962" class="btn" target="_blank">Contact Us</a>
 </section>
 
 <section id="contact">
-
 <h2>Let's Connect</h2>
-
 <p>Instagram: @trendsbyak</p>
-
 <p>Email: hello@trendsbyak.in</p>
-
 </section>
 
-<footer>
-
-<p>© 2026 Trends by AK. All Rights Reserved.</p>
-
-</footer>
-
+<footer><p>© 2026 Trends by AK. All Rights Reserved.</p></footer>
 </body>
 </html>
