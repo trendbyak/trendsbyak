@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bulk Products | Trends by AK</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f8f5f1;
+    color:#292929;
+}
+
+.header{
+    background:#292929;
+    color:white;
+    padding:22px 30px;
+}
+
+.header h1{
+    margin:0;
+    font-size:24px;
+}
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 70px);
+}
+
+.sidebar{
+    width:230px;
+    background:#171717;
+    padding:25px 18px;
+}
+
+.sidebar a{
+    display:block;
+    color:#ddd;
+    text-decoration:none;
+    padding:13px 15px;
+    margin-bottom:7px;
+    border-radius:8px;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+    background:#d1ad72;
+    color:white;
+}
+
+.main{
+    flex:1;
+    padding:35px;
+    max-width:1300px;
+}
+
+.box{
+    background:white;
+    padding:28px;
+    border-radius:14px;
+    margin-bottom:25px;
+    box-shadow:0 3px 15px rgba(0,0,0,.05);
+}
+
+h2{
+    margin-top:0;
+}
+
+.gold-btn{
+    background:#d1ad72;
+    color:white;
+    border:0;
+    padding:13px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.secondary{
+    background:#292929;
+}
+
+.file-box{
+    border:2px dashed #d1ad72;
+    padding:35px;
+    text-align:center;
+    border-radius:12px;
+    background:#faf8f5;
+}
+
+input[type=file]{
+    margin:15px 0;
+}
+
+.status{
+    margin-top:15px;
+    padding:13px;
+    border-radius:8px;
+    display:none;
+}
+
+.success{
+    display:block;
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.error{
+    display:block;
+    background:#ffebee;
+    color:#c62828;
+}
+
+.warning{
+    display:block;
+    background:#fff8e1;
+    color:#8a6500;
+}
+
+.table-wrap{
+    overflow:auto;
+    max-height:500px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:900px;
+}
+
+th,td{
+    border-bottom:1px solid #eee;
+    padding:10px;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    background:#292929;
+    color:white;
+    position:sticky;
+    top:0;
+}
+
+.bad{
+    color:#c62828;
+    font-weight:bold;
+}
+
+.good{
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+.summary{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.summary div{
+    background:#faf8f5;
+    padding:15px 20px;
+    border-radius:10px;
+}
+
+.summary strong{
+    display:block;
+    font-size:22px;
+    margin-top:5px;
+}
+
+@media(max-width:700px){
+
+    .layout{
+        display:block;
+    }
+
+    .sidebar{
+        width:100%;
+    }
+
+    .main{
+        padding:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>Trends by AK — Bulk Product Import</h1>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar">
+
+<a href="index.html">🏠 Dashboard</a>
+<a href="products.html">🛍️ Products</a>
+<a href="bulk-products.html" class="active">📥 Bulk Upload</a>
+<a href="collections.html">🎀 Collections</a>
+<a href="banners.html">🖼️ Banners</a>
+<a href="orders.html">📦 Orders</a>
+
+</aside>
+
+<main class="main">
+
+<div class="box">
+
+<h2>Bulk Product Upload</h2>
+
+<p>
+Upload an Excel or CSV file to add multiple products at once.
+</p>
+
+<button
+class="gold-btn"
+onclick="downloadTemplate()">
+Download Excel Template
+</button>
+
+</div>
+
+
+<div class="box">
+
+<h2>1. Upload File</h2>
+
+<div class="file-box">
+
+<p>
+<strong>CSV or Excel</strong>
+</p>
+
+<p>
+Accepted: .csv, .xlsx, .xls
+</p>
+
+<input
+type="file"
+id="fileInput"
+accept=".csv,.xlsx,.xls">
+
+</div>
+
+<div id="status" class="status"></div>
+
+</div>
+
+
+<div
+class="box"
+id="previewBox"
+style="display:none">
+
+<h2>2. Preview & Validate</h2>
+
+<div class="summary">
+
+<div>
+Rows
+<strong id="rowCount">0</strong>
+</div>
+
+<div>
+Valid
+<strong id="validCount">0</strong>
+</div>
+
+<div>
+Errors
+<strong id="errorCount">0</strong>
+</div>
+
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Row</th>
+<th>SKU</th>
+<th>Name</th>
+<th>Price</th>
+<th>Sale Price</th>
+<th>Category</th>
+<th>Stock</th>
+<th>Collection</th>
+<th>Status</th>
+<th>Validation</th>
+
+</tr>
+
+</thead>
+
+<tbody id="previewBody"></tbody>
+
+</table>
+
+</div>
+
+<br>
+
+<button
+id="importButton"
+class="gold-btn"
+onclick="importProducts()"
+disabled>
+
+Import Products
+
+</button>
+
+</div>
+
+
+<div
+class="box"
+id="resultBox"
+style="display:none">
+
+<h2>Import Result</h2>
+
+<div id="resultText"></div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<script>
+
+/* ================================
+   SUPABASE
+================================ */
+
+const SUPABASE_URL =
+"https://ltxrycmreumoqfpcbwnb.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* ================================
+   VARIABLES
+================================ */
+
+let importedRows = [];
+let validRows = [];
+
+
+/* ================================
+   TEMPLATE
+================================ */
+
+function downloadTemplate(){
+
+    const data = [
+
+        {
+            sku:"TBK-SCR-001",
+            name:"Premium Satin Scrunchie",
+            price:45,
+            sale_price:35,
+            category:"Scrunchies",
+            stock:20,
+            description:"Premium satin scrunchie.",
+            image_url:"",
+            collection:"Best Sellers",
+            status:"active"
+        },
+
+        {
+            sku:"TBK-JWL-001",
+            name:"Anti Tarnish Necklace",
+            price:599,
+            sale_price:499,
+            category:"Jewellery",
+            stock:10,
+            description:"Elegant anti-tarnish necklace.",
+            image_url:"",
+            collection:"Jewellery",
+            status:"active"
+        }
+
+    ];
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(data);
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Products"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        "Trends-by-AK-Product-Template.xlsx"
+    );
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+function showStatus(message,type){
+
+    const box =
+        document.getElementById("status");
+
+    box.textContent = message;
+
+    box.className =
+        "status " + type;
+}
+
+
+/* ================================
+   FILE UPLOAD
+================================ */
+
+document
+.getElementById("fileInput")
+.addEventListener(
+    "change",
+    handleFile
+);
+
+
+function handleFile(event){
+
+    const file =
+        event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload =
+        function(e){
+
+            try{
+
+                const workbook =
+                    XLSX.read(
+                        e.target.result,
+                        {
+                            type:"array"
+                        }
+                    );
+
+                const firstSheet =
+                    workbook.Sheets[
+                        workbook.SheetNames[0]
+                    ];
+
+                const rows =
+                    XLSX.utils.sheet_to_json(
+                        firstSheet,
+                        {
+                            defval:""
+                        }
+                    );
+
+                importedRows = rows;
+
+                validateRows(rows);
+
+            }catch(error){
+
+                console.error(error);
+
+                showStatus(
+                    "Could not read the file.",
+                    "error"
+                );
+
+            }
+
+        };
+
+    reader.readAsArrayBuffer(file);
+}
+
+
+/* ================================
+   VALIDATION
+================================ */
+
+function validateRows(rows){
+
+    validRows = [];
+
+    const preview =
+        document.getElementById(
+            "previewBody"
+        );
+
+    preview.innerHTML = "";
+
+    let errors = 0;
+
+    const skuSet = new Set();
+
+    rows.forEach(
+        function(row,index){
+
+            const rowNumber =
+                index + 2;
+
+            const sku =
+                String(
+                    row.sku || ""
+                ).trim();
+
+            const name =
+                String(
+                    row.name || ""
+                ).trim();
+
+            const price =
+                Number(
+                    row.price
+                );
+
+            const salePrice =
+                row.sale_price === ""
+                    ? null
+                    : Number(
+                        row.sale_price
+                    );
+
+            const category =
+                String(
+                    row.category || ""
+                ).trim();
+
+            const stock =
+                Number(
+                    row.stock
+                );
+
+            let rowErrors = [];
+
+            if(!sku){
+
+                rowErrors.push(
+                    "SKU missing"
+                );
+
+            }
+
+            if(!name){
+
+                rowErrors.push(
+                    "Name missing"
+                );
+
+            }
+
+            if(
+                !Number.isFinite(price) ||
+                price < 0
+            ){
+
+                rowErrors.push(
+                    "Invalid price"
+                );
+
+            }
+
+            if(
+                salePrice !== null &&
+                (
+                    !Number.isFinite(
+                        salePrice
+                    ) ||
+                    salePrice < 0
+                )
+            ){
+
+                rowErrors.push(
+                    "Invalid sale price"
+                );
+
+            }
+
+            if(
+                salePrice !== null &&
+                salePrice > price
+            ){
+
+                rowErrors.push(
+                    "Sale price > price"
+                );
+
+            }
+
+            if(!category){
+
+                rowErrors.push(
+                    "Category missing"
+                );
+
+            }
+
+            if(
+                !Number.isFinite(stock) ||
+                stock < 0
+            ){
+
+                rowErrors.push(
+                    "Invalid stock"
+                );
+
+            }
+
+            if(
+                sku &&
+                skuSet.has(
+                    sku.toLowerCase()
+                )
+            ){
+
+                rowErrors.push(
+                    "Duplicate SKU in file"
+                );
+
+            }
+
+            if(sku){
+
+                skuSet.add(
+                    sku.toLowerCase()
+                );
+
+            }
+
+            const valid =
+                rowErrors.length === 0;
+
+            if(valid){
+
+                validRows.push({
+
+                    sku,
+                    name,
+                    price,
+                    sale_price:
+                        salePrice,
+                    category,
+                    stock,
+                    description:
+                        String(
+                            row.description || ""
+                        ),
+                    image_url:
+                        String(
+                            row.image_url || ""
+                        ),
+                    collection:
+                        String(
+                            row.collection || ""
+                        ),
+                    status:
+                        String(
+                            row.status || "active"
+                        )
+
+                });
+
+            }else{
+
+                errors++;
+
+            }
+
+            const tr =
+                document.createElement("tr");
+
+            tr.innerHTML = `
+
+                <td>${rowNumber}</td>
+
+                <td>${escapeHtml(sku)}</td>
+
+                <td>${escapeHtml(name)}</td>
+
+                <td>₹${Number.isFinite(price) ? price : "-"}</td>
+
+                <td>
+                    ${
+                        salePrice !== null &&
+                        Number.isFinite(salePrice)
+                        ? "₹" + salePrice
+                        : "-"
+                    }
+                </td>
+
+                <td>${escapeHtml(category)}</td>
+
+                <td>${Number.isFinite(stock) ? stock : "-"}</td>
+
+                <td>${escapeHtml(String(row.collection || ""))}</td>
+
+                <td>${escapeHtml(String(row.status || "active"))}</td>
+
+                <td class="${valid ? "good" : "bad"}">
+                    ${
+                        valid
+                        ? "✓ Ready"
+                        : rowErrors.join(", ")
+                    }
+                </td>
+
+            `;
+
+            preview.appendChild(tr);
+
+        }
+    );
+
+
+    document.getElementById(
+        "previewBox"
+    ).style.display = "block";
+
+    document.getElementById(
+        "rowCount"
+    ).textContent = rows.length;
+
+    document.getElementById(
+        "validCount"
+    ).textContent = validRows.length;
+
+    document.getElementById(
+        "errorCount"
+    ).textContent = errors;
+
+    const importButton =
+        document.getElementById(
+            "importButton"
+        );
+
+    importButton.disabled =
+        validRows.length === 0 ||
+        errors > 0;
+
+    if(errors > 0){
+
+        showStatus(
+            errors +
+            " row(s) need fixing before import.",
+            "warning"
+        );
+
+    }else{
+
+        showStatus(
+            rows.length +
+            " product(s) ready to import.",
+            "success"
+        );
+
+    }
+
+}
+
+
+/* ================================
+   IMPORT
+================================ */
+
+async function importProducts(){
+
+    if(validRows.length === 0){
+
+        return;
+
+    }
+
+    const button =
+        document.getElementById(
+            "importButton"
+        );
+
+    button.disabled = true;
+
+    button.textContent =
+        "Importing...";
+
+    try{
+
+        /*
+         * Check authentication.
+         */
+
+        const {
+            data:{
+                user
+            }
+        } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+        if(!user){
+
+            throw new Error(
+                "Please log in to the admin account before importing products."
+            );
+
+        }
+
+
+        /*
+         * Check existing SKUs.
+         */
+
+        const skus =
+            validRows.map(
+                row => row.sku
+            );
+
+        const {
+            data:existing,
+            error:existingError
+        } =
+        await supabaseClient
+            .from("products")
+            .select("sku")
+            .in(
+                "sku",
+                skus
+            );
+
+        if(existingError){
+
+            throw existingError;
+
+        }
+
+
+        const existingSkus =
+            new Set(
+                (existing || [])
+                .map(
+                    row =>
+                    String(row.sku)
+                    .toLowerCase()
+                )
+            );
+
+
+        const duplicates =
+            validRows.filter(
+                row =>
+                existingSkus.has(
+                    row.sku.toLowerCase()
+                )
+            );
+
+
+        if(duplicates.length){
+
+            throw new Error(
+                "These SKU(s) already exist: " +
+                duplicates
+                .map(row => row.sku)
+                .join(", ")
+            );
+
+        }
+
+
+        /*
+         * Insert products.
+         */
+
+        const {
+            error
+        } =
+        await supabaseClient
+            .from("products")
+            .insert(
+                validRows
+            );
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        document.getElementById(
+            "resultBox"
+        ).style.display = "block";
+
+        document.getElementById(
+            "resultText"
+        ).innerHTML = `
+            <div class="success">
+                Successfully imported
+                <strong>
+                    ${validRows.length}
+                </strong>
+                product(s).
+            </div>
+        `;
+
+        showStatus(
+            "Import completed successfully.",
+            "success"
+        );
+
+        button.textContent =
+            "Imported ✓";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showStatus(
+            error.message ||
+            "Import failed.",
+            "error"
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+            "Import Products";
+
+    }
+
+}
+
+
+/* ================================
+   HTML ESCAPE
+================================ */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

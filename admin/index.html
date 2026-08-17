@@ -233,6 +233,8 @@ body {
 
         <a href="products.html" class="menu-link">
             🛍️ <span>Products</span>
+            <a href="bulk-products.html" class="menu-link">
+    📥 <span>Bulk Upload</span>
         </a>
 
 
@@ -245,9 +247,9 @@ body {
     🖼️ <span>Banners</span>
 </a>
 
-        <button>
-            📦 <span>Orders</span>
-        </button>
+       <a href="orders.html" class="menu-link">
+    📦 <span>Orders</span>
+</a>
 
 
         <button>
@@ -282,6 +284,20 @@ body {
 
         <a href="../index.html" class="view-store">
             View Store →
+            <button
+    onclick="logoutAdmin()"
+    style="
+        background:#292929;
+        color:white;
+        border:0;
+        padding:11px 18px;
+        border-radius:25px;
+        cursor:pointer;
+        margin-left:10px;
+    "
+>
+    Logout
+</button>
         </a>
 
     </div>
@@ -370,6 +386,55 @@ body {
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+const ADMIN_SUPABASE_URL =
+    "https://ltxrycmreumoqfpcbwnb.supabase.co";
+
+const ADMIN_SUPABASE_KEY =
+    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+const adminSupabase =
+    window.supabase.createClient(
+        ADMIN_SUPABASE_URL,
+        ADMIN_SUPABASE_KEY
+    );
+
+
+async function protectAdminPage() {
+
+    const {
+        data: {
+            session
+        }
+    } =
+    await adminSupabase
+        .auth
+        .getSession();
+
+    if (!session) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+}
+
+
+protectAdminPage();
+
+
+async function logoutAdmin() {
+
+    await adminSupabase
+        .auth
+        .signOut();
+
+    window.location.href =
+        "login.html";
+
+}
 
 <script>
 
