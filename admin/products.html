@@ -4,152 +4,756 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product Manager | Trends by AK</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f7f4ef;color:#222;font-family:Arial,sans-serif}
-header{background:#171717;color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between}
-header h1{margin:0;font-size:21px}
-header a{color:#fff;text-decoration:none;font-size:14px}
-main{max-width:1200px;margin:30px auto;padding:0 20px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-h2{margin:0;font-size:28px}
-.btn{border:0;border-radius:7px;padding:11px 17px;cursor:pointer;font-weight:600}
-.primary{background:#b28a4b;color:#fff}
-.secondary{background:#fff;border:1px solid #ddd}
-.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:22px;box-shadow:0 3px 15px #0000000b}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.field{display:flex;flex-direction:column;gap:7px}
-.field.full{grid-column:1/-1}
-label{font-size:13px;font-weight:600}
-input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:7px;font:inherit;background:#fff}
-textarea{min-height:100px;resize:vertical}
-.image-options{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.image-option{padding:9px 13px;border:1px solid #ddd;background:#fff;border-radius:7px;cursor:pointer;font-size:13px}
-.image-option.active{background:#171717;color:#fff;border-color:#171717}
-.image-panel{border:1px solid #e4e0d9;border-radius:9px;padding:14px;background:#faf9f6}
-.hidden{display:none!important}
-.upload-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.file-name{font-size:13px;color:#777}
-.preview{margin-top:12px;width:130px;height:130px;border-radius:9px;border:1px solid #ddd;object-fit:cover;background:#f5f5f5;display:none}
-.help{font-size:12px;color:#777;line-height:1.5}
-.actions{display:flex;gap:10px;margin-top:20px}
-#message{margin-bottom:18px;padding:12px;border-radius:7px;display:none;font-size:14px}
-.success{background:#edf7ed;color:#356b35}
-.error{background:#fff0f0;color:#9b3030}
-.table-wrap{overflow:auto}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:13px;border-bottom:1px solid #eee;font-size:13px;vertical-align:middle}
-th{font-size:12px;color:#777;text-transform:uppercase}
-.thumb{width:55px;height:55px;border-radius:6px;object-fit:cover;background:#f3f3f3}
-.small-btn{border:1px solid #ddd;background:#fff;padding:7px 10px;border-radius:6px;cursor:pointer;margin-right:5px}
-.delete{color:#a33}
-@media(max-width:700px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{gap:12px;align-items:flex-start}.actions{flex-wrap:wrap}}
+
+body{
+  margin:0;
+  background:#f7f4ef;
+  color:#222;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  background:#171717;
+  color:#fff;
+  padding:18px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+header h1{
+  margin:0;
+  font-size:21px;
+}
+
+header a{
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+}
+
+main{
+  max-width:1200px;
+  margin:30px auto;
+  padding:0 20px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  gap:15px;
+}
+
+h2{
+  margin:0;
+  font-size:28px;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:22px;
+  box-shadow:0 3px 15px #0000000b;
+}
+
+.btn{
+  border:0;
+  border-radius:7px;
+  padding:11px 17px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.primary{
+  background:#b28a4b;
+  color:#fff;
+}
+
+.secondary{
+  background:#fff;
+  border:1px solid #ddd;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:13px;
+  font-weight:600;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  font:inherit;
+  background:#fff;
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.help{
+  font-size:12px;
+  color:#777;
+  line-height:1.5;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+#message{
+  margin-bottom:18px;
+  padding:12px;
+  border-radius:7px;
+  display:none;
+  font-size:14px;
+}
+
+.success{
+  background:#edf7ed;
+  color:#356b35;
+}
+
+.error{
+  background:#fff0f0;
+  color:#9b3030;
+}
+
+/* IMPORTER */
+
+.importer-card{
+  border:1px solid #eadfce;
+}
+
+.importer-title{
+  margin:0 0 6px;
+  font-size:20px;
+}
+
+.import-row{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+}
+
+.import-row input{
+  flex:1;
+}
+
+.import-preview{
+  margin-top:20px;
+  border-top:1px solid #eee;
+  padding-top:20px;
+}
+
+.import-product-grid{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:18px;
+  margin-top:15px;
+}
+
+.import-image{
+  width:150px;
+  height:150px;
+  object-fit:cover;
+  border-radius:9px;
+  border:1px solid #ddd;
+  background:#f5f5f5;
+}
+
+.import-name{
+  font-size:18px;
+  font-weight:700;
+}
+
+.import-meta{
+  color:#777;
+  margin-top:6px;
+}
+
+.import-description{
+  margin-top:12px;
+  line-height:1.5;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* IMAGE */
+
+.image-options{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+
+.image-option{
+  padding:9px 13px;
+  border:1px solid #ddd;
+  background:#fff;
+  border-radius:7px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.image-option.active{
+  background:#171717;
+  color:#fff;
+  border-color:#171717;
+}
+
+.image-panel{
+  border:1px solid #e4e0d9;
+  border-radius:9px;
+  padding:14px;
+  background:#faf9f6;
+}
+
+.upload-row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.file-name{
+  font-size:13px;
+  color:#777;
+}
+
+.preview{
+  margin-top:12px;
+  width:130px;
+  height:130px;
+  border-radius:9px;
+  border:1px solid #ddd;
+  object-fit:cover;
+  background:#f5f5f5;
+  display:none;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,
+td{
+  text-align:left;
+  padding:13px;
+  border-bottom:1px solid #eee;
+  font-size:13px;
+  vertical-align:middle;
+}
+
+th{
+  font-size:12px;
+  color:#777;
+  text-transform:uppercase;
+}
+
+.thumb{
+  width:55px;
+  height:55px;
+  border-radius:6px;
+  object-fit:cover;
+  background:#f3f3f3;
+}
+
+.small-btn{
+  border:1px solid #ddd;
+  background:#fff;
+  padding:7px 10px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-right:5px;
+}
+
+.delete{
+  color:#a33;
+}
+
+@media(max-width:700px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .top{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .import-row{
+    flex-direction:column;
+  }
+
+  .import-product-grid{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header>
   <h1>Trends by AK — Product Manager</h1>
-  <a href="index.html">← Admin Dashboard</a>
+
+  <a href="index.html">
+    ← Admin Dashboard
+  </a>
 </header>
 
 <main>
+
   <div class="top">
     <div>
       <h2>Products</h2>
-      <div style="color:#777;margin-top:5px;font-size:14px">Add and manage products in your Supabase database.</div>
+      <div style="color:#777;margin-top:5px;font-size:14px">
+        Add, import and manage products.
+      </div>
     </div>
-    <button class="btn primary" onclick="newProduct()">+ Add Product</button>
+
+    <button
+      class="btn primary"
+      type="button"
+      onclick="newProduct()"
+    >
+      + Add Product
+    </button>
   </div>
 
   <div id="message"></div>
 
-  <section class="card">
-    <form id="productForm">
-      <input type="hidden" id="productId">
+  <!-- PRODUCT IMPORTER -->
 
-      <div class="grid">
-        <div class="field">
-          <label>Product Name *</label>
-          <input id="name" required placeholder="e.g. Premium Satin Scrunchie">
+  <section class="card importer-card">
+
+    <h3 class="importer-title">
+      Import Product
+    </h3>
+
+    <div class="help">
+      Paste a product page URL and we'll fetch the available
+      product information for you to review before saving.
+    </div>
+
+    <div class="import-row">
+
+      <input
+        id="importUrl"
+        type="url"
+        placeholder="https://example.com/product/..."
+      >
+
+      <button
+        type="button"
+        class="btn primary"
+        id="importBtn"
+        onclick="importProduct()"
+      >
+        🔍 Fetch Product
+      </button>
+
+    </div>
+
+    <div class="help" style="margin-top:10px">
+      Works best with websites containing standard product
+      information such as product name, price, image and description.
+    </div>
+
+    <div
+      id="importPreview"
+      class="import-preview hidden"
+    >
+
+      <strong>Imported Product Preview</strong>
+
+      <div class="import-product-grid">
+
+        <div>
+          <img
+            id="importImage"
+            class="import-image"
+            alt="Imported product"
+          >
         </div>
 
-        <div class="field">
-          <label>Category</label>
-          <input id="category" placeholder="Scrunchies, Jewellery, Hampers...">
+        <div>
+
+          <div
+            id="importName"
+            class="import-name"
+          ></div>
+
+          <div
+            id="importMeta"
+            class="import-meta"
+          ></div>
+
+          <div
+            id="importDescription"
+            class="import-description"
+          ></div>
+
         </div>
 
-        <div class="field">
-          <label>Price *</label>
-          <input id="price" type="number" min="0" step="0.01" required placeholder="499">
-        </div>
-
-        <div class="field">
-          <label>Sale Price</label>
-          <input id="salePrice" type="number" min="0" step="0.01" placeholder="399">
-        </div>
-
-        <div class="field">
-          <label>Stock</label>
-          <input id="stock" type="number" min="0" value="0">
-        </div>
-
-        <div class="field">
-          <label>Status</label>
-          <select id="status">
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label>Product Image</label>
-
-          <div class="image-options">
-            <button type="button" class="image-option active" id="tabUpload" onclick="showImageMode('upload')">📁 Upload from Computer</button>
-            <button type="button" class="image-option" id="tabUrl" onclick="showImageMode('url')">🔗 Image URL</button>
-            <button type="button" class="image-option" id="tabDrive" onclick="showImageMode('drive')">☁️ Google Drive</button>
-          </div>
-
-          <div class="image-panel" id="uploadPanel">
-            <div class="upload-row">
-              <input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp,image/gif">
-              <span class="file-name" id="fileName">No image selected</span>
-            </div>
-            <div class="help">Choose an image from your computer. It will be uploaded to the Supabase <b>product-images</b> bucket.</div>
-          </div>
-
-          <div class="image-panel hidden" id="urlPanel">
-            <input id="imageUrl" placeholder="https://example.com/product-image.jpg">
-            <div class="help">Paste a direct image URL.</div>
-          </div>
-
-          <div class="image-panel hidden" id="drivePanel">
-            <input id="driveUrl" placeholder="https://drive.google.com/file/d/FILE_ID/view">
-            <div class="help">The Google Drive file must be shared as <b>Anyone with the link</b>. The file will be used as the product image.</div>
-          </div>
-
-          <img id="preview" class="preview" alt="Image preview">
-        </div>
-
-        <div class="field full">
-          <label>Description</label>
-          <textarea id="description" placeholder="Describe your product..."></textarea>
-        </div>
       </div>
 
       <div class="actions">
-        <button class="btn primary" type="submit" id="saveBtn">Save Product</button>
-        <button class="btn secondary" type="button" onclick="newProduct()">Clear</button>
+
+        <button
+          type="button"
+          class="btn primary"
+          onclick="useImportedProduct()"
+        >
+          Use This Product
+        </button>
+
+        <button
+          type="button"
+          class="btn secondary"
+          onclick="clearImport()"
+        >
+          Cancel
+        </button>
+
       </div>
-    </form>
+
+    </div>
+
   </section>
 
+
+  <!-- PRODUCT FORM -->
+
   <section class="card">
+
+    <form id="productForm">
+
+      <input
+        type="hidden"
+        id="productId"
+      >
+
+      <div class="grid">
+
+        <div class="field">
+
+          <label>
+            Product Name *
+          </label>
+
+          <input
+            id="name"
+            required
+            placeholder="e.g. Premium Satin Scrunchie"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Category
+          </label>
+
+          <input
+            id="category"
+            placeholder="Scrunchies, Jewellery, Hampers..."
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Price *
+          </label>
+
+          <input
+            id="price"
+            type="number"
+            min="0"
+            step="0.01"
+            required
+            placeholder="499"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Sale Price
+          </label>
+
+          <input
+            id="salePrice"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="399"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Stock
+          </label>
+
+          <input
+            id="stock"
+            type="number"
+            min="0"
+            value="0"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Status
+          </label>
+
+          <select id="status">
+
+            <option value="active">
+              Active
+            </option>
+
+            <option value="inactive">
+              Inactive
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- IMAGE -->
+
+        <div class="field full">
+
+          <label>
+            Product Image
+          </label>
+
+          <div class="image-options">
+
+            <button
+              type="button"
+              class="image-option active"
+              id="tabUpload"
+              onclick="showImageMode('upload')"
+            >
+              📤 Upload from Computer
+            </button>
+
+            <button
+              type="button"
+              class="image-option"
+              id="tabUrl"
+              onclick="showImageMode('url')"
+            >
+              🔗 Image URL
+            </button>
+
+            <button
+              type="button"
+              class="image-option"
+              id="tabDrive"
+              onclick="showImageMode('drive')"
+            >
+              ☁️ Google Drive
+            </button>
+
+          </div>
+
+
+          <div
+            class="image-panel"
+            id="uploadPanel"
+          >
+
+            <div class="upload-row">
+
+              <input
+                type="file"
+                id="imageFile"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+              >
+
+              <span
+                class="file-name"
+                id="fileName"
+              >
+                No image selected
+              </span>
+
+            </div>
+
+            <div class="help">
+              Image will be uploaded to the
+              Supabase <b>product-images</b> bucket.
+            </div>
+
+          </div>
+
+
+          <div
+            class="image-panel hidden"
+            id="urlPanel"
+          >
+
+            <input
+              id="imageUrl"
+              placeholder="https://example.com/product-image.jpg"
+            >
+
+            <div class="help">
+              Paste a direct image URL.
+            </div>
+
+          </div>
+
+
+          <div
+            class="image-panel hidden"
+            id="drivePanel"
+          >
+
+            <input
+              id="driveUrl"
+              placeholder="https://drive.google.com/file/d/FILE_ID/view"
+            >
+
+            <div class="help">
+              Google Drive file must be shared as
+              <b>Anyone with the link</b>.
+            </div>
+
+          </div>
+
+
+          <img
+            id="preview"
+            class="preview"
+            alt="Product preview"
+          >
+
+        </div>
+
+
+        <div class="field full">
+
+          <label>
+            Description
+          </label>
+
+          <textarea
+            id="description"
+            placeholder="Describe your product..."
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn primary"
+          type="submit"
+          id="saveBtn"
+        >
+          Save Product
+        </button>
+
+        <button
+          class="btn secondary"
+          type="button"
+          onclick="newProduct()"
+        >
+          Clear
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- PRODUCT TABLE -->
+
+  <section class="card">
+
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Image</th>
             <th>Product</th>
@@ -159,286 +763,1234 @@ th{font-size:12px;color:#777;text-transform:uppercase}
             <th>Status</th>
             <th>Actions</th>
           </tr>
+
         </thead>
+
         <tbody id="productsBody">
-          <tr><td colspan="7" style="text-align:center;padding:35px">Loading products...</td></tr>
+
+          <tr>
+            <td
+              colspan="7"
+              style="text-align:center;padding:35px"
+            >
+              Loading products...
+            </td>
+          </tr>
+
         </tbody>
+
       </table>
+
     </div>
+
   </section>
+
 </main>
 
+
 <script>
-const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
-const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let imageMode="upload";
-let products=[];
+/* =========================================
+   SUPABASE
+========================================= */
 
-function $(id){return document.getElementById(id)}
+const SUPABASE_URL =
+  "https://ltxrycmreumoqfpcbwnb.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+
+/* =========================================
+   STATE
+========================================= */
+
+let imageMode = "upload";
+let products = [];
+let importedProduct = null;
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
 
 function message(text,type="success"){
-  const el=$("message");
-  el.textContent=text;
-  el.className=type;
-  el.style.display="block";
+
+  const el = $("message");
+
+  el.textContent = text;
+
+  el.className = type;
+
+  el.style.display = "block";
+
   clearTimeout(window.msgTimer);
-  window.msgTimer=setTimeout(()=>el.style.display="none",5000);
-  window.scrollTo({top:0,behavior:"smooth"});
-}
 
-function escapeHtml(v){
-  return String(v??"").replace(/[&<>"']/g,m=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
+  window.msgTimer = setTimeout(()=>{
+    el.style.display = "none";
+  },5000);
 
-function showImageMode(mode){
-  imageMode=mode;
-  ["upload","url","drive"].forEach(x=>{
-    $(x+"Panel").classList.toggle("hidden",x!==mode);
-    $("tab"+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle("active",x===mode);
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
   });
 }
 
-$("imageFile").addEventListener("change",function(){
-  const file=this.files[0];
-  $("fileName").textContent=file?file.name:"No image selected";
-  if(file){
-    $("preview").src=URL.createObjectURL(file);
-    $("preview").style.display="block";
-  }
-});
 
-$("imageUrl").addEventListener("input",function(){
-  if(this.value.trim()){
-    $("preview").src=this.value.trim();
-    $("preview").style.display="block";
-  }
-});
+function escapeHtml(value){
 
-$("driveUrl").addEventListener("input",function(){
-  const url=driveToImageUrl(this.value.trim());
-  if(url){
-    $("preview").src=url;
-    $("preview").style.display="block";
+  return String(value ?? "")
+    .replace(/[&<>"']/g,m=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[m]));
+
+}
+
+
+/* =========================================
+   AUTH
+========================================= */
+
+async function requireAdmin(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient.auth.getSession();
+
+  if(error || !data.session){
+
+    window.location.href = "login.html";
+
+    return false;
   }
-});
+
+  return true;
+}
+
+
+/* =========================================
+   IMAGE MODE
+========================================= */
+
+function showImageMode(mode){
+
+  imageMode = mode;
+
+  ["upload","url","drive"].forEach(x=>{
+
+    $(x+"Panel")
+      .classList
+      .toggle("hidden",x !== mode);
+
+    $("tab"+x.charAt(0).toUpperCase()+x.slice(1))
+      .classList
+      .toggle("active",x === mode);
+
+  });
+
+}
+
+
+/* =========================================
+   IMAGE PREVIEW
+========================================= */
+
+$("imageFile").addEventListener(
+  "change",
+  function(){
+
+    const file = this.files[0];
+
+    $("fileName").textContent =
+      file
+      ? file.name
+      : "No image selected";
+
+    if(file){
+
+      $("preview").src =
+        URL.createObjectURL(file);
+
+      $("preview").style.display =
+        "block";
+
+    }
+
+  }
+);
+
+
+$("imageUrl").addEventListener(
+  "input",
+  function(){
+
+    const url = this.value.trim();
+
+    if(url){
+
+      $("preview").src = url;
+
+      $("preview").style.display =
+        "block";
+
+    }
+
+  }
+);
+
+
+$("driveUrl").addEventListener(
+  "input",
+  function(){
+
+    const url =
+      driveToImageUrl(
+        this.value.trim()
+      );
+
+    if(url){
+
+      $("preview").src = url;
+
+      $("preview").style.display =
+        "block";
+
+    }
+
+  }
+);
+
 
 function driveToImageUrl(url){
-  if(!url)return "";
-  const match=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if(match)return "https://drive.google.com/uc?export=view&id="+match[1];
-  const id=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if(id)return "https://drive.google.com/uc?export=view&id="+id[1];
+
+  if(!url) return "";
+
+  const match =
+    url.match(
+      /\/d\/([a-zA-Z0-9_-]+)/
+    );
+
+  if(match){
+
+    return (
+      "https://drive.google.com/uc?export=view&id="
+      + match[1]
+    );
+
+  }
+
+  const id =
+    url.match(
+      /[?&]id=([a-zA-Z0-9_-]+)/
+    );
+
+  if(id){
+
+    return (
+      "https://drive.google.com/uc?export=view&id="
+      + id[1]
+    );
+
+  }
+
   return url;
 }
 
-async function uploadImage(file){
-  if(!file)throw new Error("Please choose an image.");
 
-  if(!file.type.startsWith("image/")){
-    throw new Error("Please choose an image file.");
-  }
+/* =========================================
+   PRODUCT IMPORTER
+========================================= */
 
-  const ext=(file.name.split(".").pop()||"jpg").toLowerCase();
-  const filePath="products/"+Date.now()+"-"+Math.random().toString(36).slice(2)+"."+ext;
+async function importProduct(){
 
-  const {error}=await supabaseClient.storage
-    .from("product-images")
-    .upload(filePath,file,{cacheControl:"3600",upsert:false});
+  const url =
+    $("importUrl").value.trim();
 
-  if(error){
-    throw new Error(
-      "Image upload failed: "+error.message+
-      ". Check that the public 'product-images' bucket exists and upload permission is enabled."
+  const btn =
+    $("importBtn");
+
+  if(!url){
+
+    message(
+      "Please paste a product URL.",
+      "error"
     );
-  }
 
-  const {data}=supabaseClient.storage
-    .from("product-images")
-    .getPublicUrl(filePath);
-
-  return data.publicUrl;
-}
-
-async function getImageUrl(){
-  if(imageMode==="url"){
-    const url=$("imageUrl").value.trim();
-    if(!url)throw new Error("Please enter an image URL.");
-    return url;
-  }
-
-  if(imageMode==="drive"){
-    const url=driveToImageUrl($("driveUrl").value.trim());
-    if(!url)throw new Error("Please enter a Google Drive link.");
-    return url;
-  }
-
-  const file=$("imageFile").files[0];
-  if(!file){
-    const old=products.find(p=>String(p.id)===String($("productId").value));
-    return old?.image_url||"";
-  }
-  return await uploadImage(file);
-}
-
-async function loadProducts(){
-  const {data,error}=await supabaseClient
-    .from("products")
-    .select("*")
-    .order("created_at",{ascending:false});
-
-  if(error){
-    $("productsBody").innerHTML=
-      `<tr><td colspan="7" style="color:#a33;text-align:center;padding:35px">${escapeHtml(error.message)}</td></tr>`;
     return;
   }
 
-  products=data||[];
-  renderProducts();
-}
-
-function renderProducts(){
-  if(!products.length){
-    $("productsBody").innerHTML=
-      `<tr><td colspan="7" style="text-align:center;padding:35px;color:#777">No products added yet.</td></tr>`;
-    return;
-  }
-
-  $("productsBody").innerHTML=products.map(p=>{
-    const image=p.image_url
-      ? `<img class="thumb" src="${escapeHtml(p.image_url)}" onerror="this.style.display='none'">`
-      : `<div class="thumb"></div>`;
-
-    const price=Number(p.sale_price??p.price??0);
-    return `<tr>
-      <td>${image}</td>
-      <td><b>${escapeHtml(p.name)}</b></td>
-      <td>${escapeHtml(p.category||"-")}</td>
-      <td>₹${price.toLocaleString("en-IN")}</td>
-      <td>${Number(p.stock||0)}</td>
-      <td>${escapeHtml(p.status||"active")}</td>
-      <td>
-        <button class="small-btn" onclick="editProduct('${String(p.id).replace(/'/g,"\\'")}')">Edit</button>
-        <button class="small-btn delete" onclick="deleteProduct('${String(p.id).replace(/'/g,"\\'")}')">Delete</button>
-      </td>
-    </tr>`;
-  }).join("");
-}
-
-async function saveProduct(e){
-  e.preventDefault();
-
-  const save=$("saveBtn");
-  save.disabled=true;
-  save.textContent="Saving...";
 
   try{
-    const imageUrl=await getImageUrl();
 
-    const payload={
-      name:$("name").value.trim(),
-      category:$("category").value.trim(),
-      price:Number($("price").value||0),
-      sale_price:$("salePrice").value===""?null:Number($("salePrice").value),
-      stock:Number($("stock").value||0),
-      status:$("status").value,
-      image_url:imageUrl,
-      description:$("description").value.trim()
+    new URL(url);
+
+  }catch{
+
+    message(
+      "Please enter a valid product URL.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  btn.disabled = true;
+
+  btn.textContent =
+    "Fetching...";
+
+
+  $("importPreview")
+    .classList
+    .add("hidden");
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.functions.invoke(
+      "import-product",
+      {
+        body:{
+          url:url
+        }
+      }
+    );
+
+
+    console.log(
+      "IMPORT RESPONSE:",
+      data
+    );
+
+    console.log(
+      "IMPORT ERROR:",
+      error
+    );
+
+
+    if(error){
+
+      throw new Error(
+        error.message ||
+        "Could not import the product."
+      );
+
+    }
+
+
+    if(!data){
+
+      throw new Error(
+        "The importer returned no data."
+      );
+
+    }
+
+
+    if(data.error){
+
+      throw new Error(
+        data.error
+      );
+
+    }
+
+
+    importedProduct = data;
+
+
+    $("importName").textContent =
+      data.name ||
+      "Unnamed product";
+
+
+    let meta = "";
+
+
+    if(data.price != null){
+
+      meta +=
+        "₹" +
+        Number(data.price)
+          .toLocaleString("en-IN");
+
+    }else{
+
+      meta +=
+        "Price not found";
+
+    }
+
+
+    if(data.brand){
+
+      meta +=
+        " • " +
+        data.brand;
+
+    }
+
+
+    if(data.sku){
+
+      meta +=
+        " • SKU: " +
+        data.sku;
+
+    }
+
+
+    $("importMeta").textContent =
+      meta;
+
+
+    $("importDescription").textContent =
+      data.description ||
+      "No description found.";
+
+
+    if(data.image_url){
+
+      $("importImage").src =
+        data.image_url;
+
+      $("importImage").style.display =
+        "block";
+
+    }else{
+
+      $("importImage")
+        .removeAttribute("src");
+
+      $("importImage").style.display =
+        "none";
+
+    }
+
+
+    $("importPreview")
+      .classList
+      .remove("hidden");
+
+
+    message(
+      "Product imported. Review it before saving."
+    );
+
+
+  }catch(err){
+
+    console.error(
+      "PRODUCT IMPORT ERROR:",
+      err
+    );
+
+    message(
+      err.message ||
+      "Could not import this product.",
+      "error"
+    );
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "🔍 Fetch Product";
+
+  }
+
+}
+
+
+/* =========================================
+   USE IMPORTED PRODUCT
+========================================= */
+
+function useImportedProduct(){
+
+  if(!importedProduct)
+    return;
+
+
+  $("productId").value = "";
+
+  $("name").value =
+    importedProduct.name || "";
+
+
+  $("category").value = "";
+
+
+  $("price").value =
+    importedProduct.price ?? "";
+
+
+  $("salePrice").value =
+    importedProduct.sale_price ?? "";
+
+
+  $("stock").value = 0;
+
+
+  /*
+    Imported products start inactive.
+    You can change to Active before saving.
+  */
+
+  $("status").value =
+    "inactive";
+
+
+  $("description").value =
+    importedProduct.description || "";
+
+
+  if(importedProduct.image_url){
+
+    $("imageUrl").value =
+      importedProduct.image_url;
+
+    $("preview").src =
+      importedProduct.image_url;
+
+    $("preview").style.display =
+      "block";
+
+    showImageMode("url");
+
+  }
+
+
+  $("saveBtn").textContent =
+    "Save Imported Product";
+
+
+  $("importPreview")
+    .classList
+    .add("hidden");
+
+
+  window.scrollTo({
+    top:$("productForm").offsetTop - 20,
+    behavior:"smooth"
+  });
+
+
+  message(
+    "Imported product loaded into the form. Review and save it."
+  );
+
+}
+
+
+function clearImport(){
+
+  importedProduct = null;
+
+  $("importPreview")
+    .classList
+    .add("hidden");
+
+  $("importUrl").value = "";
+
+}
+
+
+/* =========================================
+   IMAGE UPLOAD
+========================================= */
+
+async function uploadImage(file){
+
+  if(!file){
+
+    throw new Error(
+      "Please choose an image."
+    );
+
+  }
+
+
+  if(!file.type.startsWith("image/")){
+
+    throw new Error(
+      "Please choose an image file."
+    );
+
+  }
+
+
+  const ext =
+    (
+      file.name
+        .split(".")
+        .pop() ||
+      "jpg"
+    ).toLowerCase();
+
+
+  const filePath =
+    "products/" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2) +
+    "." +
+    ext;
+
+
+  const {
+    error
+  } =
+  await supabaseClient.storage
+    .from("product-images")
+    .upload(
+      filePath,
+      file,
+      {
+        cacheControl:"3600",
+        upsert:false
+      }
+    );
+
+
+  if(error){
+
+    throw new Error(
+      "Image upload failed: " +
+      error.message
+    );
+
+  }
+
+
+  const {
+    data
+  } =
+  supabaseClient.storage
+    .from("product-images")
+    .getPublicUrl(
+      filePath
+    );
+
+
+  return data.publicUrl;
+
+}
+
+
+/* =========================================
+   GET IMAGE
+========================================= */
+
+async function getImageUrl(){
+
+  if(imageMode === "url"){
+
+    const url =
+      $("imageUrl")
+        .value
+        .trim();
+
+    if(!url){
+
+      throw new Error(
+        "Please enter an image URL."
+      );
+
+    }
+
+    return url;
+
+  }
+
+
+  if(imageMode === "drive"){
+
+    const url =
+      driveToImageUrl(
+        $("driveUrl")
+          .value
+          .trim()
+      );
+
+    if(!url){
+
+      throw new Error(
+        "Please enter a Google Drive link."
+      );
+
+    }
+
+    return url;
+
+  }
+
+
+  const file =
+    $("imageFile").files[0];
+
+
+  if(!file){
+
+    const old =
+      products.find(
+        p =>
+          String(p.id) ===
+          String($("productId").value)
+      );
+
+    return old?.image_url || "";
+
+  }
+
+
+  return await uploadImage(file);
+
+}
+
+
+/* =========================================
+   LOAD PRODUCTS
+========================================= */
+
+async function loadProducts(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("products")
+    .select("*")
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    );
+
+
+  if(error){
+
+    $("productsBody").innerHTML =
+      `
+      <tr>
+        <td
+          colspan="7"
+          style="color:#a33;text-align:center;padding:35px"
+        >
+          ${escapeHtml(error.message)}
+        </td>
+      </tr>
+      `;
+
+    return;
+
+  }
+
+
+  products = data || [];
+
+  renderProducts();
+
+}
+
+
+/* =========================================
+   RENDER PRODUCTS
+========================================= */
+
+function renderProducts(){
+
+  if(!products.length){
+
+    $("productsBody").innerHTML =
+      `
+      <tr>
+        <td
+          colspan="7"
+          style="text-align:center;padding:35px;color:#777"
+        >
+          No products added yet.
+        </td>
+      </tr>
+      `;
+
+    return;
+
+  }
+
+
+  $("productsBody").innerHTML =
+    products.map(p=>{
+
+      const image =
+        p.image_url
+
+        ?
+
+        `
+        <img
+          class="thumb"
+          src="${escapeHtml(p.image_url)}"
+          onerror="this.style.display='none'"
+        >
+        `
+
+        :
+
+        `
+        <div class="thumb"></div>
+        `;
+
+
+      const price =
+        Number(
+          p.sale_price ??
+          p.price ??
+          0
+        );
+
+
+      return `
+        <tr>
+
+          <td>
+            ${image}
+          </td>
+
+          <td>
+            <b>
+              ${escapeHtml(p.name)}
+            </b>
+          </td>
+
+          <td>
+            ${escapeHtml(p.category || "-")}
+          </td>
+
+          <td>
+            ₹${price.toLocaleString("en-IN")}
+          </td>
+
+          <td>
+            ${Number(p.stock || 0)}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              p.status || "active"
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="small-btn"
+              onclick="editProduct('${String(p.id).replace(/'/g,"\\'")}')"
+            >
+              Edit
+            </button>
+
+            <button
+              class="small-btn delete"
+              onclick="deleteProduct('${String(p.id).replace(/'/g,"\\'")}')"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================
+   SAVE PRODUCT
+========================================= */
+
+async function saveProduct(e){
+
+  e.preventDefault();
+
+
+  const save =
+    $("saveBtn");
+
+
+  save.disabled = true;
+
+  save.textContent =
+    "Saving...";
+
+
+  try{
+
+    const imageUrl =
+      await getImageUrl();
+
+
+    const payload = {
+
+      name:
+        $("name")
+          .value
+          .trim(),
+
+      category:
+        $("category")
+          .value
+          .trim(),
+
+      price:
+        Number(
+          $("price").value || 0
+        ),
+
+      sale_price:
+        $("salePrice").value === ""
+          ? null
+          : Number(
+              $("salePrice").value
+            ),
+
+      stock:
+        Number(
+          $("stock").value || 0
+        ),
+
+      status:
+        $("status").value,
+
+      image_url:
+        imageUrl,
+
+      description:
+        $("description")
+          .value
+          .trim()
+
     };
 
-    if(!payload.name)throw new Error("Product name is required.");
 
-    const id=$("productId").value;
+    if(!payload.name){
+
+      throw new Error(
+        "Product name is required."
+      );
+
+    }
+
+
+    const id =
+      $("productId").value;
+
 
     let result;
 
+
     if(id){
-      result=await supabaseClient
-        .from("products")
-        .update(payload)
-        .eq("id",id);
+
+      result =
+        await supabaseClient
+          .from("products")
+          .update(payload)
+          .eq("id",id);
+
     }else{
-      result=await supabaseClient
-        .from("products")
-        .insert(payload);
+
+      result =
+        await supabaseClient
+          .from("products")
+          .insert(payload);
+
     }
 
-    if(result.error)throw result.error;
 
-    message(id?"Product updated successfully.":"Product added successfully.");
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    message(
+      id
+        ? "Product updated successfully."
+        : "Product added successfully."
+    );
+
+
     newProduct();
+
+
     await loadProducts();
 
+
   }catch(err){
-    console.error(err);
-    message(err.message||"Could not save product.","error");
+
+    console.error(
+      "SAVE PRODUCT ERROR:",
+      err
+    );
+
+
+    message(
+      err.message ||
+      "Could not save product.",
+      "error"
+    );
+
+
   }finally{
-    save.disabled=false;
-    save.textContent="Save Product";
+
+    save.disabled = false;
+
+    save.textContent =
+      "Save Product";
+
   }
+
 }
+
+
+/* =========================================
+   EDIT
+========================================= */
 
 function editProduct(id){
-  const p=products.find(x=>String(x.id)===String(id));
-  if(!p)return;
 
-  $("productId").value=p.id;
-  $("name").value=p.name||"";
-  $("category").value=p.category||"";
-  $("price").value=p.price??"";
-  $("salePrice").value=p.sale_price??"";
-  $("stock").value=p.stock??0;
-  $("status").value=p.status||"active";
-  $("description").value=p.description||"";
+  const p =
+    products.find(
+      x =>
+        String(x.id) ===
+        String(id)
+    );
+
+
+  if(!p)
+    return;
+
+
+  $("productId").value =
+    p.id;
+
+
+  $("name").value =
+    p.name || "";
+
+
+  $("category").value =
+    p.category || "";
+
+
+  $("price").value =
+    p.price ?? "";
+
+
+  $("salePrice").value =
+    p.sale_price ?? "";
+
+
+  $("stock").value =
+    p.stock ?? 0;
+
+
+  $("status").value =
+    p.status || "active";
+
+
+  $("description").value =
+    p.description || "";
+
 
   if(p.image_url){
-    $("preview").src=p.image_url;
-    $("preview").style.display="block";
-    $("imageUrl").value=p.image_url;
+
+    $("preview").src =
+      p.image_url;
+
+    $("preview").style.display =
+      "block";
+
+    $("imageUrl").value =
+      p.image_url;
+
   }
 
+
   showImageMode("url");
-  $("saveBtn").textContent="Update Product";
-  window.scrollTo({top:0,behavior:"smooth"});
+
+
+  $("saveBtn").textContent =
+    "Update Product";
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
 }
 
+
+/* =========================================
+   DELETE
+========================================= */
+
 async function deleteProduct(id){
-  const p=products.find(x=>String(x.id)===String(id));
-  if(!p)return;
 
-  if(!confirm("Delete '"+p.name+"'?"))return;
+  const p =
+    products.find(
+      x =>
+        String(x.id) ===
+        String(id)
+    );
 
-  const {error}=await supabaseClient
+
+  if(!p)
+    return;
+
+
+  if(
+    !confirm(
+      "Delete '" +
+      p.name +
+      "'?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  const {
+    error
+  } =
+  await supabaseClient
     .from("products")
     .delete()
     .eq("id",id);
 
+
   if(error){
-    message(error.message,"error");
+
+    message(
+      error.message,
+      "error"
+    );
+
     return;
+
   }
 
-  message("Product deleted.");
-  loadProducts();
+
+  message(
+    "Product deleted."
+  );
+
+
+  await loadProducts();
+
 }
+
+
+/* =========================================
+   CLEAR / NEW PRODUCT
+========================================= */
 
 function newProduct(){
+
   $("productForm").reset();
-  $("productId").value="";
-  $("stock").value=0;
-  $("status").value="active";
-  $("fileName").textContent="No image selected";
-  $("preview").style.display="none";
-  $("preview").removeAttribute("src");
-  $("saveBtn").textContent="Save Product";
-  showImageMode("upload");
+
+  $("productId").value = "";
+
+  $("stock").value = 0;
+
+  $("status").value =
+    "active";
+
+  $("fileName").textContent =
+    "No image selected";
+
+  $("preview").style.display =
+    "none";
+
+  $("preview")
+    .removeAttribute("src");
+
+  $("saveBtn").textContent =
+    "Save Product";
+
+  showImageMode(
+    "upload"
+  );
+
 }
 
-$("productForm").addEventListener("submit",saveProduct);
-loadProducts();
+
+/* =========================================
+   START
+========================================= */
+
+$("productForm")
+  .addEventListener(
+    "submit",
+    saveProduct
+  );
+
+
+(async function(){
+
+  const authenticated =
+    await requireAdmin();
+
+
+  if(!authenticated)
+    return;
+
+
+  await loadProducts();
+
+})();
+
 </script>
+
 </body>
 </html>
