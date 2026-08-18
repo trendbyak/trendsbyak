@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Instagram Reels | Trends by AK</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#f7f4ef;
+  color:#222;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  background:#171717;
+  color:#fff;
+  padding:18px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+header h1{
+  margin:0;
+  font-size:21px;
+}
+
+header a{
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+}
+
+main{
+  max-width:1100px;
+  margin:30px auto;
+  padding:0 20px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+  gap:15px;
+}
+
+h2{
+  margin:0;
+  font-size:28px;
+}
+
+.subtitle{
+  color:#777;
+  margin-top:5px;
+  font-size:14px;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:22px;
+  box-shadow:0 3px 15px #0000000b;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:13px;
+  font-weight:600;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  font:inherit;
+  background:#fff;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.help{
+  color:#777;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+.btn{
+  border:0;
+  border-radius:7px;
+  padding:11px 17px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.primary{
+  background:#b28a4b;
+  color:#fff;
+}
+
+.secondary{
+  background:#fff;
+  border:1px solid #ddd;
+}
+
+#message{
+  display:none;
+  padding:12px;
+  border-radius:7px;
+  margin-bottom:18px;
+  font-size:14px;
+}
+
+.success{
+  background:#edf7ed;
+  color:#356b35;
+}
+
+.error{
+  background:#fff0f0;
+  color:#9b3030;
+}
+
+/* REEL LIST */
+
+.reel-list{
+  display:grid;
+  gap:15px;
+}
+
+.reel{
+  border:1px solid #eee;
+  border-radius:10px;
+  padding:16px;
+  display:grid;
+  grid-template-columns:90px 1fr auto;
+  gap:16px;
+  align-items:center;
+}
+
+.reel-thumb{
+  width:90px;
+  height:120px;
+  border-radius:8px;
+  object-fit:cover;
+  background:#eee;
+}
+
+.reel-info{
+  min-width:0;
+}
+
+.reel-title{
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.reel-url{
+  font-size:12px;
+  color:#777;
+  word-break:break-all;
+}
+
+.reel-caption{
+  font-size:13px;
+  color:#666;
+  margin-top:8px;
+  line-height:1.4;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:11px;
+  margin-top:9px;
+}
+
+.active{
+  background:#edf7ed;
+  color:#356b35;
+}
+
+.inactive{
+  background:#f1f1f1;
+  color:#777;
+}
+
+.reel-actions{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.small-btn{
+  border:1px solid #ddd;
+  background:#fff;
+  padding:7px 10px;
+  border-radius:6px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.delete{
+  color:#a33;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:35px;
+}
+
+@media(max-width:700px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .top{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .reel{
+    grid-template-columns:70px 1fr;
+  }
+
+  .reel-thumb{
+    width:70px;
+    height:95px;
+  }
+
+  .reel-actions{
+    grid-column:1/-1;
+    flex-direction:row;
+    flex-wrap:wrap;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <h1>
+    Trends by AK — Instagram Reels
+  </h1>
+
+  <a href="index.html">
+    ← Admin Dashboard
+  </a>
+
+</header>
+
+<main>
+
+  <div class="top">
+
+    <div>
+      <h2>Instagram Reels</h2>
+
+      <div class="subtitle">
+        Add Reels that should appear on your main website.
+      </div>
+    </div>
+
+  </div>
+
+  <div id="message"></div>
+
+
+  <!-- ADD / EDIT -->
+
+  <section class="card">
+
+    <form id="reelForm">
+
+      <input
+        type="hidden"
+        id="reelId"
+      >
+
+      <div class="grid">
+
+        <div class="field full">
+
+          <label>
+            Instagram Reel URL *
+          </label>
+
+          <input
+            id="reelUrl"
+            type="url"
+            required
+            placeholder="https://www.instagram.com/reel/XXXXXXXXXXX/"
+          >
+
+          <div class="help">
+            Paste the full Instagram Reel URL.
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Title
+          </label>
+
+          <input
+            id="title"
+            placeholder="New Jewellery Collection"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Display Order
+          </label>
+
+          <input
+            id="displayOrder"
+            type="number"
+            value="0"
+          >
+
+          <div class="help">
+            Lower numbers appear first.
+          </div>
+
+        </div>
+
+
+        <div class="field full">
+
+          <label>
+            Caption
+          </label>
+
+          <textarea
+            id="caption"
+            placeholder="Short description for this Reel..."
+          ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Thumbnail URL
+          </label>
+
+          <input
+            id="thumbnailUrl"
+            type="url"
+            placeholder="Optional image URL"
+          >
+
+          <div class="help">
+            Optional. Instagram's thumbnail can also be used later.
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Status
+          </label>
+
+          <select id="isActive">
+
+            <option value="true">
+              Active — Show on website
+            </option>
+
+            <option value="false">
+              Inactive — Hide from website
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn primary"
+          id="saveBtn"
+          type="submit"
+        >
+          Save Reel
+        </button>
+
+        <button
+          class="btn secondary"
+          type="button"
+          onclick="newReel()"
+        >
+          Clear
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- REELS -->
+
+  <section class="card">
+
+    <h3 style="margin-top:0">
+      Your Reels
+    </h3>
+
+    <div
+      id="reelList"
+      class="reel-list"
+    >
+
+      <div class="empty">
+        Loading Reels...
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+const SUPABASE_URL =
+  "https://ltxrycmreumoqfpcbwnb.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/[&<>"']/g,m=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[m]));
+
+}
+
+
+function message(text,type="success"){
+
+  const el = $("message");
+
+  el.textContent = text;
+
+  el.className = type;
+
+  el.style.display = "block";
+
+  clearTimeout(window.messageTimer);
+
+  window.messageTimer =
+    setTimeout(()=>{
+      el.style.display = "none";
+    },5000);
+
+}
+
+
+/* =========================================
+   AUTH
+========================================= */
+
+async function requireAdmin(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient.auth.getSession();
+
+  if(error || !data.session){
+
+    window.location.href =
+      "login.html";
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+
+/* =========================================
+   LOAD REELS
+========================================= */
+
+async function loadReels(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("instagram_reels")
+    .select("*")
+    .order(
+      "display_order",
+      {
+        ascending:true
+      }
+    )
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    $("reelList").innerHTML =
+      `
+      <div class="empty" style="color:#a33">
+        ${escapeHtml(error.message)}
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  renderReels(data || []);
+
+}
+
+
+/* =========================================
+   RENDER
+========================================= */
+
+function renderReels(reels){
+
+  if(!reels.length){
+
+    $("reelList").innerHTML =
+      `
+      <div class="empty">
+        No Instagram Reels added yet.
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  $("reelList").innerHTML =
+    reels.map(reel=>{
+
+      const thumb =
+        reel.thumbnail_url
+          ? reel.thumbnail_url
+          : "";
+
+
+      return `
+        <div class="reel">
+
+          ${
+            thumb
+
+            ?
+
+            `
+            <img
+              class="reel-thumb"
+              src="${escapeHtml(thumb)}"
+              alt=""
+              onerror="this.style.display='none'"
+            >
+            `
+
+            :
+
+            `
+            <div class="reel-thumb"></div>
+            `
+          }
+
+
+          <div class="reel-info">
+
+            <div class="reel-title">
+              ${escapeHtml(
+                reel.title ||
+                "Instagram Reel"
+              )}
+            </div>
+
+            <div class="reel-url">
+              ${escapeHtml(
+                reel.reel_url
+              )}
+            </div>
+
+            ${
+              reel.caption
+
+              ?
+
+              `
+              <div class="reel-caption">
+                ${escapeHtml(
+                  reel.caption
+                )}
+              </div>
+              `
+
+              :
+
+              ""
+            }
+
+            <span
+              class="badge ${
+                reel.is_active
+                  ? "active"
+                  : "inactive"
+              }"
+            >
+              ${
+                reel.is_active
+                  ? "Active"
+                  : "Inactive"
+              }
+            </span>
+
+          </div>
+
+
+          <div class="reel-actions">
+
+            <button
+              class="small-btn"
+              onclick="editReel('${reel.id}')"
+            >
+              Edit
+            </button>
+
+            <button
+              class="small-btn"
+              onclick="toggleReel('${reel.id}',${!reel.is_active})"
+            >
+              ${
+                reel.is_active
+                  ? "Hide"
+                  : "Show"
+              }
+            </button>
+
+            <button
+              class="small-btn delete"
+              onclick="deleteReel('${reel.id}')"
+            >
+              Delete
+            </button>
+
+            <a
+              class="small-btn"
+              href="${escapeHtml(reel.reel_url)}"
+              target="_blank"
+              rel="noopener"
+            >
+              Open Reel
+            </a>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+async function saveReel(e){
+
+  e.preventDefault();
+
+  const save =
+    $("saveBtn");
+
+  save.disabled = true;
+
+  save.textContent =
+    "Saving...";
+
+
+  try{
+
+    const reelUrl =
+      $("reelUrl")
+        .value
+        .trim();
+
+
+    if(!reelUrl){
+
+      throw new Error(
+        "Instagram Reel URL is required."
+      );
+
+    }
+
+
+    if(
+      !reelUrl.includes(
+        "instagram.com/reel/"
+      )
+    ){
+
+      throw new Error(
+        "Please enter a valid Instagram Reel URL."
+      );
+
+    }
+
+
+    const payload = {
+
+      reel_url:
+        reelUrl,
+
+      title:
+        $("title")
+          .value
+          .trim() || null,
+
+      caption:
+        $("caption")
+          .value
+          .trim() || null,
+
+      thumbnail_url:
+        $("thumbnailUrl")
+          .value
+          .trim() || null,
+
+      is_active:
+        $("isActive").value === "true",
+
+      display_order:
+        Number(
+          $("displayOrder").value || 0
+        )
+
+    };
+
+
+    const id =
+      $("reelId").value;
+
+
+    let result;
+
+
+    if(id){
+
+      result =
+        await supabaseClient
+          .from("instagram_reels")
+          .update(payload)
+          .eq("id",id);
+
+    }else{
+
+      result =
+        await supabaseClient
+          .from("instagram_reels")
+          .insert(payload);
+
+    }
+
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    message(
+      id
+        ? "Reel updated successfully."
+        : "Reel added successfully."
+    );
+
+
+    newReel();
+
+    await loadReels();
+
+
+  }catch(err){
+
+    console.error(err);
+
+    message(
+      err.message ||
+      "Could not save Reel.",
+      "error"
+    );
+
+  }finally{
+
+    save.disabled = false;
+
+    save.textContent =
+      "Save Reel";
+
+  }
+
+}
+
+
+/* =========================================
+   EDIT
+========================================= */
+
+async function editReel(id){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("instagram_reels")
+    .select("*")
+    .eq("id",id)
+    .maybeSingle();
+
+
+  if(error || !data){
+
+    message(
+      error?.message ||
+      "Reel not found.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  $("reelId").value =
+    data.id;
+
+  $("reelUrl").value =
+    data.reel_url || "";
+
+  $("title").value =
+    data.title || "";
+
+  $("caption").value =
+    data.caption || "";
+
+  $("thumbnailUrl").value =
+    data.thumbnail_url || "";
+
+  $("displayOrder").value =
+    data.display_order ?? 0;
+
+  $("isActive").value =
+    data.is_active
+      ? "true"
+      : "false";
+
+
+  $("saveBtn").textContent =
+    "Update Reel";
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================================
+   TOGGLE
+========================================= */
+
+async function toggleReel(id,status){
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("instagram_reels")
+    .update({
+      is_active:status
+    })
+    .eq("id",id);
+
+
+  if(error){
+
+    message(
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  message(
+    status
+      ? "Reel is now visible."
+      : "Reel hidden."
+  );
+
+
+  await loadReels();
+
+}
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+async function deleteReel(id){
+
+  if(
+    !confirm(
+      "Delete this Instagram Reel?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("instagram_reels")
+    .delete()
+    .eq("id",id);
+
+
+  if(error){
+
+    message(
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  message(
+    "Reel deleted."
+  );
+
+
+  await loadReels();
+
+}
+
+
+/* =========================================
+   NEW
+========================================= */
+
+function newReel(){
+
+  $("reelForm").reset();
+
+  $("reelId").value = "";
+
+  $("displayOrder").value = 0;
+
+  $("isActive").value = "true";
+
+  $("saveBtn").textContent =
+    "Save Reel";
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+$("reelForm")
+  .addEventListener(
+    "submit",
+    saveReel
+  );
+
+
+(async function(){
+
+  const authenticated =
+    await requireAdmin();
+
+  if(!authenticated)
+    return;
+
+  await loadReels();
+
+})();
+
+</script>
+
+</body>
+</html>

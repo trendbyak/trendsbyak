@@ -491,13 +491,19 @@ function productImage(url, name) {
         onerror="this.parentElement.innerHTML='<div class=&quot;product-placeholder&quot;><span>AK</span></div>';">`;
 }
 
-async function loadHomepageProducts() {
+async function loadHomepageProducts(collectionFilter = "") {
     const container = document.getElementById("homepageProducts");
 
-    const { data: products, error } = await supabaseClient
-        .from("products")
-        .select("*")
-        .order("id", { ascending: false });
+let query = supabaseClient
+    .from("products")
+    .select("*")
+    .order("id", { ascending: false });
+
+if (collectionFilter) {
+    query = query.eq("category", collectionFilter);
+}
+
+const { data: products, error } = await query;
 
     if (error) {
         console.error("Product loading error:", error);
@@ -562,13 +568,147 @@ async function loadHomepageProducts() {
     }).join("");
 }
 
-function loadHomepageCollections() {
+ async function loadHomepageCollections() {
     const container = document.getElementById("homepageCollections");
-    const saved = JSON.parse(localStorage.getItem("trendsbyakCollections")) || [];
 
-    if (!saved.length) return;
+    if (!container) return;
 
-    container.innerHTML = saved.slice(0, 4).map((collection, index) => {
+    const { data: collections, error } = await supabaseClient
+        .from("collections")
+        .select("*")
+        .order("id", { ascending: false })
+        .limit(4);
+
+    if (error) {
+        console.error("Collections loading error:", error);
+        return;
+    }
+
+    if (!collections || collections.length === 0) {
+        return;
+    }
+
+    container.innerHTML = collections.map((collection, index) => {
+
+        const name = escapeHtml(
+            collection.name || "Collection"
+        );
+
+        const description = escapeHtml(
+            collection.description || "Explore the collection"
+        );
+
+        const image =
+            collection.image_url ||
+            collection.image ||
+            "";
+
+        const number =
+            String(index + 1).padStart(2, "0");
+
+        return `
+            <a
+                class="collection-card"
+                href="#products"
+                data-collection="${escapeHtml(collection.name || "")}"
+            >
+
+                <div class="collection-art ${image ? "has-image" : ""}">
+
+                    ${
+                        image
+                        ? `
+                            <img
+                                src="${escapeHtml(image)}"
+                                alt="${name}"
+                                loading="lazy"
+                                onerror="this.style.display='none'"
+                            >
+                          `
+                        : `
+                            <span>${number}</span>
+                          `
+                    }
+
+                </div>
+
+                <div>
+                    <span>${number}</span>
+
+                    <h3>${name}</h3>
+
+                    <p>${description}</p>
+                </div>
+
+            </a>
+        `;
+
+    }).join("");
+
+    // When a collection is clicked,
+    // filter homepage products by that collection.
+    container
+        .querySelectorAll(".collection-card")
+        .forEach(card => {
+
+            card.addEventListener("click", function() {
+
+                const collectionName =
+                    this.dataset.collection;
+
+                if (!collectionName) return;
+
+                loadHomepageProducts(collectionName);
+
+            });
+
+        });
+}
+    const container = document.getElementById("homepageCollections");
+
+    const { data: collections, error } = await supabaseClient
+        .from("collections")
+        .select("*")
+        .order("id", { ascending: true });
+
+    if (error) {
+        console.error("Collection loading error:", error);
+        return;
+    }
+
+    // Keep the existing fallback cards if no collections exist
+    if (!collections || collections.length === 0) {
+        return;
+    }
+
+    container.innerHTML = collections.slice(0, 4).map((collection, index) => {
+        const name = escapeHtml(collection.name || "Collection");
+        const description = escapeHtml(
+            collection.description || "Explore the collection"
+        );
+        const image = collection.image_url || "";
+
+        return `
+            <a class="collection-card" href="#products">
+                <div class="collection-art ${image ? "has-image" : ""}">
+                    ${
+                        image
+                            ? `<img src="${escapeHtml(image)}"
+                                alt="${name}"
+                                loading="lazy">`
+                            : `<span>${String(index + 1).padStart(2, "0")}</span>`
+                    }
+                </div>
+
+                <div>
+                    <span>${String(index + 1).padStart(2, "0")}</span>
+                    <h3>${name}</h3>
+                    <p>${description}</p>
+                </div>
+            </a>
+        `;
+    }).join("");
+}
         const name = escapeHtml(collection.name || "Collection");
         const description = escapeHtml(collection.description || "Explore the collection");
         const image = collection.image || "";
