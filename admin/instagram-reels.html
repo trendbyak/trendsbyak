@@ -784,143 +784,26 @@ function renderReels(reels){
    SAVE
 ========================================= */
 
-async function saveReel(e){
-
-  e.preventDefault();
-
-  const save =
-    $("saveBtn");
-
-  save.disabled = true;
-
-  save.textContent =
-    "Saving...";
-
-
-  try{
-
-    const reelUrl =
-      $("reelUrl")
-        .value
-        .trim();
-
-
-    if(!reelUrl){
-
-      throw new Error(
-        "Instagram Reel URL is required."
-      );
-
-    }
-
-
-  const instagramUrlPattern =
-  /^https?:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[A-Za-z0-9_-]+/i;
-
-if(!instagramUrlPattern.test(reelUrl)){
+if(!reelUrl){
 
   throw new Error(
-    "Please enter a valid Instagram URL."
+    "Instagram URL is required."
   );
 
 }
 
-    const payload = {
+const parsedUrl = new URL(reelUrl);
 
-      reel_url:
-        reelUrl,
+if(
+  parsedUrl.hostname !== "instagram.com" &&
+  parsedUrl.hostname !== "www.instagram.com"
+){
 
-      title:
-        $("title")
-          .value
-          .trim() || null,
-
-      caption:
-        $("caption")
-          .value
-          .trim() || null,
-
-      thumbnail_url:
-        $("thumbnailUrl")
-          .value
-          .trim() || null,
-
-      is_active:
-        $("isActive").value === "true",
-
-      display_order:
-        Number(
-          $("displayOrder").value || 0
-        )
-
-    };
-
-
-    const id =
-      $("reelId").value;
-
-
-    let result;
-
-
-    if(id){
-
-      result =
-        await supabaseClient
-          .from("instagram_reels")
-          .update(payload)
-          .eq("id",id);
-
-    }else{
-
-      result =
-        await supabaseClient
-          .from("instagram_reels")
-          .insert(payload);
-
-    }
-
-
-    if(result.error){
-
-      throw result.error;
-
-    }
-
-
-    message(
-      id
-        ? "Reel updated successfully."
-        : "Reel added successfully."
-    );
-
-
-    newReel();
-
-    await loadReels();
-
-
-  }catch(err){
-
-    console.error(err);
-
-    message(
-      err.message ||
-      "Could not save Reel.",
-      "error"
-    );
-
-  }finally{
-
-    save.disabled = false;
-
-    save.textContent =
-      "Save Reel";
-
-  }
+  throw new Error(
+    "Please enter an Instagram URL."
+  );
 
 }
-
 
 /* =========================================
    EDIT
