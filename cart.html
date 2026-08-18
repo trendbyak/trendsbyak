@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart | Trends by AK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f7f4ef;color:#1d1b19;font-family:"DM Sans",Arial,sans-serif}
+header{background:#171717;color:#fff;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-family:"Playfair Display",serif;font-size:24px;font-weight:600;color:#fff;text-decoration:none}
+.nav{display:flex;align-items:center;gap:18px}
+.nav a{color:#fff;text-decoration:none;font-size:14px}
+main{max-width:1050px;margin:45px auto;padding:0 20px}
+h1{font-family:"Playfair Display",serif;font-size:38px;margin:0 0 8px}
+.subtitle{color:#777;margin-bottom:30px}
+.layout{display:grid;grid-template-columns:1fr 340px;gap:24px}
+.card{background:#fff;border:1px solid #ebe6de;border-radius:14px;box-shadow:0 8px 25px #00000008}
+.cart-list{padding:8px 22px}
+.item{display:grid;grid-template-columns:90px 1fr auto;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid #eee}
+.item:last-child{border-bottom:0}
+.item img{width:90px;height:90px;border-radius:10px;object-fit:cover;background:#f2f0ec}
+.item-name{font-weight:700;font-size:16px;margin-bottom:7px}
+.item-price{font-size:14px;color:#777}
+.qty{display:flex;align-items:center;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-top:12px;width:max-content}
+.qty button{width:32px;height:32px;border:0;background:#fff;cursor:pointer;font-size:18px}
+.qty span{min-width:35px;text-align:center;font-size:13px}
+.item-total{font-weight:700;text-align:right}
+.remove{display:block;border:0;background:none;color:#9b6d55;font-size:12px;cursor:pointer;margin-top:9px}
+.summary{padding:24px;position:sticky;top:20px;height:max-content}
+.summary h2{font-family:"Playfair Display",serif;margin:0 0 20px;font-size:25px}
+.row{display:flex;justify-content:space-between;padding:10px 0;color:#666;font-size:14px}
+.row.total{border-top:1px solid #eee;margin-top:8px;padding-top:18px;color:#1d1b19;font-size:19px;font-weight:700}
+.checkout{display:flex;width:100%;justify-content:center;align-items:center;min-height:48px;background:#1d1b19;color:#fff;border-radius:9px;text-decoration:none;font-weight:700;margin-top:18px}
+.continue{display:flex;justify-content:center;margin-top:14px;color:#1d1b19;font-size:13px}
+.empty{text-align:center;padding:65px 25px}
+.empty h2{font-family:"Playfair Display",serif;font-size:28px;margin-bottom:8px}
+.shop{display:inline-flex;margin-top:18px;background:#b28a4b;color:#fff;padding:13px 22px;border-radius:9px;text-decoration:none;font-weight:700}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.summary{position:static}.item{grid-template-columns:70px 1fr}.item-total{grid-column:2;text-align:left}.item img{width:70px;height:70px}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Trends by AK</a>
+  <nav class="nav">
+    <a href="index.html">Continue Shopping</a>
+    <a href="cart.html">🛒 Cart <span id="headerCount">0</span></a>
+  </nav>
+</header>
+
+<main>
+  <h1>Your Cart</h1>
+  <div class="subtitle">Review your selected pieces before checkout.</div>
+  <div id="cartRoot"></div>
+</main>
+
+<script>
+function getCart(){
+  try{return JSON.parse(localStorage.getItem("trendsbyak_cart")||"[]")}catch(e){return []}
+}
+function saveCart(cart){
+  localStorage.setItem("trendsbyak_cart",JSON.stringify(cart));
+  renderCart();
+}
+function money(v){return "₹"+Number(v||0).toLocaleString("en-IN")}
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function renderCart(){
+  const cart=getCart();
+  const count=cart.reduce((s,i)=>s+Number(i.quantity||0),0);
+  document.getElementById("headerCount").textContent=count;
+
+  if(!cart.length){
+    document.getElementById("cartRoot").innerHTML=`
+      <div class="card empty">
+        <h2>Your cart is empty</h2>
+        <div class="subtitle">Looks like you haven't added anything yet.</div>
+        <a class="shop" href="index.html#products">Shop Now</a>
+      </div>`;
+    return;
+  }
+
+  let subtotal=0;
+  const items=cart.map((item,index)=>{
+    const qty=Number(item.quantity||1);
+    const price=Number(item.price||0);
+    subtotal+=price*qty;
+    const image=item.image_url
+      ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}">`
+      : `<img src="" alt="">`;
+
+    return `<div class="item">
+      ${image}
+      <div>
+        <div class="item-name">${escapeHtml(item.name)}</div>
+        <div class="item-price">${money(price)} each</div>
+        <div class="qty">
+          <button onclick="changeQty(${index},-1)">−</button>
+          <span>${qty}</span>
+          <button onclick="changeQty(${index},1)">+</button>
+        </div>
+        <button class="remove" onclick="removeItem(${index})">Remove</button>
+      </div>
+      <div class="item-total">${money(price*qty)}</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("cartRoot").innerHTML=`
+    <div class="layout">
+      <div class="card cart-list">${items}</div>
+      <div class="card summary">
+        <h2>Order Summary</h2>
+        <div class="row"><span>Subtotal</span><span>${money(subtotal)}</span></div>
+        <div class="row"><span>Shipping</span><span>Calculated at checkout</span></div>
+        <div class="row total"><span>Total</span><span>${money(subtotal)}</span></div>
+        <a class="checkout" href="checkout.html">Proceed to Checkout</a>
+        <a class="continue" href="index.html#products">← Continue Shopping</a>
+      </div>
+    </div>`;
+}
+function changeQty(index,delta){
+  const cart=getCart();
+  const item=cart[index];
+  if(!item)return;
+  item.quantity=Number(item.quantity||1)+delta;
+  if(item.quantity<=0)cart.splice(index,1);
+  saveCart(cart);
+}
+function removeItem(index){
+  const cart=getCart();
+  cart.splice(index,1);
+  saveCart(cart);
+}
+renderCart();
+</script>
+</body>
+</html>

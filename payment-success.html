@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment Successful | Trends by AK</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:#f7f4ef;
+  color:#222;
+  font-family:Arial,sans-serif;
+}
+
+.card{
+  width:100%;
+  max-width:620px;
+  background:#fff;
+  border-radius:18px;
+  padding:42px 28px;
+  text-align:center;
+  box-shadow:0 8px 30px rgba(0,0,0,.07);
+}
+
+.icon{
+  font-size:50px;
+}
+
+h1{
+  margin:14px 0 8px;
+  color:#547653;
+}
+
+.order{
+  margin:20px 0;
+  font-size:20px;
+  font-weight:700;
+}
+
+.text{
+  color:#666;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.status{
+  margin-top:20px;
+  padding:14px;
+  border-radius:10px;
+  background:#faf8f4;
+  color:#666;
+  font-size:13px;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:24px;
+  padding:13px 24px;
+  border-radius:9px;
+  background:#1d1d1d;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="icon">🎉</div>
+
+  <h1>Payment submitted successfully</h1>
+
+  <p class="text">
+    Thank you for shopping with Trends by AK.
+  </p>
+
+  <div class="order" id="orderNumber">
+    Order received
+  </div>
+
+  <p class="text">
+    Your payment has been returned to Trends by AK.
+    We are verifying the transaction and will update your order shortly.
+  </p>
+
+  <div class="status">
+    Please keep your order number for reference.
+  </div>
+
+  <a class="btn" href="/">
+    Continue Shopping
+  </a>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const order =
+  params.get("order") ||
+  params.get("order_number") ||
+  "";
+
+if(order){
+  document.getElementById("orderNumber").textContent =
+    "Order " + order;
+}
+
+localStorage.removeItem("trendsbyak_cart");
+
+</script>
+
+</body>
+</html>

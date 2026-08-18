@@ -12,6 +12,167 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style id="cart-product-button-fix">
+/* Trends by AK cart controls */
+.product-actions{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px !important;
+  margin-top:16px !important;
+}
+.product-actions .product-view,
+.product-actions .product-cart{
+  width:100% !important;
+  min-height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:10px !important;
+  font-family:inherit !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  text-decoration:none !important;
+  cursor:pointer !important;
+}
+.product-actions .product-view{
+  background:#1d1b19 !important;
+  color:#fff !important;
+  border:1px solid #1d1b19 !important;
+}
+.product-actions .product-cart{
+  background:#b28a4b !important;
+  color:#fff !important;
+  border:1px solid #b28a4b !important;
+}
+.product-actions .product-view:hover,
+.product-actions .product-cart:hover{
+  opacity:.88 !important;
+  transform:translateY(-1px);
+}
+.product-actions .product-order{
+  grid-column:1/-1 !important;
+  width:100% !important;
+  min-height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border:1px solid #1d1b19 !important;
+  border-radius:10px !important;
+  color:#1d1b19 !important;
+  background:#fff !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  text-decoration:none !important;
+}
+.nav-cart{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  font-weight:700 !important;
+}
+#cartCount{
+  min-width:21px;
+  height:21px;
+  padding:0 6px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#b28a4b;
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+}
+@media(max-width:600px){
+  .product-actions{grid-template-columns:1fr !important}
+  .product-actions .product-order{grid-column:auto !important}
+}
+</style>
+
+
+<style id="trendsbyak-cart-final">
+.product-actions{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px !important;
+  width:100% !important;
+  margin-top:16px !important;
+}
+.product-actions a.product-view,
+.product-actions button.product-cart,
+.product-actions a.product-order{
+  box-sizing:border-box !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:44px !important;
+  margin:0 !important;
+  padding:0 14px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:10px !important;
+  font-family:inherit !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  text-align:center !important;
+  text-decoration:none !important;
+  cursor:pointer !important;
+}
+.product-actions a.product-view{
+  background:#1d1b19 !important;
+  color:#fff !important;
+  border:1px solid #1d1b19 !important;
+}
+.product-actions button.product-cart{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  background:#b28a4b !important;
+  color:#fff !important;
+  border:1px solid #b28a4b !important;
+}
+.product-actions a.product-order{
+  grid-column:1 / -1 !important;
+  background:#fff !important;
+  color:#1d1b19 !important;
+  border:1px solid #1d1b19 !important;
+}
+.product-actions a.product-view:hover,
+.product-actions button.product-cart:hover,
+.product-actions a.product-order:hover{
+  transform:translateY(-1px);
+  opacity:.9;
+}
+@media(max-width:600px){
+  .product-actions{
+    grid-template-columns:1fr !important;
+  }
+  .product-actions a.product-order{
+    grid-column:auto !important;
+  }
+}
+.nav-cart{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  text-decoration:none !important;
+}
+#cartCount{
+  min-width:21px !important;
+  height:21px !important;
+  padding:0 6px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:999px !important;
+  background:#b28a4b !important;
+  color:#fff !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -38,6 +199,9 @@
         <a href="#products">Shop</a>
         <a href="#bulk-orders">Bulk Orders</a>
         <a href="#about">Our Story</a>
+        <a class="nav-cart" href="cart.html" aria-label="Open shopping cart">
+            🛒 Cart <span id="cartCount">0</span>
+        </a>
         <a class="nav-whatsapp" href="https://wa.me/918433998962" target="_blank" rel="noopener">WhatsApp</a>
     </nav>
 </header>
@@ -325,7 +489,8 @@ async function loadHomepageProducts() {
                     <div class="product-actions">
                         <a class="product-view" href="product.html?id=${encodeURIComponent(product.id)}">View Product</a>
                         ${!isOutOfStock
-                            ? `<a class="product-order" href="https://wa.me/918433998962?text=${encodeURIComponent("Hi Trends by AK, I would like to order: " + (product.name || "this product"))}" target="_blank" rel="noopener">WhatsApp</a>`
+                            ? `<button class="product-cart" type="button" onclick='addHomepageToCart(${JSON.stringify(product).replace(/'/g, "&#39;")}, this)'>Add to Cart</button>
+                               <a class="product-order" href="https://wa.me/918433998962?text=${encodeURIComponent("Hi Trends by AK, I would like to order: " + (product.name || "this product"))}" target="_blank" rel="noopener">WhatsApp</a>`
                             : `<span class="product-unavailable">Currently unavailable</span>`
                         }
                     </div>
@@ -386,6 +551,62 @@ function loadLatestBanner() {
     }
 }
 
+
+function getCart() {
+    try {
+        return JSON.parse(localStorage.getItem("trendsbyak_cart") || "[]");
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem("trendsbyak_cart", JSON.stringify(cart));
+    updateCartCount();
+}
+
+function updateCartCount() {
+    const count = getCart().reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+    const badge = document.getElementById("cartCount");
+    if (badge) badge.textContent = count;
+}
+
+function addHomepageToCart(product, button) {
+    const stock = Number(product.stock || 0);
+    if (stock <= 0) {
+        alert("This product is currently out of stock.");
+        return;
+    }
+
+    const cart = getCart();
+    const productId = String(product.id);
+    const existing = cart.find(item => String(item.product_id) === productId);
+
+    if (existing) {
+        if (Number(existing.quantity || 0) >= stock) {
+            alert(`Only ${stock} available.`);
+            return;
+        }
+        existing.quantity = Number(existing.quantity || 0) + 1;
+    } else {
+        cart.push({
+            product_id: product.id,
+            name: product.name,
+            price: Number(product.sale_price ?? product.price ?? 0),
+            image_url: product.image_url || "",
+            quantity: 1
+        });
+    }
+
+    saveCart(cart);
+
+    if (button) {
+        const original = button.textContent;
+        button.textContent = "Added ✓";
+        setTimeout(() => button.textContent = original, 1200);
+    }
+}
+
 document.getElementById("menuToggle").addEventListener("click", () => {
     const button = document.getElementById("menuToggle");
     const nav = document.getElementById("mainNav");
@@ -400,6 +621,7 @@ document.querySelectorAll("#mainNav a").forEach(link => {
     });
 });
 
+updateCartCount();
 loadHomepageProducts();
 loadHomepageCollections();
 loadLatestBanner();
