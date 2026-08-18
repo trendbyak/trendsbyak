@@ -814,18 +814,16 @@ async function saveReel(e){
     }
 
 
-    if(
-      !reelUrl.includes(
-        "instagram.com/reel/"
-      )
-    ){
+   const instagramUrlPattern =
+  /^https?:\/\/(www\.)?instagram\.com\/(reel|reels)\/[A-Za-z0-9_-]+/i;
 
-      throw new Error(
-        "Please enter a valid Instagram Reel URL."
-      );
+if(!instagramUrlPattern.test(reelUrl)){
 
-    }
+  throw new Error(
+    "Please enter a valid Instagram Reel URL, e.g. https://www.instagram.com/reel/ABC123/"
+  );
 
+}
 
     const payload = {
 
