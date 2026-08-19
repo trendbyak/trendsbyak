@@ -5,17 +5,12 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Bulk Products | Trends by AK</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@Supabase/supabase-js@2"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
 
 <style>
 
@@ -30,11 +25,6 @@ body{
     color:#292929;
 }
 
-
-/* =====================================================
-   HEADER
-===================================================== */
-
 .header{
     background:#292929;
     color:white;
@@ -45,11 +35,6 @@ body{
     margin:0;
     font-size:24px;
 }
-
-
-/* =====================================================
-   LAYOUT
-===================================================== */
 
 .layout{
     display:flex;
@@ -84,11 +69,6 @@ body{
     max-width:1500px;
 }
 
-
-/* =====================================================
-   BOX
-===================================================== */
-
 .box{
     background:white;
     padding:28px;
@@ -104,11 +84,6 @@ h2{
 h3{
     margin-top:0;
 }
-
-
-/* =====================================================
-   BUTTONS
-===================================================== */
 
 .gold-btn{
     background:#d1ad72;
@@ -130,14 +105,6 @@ h3{
     cursor:not-allowed;
 }
 
-.secondary{
-    background:#292929;
-}
-
-.danger{
-    background:#b33a3a;
-}
-
 .light-btn{
     background:#f4efe8;
     color:#292929;
@@ -148,21 +115,19 @@ h3{
     font-weight:bold;
 }
 
+.light-btn:hover{
+    background:#ebe4da;
+}
+
 .button-row{
     display:flex;
     gap:10px;
     flex-wrap:wrap;
 }
 
-
-/* =====================================================
-   FORM
-===================================================== */
-
 .form-grid{
     display:grid;
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:18px;
 }
 
@@ -198,11 +163,6 @@ select:focus{
     border-color:#d1ad72;
 }
 
-
-/* =====================================================
-   FILE UPLOAD
-===================================================== */
-
 .file-box{
     border:2px dashed #d1ad72;
     padding:35px;
@@ -214,11 +174,6 @@ select:focus{
 input[type=file]{
     margin:15px 0;
 }
-
-
-/* =====================================================
-   STATUS
-===================================================== */
 
 .status{
     margin-top:15px;
@@ -251,10 +206,55 @@ input[type=file]{
     color:#24558a;
 }
 
+.summary{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
 
-/* =====================================================
-   TABLE
-===================================================== */
+.summary div{
+    background:#faf8f5;
+    padding:15px 20px;
+    border-radius:10px;
+    min-width:130px;
+}
+
+.summary span{
+    font-size:12px;
+    color:#777;
+}
+
+.summary strong{
+    display:block;
+    font-size:22px;
+    margin-top:5px;
+}
+
+.bulk-toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+    padding:15px;
+    background:#faf8f5;
+    border-radius:10px;
+}
+
+.bulk-toolbar-left,
+.bulk-toolbar-right{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.selected-count{
+    font-weight:bold;
+    color:#8b6b42;
+}
 
 .table-wrap{
     overflow:auto;
@@ -301,71 +301,6 @@ tbody tr:hover{
     cursor:pointer;
 }
 
-
-/* =====================================================
-   SUMMARY
-===================================================== */
-
-.summary{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
-
-.summary div{
-    background:#faf8f5;
-    padding:15px 20px;
-    border-radius:10px;
-    min-width:130px;
-}
-
-.summary span{
-    font-size:12px;
-    color:#777;
-}
-
-.summary strong{
-    display:block;
-    font-size:22px;
-    margin-top:5px;
-}
-
-
-/* =====================================================
-   BULK UPDATE TOOLBAR
-===================================================== */
-
-.bulk-toolbar{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    margin-bottom:18px;
-    padding:15px;
-    background:#faf8f5;
-    border-radius:10px;
-}
-
-.bulk-toolbar-left,
-.bulk-toolbar-right{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-.selected-count{
-    font-weight:bold;
-    color:#8b6b42;
-}
-
-
-/* =====================================================
-   PRODUCT TABLE
-===================================================== */
-
 .product-name{
     font-weight:bold;
 }
@@ -390,11 +325,6 @@ tbody tr:hover{
     color:#777;
 }
 
-
-/* =====================================================
-   PREVIEW
-===================================================== */
-
 .preview-change{
     background:#fff8e1;
     border:1px solid #ead59b;
@@ -406,11 +336,6 @@ tbody tr:hover{
 .preview-change strong{
     color:#8a6500;
 }
-
-
-/* =====================================================
-   LOADING
-===================================================== */
 
 .loading{
     padding:35px;
@@ -434,10 +359,15 @@ tbody tr:hover{
     }
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
+.debug-box{
+    margin-top:15px;
+    padding:12px;
+    background:#f5f5f5;
+    border-radius:8px;
+    font-size:12px;
+    color:#666;
+    display:none;
+}
 
 @media(max-width:900px){
 
@@ -482,11 +412,6 @@ tbody tr:hover{
         width:100%;
     }
 
-    .bulk-toolbar input,
-    .bulk-toolbar select{
-        width:100%;
-    }
-
 }
 
 </style>
@@ -499,9 +424,9 @@ tbody tr:hover{
 
 <header class="header">
 
-    <h1>
-        Trends by AK — Bulk Product Management
-    </h1>
+<h1>
+Trends by AK — Bulk Product Management
+</h1>
 
 </header>
 
@@ -511,32 +436,29 @@ tbody tr:hover{
 
 <aside class="sidebar">
 
-    <a href="index.html">
-        🏠 Dashboard
-    </a>
+<a href="index.html">
+🏠 Dashboard
+</a>
 
-    <a href="products.html">
-        🛍️ Products
-    </a>
+<a href="products.html">
+🛍️ Products
+</a>
 
-    <a
-        href="bulk-products.html"
-        class="active"
-    >
-        📥 Bulk Products
-    </a>
+<a href="bulk-products.html" class="active">
+📥 Bulk Products
+</a>
 
-    <a href="collections.html">
-        🎀 Collections
-    </a>
+<a href="collections.html">
+🎀 Collections
+</a>
 
-    <a href="banners.html">
-        🖼️ Banners
-    </a>
+<a href="banners.html">
+🖼️ Banners
+</a>
 
-    <a href="orders.html">
-        📦 Orders
-    </a>
+<a href="orders.html">
+📦 Orders
+</a>
 
 </aside>
 
@@ -545,430 +467,421 @@ tbody tr:hover{
 
 
 <!-- =====================================================
-     BULK UPDATE PRODUCTS
+     BULK UPDATE
 ===================================================== -->
 
 <div class="box">
 
-    <h2>
-        Bulk Update Selected Products
-    </h2>
+<h2>
+Bulk Update Selected Products
+</h2>
 
-    <p>
-        Select multiple products and update their
-        <strong>category</strong> or
-        <strong>collection</strong> at once.
-    </p>
+<p>
+Select multiple products and update their
+<strong>category</strong> or
+<strong>collection</strong> at once.
+</p>
 
 
-    <div class="summary">
+<div class="summary">
 
-        <div>
+<div>
 
-            <span>
-                Products
-            </span>
+<span>
+Products
+</span>
 
-            <strong id="productCount">
-                0
-            </strong>
-
-        </div>
-
-
-        <div>
-
-            <span>
-                Selected
-            </span>
-
-            <strong id="selectedCount">
-                0
-            </strong>
-
-        </div>
-
-
-        <div>
-
-            <span>
-                Collections
-            </span>
-
-            <strong id="collectionCount">
-                0
-            </strong>
-
-        </div>
-
-
-        <div>
-
-            <span>
-                Categories
-            </span>
-
-            <strong id="categoryCount">
-                0
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <!-- SEARCH -->
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>
-                Search Products
-            </label>
-
-            <input
-                type="search"
-                id="productSearch"
-                placeholder="Search by product name or SKU..."
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                Filter Collection
-            </label>
-
-            <select id="collectionFilter">
-
-                <option value="">
-                    All Collections
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-
-    <br>
-
-
-    <!-- BULK ACTIONS -->
-
-    <div class="bulk-toolbar">
-
-        <div class="bulk-toolbar-left">
-
-            <button
-                type="button"
-                class="light-btn"
-                id="selectAllButton"
-            >
-                ☑ Select All
-            </button>
-
-
-            <button
-                type="button"
-                class="light-btn"
-                id="clearSelectionButton"
-            >
-                Clear Selection
-            </button>
-
-
-            <span class="selected-count">
-
-                <span id="toolbarSelectedCount">
-                    0
-                </span>
-
-                selected
-
-            </span>
-
-        </div>
-
-
-        <div class="bulk-toolbar-right">
-
-            <button
-                type="button"
-                class="light-btn"
-                id="refreshProductsButton"
-            >
-                ↻ Refresh
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- PRODUCT TABLE -->
-
-    <div
-        class="table-wrap"
-        id="productTableWrap"
-    >
-
-        <div class="loading">
-
-            <div class="loader"></div>
-
-            Loading products...
-
-        </div>
-
-    </div>
-
-
-    <br>
-
-
-    <!-- UPDATE FORM -->
-
-    <div
-        class="preview-change"
-        id="bulkUpdatePanel"
-        style="display:none"
-    >
-
-        <h3>
-            Update Selected Products
-        </h3>
-
-
-        <p>
-            Leave a field unchanged if you do not want
-            to modify it.
-        </p>
-
-
-        <div class="form-grid">
-
-
-            <!-- CATEGORY -->
-
-            <div class="form-group">
-
-                <label>
-                    Category
-                </label>
-
-                <select id="bulkCategory">
-
-                    <option value="">
-                        — Do not change category —
-                    </option>
-
-                    <option value="__CLEAR__">
-                        Clear category
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- COLLECTION -->
-
-            <div class="form-group">
-
-                <label>
-                    Collection
-                </label>
-
-                <select id="bulkCollection">
-
-                    <option value="">
-                        — Do not change collection —
-                    </option>
-
-                    <option value="__CLEAR__">
-                        Clear collection
-                    </option>
-
-                </select>
-
-            </div>
-
-
-        </div>
-
-
-        <br>
-
-
-        <div class="button-row">
-
-            <button
-                type="button"
-                class="gold-btn"
-                id="previewUpdateButton"
-            >
-                Preview Changes
-            </button>
-
-            <button
-                type="button"
-                class="light-btn"
-                id="cancelUpdateButton"
-            >
-                Cancel
-            </button>
-
-        </div>
-
-
-        <div
-            id="updatePreview"
-            style="display:none"
-        >
-
-        </div>
-
-    </div>
-
-
-    <div
-        id="bulkStatus"
-        class="status"
-    ></div>
+<strong id="productCount">
+0
+</strong>
 
 </div>
 
+
+<div>
+
+<span>
+Selected
+</span>
+
+<strong id="selectedCount">
+0
+</strong>
+
+</div>
+
+
+<div>
+
+<span>
+Collections
+</span>
+
+<strong id="collectionCount">
+0
+</strong>
+
+</div>
+
+
+<div>
+
+<span>
+Categories
+</span>
+
+<strong id="categoryCount">
+0
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+Search Products
+</label>
+
+<input
+type="search"
+id="productSearch"
+placeholder="Search by product name or SKU..."
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Filter Collection
+</label>
+
+<select id="collectionFilter">
+
+<option value="">
+All Collections
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<div class="bulk-toolbar">
+
+<div class="bulk-toolbar-left">
+
+<button
+type="button"
+class="light-btn"
+id="selectAllButton"
+>
+☑ Select All
+</button>
+
+
+<button
+type="button"
+class="light-btn"
+id="clearSelectionButton"
+>
+Clear Selection
+</button>
+
+
+<span class="selected-count">
+
+<span id="toolbarSelectedCount">
+0
+</span>
+
+selected
+
+</span>
+
+</div>
+
+
+<div class="bulk-toolbar-right">
+
+<button
+type="button"
+class="light-btn"
+id="refreshProductsButton"
+>
+↻ Refresh
+</button>
+
+</div>
+
+</div>
+
+
+<div
+class="table-wrap"
+id="productTableWrap"
+>
+
+<div class="loading">
+
+<div class="loader"></div>
+
+Loading products...
+
+</div>
+
+</div>
+
+
+<div
+id="productDebug"
+class="debug-box"
+>
+</div>
+
+
+<br>
+
+
+<!-- UPDATE PANEL -->
+
+<div
+class="preview-change"
+id="bulkUpdatePanel"
+style="display:none"
+>
+
+<h3>
+Update Selected Products
+</h3>
+
+<p>
+Leave a field unchanged if you do not want to modify it.
+</p>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Category
+</label>
+
+<select id="bulkCategory">
+
+<option value="">
+— Do not change category —
+</option>
+
+<option value="__CLEAR__">
+Clear category
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Collection
+</label>
+
+<select id="bulkCollection">
+
+<option value="">
+— Do not change collection —
+</option>
+
+<option value="__CLEAR__">
+Clear collection
+</option>
+
+</select>
+
+</div>
+
+
+</div>
+
+
+<br>
+
+
+<div class="button-row">
+
+<button
+type="button"
+class="gold-btn"
+id="previewUpdateButton"
+>
+Preview Changes
+</button>
+
+
+<button
+type="button"
+class="light-btn"
+id="cancelUpdateButton"
+>
+Cancel
+</button>
+
+</div>
+
+
+<div
+id="updatePreview"
+style="display:none"
+>
+</div>
+
+</div>
+
+
+<div
+id="bulkStatus"
+class="status"
+>
+</div>
+
+</div>
 
 
 <!-- =====================================================
-     ADD COLLECTION
+     COLLECTION MANAGEMENT
 ===================================================== -->
 
 <div class="box">
 
-    <h2>
-        Collections
-    </h2>
+<h2>
+Collections
+</h2>
 
-    <p>
-        Collections created in your Admin
-        <strong>Collections</strong> table will automatically
-        appear in the product dropdown above.
-    </p>
-
-
-    <div class="form-grid">
-
-        <div class="form-group">
-
-            <label>
-                Create New Collection
-            </label>
-
-            <input
-                type="text"
-                id="newCollectionName"
-                placeholder="Example: Rakhi Collection"
-            >
-
-        </div>
+<p>
+Collections created in the Admin Collections section will
+automatically appear in the bulk update dropdown.
+</p>
 
 
-        <div
-            class="form-group"
-            style="justify-content:end"
-        >
+<div class="form-grid">
 
-            <button
-                type="button"
-                class="gold-btn"
-                id="addCollectionButton"
-            >
-                + Add Collection
-            </button>
+<div class="form-group">
 
-        </div>
+<label>
+Create New Collection
+</label>
 
-    </div>
-
-
-    <div
-        id="collectionStatus"
-        class="status"
-    ></div>
+<input
+type="text"
+id="newCollectionName"
+placeholder="Example: Rakhi Collection"
+>
 
 </div>
 
+
+<div class="form-group">
+
+<label>
+&nbsp;
+</label>
+
+<button
+type="button"
+class="gold-btn"
+id="addCollectionButton"
+>
++ Add Collection
+</button>
+
+</div>
+
+</div>
+
+
+<div
+id="collectionStatus"
+class="status"
+>
+</div>
+
+</div>
 
 
 <!-- =====================================================
-     BULK EXCEL UPLOAD
+     EXCEL UPLOAD
 ===================================================== -->
 
 <div class="box">
 
-    <h2>
-        Bulk Product Upload
-    </h2>
+<h2>
+Bulk Product Upload
+</h2>
 
-    <p>
-        Upload an Excel or CSV file to add multiple
-        products at once.
-    </p>
+<p>
+Upload an Excel or CSV file to add multiple products at once.
+</p>
 
 
-    <button
-        class="gold-btn"
-        onclick="downloadTemplate()"
-    >
-        Download Excel Template
-    </button>
+<button
+class="gold-btn"
+onclick="downloadTemplate()"
+>
+Download Excel Template
+</button>
 
 </div>
-
 
 
 <div class="box">
 
-    <h2>
-        1. Upload File
-    </h2>
+<h2>
+1. Upload File
+</h2>
 
 
-    <div class="file-box">
+<div class="file-box">
 
-        <p>
-            <strong>
-                CSV or Excel
-            </strong>
-        </p>
+<p>
+<strong>CSV or Excel</strong>
+</p>
 
-        <p>
-            Accepted: .csv, .xlsx, .xls
-        </p>
+<p>
+Accepted: .csv, .xlsx, .xls
+</p>
 
 
-        <input
-            type="file"
-            id="fileInput"
-            accept=".csv,.xlsx,.xls"
-        >
-
-    </div>
-
-
-    <div
-        id="status"
-        class="status"
-    ></div>
+<input
+type="file"
+id="fileInput"
+accept=".csv,.xlsx,.xls"
+>
 
 </div>
 
+
+<div
+id="status"
+class="status"
+>
+</div>
+
+</div>
 
 
 <!-- =====================================================
@@ -976,116 +889,79 @@ tbody tr:hover{
 ===================================================== -->
 
 <div
-    class="box"
-    id="previewBox"
-    style="display:none"
+class="box"
+id="previewBox"
+style="display:none"
 >
 
-    <h2>
-        2. Preview & Validate
-    </h2>
+<h2>
+2. Preview & Validate
+</h2>
 
 
-    <div class="summary">
+<div class="summary">
 
-        <div>
-            Rows
-            <strong id="rowCount">
-                0
-            </strong>
-        </div>
+<div>
+Rows
+<strong id="rowCount">0</strong>
+</div>
 
-        <div>
-            Valid
-            <strong id="validCount">
-                0
-            </strong>
-        </div>
+<div>
+Valid
+<strong id="validCount">0</strong>
+</div>
 
-        <div>
-            Errors
-            <strong id="errorCount">
-                0
-            </strong>
-        </div>
-
-    </div>
-
-
-    <div class="table-wrap">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Row
-                    </th>
-
-                    <th>
-                        SKU
-                    </th>
-
-                    <th>
-                        Name
-                    </th>
-
-                    <th>
-                        Price
-                    </th>
-
-                    <th>
-                        Sale Price
-                    </th>
-
-                    <th>
-                        Category
-                    </th>
-
-                    <th>
-                        Stock
-                    </th>
-
-                    <th>
-                        Collection
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th>
-                        Validation
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="previewBody"></tbody>
-
-        </table>
-
-    </div>
-
-
-    <br>
-
-
-    <button
-        id="importButton"
-        class="gold-btn"
-        onclick="importProducts()"
-        disabled
-    >
-        Import Products
-    </button>
+<div>
+Errors
+<strong id="errorCount">0</strong>
+</div>
 
 </div>
 
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Row</th>
+<th>SKU</th>
+<th>Name</th>
+<th>Price</th>
+<th>Sale Price</th>
+<th>Category</th>
+<th>Stock</th>
+<th>Collection</th>
+<th>Status</th>
+<th>Validation</th>
+
+</tr>
+
+</thead>
+
+<tbody id="previewBody"></tbody>
+
+</table>
+
+</div>
+
+
+<br>
+
+
+<button
+id="importButton"
+class="gold-btn"
+onclick="importProducts()"
+disabled
+>
+Import Products
+</button>
+
+</div>
 
 
 <!-- =====================================================
@@ -1093,16 +969,16 @@ tbody tr:hover{
 ===================================================== -->
 
 <div
-    class="box"
-    id="resultBox"
-    style="display:none"
+class="box"
+id="resultBox"
+style="display:none"
 >
 
-    <h2>
-        Import Result
-    </h2>
+<h2>
+Import Result
+</h2>
 
-    <div id="resultText"></div>
+<div id="resultText"></div>
 
 </div>
 
@@ -1110,7 +986,6 @@ tbody tr:hover{
 </main>
 
 </div>
-
 
 
 <script>
@@ -1123,17 +998,16 @@ tbody tr:hover{
 ===================================================== */
 
 const SUPABASE_URL =
-    "https://ltxrycmreumoqfpcbwnb.supabase.co";
+"https://ltxrycmreumoqfpcbwnb.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
-
+"sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
 /* =====================================================
@@ -1154,17 +1028,17 @@ let categories = new Set();
 
 
 /* =====================================================
-   HTML ESCAPE
+   ESCAPE HTML
 ===================================================== */
 
 function escapeHtml(value){
 
-    return String(value ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+return String(value ?? "")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
@@ -1174,38 +1048,89 @@ function escapeHtml(value){
 ===================================================== */
 
 function showStatus(
-    elementId,
-    message,
-    type
+elementId,
+message,
+type
 ){
 
-    const box =
-        document.getElementById(
-            elementId
-        );
+const box =
+document.getElementById(elementId);
 
-    if(!box)
-        return;
+if(!box){
+return;
+}
 
-    box.textContent =
-        message;
+box.textContent =
+message;
 
-    box.className =
-        "status " + type;
+box.className =
+"status " + type;
 
 }
 
 
 /* =====================================================
-   LOAD EVERYTHING
+   NORMALIZE PRODUCT
+===================================================== */
+
+function normalizeProduct(product){
+
+return {
+
+...product,
+
+id:
+product.id !== null &&
+product.id !== undefined
+? String(product.id)
+: "",
+
+name:
+String(product.name || "").trim(),
+
+sku:
+String(product.sku || "").trim(),
+
+category:
+String(product.category || "").trim(),
+
+collection:
+String(product.collection || "").trim(),
+
+price:
+product.price,
+
+sale_price:
+product.sale_price,
+
+stock:
+product.stock ??
+product.quantity ??
+0,
+
+status:
+product.status ||
+(
+product.is_active === false
+? "inactive"
+: "active"
+)
+
+};
+
+}
+
+
+/* =====================================================
+   LOAD ALL DATA
 ===================================================== */
 
 async function loadAdminData(){
 
-    await Promise.all([
-        loadProducts(),
-        loadCollections()
-    ]);
+await Promise.all([
+loadProducts(),
+loadCollections()
+]);
 
 }
 
@@ -1216,101 +1141,204 @@ async function loadAdminData(){
 
 async function loadProducts(){
 
-    const tableWrap =
-        document.getElementById(
-            "productTableWrap"
-        );
+const tableWrap =
+document.getElementById(
+"productTableWrap"
+);
+
+tableWrap.innerHTML = `
+
+<div class="loading">
+
+<div class="loader"></div>
+
+Loading products...
+
+</div>
+
+`;
 
 
-    tableWrap.innerHTML = `
-        <div class="loading">
-            <div class="loader"></div>
-            Loading products...
-        </div>
-    `;
+try{
+
+/*
+ * First query.
+ * Do NOT depend on id ordering.
+ */
+
+let response =
+await supabaseClient
+.from("products")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("products")
-        .select("*")
-        .order(
-            "id",
-            {
-                ascending:false
-            }
-        );
+if(response.error){
+
+console.warn(
+"created_at ordering failed. Retrying without ordering.",
+response.error
+);
 
 
-    if(error){
+/*
+ * Fallback query.
+ */
 
-        console.error(
-            "Products error:",
-            error
-        );
+response =
+await supabaseClient
+.from("products")
+.select("*");
 
-
-        tableWrap.innerHTML = `
-            <div class="empty-state">
-                Unable to load products.
-                <br><br>
-                ${escapeHtml(error.message)}
-            </div>
-        `;
-
-        return;
-
-    }
+}
 
 
-    allProducts =
-        data || [];
+if(response.error){
+
+throw response.error;
+
+}
 
 
-    categories =
-        new Set();
+allProducts =
+(response.data || [])
+.map(
+normalizeProduct
+);
 
 
-    allProducts.forEach(
-        product => {
-
-            const category =
-                String(
-                    product.category || ""
-                ).trim();
-
-            if(category){
-
-                categories.add(
-                    category
-                );
-
-            }
-
-        }
-    );
+categories =
+new Set();
 
 
-    document.getElementById(
-        "productCount"
-    ).textContent =
-        allProducts.length;
+allProducts.forEach(
+product => {
+
+if(product.category){
+
+categories.add(
+product.category
+);
+
+}
+
+});
 
 
-    document.getElementById(
-        "categoryCount"
-    ).textContent =
-        categories.size;
+document.getElementById(
+"productCount"
+).textContent =
+allProducts.length;
 
 
-    renderCategoryDropdown();
+document.getElementById(
+"categoryCount"
+).textContent =
+categories.size;
 
-    renderProducts();
 
-    updateSelectedCount();
+renderCategoryDropdown();
+
+renderProducts();
+
+updateSelectedCount();
+
+
+/*
+ * Debug information.
+ */
+
+const debug =
+document.getElementById(
+"productDebug"
+);
+
+if(debug){
+
+debug.style.display =
+"block";
+
+debug.textContent =
+`Loaded ${allProducts.length} product(s) from Supabase.`;
+
+}
+
+
+}catch(error){
+
+console.error(
+"Products loading error:",
+error
+);
+
+
+allProducts = [];
+
+
+document.getElementById(
+"productCount"
+).textContent =
+"0";
+
+
+document.getElementById(
+"categoryCount"
+).textContent =
+"0";
+
+
+tableWrap.innerHTML = `
+
+<div class="empty-state">
+
+<strong>
+Unable to load products
+</strong>
+
+<br><br>
+
+${escapeHtml(
+error.message ||
+"Unknown Supabase error"
+)}
+
+<br><br>
+
+<button
+type="button"
+class="gold-btn"
+onclick="loadProducts()"
+>
+Try Again
+</button>
+
+</div>
+
+`;
+
+
+const debug =
+document.getElementById(
+"productDebug"
+);
+
+if(debug){
+
+debug.style.display =
+"block";
+
+debug.textContent =
+"Supabase error: " +
+(error.message || "Unknown error");
+
+}
+
+}
 
 }
 
@@ -1321,52 +1349,46 @@ async function loadProducts(){
 
 async function loadCollections(){
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("collections")
-        .select("*")
-        .order(
-            "id",
-            {
-                ascending:true
-            }
-        );
+try{
+
+const response =
+await supabaseClient
+.from("collections")
+.select("*");
 
 
-    if(error){
+if(response.error){
 
-        console.error(
-            "Collections error:",
-            error
-        );
+console.error(
+"Collections error:",
+response.error
+);
 
-        allCollections = [];
+allCollections = [];
 
-        /*
-         * We still populate the dropdown with
-         * collections already used by products.
-         */
+}else{
 
-        buildProductCollectionFallback();
+allCollections =
+response.data || [];
 
-        return;
-
-    }
+}
 
 
-    allCollections =
-        data || [];
+renderCollectionDropdowns();
 
 
-    /*
-     * If collection records exist,
-     * use them for the dropdown.
-     */
+}catch(error){
 
-    renderCollectionDropdowns();
+console.error(
+"Collections loading error:",
+error
+);
+
+allCollections = [];
+
+renderCollectionDropdowns();
+
+}
 
 }
 
@@ -1377,12 +1399,12 @@ async function loadCollections(){
 
 function getCollectionName(collection){
 
-    return String(
-        collection?.name ||
-        collection?.title ||
-        collection?.collection_name ||
-        ""
-    ).trim();
+return String(
+collection?.name ||
+collection?.title ||
+collection?.collection_name ||
+""
+).trim();
 
 }
 
@@ -1393,149 +1415,147 @@ function getCollectionName(collection){
 
 function renderCollectionDropdowns(){
 
-    const names = new Set();
+const names =
+new Set();
 
 
-    /*
-     * Collections from Admin
-     */
+/*
+ * Add collections from collections table.
+ */
 
-    allCollections.forEach(
-        collection => {
+allCollections.forEach(
+collection => {
 
-            const name =
-                getCollectionName(
-                    collection
-                );
+const name =
+getCollectionName(
+collection
+);
 
-            if(name){
+if(name){
 
-                names.add(
-                    name
-                );
-
-            }
-
-        }
-    );
-
-
-    /*
-     * Also include collections already
-     * assigned to products.
-     */
-
-    allProducts.forEach(
-        product => {
-
-            const collection =
-                String(
-                    product.collection || ""
-                ).trim();
-
-            if(collection){
-
-                names.add(
-                    collection
-                );
-
-            }
-
-        }
-    );
-
-
-    const sorted =
-        Array.from(names)
-            .sort(
-                (a,b) =>
-                a.localeCompare(b)
-            );
-
-
-    document.getElementById(
-        "collectionCount"
-    ).textContent =
-        sorted.length;
-
-
-    const bulk =
-        document.getElementById(
-            "bulkCollection"
-        );
-
-
-    const filter =
-        document.getElementById(
-            "collectionFilter"
-        );
-
-
-    bulk.innerHTML = `
-        <option value="">
-            — Do not change collection —
-        </option>
-
-        <option value="__CLEAR__">
-            Clear collection
-        </option>
-    `;
-
-
-    filter.innerHTML = `
-        <option value="">
-            All Collections
-        </option>
-    `;
-
-
-    sorted.forEach(
-        name => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-            option.value =
-                name;
-
-            option.textContent =
-                name;
-
-            bulk.appendChild(
-                option
-            );
-
-
-            const filterOption =
-                document.createElement(
-                    "option"
-                );
-
-            filterOption.value =
-                name;
-
-            filterOption.textContent =
-                name;
-
-            filter.appendChild(
-                filterOption
-            );
-
-        }
-    );
+names.add(
+name
+);
 
 }
 
+});
 
-/* =====================================================
-   FALLBACK COLLECTIONS
-===================================================== */
 
-function buildProductCollectionFallback(){
+/*
+ * Add collections already used by products.
+ */
 
-    renderCollectionDropdowns();
+allProducts.forEach(
+product => {
+
+const collection =
+String(
+product.collection || ""
+).trim();
+
+if(collection){
+
+names.add(
+collection
+);
+
+}
+
+});
+
+
+const sorted =
+Array.from(names)
+.sort(
+(a,b) =>
+a.localeCompare(
+b
+)
+);
+
+
+document.getElementById(
+"collectionCount"
+).textContent =
+sorted.length;
+
+
+/*
+ * Bulk update dropdown.
+ */
+
+const bulk =
+document.getElementById(
+"bulkCollection"
+);
+
+bulk.innerHTML = `
+
+<option value="">
+— Do not change collection —
+</option>
+
+<option value="__CLEAR__">
+Clear collection
+</option>
+
+`;
+
+
+/*
+ * Filter dropdown.
+ */
+
+const filter =
+document.getElementById(
+"collectionFilter"
+);
+
+filter.innerHTML = `
+
+<option value="">
+All Collections
+</option>
+
+`;
+
+
+sorted.forEach(
+name => {
+
+const bulkOption =
+document.createElement(
+"option"
+);
+
+bulkOption.value =
+name;
+
+bulkOption.textContent =
+name;
+
+bulk.appendChild(
+bulkOption
+);
+
+
+const filterOption =
+document.createElement(
+"option"
+);
+
+filterOption.value =
+name;
+
+filterOption.textContent =
+name;
+
+filter.appendChild(
+filterOption
+);
+
+});
 
 }
 
@@ -1546,70 +1566,66 @@ function buildProductCollectionFallback(){
 
 function renderCategoryDropdown(){
 
-    const select =
-        document.getElementById(
-            "bulkCategory"
-        );
+const select =
+document.getElementById(
+"bulkCategory"
+);
+
+select.innerHTML = `
+
+<option value="">
+— Do not change category —
+</option>
+
+<option value="__CLEAR__">
+Clear category
+</option>
+
+`;
 
 
-    select.innerHTML = `
+Array.from(categories)
+.sort(
+(a,b) =>
+a.localeCompare(
+b
+)
+)
+.forEach(
+category => {
 
-        <option value="">
-            — Do not change category —
-        </option>
+const option =
+document.createElement(
+"option"
+);
 
-        <option value="__CLEAR__">
-            Clear category
-        </option>
+option.value =
+category;
 
-    `;
+option.textContent =
+category;
 
+select.appendChild(
+option
+);
 
-    Array.from(categories)
-        .sort(
-            (a,b) =>
-            a.localeCompare(b)
-        )
-        .forEach(
-            category => {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    category;
-
-                option.textContent =
-                    category;
-
-                select.appendChild(
-                    option
-                );
-
-            }
-        );
+});
 
 
-    /*
-     * Custom category option
-     */
+const custom =
+document.createElement(
+"option"
+);
 
-    const custom =
-        document.createElement(
-            "option"
-        );
+custom.value =
+"__CUSTOM__";
 
-    custom.value =
-        "__CUSTOM__";
+custom.textContent =
+"+ Custom Category...";
 
-    custom.textContent =
-        "+ Custom Category...";
-
-    select.appendChild(
-        custom
-    );
+select.appendChild(
+custom
+);
 
 }
 
@@ -1619,54 +1635,125 @@ function renderCategoryDropdown(){
 ===================================================== */
 
 document
-.getElementById("bulkCategory")
+.getElementById(
+"bulkCategory"
+)
 .addEventListener(
-    "change",
-    function(){
+"change",
+function(){
 
-        if(
-            this.value ===
-            "__CUSTOM__"
-        ){
-
-            const custom =
-                prompt(
-                    "Enter the new category:"
-                );
+if(
+this.value !== "__CUSTOM__"
+){
+return;
+}
 
 
-            if(
-                custom &&
-                custom.trim()
-            ){
-
-                const name =
-                    custom.trim();
-
-
-                categories.add(
-                    name
-                );
-
-
-                renderCategoryDropdown();
-
-
-                document.getElementById(
-                    "bulkCategory"
-                ).value =
-                    name;
-
-            }else{
-
-                this.value = "";
-
-            }
-
-        }
-
-    }
+const custom =
+prompt(
+"Enter the new category:"
 );
+
+
+if(
+custom &&
+custom.trim()
+){
+
+const name =
+custom.trim();
+
+categories.add(
+name
+);
+
+renderCategoryDropdown();
+
+document.getElementById(
+"bulkCategory"
+).value =
+name;
+
+}else{
+
+this.value = "";
+
+}
+
+}
+);
+
+
+/* =====================================================
+   FILTER PRODUCTS
+===================================================== */
+
+function getFilteredProducts(){
+
+const search =
+String(
+document.getElementById(
+"productSearch"
+).value || ""
+)
+.trim()
+.toLowerCase();
+
+
+const collectionFilter =
+String(
+document.getElementById(
+"collectionFilter"
+).value || ""
+)
+.trim()
+.toLowerCase();
+
+
+return allProducts.filter(
+product => {
+
+const name =
+String(
+product.name || ""
+)
+.toLowerCase();
+
+
+const sku =
+String(
+product.sku || ""
+)
+.toLowerCase();
+
+
+const collection =
+String(
+product.collection || ""
+)
+.toLowerCase();
+
+
+const matchesSearch =
+!search ||
+name.includes(search) ||
+sku.includes(search);
+
+
+const matchesCollection =
+!collectionFilter ||
+collection ===
+collectionFilter;
+
+
+return (
+matchesSearch &&
+matchesCollection
+);
+
+});
+
+}
 
 
 /* =====================================================
@@ -1675,265 +1762,219 @@ document
 
 function renderProducts(){
 
-    const tableWrap =
-        document.getElementById(
-            "productTableWrap"
-        );
+const tableWrap =
+document.getElementById(
+"productTableWrap"
+);
 
 
-    const search =
-        String(
-            document.getElementById(
-                "productSearch"
-            ).value || ""
-        )
-        .trim()
-        .toLowerCase();
+const filtered =
+getFilteredProducts();
 
 
-    const collectionFilter =
-        String(
-            document.getElementById(
-                "collectionFilter"
-            ).value || ""
-        )
-        .trim()
-        .toLowerCase();
+if(!filtered.length){
 
+tableWrap.innerHTML = `
 
-    const filtered =
-        allProducts.filter(
-            product => {
+<div class="empty-state">
 
-                const name =
-                    String(
-                        product.name || ""
-                    )
-                    .toLowerCase();
+No products found.
 
+<br><br>
 
-                const sku =
-                    String(
-                        product.sku || ""
-                    )
-                    .toLowerCase();
+Try clearing the search/filter
+or click Refresh.
 
+</div>
 
-                const collection =
-                    String(
-                        product.collection || ""
-                    )
-                    .toLowerCase();
+`;
 
+return;
 
-                const matchesSearch =
-                    !search ||
-                    name.includes(search) ||
-                    sku.includes(search);
+}
 
 
-                const matchesCollection =
-                    !collectionFilter ||
-                    collection ===
-                    collectionFilter;
+tableWrap.innerHTML = `
 
+<table>
 
-                return (
-                    matchesSearch &&
-                    matchesCollection
-                );
+<thead>
 
-            }
-        );
+<tr>
 
+<th class="checkbox-cell">
 
-    if(!filtered.length){
+<input
+type="checkbox"
+id="selectAll"
+>
 
-        tableWrap.innerHTML = `
-            <div class="empty-state">
-                No products found.
-            </div>
-        `;
+</th>
 
-        return;
+<th>
+Product
+</th>
 
-    }
+<th>
+SKU
+</th>
 
+<th>
+Category
+</th>
 
-    tableWrap.innerHTML = `
+<th>
+Collection
+</th>
 
-        <table>
+<th>
+Price
+</th>
 
-            <thead>
+<th>
+Stock
+</th>
 
-                <tr>
+<th>
+Status
+</th>
 
-                    <th class="checkbox-cell">
+</tr>
 
-                        <input
-                            type="checkbox"
-                            id="selectAll"
-                        >
+</thead>
 
-                    </th>
 
-                    <th>
-                        Product
-                    </th>
+<tbody>
 
-                    <th>
-                        SKU
-                    </th>
+${filtered
+.map(
+product =>
+productRow(product)
+)
+.join("")}
 
-                    <th>
-                        Category
-                    </th>
+</tbody>
 
-                    <th>
-                        Collection
-                    </th>
+</table>
 
-                    <th>
-                        Price
-                    </th>
+`;
 
-                    <th>
-                        Stock
-                    </th>
 
-                    <th>
-                        Status
-                    </th>
+/*
+ * Restore selected checkboxes.
+ */
 
-                </tr>
+document
+.querySelectorAll(
+".product-checkbox"
+)
+.forEach(
+checkbox => {
 
-            </thead>
+checkbox.checked =
+selectedProductIds.has(
+String(
+checkbox.dataset.id
+)
+);
 
 
-            <tbody>
+checkbox.addEventListener(
+"change",
+function(){
 
-                ${
-                    filtered
-                    .map(
-                        product =>
-                        productRow(product)
-                    )
-                    .join("")
-                }
+const id =
+String(
+this.dataset.id
+);
 
-            </tbody>
 
-        </table>
+if(this.checked){
 
-    `;
+selectedProductIds.add(
+id
+);
 
+}else{
 
-    const selectAll =
-        document.getElementById(
-            "selectAll"
-        );
+selectedProductIds.delete(
+id
+);
 
+}
 
-    if(selectAll){
 
-        selectAll.addEventListener(
-            "change",
-            function(){
+updateSelectedCount();
 
-                filtered.forEach(
-                    product => {
+}
+);
 
-                        if(this.checked){
+});
 
-                            selectedProductIds.add(
-                                product.id
-                            );
 
-                        }else{
+/*
+ * Select all visible.
+ */
 
-                            selectedProductIds.delete(
-                                product.id
-                            );
+const selectAll =
+document.getElementById(
+"selectAll"
+);
 
-                        }
 
-                    }
-                );
+if(selectAll){
 
+const visibleIds =
+filtered.map(
+product =>
+String(product.id)
+);
 
-                renderProducts();
 
-                updateSelectedCount();
+const allSelected =
+visibleIds.length > 0 &&
+visibleIds.every(
+id =>
+selectedProductIds.has(id)
+);
 
-            }
-        );
 
-    }
+selectAll.checked =
+allSelected;
 
 
-    document
-        .querySelectorAll(
-            ".product-checkbox"
-        )
-        .forEach(
-            checkbox => {
+selectAll.addEventListener(
+"change",
+function(){
 
-                checkbox.addEventListener(
-                    "change",
-                    function(){
+visibleIds.forEach(
+id => {
 
-                        const id =
-                            this.dataset.id;
+if(this.checked){
 
+selectedProductIds.add(
+id
+);
 
-                        if(this.checked){
+}else{
 
-                            selectedProductIds.add(
-                                id
-                            );
+selectedProductIds.delete(
+id
+);
 
-                        }else{
+}
 
-                            selectedProductIds.delete(
-                                id
-                            );
+});
 
-                        }
 
+renderProducts();
 
-                        updateSelectedCount();
+updateSelectedCount();
 
-                    }
-                );
+}
+);
 
-            }
-        );
-
-
-    /*
-     * Restore checked state.
-     */
-
-    document
-        .querySelectorAll(
-            ".product-checkbox"
-        )
-        .forEach(
-            checkbox => {
-
-                if(
-                    selectedProductIds.has(
-                        checkbox.dataset.id
-                    )
-                ){
-
-                    checkbox.checked =
-                        true;
-
-                }
-
-            }
-        );
+}
 
 }
 
@@ -1944,288 +1985,212 @@ function renderProducts(){
 
 function productRow(product){
 
-    const id =
-        String(
-            product.id
-        );
+const id =
+String(
+product.id || ""
+);
 
 
-    const selected =
-        selectedProductIds.has(
-            id
-        );
+const selected =
+selectedProductIds.has(
+id
+);
 
 
-    const image =
-        product.image_url ||
-        product.image ||
-        "";
+const name =
+escapeHtml(
+product.name ||
+"Unnamed Product"
+);
 
 
-    const name =
-        escapeHtml(
-            product.name ||
-            "Unnamed Product"
-        );
+const sku =
+escapeHtml(
+product.sku ||
+"—"
+);
 
 
-    const sku =
-        escapeHtml(
-            product.sku ||
-            "-"
-        );
+const category =
+escapeHtml(
+product.category ||
+"—"
+);
 
 
-    const category =
-        escapeHtml(
-            product.category ||
-            "—"
-        );
+const collection =
+escapeHtml(
+product.collection ||
+"—"
+);
 
 
-    const collection =
-        escapeHtml(
-            product.collection ||
-            "—"
-        );
+const priceValue =
+Number(
+product.sale_price ??
+product.price ??
+0
+);
 
 
-    const price =
-        Number(
-            product.sale_price ??
-            product.price ??
-            0
-        );
+const stock =
+product.stock ??
+0;
 
 
-    const stock =
-        product.stock ??
-        product.quantity ??
-        0;
+const status =
+escapeHtml(
+product.status ||
+"active"
+);
 
 
-    const status =
-        escapeHtml(
-            product.status ||
-            (
-                product.is_active === false
-                ? "inactive"
-                : "active"
-            )
-        );
+return `
+
+<tr>
+
+<td class="checkbox-cell">
+
+<input
+type="checkbox"
+class="product-checkbox"
+data-id="${escapeHtml(id)}"
+${selected ? "checked" : ""}
+>
+
+</td>
 
 
-    return `
+<td>
 
-        <tr>
+<div class="product-name">
+${name}
+</div>
 
-            <td class="checkbox-cell">
-
-                <input
-                    type="checkbox"
-                    class="product-checkbox"
-                    data-id="${escapeHtml(id)}"
-                    ${selected ? "checked" : ""}
-                >
-
-            </td>
+</td>
 
 
-            <td>
+<td>
 
-                <div class="product-name">
-                    ${name}
-                </div>
+<span class="product-sku">
+${sku}
+</span>
 
-                ${
-                    image
-                    ?
-                    `
-                        <div
-                            style="
-                                color:#777;
-                                font-size:11px;
-                                margin-top:4px;
-                            "
-                        >
-                            Image available
-                        </div>
-                    `
-                    :
-                    ""
-                }
-
-            </td>
+</td>
 
 
-            <td>
+<td>
 
-                <span class="product-sku">
-                    ${sku}
-                </span>
+<span class="tag">
+${category}
+</span>
 
-            </td>
-
-
-            <td>
-
-                <span class="tag">
-                    ${category}
-                </span>
-
-            </td>
+</td>
 
 
-            <td>
+<td>
 
-                <span class="tag">
-                    ${collection}
-                </span>
+<span class="tag">
+${collection}
+</span>
 
-            </td>
-
-
-            <td>
-                ₹${Number.isFinite(price) ? price.toLocaleString("en-IN") : "0"}
-            </td>
+</td>
 
 
-            <td>
-                ${escapeHtml(stock)}
-            </td>
+<td>
+
+₹${
+Number.isFinite(priceValue)
+? priceValue.toLocaleString("en-IN")
+: "0"
+}
+
+</td>
 
 
-            <td>
-                ${status}
-            </td>
+<td>
+${escapeHtml(stock)}
+</td>
 
-        </tr>
 
-    `;
+<td>
+${status}
+</td>
+
+</tr>
+
+`;
 
 }
 
 
 /* =====================================================
-   SELECT COUNT
+   SELECTED COUNT
 ===================================================== */
 
 function updateSelectedCount(){
 
-    const count =
-        selectedProductIds.size;
+const count =
+selectedProductIds.size;
 
 
-    document.getElementById(
-        "selectedCount"
-    ).textContent =
-        count;
+document.getElementById(
+"selectedCount"
+).textContent =
+count;
 
 
-    document.getElementById(
-        "toolbarSelectedCount"
-    ).textContent =
-        count;
+document.getElementById(
+"toolbarSelectedCount"
+).textContent =
+count;
 
 
-    const panel =
-        document.getElementById(
-            "bulkUpdatePanel"
-        );
+const panel =
+document.getElementById(
+"bulkUpdatePanel"
+);
 
 
-    panel.style.display =
-        count > 0
-        ? "block"
-        : "none";
+panel.style.display =
+count > 0
+? "block"
+: "none";
 
 }
 
 
 /* =====================================================
-   SELECT ALL
+   SELECT ALL BUTTON
 ===================================================== */
 
 document
 .getElementById(
-    "selectAllButton"
+"selectAllButton"
 )
 .addEventListener(
-    "click",
-    function(){
+"click",
+function(){
 
-        const search =
-            String(
-                document.getElementById(
-                    "productSearch"
-                ).value || ""
-            )
-            .trim()
-            .toLowerCase();
+const filtered =
+getFilteredProducts();
 
 
-        const filter =
-            String(
-                document.getElementById(
-                    "collectionFilter"
-                ).value || ""
-            )
-            .trim()
-            .toLowerCase();
+filtered.forEach(
+product => {
+
+selectedProductIds.add(
+String(product.id)
+);
+
+});
 
 
-        allProducts.forEach(
-            product => {
+renderProducts();
 
-                const name =
-                    String(
-                        product.name || ""
-                    ).toLowerCase();
+updateSelectedCount();
 
-
-                const sku =
-                    String(
-                        product.sku || ""
-                    ).toLowerCase();
-
-
-                const collection =
-                    String(
-                        product.collection || ""
-                    ).toLowerCase();
-
-
-                const matchSearch =
-                    !search ||
-                    name.includes(search) ||
-                    sku.includes(search);
-
-
-                const matchCollection =
-                    !filter ||
-                    collection === filter;
-
-
-                if(
-                    matchSearch &&
-                    matchCollection
-                ){
-
-                    selectedProductIds.add(
-                        product.id
-                    );
-
-                }
-
-            }
-        );
-
-
-        renderProducts();
-
-        updateSelectedCount();
-
-    }
+}
 );
 
 
@@ -2235,19 +2200,19 @@ document
 
 document
 .getElementById(
-    "clearSelectionButton"
+"clearSelectionButton"
 )
 .addEventListener(
-    "click",
-    function(){
+"click",
+function(){
 
-        selectedProductIds.clear();
+selectedProductIds.clear();
 
-        renderProducts();
+renderProducts();
 
-        updateSelectedCount();
+updateSelectedCount();
 
-    }
+}
 );
 
 
@@ -2257,11 +2222,11 @@ document
 
 document
 .getElementById(
-    "productSearch"
+"productSearch"
 )
 .addEventListener(
-    "input",
-    renderProducts
+"input",
+renderProducts
 );
 
 
@@ -2271,11 +2236,11 @@ document
 
 document
 .getElementById(
-    "collectionFilter"
+"collectionFilter"
 )
 .addEventListener(
-    "change",
-    renderProducts
+"change",
+renderProducts
 );
 
 
@@ -2285,17 +2250,44 @@ document
 
 document
 .getElementById(
-    "refreshProductsButton"
+"refreshProductsButton"
 )
 .addEventListener(
-    "click",
-    async function(){
+"click",
+async function(){
 
-        selectedProductIds.clear();
+selectedProductIds.clear();
 
-        await loadAdminData();
+this.disabled = true;
 
-    }
+this.textContent =
+"Refreshing...";
+
+
+try{
+
+await loadAdminData();
+
+showStatus(
+"bulkStatus",
+"Products and collections refreshed.",
+"success"
+);
+
+}catch(error){
+
+console.error(error);
+
+}finally{
+
+this.disabled = false;
+
+this.textContent =
+"↻ Refresh";
+
+}
+
+}
 );
 
 
@@ -2305,159 +2297,159 @@ document
 
 document
 .getElementById(
-    "cancelUpdateButton"
+"cancelUpdateButton"
 )
 .addEventListener(
-    "click",
-    function(){
+"click",
+function(){
 
-        document.getElementById(
-            "bulkCategory"
-        ).value = "";
-
-
-        document.getElementById(
-            "bulkCollection"
-        ).value = "";
+document.getElementById(
+"bulkCategory"
+).value = "";
 
 
-        document.getElementById(
-            "updatePreview"
-        ).style.display =
-            "none";
+document.getElementById(
+"bulkCollection"
+).value = "";
 
-    }
+
+document.getElementById(
+"updatePreview"
+).style.display =
+"none";
+
+}
 );
 
 
 /* =====================================================
-   PREVIEW BULK UPDATE
+   PREVIEW UPDATE
 ===================================================== */
 
 document
 .getElementById(
-    "previewUpdateButton"
+"previewUpdateButton"
 )
 .addEventListener(
-    "click",
-    function(){
+"click",
+function(){
 
-        const selected =
-            Array.from(
-                selectedProductIds
-            );
-
-
-        if(!selected.length){
-
-            showStatus(
-                "bulkStatus",
-                "Please select at least one product.",
-                "warning"
-            );
-
-            return;
-
-        }
+const selected =
+Array.from(
+selectedProductIds
+);
 
 
-        const category =
-            document.getElementById(
-                "bulkCategory"
-            ).value;
+if(!selected.length){
+
+showStatus(
+"bulkStatus",
+"Please select at least one product.",
+"warning"
+);
+
+return;
+
+}
 
 
-        const collection =
-            document.getElementById(
-                "bulkCollection"
-            ).value;
+const category =
+document.getElementById(
+"bulkCategory"
+).value;
 
 
-        if(
-            category === "" &&
-            collection === ""
-        ){
-
-            showStatus(
-                "bulkStatus",
-                "Choose a category or collection to update.",
-                "warning"
-            );
-
-            return;
-
-        }
+const collection =
+document.getElementById(
+"bulkCollection"
+).value;
 
 
-        const categoryText =
-            category === "__CLEAR__"
-            ? "Clear category"
-            : category || "No change";
+if(
+category === "" &&
+collection === ""
+){
+
+showStatus(
+"bulkStatus",
+"Choose a category or collection to update.",
+"warning"
+);
+
+return;
+
+}
 
 
-        const collectionText =
-            collection === "__CLEAR__"
-            ? "Clear collection"
-            : collection || "No change";
+const categoryText =
+category === "__CLEAR__"
+? "Clear category"
+: category || "No change";
 
 
-        const preview =
-            document.getElementById(
-                "updatePreview"
-            );
+const collectionText =
+collection === "__CLEAR__"
+? "Clear collection"
+: collection || "No change";
 
 
-        preview.innerHTML = `
-
-            <div class="preview-change">
-
-                <strong>
-                    Ready to update ${selected.length} product(s)
-                </strong>
-
-                <br><br>
-
-                Category:
-                <strong>
-                    ${escapeHtml(categoryText)}
-                </strong>
-
-                <br>
-
-                Collection:
-                <strong>
-                    ${escapeHtml(collectionText)}
-                </strong>
-
-                <br><br>
-
-                <button
-                    type="button"
-                    class="gold-btn"
-                    id="confirmBulkUpdateButton"
-                >
-                    ✓ Confirm & Update ${selected.length} Product(s)
-                </button>
-
-            </div>
-
-        `;
+const preview =
+document.getElementById(
+"updatePreview"
+);
 
 
-        preview.style.display =
-            "block";
+preview.innerHTML = `
+
+<div class="preview-change">
+
+<strong>
+Ready to update ${selected.length} product(s)
+</strong>
+
+<br><br>
+
+Category:
+<strong>
+${escapeHtml(categoryText)}
+</strong>
+
+<br>
+
+Collection:
+<strong>
+${escapeHtml(collectionText)}
+</strong>
+
+<br><br>
+
+<button
+type="button"
+class="gold-btn"
+id="confirmBulkUpdateButton"
+>
+✓ Confirm & Update ${selected.length} Product(s)
+</button>
+
+</div>
+
+`;
 
 
-        document
-        .getElementById(
-            "confirmBulkUpdateButton"
-        )
-        .addEventListener(
-            "click",
-            performBulkUpdate
-        );
+preview.style.display =
+"block";
 
-    }
+
+document
+.getElementById(
+"confirmBulkUpdateButton"
+)
+.addEventListener(
+"click",
+performBulkUpdate
+);
+
+}
 );
 
 
@@ -2467,177 +2459,188 @@ document
 
 async function performBulkUpdate(){
 
-    const selected =
-        Array.from(
-            selectedProductIds
-        );
+const selected =
+Array.from(
+selectedProductIds
+);
 
 
-    if(!selected.length){
+if(!selected.length){
 
-        return;
+return;
 
-    }
+}
 
 
-    const category =
-        document.getElementById(
-            "bulkCategory"
-        ).value;
+const category =
+document.getElementById(
+"bulkCategory"
+).value;
 
 
-    const collection =
-        document.getElementById(
-            "bulkCollection"
-        ).value;
+const collection =
+document.getElementById(
+"bulkCollection"
+).value;
 
 
-    const updates = {};
+const updates = {};
 
 
-    /*
-     * Only update fields that were selected.
-     */
+if(category !== ""){
 
-    if(category !== ""){
+updates.category =
+category === "__CLEAR__"
+? null
+: category;
 
-        updates.category =
-            category === "__CLEAR__"
-            ? null
-            : category;
+}
 
-    }
 
+if(collection !== ""){
 
-    if(collection !== ""){
+updates.collection =
+collection === "__CLEAR__"
+? null
+: collection;
 
-        updates.collection =
-            collection === "__CLEAR__"
-            ? null
-            : collection;
+}
 
-    }
 
+if(
+Object.keys(updates).length === 0
+){
 
-    if(
-        Object.keys(updates).length === 0
-    ){
+return;
 
-        return;
+}
 
-    }
 
+const button =
+document.getElementById(
+"confirmBulkUpdateButton"
+);
 
-    const button =
-        document.getElementById(
-            "confirmBulkUpdateButton"
-        );
 
+button.disabled = true;
 
-    button.disabled = true;
+button.textContent =
+"Updating...";
 
-    button.textContent =
-        "Updating...";
 
+try{
 
-    try{
+/*
+ * Important:
+ * IDs are normalized to strings in the UI,
+ * but Supabase can still compare them correctly.
+ */
 
-        /*
-         * Update each selected product by ID.
-         *
-         * This works even if products have
-         * different SKUs.
-         */
+let updated = 0;
 
-        let updated = 0;
+let failed = [];
 
 
-        for(
-            const id of selected
-        ){
+for(
+const id of selected
+){
 
-            const {
-                error
-            } =
-            await supabaseClient
-                .from("products")
-                .update(updates)
-                .eq(
-                    "id",
-                    id
-                );
+const response =
+await supabaseClient
+.from("products")
+.update(updates)
+.eq(
+"id",
+id
+);
 
 
-            if(error){
+if(response.error){
 
-                throw error;
+failed.push({
+id:id,
+error:response.error.message
+});
 
-            }
+}else{
 
+updated++;
 
-            updated++;
+}
 
-        }
+}
 
 
-        showStatus(
-            "bulkStatus",
-            `Successfully updated ${updated} product(s).`,
-            "success"
-        );
+if(failed.length){
 
+throw new Error(
+`${updated} product(s) updated, but ${failed.length} failed. ` +
+failed
+.map(
+item =>
+item.error
+)
+.join("; ")
+);
 
-        /*
-         * Reset
-         */
+}
 
-        selectedProductIds.clear();
 
+showStatus(
+"bulkStatus",
+`Successfully updated ${updated} product(s).`,
+"success"
+);
 
-        document.getElementById(
-            "bulkCategory"
-        ).value = "";
 
+selectedProductIds.clear();
 
-        document.getElementById(
-            "bulkCollection"
-        ).value = "";
 
+document.getElementById(
+"bulkCategory"
+).value = "";
 
-        document.getElementById(
-            "updatePreview"
-        ).style.display =
-            "none";
 
+document.getElementById(
+"bulkCollection"
+).value = "";
 
-        await loadProducts();
 
+document.getElementById(
+"updatePreview"
+).style.display =
+"none";
 
-        updateSelectedCount();
 
+await loadAdminData();
 
-    }catch(error){
 
-        console.error(
-            "Bulk update error:",
-            error
-        );
+updateSelectedCount();
 
 
-        showStatus(
-            "bulkStatus",
-            error.message ||
-            "Bulk update failed.",
-            "error"
-        );
+}catch(error){
 
+console.error(
+"Bulk update error:",
+error
+);
 
-        button.disabled = false;
 
-        button.textContent =
-            "✓ Confirm & Update";
+showStatus(
+"bulkStatus",
+error.message ||
+"Bulk update failed.",
+"error"
+);
 
-    }
+
+button.disabled =
+false;
+
+button.textContent =
+"✓ Confirm & Update";
+
+}
 
 }
 
@@ -2648,149 +2651,144 @@ async function performBulkUpdate(){
 
 document
 .getElementById(
-    "addCollectionButton"
+"addCollectionButton"
 )
 .addEventListener(
-    "click",
-    addCollection
+"click",
+addCollection
 );
 
 
 async function addCollection(){
 
-    const input =
-        document.getElementById(
-            "newCollectionName"
-        );
+const input =
+document.getElementById(
+"newCollectionName"
+);
 
 
-    const name =
-        String(
-            input.value || ""
-        ).trim();
+const name =
+String(
+input.value || ""
+).trim();
 
 
-    if(!name){
+if(!name){
 
-        showStatus(
-            "collectionStatus",
-            "Enter a collection name.",
-            "warning"
-        );
+showStatus(
+"collectionStatus",
+"Enter a collection name.",
+"warning"
+);
 
-        return;
+return;
 
-    }
-
-
-    const button =
-        document.getElementById(
-            "addCollectionButton"
-        );
+}
 
 
-    button.disabled = true;
-
-    button.textContent =
-        "Adding...";
-
-
-    try{
-
-        /*
-         * Check duplicate locally first.
-         */
-
-        const duplicate =
-            allCollections.some(
-                collection =>
-                getCollectionName(
-                    collection
-                ).toLowerCase() ===
-                name.toLowerCase()
-            );
+const button =
+document.getElementById(
+"addCollectionButton"
+);
 
 
-        if(duplicate){
+button.disabled =
+true;
 
-            throw new Error(
-                "This collection already exists."
-            );
-
-        }
+button.textContent =
+"Adding...";
 
 
-        const {
-            data,
-            error
-        } =
-        await supabaseClient
-            .from("collections")
-            .insert([
-                {
-                    name:name
-                }
-            ])
-            .select();
+try{
+
+const duplicate =
+allCollections.some(
+collection =>
+getCollectionName(
+collection
+).toLowerCase() ===
+name.toLowerCase()
+);
 
 
-        if(error){
+if(duplicate){
 
-            throw error;
+throw new Error(
+"This collection already exists."
+);
 
-        }
-
-
-        if(data?.length){
-
-            allCollections.push(
-                data[0]
-            );
-
-        }else{
-
-            allCollections.push({
-                name:name
-            });
-
-        }
+}
 
 
-        renderCollectionDropdowns();
+const response =
+await supabaseClient
+.from("collections")
+.insert([
+{
+name:name
+}
+])
+.select();
 
 
-        input.value = "";
+if(response.error){
+
+throw response.error;
+
+}
 
 
-        showStatus(
-            "collectionStatus",
-            `"${name}" was added successfully and is now available in the product dropdown.`,
-            "success"
-        );
+if(response.data?.length){
+
+allCollections.push(
+response.data[0]
+);
+
+}else{
+
+allCollections.push({
+name:name
+});
+
+}
 
 
-    }catch(error){
-
-        console.error(
-            "Add collection error:",
-            error
-        );
+renderCollectionDropdowns();
 
 
-        showStatus(
-            "collectionStatus",
-            error.message ||
-            "Could not create collection.",
-            "error"
-        );
-
-    }
+input.value = "";
 
 
-    button.disabled = false;
+showStatus(
+"collectionStatus",
+`"${name}" was added successfully.`,
+"success"
+);
 
-    button.textContent =
-        "+ Add Collection";
+
+}catch(error){
+
+console.error(
+"Add collection error:",
+error
+);
+
+
+showStatus(
+"collectionStatus",
+error.message ||
+"Could not create collection.",
+"error"
+);
+
+}
+
+
+button.disabled =
+false;
+
+button.textContent =
+"+ Add Collection";
 
 }
 
@@ -2801,58 +2799,58 @@ async function addCollection(){
 
 function downloadTemplate(){
 
-    const data = [
+const data = [
 
-        {
-            sku:"TBK-SCR-001",
-            name:"Premium Satin Scrunchie",
-            price:45,
-            sale_price:35,
-            category:"Scrunchies",
-            stock:20,
-            description:"Premium satin scrunchie.",
-            image_url:"",
-            collection:"Best Sellers",
-            status:"active"
-        },
+{
+sku:"TBK-SCR-001",
+name:"Premium Satin Scrunchie",
+price:45,
+sale_price:35,
+category:"Scrunchies",
+stock:20,
+description:"Premium satin scrunchie.",
+image_url:"",
+collection:"Best Sellers",
+status:"active"
+},
 
-        {
-            sku:"TBK-JWL-001",
-            name:"Anti Tarnish Necklace",
-            price:599,
-            sale_price:499,
-            category:"Jewellery",
-            stock:10,
-            description:"Elegant anti-tarnish necklace.",
-            image_url:"",
-            collection:"Jewellery",
-            status:"active"
-        }
+{
+sku:"TBK-JWL-001",
+name:"Anti Tarnish Necklace",
+price:599,
+sale_price:499,
+category:"Jewellery",
+stock:10,
+description:"Elegant anti-tarnish necklace.",
+image_url:"",
+collection:"Jewellery",
+status:"active"
+}
 
-    ];
-
-
-    const worksheet =
-        XLSX.utils.json_to_sheet(
-            data
-        );
+];
 
 
-    const workbook =
-        XLSX.utils.book_new();
+const worksheet =
+XLSX.utils.json_to_sheet(
+data
+);
 
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        worksheet,
-        "Products"
-    );
+const workbook =
+XLSX.utils.book_new();
 
 
-    XLSX.writeFile(
-        workbook,
-        "Trends-by-AK-Product-Template.xlsx"
-    );
+XLSX.utils.book_append_sheet(
+workbook,
+worksheet,
+"Products"
+);
+
+
+XLSX.writeFile(
+workbook,
+"Trends-by-AK-Product-Template.xlsx"
+);
 
 }
 
@@ -2863,487 +2861,475 @@ function downloadTemplate(){
 
 document
 .getElementById(
-    "fileInput"
+"fileInput"
 )
 .addEventListener(
-    "change",
-    handleFile
+"change",
+handleFile
 );
 
 
 function handleFile(event){
 
-    const file =
-        event.target.files[0];
+const file =
+event.target.files[0];
 
 
-    if(!file){
+if(!file){
 
-        return;
+return;
 
-    }
-
-
-    const reader =
-        new FileReader();
+}
 
 
-    reader.onload =
-        function(e){
-
-            try{
-
-                const workbook =
-                    XLSX.read(
-                        e.target.result,
-                        {
-                            type:"array"
-                        }
-                    );
+const reader =
+new FileReader();
 
 
-                const firstSheet =
-                    workbook.Sheets[
-                        workbook.SheetNames[0]
-                    ];
+reader.onload =
+function(e){
+
+try{
+
+const workbook =
+XLSX.read(
+e.target.result,
+{
+type:"array"
+}
+);
 
 
-                const rows =
-                    XLSX.utils.sheet_to_json(
-                        firstSheet,
-                        {
-                            defval:""
-                        }
-                    );
+const firstSheet =
+workbook.Sheets[
+workbook.SheetNames[0]
+];
 
 
-                importedRows =
-                    rows;
+const rows =
+XLSX.utils.sheet_to_json(
+firstSheet,
+{
+defval:""
+}
+);
 
 
-                validateRows(
-                    rows
-                );
+importedRows =
+rows;
 
 
-            }catch(error){
-
-                console.error(
-                    error
-                );
+validateRows(
+rows
+);
 
 
-                showStatus(
-                    "status",
-                    "Could not read the file.",
-                    "error"
-                );
+}catch(error){
 
-            }
-
-        };
+console.error(
+error
+);
 
 
-    reader.readAsArrayBuffer(
-        file
-    );
+showStatus(
+"status",
+"Could not read the file.",
+"error"
+);
+
+}
+
+};
+
+
+reader.readAsArrayBuffer(
+file
+);
 
 }
 
 
 /* =====================================================
-   EXCEL VALIDATION
+   VALIDATE EXCEL
 ===================================================== */
 
 function validateRows(rows){
 
-    validRows = [];
+validRows = [];
 
 
-    const preview =
-        document.getElementById(
-            "previewBody"
-        );
+const preview =
+document.getElementById(
+"previewBody"
+);
 
 
-    preview.innerHTML = "";
+preview.innerHTML = "";
 
 
-    let errors = 0;
+let errors = 0;
 
 
-    const skuSet =
-        new Set();
+const skuSet =
+new Set();
 
 
-    rows.forEach(
-        function(row,index){
+rows.forEach(
+function(row,index){
 
-            const rowNumber =
-                index + 2;
+const rowNumber =
+index + 2;
 
 
-            const sku =
-                String(
-                    row.sku || ""
-                ).trim();
+const sku =
+String(
+row.sku || ""
+).trim();
 
 
-            const name =
-                String(
-                    row.name || ""
-                ).trim();
+const name =
+String(
+row.name || ""
+).trim();
 
 
-            const price =
-                Number(
-                    row.price
-                );
+const price =
+Number(
+row.price
+);
 
 
-            const salePrice =
-                row.sale_price === ""
-                ?
-                null
-                :
-                Number(
-                    row.sale_price
-                );
+const salePrice =
+row.sale_price === ""
+?
+null
+:
+Number(
+row.sale_price
+);
 
 
-            const category =
-                String(
-                    row.category || ""
-                ).trim();
+const category =
+String(
+row.category || ""
+).trim();
 
 
-            const stock =
-                Number(
-                    row.stock
-                );
+const stock =
+Number(
+row.stock
+);
 
 
-            let rowErrors = [];
+let rowErrors = [];
 
 
-            if(!sku){
+if(!sku){
 
-                rowErrors.push(
-                    "SKU missing"
-                );
+rowErrors.push(
+"SKU missing"
+);
 
-            }
+}
 
 
-            if(!name){
+if(!name){
 
-                rowErrors.push(
-                    "Name missing"
-                );
+rowErrors.push(
+"Name missing"
+);
 
-            }
+}
 
 
-            if(
-                !Number.isFinite(price) ||
-                price < 0
-            ){
+if(
+!Number.isFinite(price) ||
+price < 0
+){
 
-                rowErrors.push(
-                    "Invalid price"
-                );
+rowErrors.push(
+"Invalid price"
+);
 
-            }
+}
 
 
-            if(
-                salePrice !== null &&
-                (
-                    !Number.isFinite(
-                        salePrice
-                    ) ||
-                    salePrice < 0
-                )
-            ){
+if(
+salePrice !== null &&
+(
+!Number.isFinite(
+salePrice
+) ||
+salePrice < 0
+)
+){
 
-                rowErrors.push(
-                    "Invalid sale price"
-                );
+rowErrors.push(
+"Invalid sale price"
+);
 
-            }
+}
 
 
-            if(
-                salePrice !== null &&
-                salePrice > price
-            ){
+if(
+salePrice !== null &&
+salePrice > price
+){
 
-                rowErrors.push(
-                    "Sale price > price"
-                );
+rowErrors.push(
+"Sale price > price"
+);
 
-            }
+}
 
 
-            if(!category){
+if(!category){
 
-                rowErrors.push(
-                    "Category missing"
-                );
+rowErrors.push(
+"Category missing"
+);
 
-            }
+}
 
 
-            if(
-                !Number.isFinite(stock) ||
-                stock < 0
-            ){
+if(
+!Number.isFinite(stock) ||
+stock < 0
+){
 
-                rowErrors.push(
-                    "Invalid stock"
-                );
+rowErrors.push(
+"Invalid stock"
+);
 
-            }
+}
 
 
-            if(
-                sku &&
-                skuSet.has(
-                    sku.toLowerCase()
-                )
-            ){
+if(
+sku &&
+skuSet.has(
+sku.toLowerCase()
+)
+){
 
-                rowErrors.push(
-                    "Duplicate SKU in file"
-                );
+rowErrors.push(
+"Duplicate SKU in file"
+);
 
-            }
+}
 
 
-            if(sku){
+if(sku){
 
-                skuSet.add(
-                    sku.toLowerCase()
-                );
+skuSet.add(
+sku.toLowerCase()
+);
 
-            }
+}
 
 
-            const valid =
-                rowErrors.length === 0;
+const valid =
+rowErrors.length === 0;
 
 
-            if(valid){
+if(valid){
 
-                validRows.push({
+validRows.push({
 
-                    sku,
+sku:sku,
 
-                    name,
+name:name,
 
-                    price,
+price:price,
 
-                    sale_price:
-                        salePrice,
+sale_price:salePrice,
 
-                    category,
+category:category,
 
-                    stock,
+stock:stock,
 
-                    description:
-                        String(
-                            row.description || ""
-                        ),
+description:
+String(
+row.description || ""
+),
 
-                    image_url:
-                        String(
-                            row.image_url || ""
-                        ),
+image_url:
+String(
+row.image_url || ""
+),
 
-                    collection:
-                        String(
-                            row.collection || ""
-                        ),
+collection:
+String(
+row.collection || ""
+),
 
-                    status:
-                        String(
-                            row.status ||
-                            "active"
-                        )
+status:
+String(
+row.status || "active"
+)
 
-                });
+});
 
-            }else{
+}else{
 
-                errors++;
+errors++;
 
-            }
+}
 
 
-            const tr =
-                document.createElement(
-                    "tr"
-                );
+const tr =
+document.createElement(
+"tr"
+);
 
 
-            tr.innerHTML = `
+tr.innerHTML = `
 
-                <td>
-                    ${rowNumber}
-                </td>
+<td>
+${rowNumber}
+</td>
 
-                <td>
-                    ${escapeHtml(sku)}
-                </td>
+<td>
+${escapeHtml(sku)}
+</td>
 
-                <td>
-                    ${escapeHtml(name)}
-                </td>
+<td>
+${escapeHtml(name)}
+</td>
 
-                <td>
-                    ₹${
-                        Number.isFinite(price)
-                        ? price
-                        : "-"
-                    }
-                </td>
+<td>
+₹${
+Number.isFinite(price)
+? price
+: "-"
+}
+</td>
 
-                <td>
-                    ${
-                        salePrice !== null &&
-                        Number.isFinite(
-                            salePrice
-                        )
-                        ?
-                        "₹" + salePrice
-                        :
-                        "-"
-                    }
-                </td>
+<td>
+${
+salePrice !== null &&
+Number.isFinite(salePrice)
+?
+"₹" + salePrice
+:
+"-"
+}
+</td>
 
-                <td>
-                    ${escapeHtml(category)}
-                </td>
+<td>
+${escapeHtml(category)}
+</td>
 
-                <td>
-                    ${
-                        Number.isFinite(stock)
-                        ?
-                        stock
-                        :
-                        "-"
-                    }
-                </td>
+<td>
+${
+Number.isFinite(stock)
+?
+stock
+:
+"-"
+}
+</td>
 
-                <td>
-                    ${
-                        escapeHtml(
-                            String(
-                                row.collection ||
-                                ""
-                            )
-                        )
-                    }
-                </td>
+<td>
+${escapeHtml(
+String(
+row.collection || ""
+)
+)}
+</td>
 
-                <td>
-                    ${
-                        escapeHtml(
-                            String(
-                                row.status ||
-                                "active"
-                            )
-                        )
-                    }
-                </td>
+<td>
+${escapeHtml(
+String(
+row.status || "active"
+)
+)}
+</td>
 
-                <td
-                    class="${
-                        valid
-                        ?
-                        "good"
-                        :
-                        "bad"
-                    }"
-                >
+<td
+class="${
+valid
+?
+"good"
+:
+"bad"
+}"
+>
 
-                    ${
-                        valid
-                        ?
-                        "✓ Ready"
-                        :
-                        rowErrors.join(
-                            ", "
-                        )
-                    }
+${
+valid
+?
+"✓ Ready"
+:
+rowErrors.join(", ")
+}
 
-                </td>
+</td>
 
-            `;
+`;
 
 
-            preview.appendChild(
-                tr
-            );
+preview.appendChild(
+tr
+);
 
-        }
-    );
+}
+);
 
 
-    document.getElementById(
-        "previewBox"
-    ).style.display =
-        "block";
+document.getElementById(
+"previewBox"
+).style.display =
+"block";
 
 
-    document.getElementById(
-        "rowCount"
-    ).textContent =
-        rows.length;
+document.getElementById(
+"rowCount"
+).textContent =
+rows.length;
 
 
-    document.getElementById(
-        "validCount"
-    ).textContent =
-        validRows.length;
+document.getElementById(
+"validCount"
+).textContent =
+validRows.length;
 
 
-    document.getElementById(
-        "errorCount"
-    ).textContent =
-        errors;
+document.getElementById(
+"errorCount"
+).textContent =
+errors;
 
 
-    const importButton =
-        document.getElementById(
-            "importButton"
-        );
+const importButton =
+document.getElementById(
+"importButton"
+);
 
 
-    importButton.disabled =
-        validRows.length === 0 ||
-        errors > 0;
+importButton.disabled =
+validRows.length === 0 ||
+errors > 0;
 
 
-    if(errors > 0){
+if(errors > 0){
 
-        showStatus(
-            "status",
-            errors +
-            " row(s) need fixing before import.",
-            "warning"
-        );
+showStatus(
+"status",
+errors +
+" row(s) need fixing before import.",
+"warning"
+);
 
-    }else{
+}else{
 
-        showStatus(
-            "status",
-            rows.length +
-            " product(s) ready to import.",
-            "success"
-        );
+showStatus(
+"status",
+rows.length +
+" product(s) ready to import.",
+"success"
+);
 
-    }
+}
 
 }
 
@@ -3354,209 +3340,187 @@ function validateRows(rows){
 
 async function importProducts(){
 
-    if(
-        validRows.length === 0
-    ){
+if(
+validRows.length === 0
+){
 
-        return;
+return;
 
-    }
+}
 
 
-    const button =
-        document.getElementById(
-            "importButton"
-        );
+const button =
+document.getElementById(
+"importButton"
+);
 
 
-    button.disabled = true;
+button.disabled =
+true;
 
-    button.textContent =
-        "Importing...";
+button.textContent =
+"Importing...";
 
 
-    try{
+try{
 
-        /*
-         * Authentication
-         */
+const {
+data:{
+user
+}
+} =
+await supabaseClient
+.auth
+.getUser();
 
-        const {
-            data:{
-                user
-            }
-        } =
-        await supabaseClient
-            .auth
-            .getUser();
 
+if(!user){
 
-        if(!user){
+throw new Error(
+"Please log in to the admin account before importing products."
+);
 
-            throw new Error(
-                "Please log in to the admin account before importing products."
-            );
+}
 
-        }
 
+const skus =
+validRows.map(
+row =>
+row.sku
+);
 
-        /*
-         * Check existing SKUs
-         */
 
-        const skus =
-            validRows.map(
-                row =>
-                row.sku
-            );
+const response =
+await supabaseClient
+.from("products")
+.select("sku")
+.in(
+"sku",
+skus
+);
 
 
-        const {
-            data:existing,
-            error:existingError
-        } =
-        await supabaseClient
-            .from("products")
-            .select("sku")
-            .in(
-                "sku",
-                skus
-            );
+if(response.error){
 
+throw response.error;
 
-        if(existingError){
+}
 
-            throw existingError;
 
-        }
+const existingSkus =
+new Set(
+(response.data || [])
+.map(
+row =>
+String(
+row.sku
+).toLowerCase()
+)
+);
 
 
-        const existingSkus =
-            new Set(
-                (existing || [])
-                .map(
-                    row =>
-                    String(
-                        row.sku
-                    )
-                    .toLowerCase()
-                )
-            );
+const duplicates =
+validRows.filter(
+row =>
+existingSkus.has(
+row.sku.toLowerCase()
+)
+);
 
 
-        const duplicates =
-            validRows.filter(
-                row =>
-                existingSkus.has(
-                    row.sku.toLowerCase()
-                )
-            );
+if(
+duplicates.length
+){
 
+throw new Error(
+"These SKU(s) already exist: " +
+duplicates
+.map(
+row =>
+row.sku
+)
+.join(", ")
+);
 
-        if(
-            duplicates.length
-        ){
+}
 
-            throw new Error(
-                "These SKU(s) already exist: " +
-                duplicates
-                .map(
-                    row =>
-                    row.sku
-                )
-                .join(", ")
-            );
 
-        }
+const insertResponse =
+await supabaseClient
+.from("products")
+.insert(
+validRows
+);
 
 
-        /*
-         * Insert
-         */
+if(insertResponse.error){
 
-        const {
-            error
-        } =
-        await supabaseClient
-            .from("products")
-            .insert(
-                validRows
-            );
+throw insertResponse.error;
 
+}
 
-        if(error){
 
-            throw error;
+document.getElementById(
+"resultBox"
+).style.display =
+"block";
 
-        }
 
+document.getElementById(
+"resultText"
+).innerHTML = `
 
-        document.getElementById(
-            "resultBox"
-        ).style.display =
-            "block";
+<div class="success">
 
+Successfully imported
 
-        document.getElementById(
-            "resultText"
-        ).innerHTML = `
+<strong>
+${validRows.length}
+</strong>
 
-            <div class="success">
+product(s).
 
-                Successfully imported
+</div>
 
-                <strong>
-                    ${validRows.length}
-                </strong>
+`;
 
-                product(s).
 
-            </div>
+showStatus(
+"status",
+"Import completed successfully.",
+"success"
+);
 
-        `;
 
+button.textContent =
+"Imported ✓";
 
-        showStatus(
-            "status",
-            "Import completed successfully.",
-            "success"
-        );
 
+await loadAdminData();
 
-        button.textContent =
-            "Imported ✓";
 
+}catch(error){
 
-        /*
-         * Refresh product list
-         */
+console.error(
+error
+);
 
-        await loadProducts();
 
+showStatus(
+"status",
+error.message ||
+"Import failed.",
+"error"
+);
 
-    }catch(error){
 
-        console.error(
-            error
-        );
+button.disabled =
+false;
 
+button.textContent =
+"Import Products";
 
-        showStatus(
-            "status",
-            error.message ||
-            "Import failed.",
-            "error"
-        );
-
-
-        button.disabled =
-            false;
-
-
-        button.textContent =
-            "Import Products";
-
-    }
+}
 
 }
 
@@ -3566,16 +3530,15 @@ async function importProducts(){
 ===================================================== */
 
 document.addEventListener(
-    "DOMContentLoaded",
-    async function(){
+"DOMContentLoaded",
+async function(){
 
-        await loadAdminData();
+await loadAdminData();
 
-    }
+}
 );
 
 </script>
-
 
 </body>
 
