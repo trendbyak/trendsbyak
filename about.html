@@ -1,1 +1,2442 @@
-<h1>About</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Discover the story behind Trends by AK — thoughtfully curated accessories, jewellery, handmade pieces and gifts designed to make everyday moments feel a little more special."
+    >
+
+    <meta
+        name="theme-color"
+        content="#0d0c0b"
+    >
+
+    <title>
+        Our Story | Trends by AK
+    </title>
+
+
+    <!-- FAVICON -->
+
+    <link
+        rel="icon"
+        href="assets/logo.png"
+    >
+
+
+    <!-- FONTS -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background: #0d0c0b;
+
+            color: #f4eee5;
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
+            line-height: 1.7;
+
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .site-header {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            min-height: 82px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                12px
+                5vw;
+
+            background:
+                rgba(13,12,11,.96);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+
+            backdrop-filter:
+                blur(14px);
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+        }
+
+
+        .site-logo-image {
+
+            width: 54px;
+
+            height: 54px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+
+        }
+
+
+        .brand-copy {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .brand-copy strong {
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 19px;
+
+            font-weight: 600;
+
+        }
+
+
+        .brand-copy small {
+
+            color: #aaa29a;
+
+            font-size: 10px;
+
+            letter-spacing: .5px;
+
+        }
+
+
+        .main-nav {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 25px;
+
+        }
+
+
+        .main-nav a {
+
+            color: #d7d0c7;
+
+            font-size: 13px;
+
+            transition:
+                color .2s ease;
+
+        }
+
+
+        .main-nav a:hover {
+
+            color: #c5a16a;
+
+        }
+
+
+        .nav-whatsapp {
+
+            padding:
+                10px
+                16px;
+
+            border:
+                1px solid
+                #b28a4b;
+
+            border-radius: 999px;
+
+            color: #fff !important;
+
+        }
+
+
+        .menu-toggle {
+
+            display: none;
+
+            background: none;
+
+            border: 0;
+
+            cursor: pointer;
+
+        }
+
+
+        .menu-toggle span {
+
+            display: block;
+
+            width: 25px;
+
+            height: 2px;
+
+            margin: 5px 0;
+
+            background: #fff;
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .about-hero {
+
+            min-height: 78vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            padding:
+                100px 6vw;
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 50% 25%,
+                    #30271e 0%,
+                    #171411 35%,
+                    #0d0c0b 72%
+                );
+
+        }
+
+
+        .about-hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 420px;
+
+            height: 420px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(178,138,75,.22);
+
+            top: 50%;
+
+            left: 50%;
+
+            transform:
+                translate(-50%,-50%);
+
+        }
+
+
+        .about-hero::after {
+
+            content: "AK";
+
+            position: absolute;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(180px, 30vw, 430px);
+
+            color:
+                rgba(255,255,255,.025);
+
+            line-height: 1;
+
+            pointer-events: none;
+
+        }
+
+
+        .hero-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 850px;
+
+        }
+
+
+        .eyebrow {
+
+            color: #b28a4b;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 3px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .about-hero h1 {
+
+            margin: 0;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(48px, 7vw, 90px);
+
+            font-weight: 500;
+
+            line-height: 1.05;
+
+        }
+
+
+        .about-hero h1 em {
+
+            color: #c6a36c;
+
+            font-style: italic;
+
+        }
+
+
+        .hero-intro {
+
+            max-width: 650px;
+
+            margin:
+                28px auto 0;
+
+            color: #bdb5ad;
+
+            font-size:
+                clamp(15px, 2vw, 18px);
+
+        }
+
+
+        /* =====================================================
+           GENERAL
+        ===================================================== */
+
+        .section {
+
+            padding:
+                110px 7vw;
+
+        }
+
+
+        .section-inner {
+
+            max-width: 1180px;
+
+            margin: auto;
+
+        }
+
+
+        .section-heading {
+
+            max-width: 750px;
+
+        }
+
+
+        h2 {
+
+            margin:
+                0 0 25px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-weight: 500;
+
+            font-size:
+                clamp(36px, 5vw, 62px);
+
+            line-height: 1.15;
+
+        }
+
+
+        h2 em {
+
+            color: #c4a06a;
+
+            font-style: italic;
+
+        }
+
+
+        .section p {
+
+            color: #bdb6ae;
+
+            font-size: 16px;
+
+            line-height: 1.9;
+
+        }
+
+
+        /* =====================================================
+           STORY
+        ===================================================== */
+
+        .story-section {
+
+            background: #0d0c0b;
+
+        }
+
+
+        .story-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 90px;
+
+            align-items: center;
+
+        }
+
+
+        .story-number {
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 120px;
+
+            line-height: 1;
+
+            color:
+                rgba(178,138,75,.15);
+
+            margin-bottom: -35px;
+
+        }
+
+
+        .story-copy h2 {
+
+            max-width: 650px;
+
+        }
+
+
+        .story-copy p {
+
+            max-width: 650px;
+
+        }
+
+
+        .story-visual {
+
+            min-height: 570px;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #211c17,
+                    #0f0e0d
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            overflow: hidden;
+
+        }
+
+
+        .story-visual::before {
+
+            content: "";
+
+            width: 72%;
+
+            aspect-ratio: 1;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(178,138,75,.35);
+
+            position: absolute;
+
+        }
+
+
+        .story-monogram {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: 180px;
+
+            height: 180px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border:
+                1px solid
+                rgba(178,138,75,.6);
+
+            border-radius: 50%;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 58px;
+
+            color: #c7a36a;
+
+        }
+
+
+        .story-label {
+
+            position: absolute;
+
+            bottom: 30px;
+
+            left: 30px;
+
+            right: 30px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            color: #99918a;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+        }
+
+
+        /* =====================================================
+           PHILOSOPHY
+        ===================================================== */
+
+        .philosophy {
+
+            background: #151311;
+
+            text-align: center;
+
+        }
+
+
+        .philosophy-content {
+
+            max-width: 900px;
+
+            margin: auto;
+
+        }
+
+
+        .philosophy h2 {
+
+            font-size:
+                clamp(40px, 6vw, 72px);
+
+        }
+
+
+        .philosophy-quote {
+
+            margin:
+                35px auto 0;
+
+            color: #d4ccc3;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(20px, 3vw, 28px);
+
+            line-height: 1.55;
+
+        }
+
+
+        /* =====================================================
+           VALUES
+        ===================================================== */
+
+        .values-grid {
+
+            margin-top: 55px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.1);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.1);
+
+        }
+
+
+        .value {
+
+            padding:
+                42px 28px;
+
+            border-right:
+                1px solid
+                rgba(255,255,255,.1);
+
+        }
+
+
+        .value:last-child {
+
+            border-right: 0;
+
+        }
+
+
+        .value-number {
+
+            color: #b28a4b;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+        }
+
+
+        .value h3 {
+
+            margin:
+                18px 0 10px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 24px;
+
+            font-weight: 500;
+
+        }
+
+
+        .value p {
+
+            margin: 0;
+
+            font-size: 13px;
+
+            color: #918a83;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           WHAT WE OFFER
+        ===================================================== */
+
+        .offer-section {
+
+            background: #0d0c0b;
+
+        }
+
+
+        .offer-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+
+            margin-top: 55px;
+
+        }
+
+
+        .offer-card {
+
+            padding: 40px;
+
+            min-height: 240px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #191613,
+                    #100f0e
+                );
+
+            transition:
+                transform .25s ease,
+                border-color .25s ease;
+
+        }
+
+
+        .offer-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                rgba(178,138,75,.45);
+
+        }
+
+
+        .offer-card span {
+
+            color: #b28a4b;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+        }
+
+
+        .offer-card h3 {
+
+            margin:
+                22px 0 12px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 29px;
+
+            font-weight: 500;
+
+        }
+
+
+        .offer-card p {
+
+            margin: 0;
+
+            color: #98918a;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =====================================================
+           AFFORDABLE LUXURY
+        ===================================================== */
+
+        .luxury-section {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d1915,
+                    #0d0c0b
+                );
+
+        }
+
+
+        .luxury-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.1fr .9fr;
+
+            gap: 90px;
+
+            align-items: center;
+
+        }
+
+
+        .luxury-copy p {
+
+            max-width: 680px;
+
+        }
+
+
+        .luxury-points {
+
+            display: grid;
+
+            gap: 20px;
+
+        }
+
+
+        .luxury-point {
+
+            display: flex;
+
+            gap: 18px;
+
+            padding:
+                20px 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+
+        }
+
+
+        .luxury-point strong {
+
+            display: block;
+
+            margin-bottom: 4px;
+
+            font-size: 14px;
+
+        }
+
+
+        .luxury-point span {
+
+            color: #b28a4b;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 24px;
+
+        }
+
+
+        .luxury-point small {
+
+            color: #89827b;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =====================================================
+           GIFTING / BULK
+        ===================================================== */
+
+        .bulk-section {
+
+            padding:
+                100px 7vw;
+
+            background: #151311;
+
+        }
+
+
+        .bulk-inner {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding:
+                65px;
+
+            border:
+                1px solid
+                rgba(178,138,75,.3);
+
+            text-align: center;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #241d16,
+                    #151311 65%
+                );
+
+        }
+
+
+        .bulk-inner p {
+
+            max-width: 680px;
+
+            margin:
+                0 auto 30px;
+
+            color: #aaa29a;
+
+        }
+
+
+        .btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 48px;
+
+            padding:
+                12px 25px;
+
+            border-radius: 999px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition:
+                transform .2s ease,
+                background .2s ease;
+
+        }
+
+
+        .btn:hover {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        .btn-gold {
+
+            background: #b28a4b;
+
+            color: #fff;
+
+        }
+
+
+        /* =====================================================
+           CLOSING
+        ===================================================== */
+
+        .closing {
+
+            padding:
+                130px 7vw;
+
+            text-align: center;
+
+            background: #0d0c0b;
+
+        }
+
+
+        .closing-inner {
+
+            max-width: 850px;
+
+            margin: auto;
+
+        }
+
+
+        .closing h2 {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .closing p {
+
+            color: #9d968f;
+
+            max-width: 650px;
+
+            margin:
+                0 auto 35px;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .site-footer {
+
+            padding:
+                60px 7vw 25px;
+
+            background: #080807;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.08);
+
+        }
+
+
+        .footer-top {
+
+            max-width: 1180px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr 1fr 1fr;
+
+            gap: 50px;
+
+        }
+
+
+        .footer-note {
+
+            color: #77716b;
+
+            max-width: 260px;
+
+            font-size: 13px;
+
+            margin-top: 20px;
+
+        }
+
+
+        .footer-column {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 11px;
+
+        }
+
+
+        .footer-column strong {
+
+            margin-bottom: 8px;
+
+            color: #fff;
+
+            font-size: 13px;
+
+        }
+
+
+        .footer-column a {
+
+            color: #77716b;
+
+            font-size: 12px;
+
+        }
+
+
+        .footer-column a:hover {
+
+            color: #b28a4b;
+
+        }
+
+
+        .footer-bottom {
+
+            max-width: 1180px;
+
+            margin:
+                50px auto 0;
+
+            padding-top: 22px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.07);
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            color: #5f5a55;
+
+            font-size: 11px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .main-nav {
+
+                position: absolute;
+
+                top: 82px;
+
+                left: 0;
+
+                right: 0;
+
+                display: none;
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 0;
+
+                padding: 15px 6vw;
+
+                background: #0d0c0b;
+
+                border-bottom:
+                    1px solid
+                    rgba(255,255,255,.1);
+
+            }
+
+
+            .main-nav.is-open {
+
+                display: flex;
+
+            }
+
+
+            .main-nav a {
+
+                padding: 13px 0;
+
+                border-bottom:
+                    1px solid
+                    rgba(255,255,255,.06);
+
+            }
+
+
+            .menu-toggle {
+
+                display: block;
+
+            }
+
+
+            .story-grid,
+            .luxury-grid {
+
+                grid-template-columns: 1fr;
+
+                gap: 45px;
+
+            }
+
+
+            .story-visual {
+
+                min-height: 430px;
+
+            }
+
+
+            .values-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+
+            .value:nth-child(2) {
+
+                border-right: 0;
+
+            }
+
+
+            .value:nth-child(-n+2) {
+
+                border-bottom:
+                    1px solid
+                    rgba(255,255,255,.1);
+
+            }
+
+
+            .offer-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .footer-top {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .site-header {
+
+                padding:
+                    10px 5vw;
+
+            }
+
+
+            .site-logo-image {
+
+                width: 47px;
+
+                height: 47px;
+
+            }
+
+
+            .brand-copy strong {
+
+                font-size: 16px;
+
+            }
+
+
+            .brand-copy small {
+
+                font-size: 8px;
+
+            }
+
+
+            .about-hero {
+
+                min-height: 72vh;
+
+                padding:
+                    80px 6vw;
+
+            }
+
+
+            .about-hero::before {
+
+                width: 290px;
+
+                height: 290px;
+
+            }
+
+
+            .section {
+
+                padding:
+                    75px 6vw;
+
+            }
+
+
+            .story-number {
+
+                font-size: 80px;
+
+            }
+
+
+            .story-visual {
+
+                min-height: 360px;
+
+            }
+
+
+            .story-monogram {
+
+                width: 140px;
+
+                height: 140px;
+
+                font-size: 45px;
+
+            }
+
+
+            .values-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .value {
+
+                border-right: 0;
+
+                border-bottom:
+                    1px solid
+                    rgba(255,255,255,.1);
+
+            }
+
+
+            .value:last-child {
+
+                border-bottom: 0;
+
+            }
+
+
+            .bulk-section {
+
+                padding:
+                    60px 6vw;
+
+            }
+
+
+            .bulk-inner {
+
+                padding:
+                    45px 25px;
+
+            }
+
+
+            .footer-top {
+
+                grid-template-columns: 1fr;
+
+                gap: 35px;
+
+            }
+
+
+            .footer-bottom {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <a
+        class="brand"
+        href="index.html"
+        aria-label="Trends by AK Home"
+    >
+
+        <img
+            src="assets/logo.png"
+            alt="Trends by AK"
+            class="site-logo-image"
+        >
+
+        <span class="brand-copy">
+
+            <strong>
+                Trends by AK
+            </strong>
+
+            <small>
+                Sustainable Luxury · Affordable
+            </small>
+
+        </span>
+
+    </a>
+
+
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+
+    <nav
+        class="main-nav"
+        id="mainNav"
+    >
+
+        <a href="index.html#collections">
+            Collections
+        </a>
+
+        <a href="index.html#products">
+            Shop
+        </a>
+
+        <a href="index.html#instagram">
+            Instagram
+        </a>
+
+        <a href="index.html#reviews">
+            Reviews
+        </a>
+
+        <a href="index.html#bulk-orders">
+            Bulk Orders
+        </a>
+
+        <a href="about.html">
+            Our Story
+        </a>
+
+        <a href="cart.html">
+            🛒 Cart
+        </a>
+
+        <a
+            class="nav-whatsapp"
+            href="https://wa.me/918433998962"
+            target="_blank"
+            rel="noopener"
+        >
+            WhatsApp
+        </a>
+
+    </nav>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="about-hero">
+
+    <div class="hero-content">
+
+        <p class="eyebrow">
+            OUR STORY · TRENDS BY AK
+        </p>
+
+        <h1>
+
+            Pretty things.<br>
+
+            <em>
+                With a purpose.
+            </em>
+
+        </h1>
+
+        <p class="hero-intro">
+
+            Trends by AK was created with one simple belief:
+            you shouldn't have to spend a fortune to enjoy
+            beautiful, thoughtfully chosen things.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<main>
+
+
+<!-- =====================================================
+     OUR BEGINNING
+===================================================== -->
+
+<section class="section story-section">
+
+    <div class="section-inner">
+
+        <div class="story-grid">
+
+
+            <div class="story-copy">
+
+                <div class="story-number">
+                    01
+                </div>
+
+                <p class="eyebrow">
+                    HOW IT STARTED
+                </p>
+
+                <h2>
+
+                    It started with a love
+                    for <em>beautiful little things.</em>
+
+                </h2>
+
+                <p>
+
+                    Trends by AK grew from a simple passion
+                    for discovering pretty, useful and
+                    affordable accessories — the kind of
+                    pieces that can instantly make an
+                    ordinary day feel a little more special.
+
+                </p>
+
+                <p>
+
+                    What began as a small idea gradually
+                    became a growing collection of
+                    accessories, jewellery, handmade
+                    pieces and gifts, carefully selected
+                    with real people and real everyday
+                    moments in mind.
+
+                </p>
+
+                <p>
+
+                    We don't believe that luxury needs
+                    to be intimidating, excessive or
+                    unreachable.
+
+                    Sometimes luxury is simply finding
+                    something beautiful, receiving it
+                    thoughtfully packed and knowing
+                    you made a good choice.
+
+                </p>
+
+            </div>
+
+
+            <div class="story-visual">
+
+                <div class="story-monogram">
+                    AK
+                </div>
+
+                <div class="story-label">
+
+                    <span>
+                        Thoughtfully curated
+                    </span>
+
+                    <span>
+                          Trends by AK
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PHILOSOPHY
+===================================================== -->
+
+<section class="section philosophy">
+
+    <div class="section-inner">
+
+        <div class="philosophy-content">
+
+            <p class="eyebrow">
+                OUR PHILOSOPHY
+            </p>
+
+            <h2>
+
+                Luxury doesn't have
+                to be <em>loud.</em>
+
+            </h2>
+
+            <p class="philosophy-quote">
+
+                “We believe the prettiest things are
+                the ones that effortlessly become part
+                of your everyday life.”
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     OUR VALUES
+===================================================== -->
+
+<section class="section">
+
+    <div class="section-inner">
+
+        <p class="eyebrow">
+            WHAT MATTERS TO US
+        </p>
+
+        <h2>
+            The little things
+            <em>matter.</em>
+        </h2>
+
+
+        <div class="values-grid">
+
+
+            <div class="value">
+
+                <span class="value-number">
+                    01
+                </span>
+
+                <h3>
+                    Thoughtful
+                </h3>
+
+                <p>
+
+                    We don't want to fill your space
+                    with more things. We want to help
+                    you discover pieces you'll actually
+                    love.
+
+                </p>
+
+            </div>
+
+
+            <div class="value">
+
+                <span class="value-number">
+                    02
+                </span>
+
+                <h3>
+                    Affordable
+                </h3>
+
+                <p>
+
+                    Beautiful shouldn't automatically
+                    mean expensive. We look for the
+                    balance between quality, design
+                    and accessible pricing.
+
+                </p>
+
+            </div>
+
+
+            <div class="value">
+
+                <span class="value-number">
+                    03
+                </span>
+
+                <h3>
+                    Personal
+                </h3>
+
+                <p>
+
+                    From everyday accessories to
+                    gifting, we want every purchase
+                    to feel personal and considered.
+
+                </p>
+
+            </div>
+
+
+            <div class="value">
+
+                <span class="value-number">
+                    04
+                </span>
+
+                <h3>
+                    Genuine
+                </h3>
+
+                <p>
+
+                    We're building Trends by AK
+                    one customer, one order and
+                    one beautiful experience at a time.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WHAT WE OFFER
+===================================================== -->
+
+<section class="section offer-section">
+
+    <div class="section-inner">
+
+        <p class="eyebrow">
+            WHAT YOU'LL FIND HERE
+        </p>
+
+        <h2>
+            A little something
+            for <em>every mood.</em>
+        </h2>
+
+
+        <div class="offer-grid">
+
+
+            <article class="offer-card">
+
+                <span>
+                    01 · HAIR ACCESSORIES
+                </span>
+
+                <h3>
+                    Everyday pretty.
+                </h3>
+
+                <p>
+
+                    From satin scrunchies and bows
+                    to headbands and other hair
+                    accessories — pieces that make
+                    everyday styling effortless.
+
+                </p>
+
+            </article>
+
+
+            <article class="offer-card">
+
+                <span>
+                    02 · JEWELLERY
+                </span>
+
+                <h3>
+                    Effortlessly elegant.
+                </h3>
+
+                <p>
+
+                    Carefully selected jewellery
+                    designed to complement everyday
+                    outfits, celebrations and everything
+                    in between.
+
+                </p>
+
+            </article>
+
+
+            <article class="offer-card">
+
+                <span>
+                    03 · GIFTING
+                </span>
+
+                <h3>
+                    Made to make someone smile.
+                </h3>
+
+                <p>
+
+                    Curated hampers, gift sets,
+                    return favours and thoughtful
+                    little surprises for the people
+                    who matter.
+
+                </p>
+
+            </article>
+
+
+            <article class="offer-card">
+
+                <span>
+                    04 · BULK & EVENTS
+                </span>
+
+                <h3>
+                    More to celebrate.
+                </h3>
+
+                <p>
+
+                    Bulk orders for weddings,
+                    events, corporate gifting,
+                    boutiques, return gifts and
+                    special occasions.
+
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AFFORDABLE LUXURY
+===================================================== -->
+
+<section class="section luxury-section">
+
+    <div class="section-inner">
+
+        <div class="luxury-grid">
+
+
+            <div class="luxury-copy">
+
+                <p class="eyebrow">
+                    SUSTAINABLE LUXURY · AFFORDABLE
+                </p>
+
+                <h2>
+
+                    Why we call it
+                    <em>affordable luxury.</em>
+
+                </h2>
+
+                <p>
+
+                    For us, luxury isn't only about a
+                    price tag.
+
+                </p>
+
+                <p>
+
+                    It's about how something feels when
+                    you open the package. It's about
+                    thoughtful details, beautiful designs,
+                    useful products and the feeling that
+                    you've chosen something worth having.
+
+                </p>
+
+                <p>
+
+                    We aim to bring that feeling to you
+                    without adding an unnecessary luxury
+                    markup.
+
+                </p>
+
+            </div>
+
+
+            <div class="luxury-points">
+
+
+                <div class="luxury-point">
+
+                    <span>
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Quality first
+                        </strong>
+
+                        <small>
+                            We look for products and
+                            materials that offer real value.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="luxury-point">
+
+                    <span>
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Carefully selected
+                        </strong>
+
+                        <small>
+                            Every collection is chosen
+                            with your everyday needs in mind.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="luxury-point">
+
+                    <span>
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Accessible pricing
+                        </strong>
+
+                        <small>
+                            Premium doesn't have to mean
+                            prohibitively expensive.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="luxury-point">
+
+                    <span>
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Beautiful gifting
+                        </strong>
+
+                        <small>
+                            Because the experience of giving
+                            matters just as much as the gift.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BULK / GIFTING
+===================================================== -->
+
+<section class="bulk-section">
+
+    <div class="bulk-inner">
+
+        <p class="eyebrow">
+            FOR EVENTS · BUSINESSES · SPECIAL MOMENTS
+        </p>
+
+        <h2>
+
+            Have something special
+            <em>in mind?</em>
+
+        </h2>
+
+        <p>
+
+            Whether you're planning a wedding,
+            putting together return gifts,
+            arranging corporate gifting or
+            stocking your boutique, we can help
+            you create something beautiful
+            at a quantity-friendly price.
+
+        </p>
+
+        <a
+            href="https://wa.me/918433998962?text=Hi%20Trends%20by%20AK%2C%20I%27d%20like%20to%20discuss%20a%20bulk%20order."
+            target="_blank"
+            rel="noopener"
+            class="btn btn-gold"
+        >
+            Let's talk about your order →
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CLOSING
+===================================================== -->
+
+<section class="closing">
+
+    <div class="closing-inner">
+
+        <p class="eyebrow">
+            FROM US TO YOU
+        </p>
+
+        <h2>
+
+            Thank you for being
+            part of our <em>story.</em>
+
+        </h2>
+
+        <p>
+
+            Every visit, every order, every recommendation
+            and every message helps a small brand like ours
+            grow.
+
+            We hope Trends by AK becomes the place you
+            come to whenever you're looking for something
+            pretty, thoughtful and a little bit special.
+
+        </p>
+
+        <a
+            href="index.html#products"
+            class="btn btn-gold"
+        >
+            Explore the collection →
+        </a>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="site-footer">
+
+    <div class="footer-top">
+
+
+        <div>
+
+            <a
+                class="brand footer-brand"
+                href="index.html"
+            >
+
+                <img
+                    src="assets/logo.png"
+                    alt="Trends by AK"
+                    class="site-logo-image"
+                >
+
+                <span class="brand-copy">
+
+                    <strong>
+                        Trends by AK
+                    </strong>
+
+                    <small>
+                        Sustainable Luxury · Affordable
+                    </small>
+
+                </span>
+
+            </a>
+
+
+            <p class="footer-note">
+
+                Beautiful accessories.
+                Thoughtfully curated.
+
+            </p>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <strong>
+                Shop
+            </strong>
+
+            <a href="index.html#products">
+                Featured Products
+            </a>
+
+            <a href="index.html#collections">
+                Collections
+            </a>
+
+            <a href="index.html#bulk-orders">
+                Bulk Orders
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <strong>
+                Help
+            </strong>
+
+            <a href="shipping.html">
+                Shipping
+            </a>
+
+            <a href="return.html">
+                Returns
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <strong>
+                Follow
+            </strong>
+
+            <a
+                href="https://instagram.com/trendsbyak"
+                target="_blank"
+                rel="noopener"
+            >
+                @trendsbyak
+            </a>
+
+            <a
+                href="https://wa.me/918433998962"
+                target="_blank"
+                rel="noopener"
+            >
+                WhatsApp
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 Trends by AK.
+            All Rights Reserved.
+        </span>
+
+        <span>
+            Made with love in Mumbai.
+        </span>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     MOBILE MENU
+===================================================== -->
+
+<script>
+
+"use strict";
+
+
+const menuToggle =
+    document.getElementById(
+        "menuToggle"
+    );
+
+
+const mainNav =
+    document.getElementById(
+        "mainNav"
+    );
+
+
+if (
+    menuToggle &&
+    mainNav
+) {
+
+    menuToggle.addEventListener(
+        "click",
+        () => {
+
+            const isOpen =
+                mainNav.classList.toggle(
+                    "is-open"
+                );
+
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+        }
+    );
+
+
+    mainNav
+        .querySelectorAll("a")
+        .forEach(
+            link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        mainNav.classList.remove(
+                            "is-open"
+                        );
+
+
+                        menuToggle.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
