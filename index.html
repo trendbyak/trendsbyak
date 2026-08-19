@@ -1,500 +1,726 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="description"
+    content="Trends by AK — thoughtfully curated accessories, handmade scrunchies, jewellery and gifts."
+>
+
+<meta name="theme-color" content="#1d1b19">
+
+<title>Trends by AK | Sustainable Luxury, Made Affordable</title>
+
+<link rel="icon" href="assets/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet"
+>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@Supabase/supabase-js@2"></script>
+
+
+<style>
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.site-logo-image {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   PRODUCT ACTIONS
+========================================================= */
+
+.product-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin-top: 16px !important;
+}
+
+.product-actions a,
+.product-actions button {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.product-view {
+    background: #1d1b19;
+    color: #fff;
+    border: 1px solid #1d1b19;
+}
+
+.product-cart {
+    background: #b28a4b;
+    color: #fff;
+    border: 1px solid #b28a4b;
+}
+
+.product-order {
+    grid-column: 1 / -1;
+    background: #fff;
+    color: #1d1b19;
+    border: 1px solid #1d1b19;
+}
+
+.product-unavailable {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    color: #777;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+.nav-cart {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+}
+
+#cartCount {
+    min-width: 21px;
+    height: 21px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #b28a4b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   COLLECTION FILTER / STORE CONTROLS
+========================================================= */
+
+.store-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 10px 0 30px;
+    padding: 14px 0;
+    border-top: 1px solid #e8e3db;
+    border-bottom: 1px solid #e8e3db;
+}
+
+.category-filter-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.category-filter-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.category-filter {
+    border: 1px solid #dcd5ca;
+    background: #fff;
+    color: #1d1b19;
+    border-radius: 999px;
+    padding: 9px 34px 9px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+}
+
+.shop-all-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: #1d1b19;
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.shop-all-btn:hover {
+    opacity: .9;
+}
+
+
+/* =========================================================
+   COLLECTION CARDS
+========================================================= */
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.collection-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid #e8e3db;
+    background: #fff;
+    cursor: pointer;
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+.collection-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+.collection-art {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #f4efe7;
+}
+
+.collection-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .4s ease;
+}
+
+.collection-card:hover .collection-art img {
+    transform: scale(1.04);
+}
+
+.collection-art span.collection-number {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(29,27,25,.8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.collection-info {
+    padding: 18px 18px 20px;
+}
+
+.collection-info > span {
+    font-size: 10px;
+    color: #b28a4b;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.collection-info h3 {
+    margin: 6px 0 5px;
+}
+
+.collection-info p {
+    margin: 0;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACTIVE COLLECTION
+========================================================= */
+
+.collection-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+.collection-status strong {
+    font-family: "Playfair Display", serif;
+    font-size: 20px;
+}
+
+.clear-filter {
+    border: none;
+    background: transparent;
+    color: #b28a4b;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0;
+}
+
+
+/* =========================================================
+   INSTAGRAM
+========================================================= */
+
+.instagram-section {
+    overflow: hidden;
+}
+
+.instagram-heading {
+    align-items: flex-end;
+}
+
+.instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+.instagram-link-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    min-width: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e8e3db;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+.instagram-placeholder {
+    aspect-ratio: 4 / 5;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(145deg,#1d1b19,#8b6b42);
+    color: #fff;
+    transition: transform .25s ease;
+    box-sizing: border-box;
+}
+
+.instagram-link-card:hover .instagram-placeholder {
+    transform: scale(1.015);
+}
+
+.instagram-icon {
+    width: 64px;
+    height: 64px;
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+    margin-bottom: 22px;
+}
+
+.instagram-placeholder strong {
+    font-family: "Playfair Display",serif;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.instagram-placeholder span {
+    font-size: 12px;
+    opacity: .8;
+}
+
+.instagram-reel-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,.6);
+    padding: 7px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+}
+
+.instagram-follow-bar {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid #e8e3db;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.instagram-follow-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.instagram-follow-info small {
+    width: 100%;
+    margin-left: 19px;
+    color: #777;
+}
+
+.instagram-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #b28a4b;
+}
+
+
+/* =========================================================
+   REVIEWS
+========================================================= */
+
+.reviews-section {
+    background: #f8f4ed;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 20px;
+}
+
+.review-card {
+    background: #fff;
+    border: 1px solid #e8e3db;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.04);
+}
+
+.review-stars {
+    color: #b28a4b;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.review-text {
+    font-family: "Playfair Display",serif;
+    font-size: 19px;
+    line-height: 1.5;
+    margin: 0 0 22px;
+}
+
+.review-name {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.review-product {
+    display: block;
+    margin-top: 4px;
+    color: #888;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-card,
+.empty-card {
+    grid-column: 1 / -1;
+    padding: 50px 20px;
+    text-align: center;
+    border: 1px solid #e8e3db;
+    border-radius: 16px;
+}
+
+.loader {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 15px;
+    border: 3px solid #e8e3db;
+    border-top-color: #b28a4b;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width:1000px) {
+
+    .collection-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+    .instagram-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+    .reviews-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+}
+
+@media (max-width:600px) {
+
+    .site-logo-image {
+        width: 48px;
+        height: 48px;
+    }
+
+    .collection-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-actions {
+        grid-template-columns: 1fr !important;
+    }
+
+    .product-order {
+        grid-column: auto;
+    }
+
+    .store-controls {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .category-filter-wrap {
+        width: 100%;
+    }
+
+    .category-filter {
+        width: 100%;
+    }
+
+    .shop-all-btn {
+        width: 100%;
+    }
+
+    .instagram-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 12px;
+        padding-bottom: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .instagram-link-card {
+        flex: 0 0 82%;
+        scroll-snap-align: start;
+    }
+
+    .instagram-placeholder {
+        min-height: 390px;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .review-card {
+        padding: 23px;
+    }
+
+    .instagram-follow-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .instagram-follow-bar .btn {
+        width: 100%;
+    }
+
+}
+
+</style>
 
-    <meta
-        name="description"
-        content="Trends by AK — thoughtfully curated accessories, handmade scrunchies, jewellery and gifts."
-    >
-
-    <title>Trends by AK | Sustainable Luxury, Made Affordable</title>
-
-    <!-- Prevent favicon 404 -->
-    <link
-        rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%231d1b19%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-size=%2250%22 fill=%22%23b28a4b%22>AK</text></svg>"
-    >
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-
-        /* =========================================
-           CART
-        ========================================= */
-
-        .product-actions {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 10px !important;
-            width: 100% !important;
-            margin-top: 16px !important;
-        }
-
-        .product-actions a,
-        .product-actions button {
-            box-sizing: border-box !important;
-            width: 100% !important;
-            min-height: 44px !important;
-            padding: 0 14px !important;
-
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-
-            border-radius: 10px !important;
-
-            font-family: inherit !important;
-            font-size: 13px !important;
-            font-weight: 700 !important;
-            line-height: 1 !important;
-
-            text-align: center !important;
-            text-decoration: none !important;
-
-            cursor: pointer !important;
-        }
-
-        .product-view {
-            background: #1d1b19 !important;
-            color: #fff !important;
-            border: 1px solid #1d1b19 !important;
-        }
-
-        .product-cart {
-            appearance: none !important;
-            -webkit-appearance: none !important;
-
-            background: #b28a4b !important;
-            color: #fff !important;
-
-            border: 1px solid #b28a4b !important;
-        }
-
-        .product-order {
-            grid-column: 1 / -1 !important;
-
-            background: #fff !important;
-            color: #1d1b19 !important;
-
-            border: 1px solid #1d1b19 !important;
-        }
-
-        .product-actions a:hover,
-        .product-actions button:hover {
-            opacity: .88 !important;
-            transform: translateY(-1px);
-        }
-
-        .product-unavailable {
-            grid-column: 1 / -1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            min-height: 44px;
-
-            border: 1px solid #ddd;
-            border-radius: 10px;
-
-            color: #777;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .nav-cart {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 6px !important;
-            text-decoration: none !important;
-            font-weight: 700 !important;
-        }
-
-        #cartCount {
-            min-width: 21px;
-            height: 21px;
-            padding: 0 6px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 999px;
-
-            background: #b28a4b;
-            color: #fff;
-
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-
-        /* =========================================
-           INSTAGRAM REELS
-        ========================================= */
-
-        .instagram-reels-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-        }
-
-        .instagram-reel-card {
-            display: block;
-            position: relative;
-
-            aspect-ratio: 9 / 16;
-
-            overflow: hidden;
-
-            border-radius: 16px;
-
-            text-decoration: none;
-
-            background:
-                radial-gradient(
-                    circle at 30% 20%,
-                    rgba(255,255,255,.20),
-                    transparent 30%
-                ),
-                linear-gradient(
-                    145deg,
-                    #1d1b19,
-                    #5a4631,
-                    #b28a4b
-                );
-
-            box-shadow: 0 12px 30px rgba(0,0,0,.10);
-
-            transition:
-                transform .25s ease,
-                box-shadow .25s ease;
-        }
-
-        .instagram-reel-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 18px 35px rgba(0,0,0,.16);
-        }
-
-        .instagram-reel-placeholder {
-            position: relative;
-
-            width: 100%;
-            height: 100%;
-
-            display: flex;
-            flex-direction: column;
-
-            align-items: center;
-            justify-content: center;
-
-            text-align: center;
-
-            padding: 24px;
-
-            color: #fff;
-        }
-
-        .instagram-reel-placeholder img {
-            position: absolute;
-
-            inset: 0;
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-
-            z-index: 0;
-        }
-
-        .instagram-reel-placeholder::after {
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    to bottom,
-                    rgba(0,0,0,.15),
-                    rgba(0,0,0,.60)
-                );
-
-            z-index: 1;
-        }
-
-        .instagram-icon,
-        .reel-label,
-        .instagram-reel-placeholder strong {
-            position: relative;
-            z-index: 2;
-        }
-
-        .instagram-icon {
-            width: 62px;
-            height: 62px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            margin-bottom: 18px;
-
-            border: 1px solid rgba(255,255,255,.7);
-            border-radius: 18px;
-
-            font-size: 34px;
-        }
-
-        .reel-label {
-            margin-bottom: 10px;
-
-            font-size: 10px;
-            font-weight: 700;
-
-            letter-spacing: 2px;
-        }
-
-        .instagram-reel-placeholder strong {
-            max-width: 190px;
-
-            font-family: "Playfair Display", serif;
-
-            font-size: 20px;
-            line-height: 1.3;
-        }
-
-        .instagram-follow-bar {
-            margin-top: 28px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 20px;
-        }
-
-        .instagram-follow-bar > div {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .instagram-follow-bar small {
-            width: 100%;
-            margin-left: 24px;
-            opacity: .7;
-        }
-
-        .instagram-follow-dot {
-            width: 9px;
-            height: 9px;
-
-            display: inline-block;
-
-            border-radius: 50%;
-
-            background: #b28a4b;
-        }
-
-
-        /* =========================================
-           LOADING / EMPTY STATES
-        ========================================= */
-
-        .loading-card,
-        .empty-card {
-            grid-column: 1 / -1;
-
-            padding: 50px 20px;
-
-            text-align: center;
-
-            border: 1px solid #e8e4de;
-            border-radius: 16px;
-        }
-
-        .loader {
-            width: 30px;
-            height: 30px;
-
-            margin: 0 auto 15px;
-
-            border: 3px solid #e8e4de;
-            border-top-color: #b28a4b;
-
-            border-radius: 50%;
-
-            animation: spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-
-        /* =========================================
-           MOBILE
-        ========================================= */
-
-        @media (max-width: 900px) {
-
-            .instagram-reels-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-        }
-
-        @media (max-width: 600px) {
-
-            .product-actions {
-                grid-template-columns: 1fr !important;
-            }
-
-            .product-order {
-                grid-column: auto !important;
-            }
-
-            .instagram-reels-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .instagram-follow-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .instagram-follow-bar .btn {
-                width: 100%;
-            }
-
-        }
-
-    </style>
 </head>
 
 
 <body>
 
 
-<!-- =========================================
+<!-- =========================================================
      ANNOUNCEMENT
-========================================= -->
+========================================================= -->
 
 <div class="announcement">
-    <p>
-        ✨ Thoughtfully curated accessories • Bulk orders available • Order directly on WhatsApp
-    </p>
+
+<p>
+✨ Thoughtfully curated accessories •
+Bulk orders available •
+Order directly on WhatsApp
+</p>
+
 </div>
 
 
-<!-- =========================================
+<!-- =========================================================
      HEADER
-========================================= -->
+========================================================= -->
 
 <header class="site-header">
 
-    <a
-        class="brand"
-        href="index.html"
-        aria-label="Trends by AK home"
-    >
+<a
+    class="brand"
+    href="index.html"
+    aria-label="Trends by AK home"
+>
 
-        <span class="brand-mark">AK</span>
+<img
+    src="assets/logo.png"
+    alt="Trends by AK"
+    class="site-logo-image"
+>
 
-        <span class="brand-copy">
+<span class="brand-copy">
 
-            <strong>Trends by AK</strong>
+<strong>Trends by AK</strong>
 
-            <small>
-                Sustainable Luxury · Affordable
-            </small>
+<small>
+Sustainable Luxury · Affordable
+</small>
 
-        </span>
+</span>
 
-    </a>
-
-
-    <button
-        class="menu-toggle"
-        id="menuToggle"
-        aria-label="Open menu"
-        aria-expanded="false"
-    >
-
-        <span></span>
-        <span></span>
-        <span></span>
-
-    </button>
+</a>
 
 
-    <nav
-        class="main-nav"
-        id="mainNav"
-    >
+<button
+    class="menu-toggle"
+    id="menuToggle"
+    aria-label="Open menu"
+    aria-expanded="false"
+>
 
-        <a href="#collections">
-            Collections
-        </a>
+<span></span>
+<span></span>
+<span></span>
 
-        <a href="#products">
-            Shop
-        </a>
+</button>
 
-        <a href="#bulk-orders">
-            Bulk Orders
-        </a>
 
-        <a href="#about">
-            Our Story
-        </a>
+<nav class="main-nav" id="mainNav">
 
-        <a
-            class="nav-cart"
-            href="cart.html"
-            aria-label="Open shopping cart"
-        >
+<a href="#collections">
+Collections
+</a>
 
-            🛒 Cart
+<a href="#products">
+Shop
+</a>
 
-            <span id="cartCount">
-                0
-            </span>
+<a href="store.html">
+Store
+</a>
 
-        </a>
+<a href="#instagram">
+Instagram
+</a>
 
-        <a
-            class="nav-whatsapp"
-            href="https://wa.me/918433998962"
-            target="_blank"
-            rel="noopener"
-        >
-            WhatsApp
-        </a>
+<a href="#reviews">
+Reviews
+</a>
 
-    </nav>
+<a href="#bulk-orders">
+Bulk Orders
+</a>
+
+<a href="#about">
+Our Story
+</a>
+
+<a
+    class="nav-cart"
+    href="cart.html"
+    aria-label="Open shopping cart"
+>
+
+🛒 Cart
+
+<span id="cartCount">0</span>
+
+</a>
+
+<a
+    class="nav-whatsapp"
+    href="https://wa.me/918433998962"
+    target="_blank"
+    rel="noopener"
+>
+WhatsApp
+</a>
+
+</nav>
 
 </header>
 
@@ -502,711 +728,978 @@
 <main>
 
 
-<!-- =========================================
+<!-- =========================================================
      HERO
-========================================= -->
+========================================================= -->
 
-<section
-    class="hero"
-    id="hero"
+<section class="hero" id="hero">
+
+<div class="hero-overlay"></div>
+
+<div class="hero-content">
+
+<p class="eyebrow">
+TRENDS BY AK · CURATED WITH LOVE
+</p>
+
+<h1>
+Little luxuries.<br>
+<em>Made for you.</em>
+</h1>
+
+<p class="hero-text">
+
+Beautiful scrunchies, jewellery,
+accessories and gifts —
+thoughtfully chosen to add
+a little more elegance
+to everyday moments.
+
+</p>
+
+
+<div class="hero-actions">
+
+<a
+    href="#products"
+    class="btn btn-dark"
 >
+Shop the collection →
+</a>
 
-    <div class="hero-overlay"></div>
+<a
+    href="https://wa.me/918433998962"
+    target="_blank"
+    rel="noopener"
+    class="btn btn-light"
+>
+Chat on WhatsApp
+</a>
 
-    <div class="hero-content">
-
-        <p class="eyebrow">
-            TRENDS BY AK · CURATED WITH LOVE
-        </p>
-
-        <h1>
-            Little luxuries.<br>
-            <em>Made for you.</em>
-        </h1>
-
-        <p class="hero-text">
-            Beautiful scrunchies, jewellery, accessories and gifts —
-            thoughtfully chosen to add a little more elegance to everyday moments.
-        </p>
+</div>
 
 
-        <div class="hero-actions">
+<div class="hero-note">
 
-            <a
-                href="#products"
-                class="btn btn-dark"
-            >
-                Shop the collection →
-            </a>
+<span>✓ Premium quality</span>
 
-            <a
-                href="https://wa.me/918433998962"
-                target="_blank"
-                rel="noopener"
-                class="btn btn-light"
-            >
-                Chat on WhatsApp
-            </a>
+<span>✓ Gift-ready options</span>
 
-        </div>
+<span>✓ Bulk orders from 50 pcs</span>
 
+</div>
 
-        <div class="hero-note">
-
-            <span>
-                ✓ Premium quality
-            </span>
-
-            <span>
-                ✓ Gift-ready options
-            </span>
-
-            <span>
-                ✓ Bulk orders from 50 pcs
-            </span>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- =========================================
-     TRUST STRIP
-========================================= -->
+<!-- =========================================================
+     TRUST
+========================================================= -->
 
 <section class="trust-strip">
 
-    <div>
-        <span>01</span>
-        <strong>Thoughtfully Curated</strong>
-        <small>Products chosen with care</small>
-    </div>
+<div>
 
-    <div>
-        <span>02</span>
-        <strong>Premium & Affordable</strong>
-        <small>Luxury without the luxury price</small>
-    </div>
+<span>01</span>
 
-    <div>
-        <span>03</span>
-        <strong>Made for Gifting</strong>
-        <small>Beautiful little moments</small>
-    </div>
+<strong>
+Thoughtfully Curated
+</strong>
 
-    <div>
-        <span>04</span>
-        <strong>Bulk Orders Welcome</strong>
-        <small>Perfect for events & businesses</small>
-    </div>
+<small>
+Products chosen with care
+</small>
+
+</div>
+
+
+<div>
+
+<span>02</span>
+
+<strong>
+Premium & Affordable
+</strong>
+
+<small>
+Luxury without the luxury price
+</small>
+
+</div>
+
+
+<div>
+
+<span>03</span>
+
+<strong>
+Made for Gifting
+</strong>
+
+<small>
+Beautiful little moments
+</small>
+
+</div>
+
+
+<div>
+
+<span>04</span>
+
+<strong>
+Bulk Orders Welcome
+</strong>
+
+<small>
+Perfect for events & businesses
+</small>
+
+</div>
 
 </section>
 
 
-<!-- =========================================
+<!-- =========================================================
      COLLECTIONS
-========================================= -->
+========================================================= -->
 
-<section
-    class="section"
-    id="collections"
+<section class="section" id="collections">
+
+<div class="section-heading">
+
+<div>
+
+<p class="eyebrow">
+SHOP BY MOOD
+</p>
+
+<h2>
+Find your kind of pretty.
+</h2>
+
+</div>
+
+
+<p class="section-intro">
+
+From everyday essentials
+to thoughtful gifting,
+discover something that
+feels just right.
+
+</p>
+
+</div>
+
+
+<div
+    class="collection-grid"
+    id="homepageCollections"
 >
 
-    <div class="section-heading">
+<div class="loading-card">
 
-        <div>
+<div class="loader"></div>
 
-            <p class="eyebrow">
-                SHOP BY MOOD
-            </p>
+<p>
+Loading collections...
+</p>
 
-            <h2>
-                Find your kind of pretty.
-            </h2>
+</div>
 
-        </div>
-
-        <p class="section-intro">
-            From everyday essentials to thoughtful gifting,
-            discover something that feels just right.
-        </p>
-
-    </div>
-
-
-    <div
-        class="collection-grid"
-        id="homepageCollections"
-    >
-
-        <article class="collection-card collection-fallback">
-
-            <div class="collection-art">
-                <span>01</span>
-            </div>
-
-            <div>
-                <span>01</span>
-                <h3>Hair Accessories</h3>
-                <p>Scrunchies, bows & more</p>
-            </div>
-
-        </article>
-
-
-        <article class="collection-card collection-fallback">
-
-            <div class="collection-art">
-                <span>02</span>
-            </div>
-
-            <div>
-                <span>02</span>
-                <h3>Jewellery</h3>
-                <p>Everyday anti-tarnish styles</p>
-            </div>
-
-        </article>
-
-
-        <article class="collection-card collection-fallback">
-
-            <div class="collection-art">
-                <span>03</span>
-            </div>
-
-            <div>
-                <span>03</span>
-                <h3>Gifting</h3>
-                <p>Hampers, favours & return gifts</p>
-            </div>
-
-        </article>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- =========================================
-     PRODUCTS
-========================================= -->
+<!-- =========================================================
+     PRODUCTS / STORE
+========================================================= -->
 
 <section
     class="section products-section"
     id="products"
 >
 
-    <div class="section-heading">
+<div class="section-heading">
 
-        <div>
+<div>
 
-            <p class="eyebrow">
-                JUST IN
-            </p>
+<p class="eyebrow">
+SHOP
+</p>
 
-            <h2>
-                Featured favourites.
-            </h2>
+<h2 id="productsHeading">
+Featured favourites.
+</h2>
 
-        </div>
+</div>
 
-        <a
-            class="text-link"
-            href="#products"
-        >
-            Explore all →
-        </a>
+<a
+    href="store.html"
+    class="text-link"
+>
+View all products →
+</a>
 
-    </div>
-
-
-    <div
-        class="product-grid"
-        id="homepageProducts"
-    >
-
-        <div class="loading-card">
-
-            <div class="loader"></div>
-
-            <p>
-                Loading your favourites...
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
+</div>
 
 
-<!-- =========================================
-     INSTAGRAM REELS
-========================================= -->
+<!-- STORE CONTROLS -->
 
-<section
-    class="instagram-section section"
-    id="instagram-reels"
+<div class="store-controls">
+
+<div class="category-filter-wrap">
+
+<span class="category-filter-label">
+Category
+</span>
+
+<select
+    id="categoryFilter"
+    class="category-filter"
 >
 
-    <div class="section-heading instagram-heading">
+<option value="">
+All categories
+</option>
 
-        <div>
+</select>
 
-            <p class="eyebrow">
-                FOLLOW OUR JOURNEY
-            </p>
-
-            <h2>
-                Seen it on Instagram?
-            </h2>
-
-        </div>
-
-        <a
-            class="text-link"
-            href="https://instagram.com/trendsbyak"
-            target="_blank"
-            rel="noopener"
-        >
-            Follow @trendsbyak ↗
-        </a>
-
-    </div>
+</div>
 
 
-    <div
-        class="instagram-reels-grid"
-        id="instagramReelsGrid"
-    >
+<a
+    href="#products"
+    id="shopAllButton"
+    class="shop-all-btn"
+>
+Shop All
+</a>
 
-        <div class="instagram-reel-placeholder">
-
-            <span class="instagram-icon">
-                ◎
-            </span>
-
-            <span class="reel-label">
-                INSTAGRAM
-            </span>
-
-            <strong>
-                Loading our latest reels...
-            </strong>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <div class="instagram-follow-bar">
+<div
+    id="collectionStatus"
+    class="collection-status"
+    style="display:none;"
+>
 
-        <div>
+<strong id="activeCollectionName"></strong>
 
-            <span class="instagram-follow-dot"></span>
+<button
+    type="button"
+    id="clearCollection"
+    class="clear-filter"
+>
+Clear ×
+</button>
 
-            <strong>
-                @trendsbyak
-            </strong>
-
-            <small>
-                New reels · Styling ideas · Offers
-            </small>
-
-        </div>
+</div>
 
 
-        <a
-            href="https://instagram.com/trendsbyak"
-            target="_blank"
-            rel="noopener"
-            class="btn btn-dark"
-        >
-            Follow us on Instagram →
-        </a>
+<div
+    class="product-grid"
+    id="homepageProducts"
+>
 
-    </div>
+<div class="loading-card">
+
+<div class="loader"></div>
+
+<p>
+Loading your favourites...
+</p>
+
+</div>
+
+</div>
 
 </section>
 
 
-<!-- =========================================
+<!-- =========================================================
+     INSTAGRAM
+========================================================= -->
+
+<section
+    class="section instagram-section"
+    id="instagram"
+>
+
+<div class="section-heading instagram-heading">
+
+<div>
+
+<p class="eyebrow">
+FROM @TRENDSBYAK
+</p>
+
+<h2>
+A little Trends by AK on your feed.
+</h2>
+
+<p class="section-intro">
+
+New launches, styling ideas,
+behind-the-scenes moments and
+little luxuries from Trends by AK.
+
+</p>
+
+</div>
+
+
+<a
+    class="text-link"
+    href="https://www.instagram.com/trendsbyak/"
+    target="_blank"
+    rel="noopener"
+>
+Follow @trendsbyak ↗
+</a>
+
+</div>
+
+
+<div class="instagram-grid">
+
+
+<a
+    href="https://www.instagram.com/p/Db8PMxlDZIC/"
+    target="_blank"
+    rel="noopener"
+    class="instagram-link-card"
+>
+
+<div class="instagram-placeholder">
+
+<div class="instagram-icon">
+◎
+</div>
+
+<strong>
+View on Instagram
+</strong>
+
+<span>
+@trendsbyak
+</span>
+
+</div>
+
+</a>
+
+
+<a
+    href="https://www.instagram.com/p/DcGTuQujdB3/"
+    target="_blank"
+    rel="noopener"
+    class="instagram-link-card"
+>
+
+<div class="instagram-placeholder">
+
+<div class="instagram-icon">
+◎
+</div>
+
+<strong>
+View on Instagram
+</strong>
+
+<span>
+@trendsbyak
+</span>
+
+</div>
+
+</a>
+
+
+<a
+    href="https://www.instagram.com/p/DcI7egfNnWW/"
+    target="_blank"
+    rel="noopener"
+    class="instagram-link-card"
+>
+
+<div class="instagram-placeholder">
+
+<div class="instagram-icon">
+◎
+</div>
+
+<strong>
+View on Instagram
+</strong>
+
+<span>
+@trendsbyak
+</span>
+
+</div>
+
+</a>
+
+
+<a
+    href="https://www.instagram.com/reel/DXj7eOwDenX/"
+    target="_blank"
+    rel="noopener"
+    class="instagram-link-card"
+>
+
+<div class="instagram-placeholder">
+
+<div class="instagram-reel-label">
+INSTAGRAM REEL
+</div>
+
+<div class="instagram-icon">
+▶
+</div>
+
+<strong>
+Watch the Reel
+</strong>
+
+<span>
+@trendsbyak
+</span>
+
+</div>
+
+</a>
+
+</div>
+
+
+<div class="instagram-follow-bar">
+
+<div class="instagram-follow-info">
+
+<span class="instagram-dot"></span>
+
+<strong>
+Follow @trendsbyak
+</strong>
+
+<small>
+New products, styling ideas & behind the scenes.
+</small>
+
+</div>
+
+
+<a
+    href="https://www.instagram.com/trendsbyak/"
+    target="_blank"
+    rel="noopener"
+    class="btn btn-dark"
+>
+Follow on Instagram →
+</a>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     REVIEWS
+========================================================= -->
+
+<section
+    class="section reviews-section"
+    id="reviews"
+>
+
+<div class="section-heading">
+
+<div>
+
+<p class="eyebrow">
+CUSTOMER LOVE
+</p>
+
+<h2>
+Pretty things. Happy customers.
+</h2>
+
+</div>
+
+<p class="section-intro">
+A few words from the people who have shopped with us.
+</p>
+
+</div>
+
+
+<div class="reviews-grid">
+
+<article class="review-card">
+
+<div class="review-stars">
+★★★★★
+</div>
+
+<p class="review-text">
+“The quality is so much better than I expected. Everything looked even prettier in person.”
+</p>
+
+<span class="review-name">
+Happy Customer
+</span>
+
+<span class="review-product">
+Trends by AK
+</span>
+
+</article>
+
+
+<article class="review-card">
+
+<div class="review-stars">
+★★★★★
+</div>
+
+<p class="review-text">
+“Absolutely loved the jewellery. Elegant, affordable and perfect for everyday wear.”
+</p>
+
+<span class="review-name">
+Happy Customer
+</span>
+
+<span class="review-product">
+Jewellery
+</span>
+
+</article>
+
+
+<article class="review-card">
+
+<div class="review-stars">
+★★★★★
+</div>
+
+<p class="review-text">
+“The gifting pieces were beautiful and the packaging made everything feel extra special.”
+</p>
+
+<span class="review-name">
+Happy Customer
+</span>
+
+<span class="review-product">
+Gifting
+</span>
+
+</article>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
      BULK ORDERS
-========================================= -->
+========================================================= -->
 
 <section
     class="bulk-section"
     id="bulk-orders"
 >
 
-    <div class="bulk-copy">
+<div class="bulk-copy">
 
-        <p class="eyebrow">
-            FOR BUSINESSES · EVENTS · GIFTING
-        </p>
+<p class="eyebrow">
+FOR BUSINESSES · EVENTS · GIFTING
+</p>
 
-        <h2>
-            Need more than one?<br>
-            <em>Let's make it special.</em>
-        </h2>
+<h2>
+Need more than one?<br>
+<em>Let's make it special.</em>
+</h2>
 
-        <p>
-            Planning return gifts, wedding favours, corporate gifts,
-            boutique stock or a large event? Get premium scrunchies
-            and curated gifts at the best price for bulk quantities.
-        </p>
+<p>
 
+Planning return gifts,
+wedding favours, corporate gifts,
+boutique stock or a large event?
 
-        <div class="bulk-points">
+Get premium accessories and
+curated gifts at the best price
+for bulk quantities.
 
-            <span>
-                ✓ Bulk orders from 50 pcs
-            </span>
-
-            <span>
-                ✓ Custom colour & gifting options
-            </span>
-
-            <span>
-                ✓ Best pricing for quantity orders
-            </span>
-
-        </div>
+</p>
 
 
-        <a
-            href="https://wa.me/918433998962?text=Hi%20Trends%20by%20AK%2C%20I'm%20interested%20in%20a%20bulk%20order."
-            target="_blank"
-            rel="noopener"
-            class="btn btn-dark"
-        >
-            Enquire for bulk orders →
-        </a>
+<div class="bulk-points">
 
-    </div>
+<span>
+✓ Bulk orders from 50 pcs
+</span>
 
+<span>
+✓ Custom colour & gifting options
+</span>
 
-    <div class="bulk-visual">
+<span>
+✓ Best pricing for quantity orders
+</span>
 
-        <div class="bulk-card">
-
-            <span class="bulk-number">
-                50+
-            </span>
-
-            <span class="bulk-label">
-                pieces
-            </span>
-
-            <small>
-                starting quantity
-            </small>
-
-        </div>
+</div>
 
 
-        <div class="floating-pill pill-one">
-            Corporate gifts
-        </div>
+<a
+    href="https://wa.me/918433998962?text=Hi%20Trends%20by%20AK%2C%20I'm%20interested%20in%20a%20bulk%20order."
+    target="_blank"
+    rel="noopener"
+    class="btn btn-dark"
+>
+Enquire for bulk orders →
+</a>
 
-        <div class="floating-pill pill-two">
-            Return favours
-        </div>
+</div>
 
-        <div class="floating-pill pill-three">
-            Boutique stock
-        </div>
 
-    </div>
+<div class="bulk-visual">
+
+<div class="bulk-card">
+
+<span class="bulk-number">
+50+
+</span>
+
+<span class="bulk-label">
+pieces
+</span>
+
+<small>
+starting quantity
+</small>
+
+</div>
+
+<div class="floating-pill pill-one">
+Corporate gifts
+</div>
+
+<div class="floating-pill pill-two">
+Return favours
+</div>
+
+<div class="floating-pill pill-three">
+Boutique stock
+</div>
+
+</div>
 
 </section>
 
 
-<!-- =========================================
+<!-- =========================================================
      ABOUT
-========================================= -->
+========================================================= -->
 
 <section
     class="about-section section"
     id="about"
 >
 
-    <div class="about-image">
+<div class="about-image">
 
-        <div class="about-monogram">
-            AK
-        </div>
+<div class="about-monogram">
+AK
+</div>
 
-        <span>
-            Thoughtfully curated<br>
-            with love.
-        </span>
+<span>
+Thoughtfully curated<br>
+with love.
+</span>
 
-    </div>
-
-
-    <div class="about-copy">
-
-        <p class="eyebrow">
-            OUR STORY
-        </p>
-
-        <h2>
-            Luxury doesn't have to be loud.
-        </h2>
-
-        <p>
-            At Trends by AK, we believe the prettiest things are the ones
-            that fit effortlessly into your everyday life. We bring together
-            accessories and gifts that feel beautiful, useful and worth keeping.
-        </p>
-
-        <p>
-            From satin scrunchies and hair accessories to anti-tarnish jewellery
-            and gifting options, every collection is selected with quality,
-            affordability and a little extra joy in mind.
-        </p>
+</div>
 
 
-        <a
-            href="about.html"
-            class="text-link"
-        >
-            More about Trends by AK →
-        </a>
+<div class="about-copy">
 
-    </div>
+<p class="eyebrow">
+OUR STORY
+</p>
+
+<h2>
+Luxury doesn't have to be loud.
+</h2>
+
+<p>
+
+At Trends by AK, we believe
+the prettiest things are the ones
+that fit effortlessly into your
+everyday life.
+
+</p>
+
+<p>
+
+From satin scrunchies and
+hair accessories to anti-tarnish
+jewellery and gifting options,
+every collection is selected with
+quality, affordability and a little
+extra joy in mind.
+
+</p>
+
+
+<a
+    href="about.html"
+    class="text-link"
+>
+More about Trends by AK →
+</a>
+
+</div>
 
 </section>
 
 
-<!-- =========================================
+<!-- =========================================================
      WHATSAPP CTA
-========================================= -->
+========================================================= -->
 
 <section class="whatsapp-cta">
 
-    <div>
+<div>
 
-        <p class="eyebrow">
-            HAVE A QUESTION?
-        </p>
+<p class="eyebrow">
+HAVE A QUESTION?
+</p>
 
-        <h2>
-            Let's find something<br>
-            <em>you'll love.</em>
-        </h2>
+<h2>
+Let's find something<br>
+<em>you'll love.</em>
+</h2>
 
-    </div>
+</div>
 
 
-    <a
-        href="https://wa.me/918433998962"
-        target="_blank"
-        rel="noopener"
-        class="btn btn-light"
-    >
-        Talk to us on WhatsApp →
-    </a>
+<a
+    href="https://wa.me/918433998962"
+    target="_blank"
+    rel="noopener"
+    class="btn btn-light"
+>
+Talk to us on WhatsApp →
+</a>
 
 </section>
 
 
-<!-- =========================================
+<!-- =========================================================
      CONTACT
-========================================= -->
+========================================================= -->
 
 <section
     class="contact-section section"
     id="contact"
 >
 
-    <div>
+<div>
 
-        <p class="eyebrow">
-            STAY CONNECTED
-        </p>
+<p class="eyebrow">
+STAY CONNECTED
+</p>
 
-        <h2>
-            Come say hello.
-        </h2>
+<h2>
+Come say hello.
+</h2>
 
-        <p>
-            Follow <strong>@trendsbyak</strong> for new launches,
-            offers, styling ideas and behind-the-scenes moments.
-        </p>
+<p>
 
-    </div>
+Follow <strong>@trendsbyak</strong>
+for new launches, offers,
+styling ideas and
+behind-the-scenes moments.
+
+</p>
+
+</div>
 
 
-    <div class="contact-links">
+<div class="contact-links">
 
-        <a
-            href="https://instagram.com/trendsbyak"
-            target="_blank"
-            rel="noopener"
-        >
-            Instagram ↗
-        </a>
+<a
+    href="https://instagram.com/trendsbyak"
+    target="_blank"
+    rel="noopener"
+>
+Instagram ↗
+</a>
 
-        <a href="mailto:hello@trendsbyak.in">
-            hello@trendsbyak.in
-        </a>
+<a href="mailto:hello@trendsbyak.in">
+hello@trendsbyak.in
+</a>
 
-        <a
-            href="https://wa.me/918433998962"
-            target="_blank"
-            rel="noopener"
-        >
-            WhatsApp ↗
-        </a>
+<a
+    href="https://wa.me/918433998962"
+    target="_blank"
+    rel="noopener"
+>
+WhatsApp ↗
+</a>
 
-    </div>
+</div>
 
 </section>
+
 
 </main>
 
 
-<!-- =========================================
+<!-- =========================================================
      FOOTER
-========================================= -->
+========================================================= -->
 
 <footer class="site-footer">
 
-    <div class="footer-top">
+<div class="footer-top">
 
-        <div>
+<div>
 
-            <a
-                class="brand footer-brand"
-                href="index.html"
-            >
+<a
+    class="brand footer-brand"
+    href="index.html"
+>
 
-                <span class="brand-mark">
-                    AK
-                </span>
+<img
+    src="assets/logo.png"
+    alt="Trends by AK"
+    class="site-logo-image"
+>
 
-                <span class="brand-copy">
+<span class="brand-copy">
 
-                    <strong>
-                        Trends by AK
-                    </strong>
+<strong>
+Trends by AK
+</strong>
 
-                    <small>
-                        Sustainable Luxury · Affordable
-                    </small>
+<small>
+Sustainable Luxury · Affordable
+</small>
 
-                </span>
+</span>
 
-            </a>
-
-            <p class="footer-note">
-                Beautiful accessories. Thoughtfully curated.
-            </p>
-
-        </div>
+</a>
 
 
-        <div class="footer-column">
+<p class="footer-note">
+Beautiful accessories. Thoughtfully curated.
+</p>
 
-            <strong>
-                Shop
-            </strong>
-
-            <a href="#products">
-                Featured Products
-            </a>
-
-            <a href="#collections">
-                Collections
-            </a>
-
-            <a href="#bulk-orders">
-                Bulk Orders
-            </a>
-
-        </div>
+</div>
 
 
-        <div class="footer-column">
+<div class="footer-column">
 
-            <strong>
-                Help
-            </strong>
+<strong>
+Shop
+</strong>
 
-            <a href="shipping.html">
-                Shipping
-            </a>
+<a href="store.html">
+All Products
+</a>
 
-            <a href="return.html">
-                Returns
-            </a>
+<a href="#collections">
+Collections
+</a>
 
-            <a href="contact.html">
-                Contact
-            </a>
+<a href="#bulk-orders">
+Bulk Orders
+</a>
 
-        </div>
-
-
-        <div class="footer-column">
-
-            <strong>
-                Follow
-            </strong>
-
-            <a
-                href="https://instagram.com/trendsbyak"
-                target="_blank"
-                rel="noopener"
-            >
-                @trendsbyak
-            </a>
-
-            <a
-                href="https://wa.me/918433998962"
-                target="_blank"
-                rel="noopener"
-            >
-                WhatsApp
-            </a>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <div class="footer-bottom">
+<div class="footer-column">
 
-        <span>
-            © 2026 Trends by AK. All Rights Reserved.
-        </span>
+<strong>
+Help
+</strong>
 
-        <span>
-            Made with love in Mumbai.
-        </span>
+<a href="shipping.html">
+Shipping
+</a>
 
-    </div>
+<a href="return.html">
+Returns
+</a>
+
+<a href="contact.html">
+Contact
+</a>
+
+</div>
+
+
+<div class="footer-column">
+
+<strong>
+Follow
+</strong>
+
+<a
+    href="https://instagram.com/trendsbyak"
+    target="_blank"
+    rel="noopener"
+>
+@trendsbyak
+</a>
+
+<a
+    href="https://wa.me/918433998962"
+    target="_blank"
+    rel="noopener"
+>
+WhatsApp
+</a>
+
+</div>
+
+</div>
+
+
+<div class="footer-bottom">
+
+<span>
+© 2026 Trends by AK. All Rights Reserved.
+</span>
+
+<span>
+Made with love in Mumbai.
+</span>
+
+</div>
 
 </footer>
 
-
-<!-- =========================================
-     JAVASCRIPT
-========================================= -->
 
 <script>
 
 "use strict";
 
 
-/* =========================================
+/* =========================================================
    SUPABASE
-========================================= */
+========================================================= */
 
 const SUPABASE_URL =
     "https://ltxrycmreumoqfpcbwnb.supabase.co";
@@ -1229,35 +1722,39 @@ if (
             SUPABASE_KEY
         );
 
-} else {
-
-    console.error(
-        "Supabase library failed to load."
-    );
-
 }
 
 
-/* =========================================
+/* =========================================================
+   GLOBAL FILTER STATE
+========================================================= */
+
+let allHomepageProducts = [];
+
+let activeCollection = "";
+
+let activeCategory = "";
+
+
+/* =========================================================
    HELPERS
-========================================= */
+========================================================= */
 
 function escapeHtml(value) {
 
     return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
 
 function formatPrice(value) {
 
-    const number =
-        Number(value || 0);
+    const number = Number(value || 0);
 
     return Number.isFinite(number)
         ? `₹${number.toLocaleString("en-IN")}`
@@ -1265,6 +1762,10 @@ function formatPrice(value) {
 
 }
 
+
+/* =========================================================
+   CART
+========================================================= */
 
 function getCart() {
 
@@ -1299,123 +1800,130 @@ function saveCart(cart) {
 
 function updateCartCount() {
 
-    const cart =
-        getCart();
+    const cart = getCart();
 
     const count =
         cart.reduce(
-            (total, item) =>
+            (total,item) =>
                 total +
                 Number(item.quantity || 0),
             0
         );
 
-    const badge =
+    const counter =
         document.getElementById(
             "cartCount"
         );
 
-    if (badge) {
-
-        badge.textContent =
-            count;
-
-    }
+    if (counter)
+        counter.textContent = count;
 
 }
 
 
-/* =========================================
+/* =========================================================
    PRODUCT IMAGE
-========================================= */
+========================================================= */
 
-function productImage(
-    url,
-    name
-) {
+function productImage(url,alt) {
 
     if (!url) {
 
         return `
-            <div class="product-placeholder">
-                <span>AK</span>
-            </div>
+
+        <div
+            style="
+                width:100%;
+                height:100%;
+                min-height:260px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:#f4efe7;
+                color:#a8895e;
+                font-family:'Playfair Display',serif;
+                font-size:34px;
+            "
+        >
+            AK
+        </div>
+
         `;
 
     }
 
+
     return `
-        <img
-            src="${escapeHtml(url)}"
-            alt="${escapeHtml(name)}"
-            loading="lazy"
-            onerror="
-                this.style.display='none';
-            "
-        >
+
+    <img
+        src="${escapeHtml(url)}"
+        alt="${escapeHtml(alt)}"
+        loading="lazy"
+    >
+
     `;
 
 }
 
 
-/* =========================================
+/* =========================================================
    ANALYTICS
-========================================= */
+========================================================= */
 
 function getVisitorId() {
 
-    let visitorId =
+    let id =
         localStorage.getItem(
             "trendsbyak_visitor_id"
         );
 
-    if (!visitorId) {
+    if (!id) {
 
-        visitorId =
+        id =
             "visitor_" +
             Date.now() +
             "_" +
             Math.random()
                 .toString(36)
-                .substring(2, 12);
+                .substring(2,10);
 
         localStorage.setItem(
             "trendsbyak_visitor_id",
-            visitorId
+            id
         );
 
     }
 
-    return visitorId;
+    return id;
 
 }
 
 
 function getSessionId() {
 
-    let sessionId =
+    let id =
         sessionStorage.getItem(
             "trendsbyak_session_id"
         );
 
-    if (!sessionId) {
+    if (!id) {
 
-        sessionId =
+        id =
             "session_" +
             Date.now() +
             "_" +
             Math.random()
                 .toString(36)
-                .substring(2, 12);
+                .substring(2,10);
 
         sessionStorage.setItem(
             "trendsbyak_session_id",
-            sessionId
+            id
         );
 
     }
 
-    return sessionId;
+    return id;
 
 }
 
@@ -1427,29 +1935,22 @@ function getTrafficSource() {
             window.location.search
         );
 
-
-    const utmSource =
+    const source =
         params.get("utm_source");
 
-    const utmMedium =
+    const medium =
         params.get("utm_medium");
 
-    const utmCampaign =
+    const campaign =
         params.get("utm_campaign");
 
 
-    if (utmSource) {
+    if (source) {
 
         return {
-
-            source: utmSource,
-
-            medium:
-                utmMedium || "unknown",
-
-            campaign:
-                utmCampaign || ""
-
+            source,
+            medium: medium || "unknown",
+            campaign: campaign || ""
         };
 
     }
@@ -1462,13 +1963,9 @@ function getTrafficSource() {
     if (!referrer) {
 
         return {
-
-            source: "direct",
-
-            medium: "none",
-
-            campaign: ""
-
+            source:"direct",
+            medium:"none",
+            campaign:""
         };
 
     }
@@ -1477,113 +1974,70 @@ function getTrafficSource() {
     try {
 
         const host =
-            new URL(
-                referrer
-            ).hostname
-            .toLowerCase();
+            new URL(referrer)
+                .hostname
+                .toLowerCase();
 
 
-        if (
-            host.includes(
-                "instagram.com"
-            )
-        ) {
+        if (host.includes("instagram.com")) {
 
             return {
-                source: "instagram",
-                medium: "social",
-                campaign: ""
+                source:"instagram",
+                medium:"social",
+                campaign:""
             };
 
         }
 
 
         if (
-            host.includes(
-                "facebook.com"
-            ) ||
-            host.includes(
-                "fb.com"
-            )
+            host.includes("facebook.com") ||
+            host.includes("fb.com")
         ) {
 
             return {
-                source: "facebook",
-                medium: "social",
-                campaign: ""
+                source:"facebook",
+                medium:"social",
+                campaign:""
             };
 
         }
 
 
-        if (
-            host.includes(
-                "google."
-            )
-        ) {
+        if (host.includes("google.")) {
 
             return {
-                source: "google",
-                medium: "organic",
-                campaign: ""
+                source:"google",
+                medium:"organic",
+                campaign:""
             };
 
         }
 
 
-        if (
-            host.includes(
-                "youtube.com"
-            )
-        ) {
+        if (host.includes("youtube.com")) {
 
             return {
-                source: "youtube",
-                medium: "social",
-                campaign: ""
-            };
-
-        }
-
-
-        if (
-            host.includes(
-                "whatsapp.com"
-            ) ||
-            host.includes(
-                "wa.me"
-            )
-        ) {
-
-            return {
-                source: "whatsapp",
-                medium: "referral",
-                campaign: ""
+                source:"youtube",
+                medium:"social",
+                campaign:""
             };
 
         }
 
 
         return {
-
-            source: host,
-
-            medium: "referral",
-
-            campaign: ""
-
+            source:host,
+            medium:"referral",
+            campaign:""
         };
 
     } catch {
 
         return {
-
-            source: "unknown",
-
-            medium: "unknown",
-
-            campaign: ""
-
+            source:"unknown",
+            medium:"unknown",
+            campaign:""
         };
 
     }
@@ -1591,19 +2045,13 @@ function getTrafficSource() {
 }
 
 
-/*
-    Analytics is intentionally non-blocking.
-
-    Even if your analytics table has a different
-    structure, the website will continue working.
-*/
-
 async function trackAnalyticsEvent(
     eventType,
     product = null
 ) {
 
-    if (!supabaseClient) return;
+    if (!supabaseClient)
+        return;
 
 
     try {
@@ -1612,62 +2060,37 @@ async function trackAnalyticsEvent(
             getTrafficSource();
 
 
-        const event = {
+        await supabaseClient
+            .from("analytics_events")
+            .insert({
 
-            event_type:
-                eventType,
+                event_type:eventType,
 
-            session_id:
-                getSessionId(),
+                visitor_id:getVisitorId(),
 
-            page_url:
-                window.location.href,
+                session_id:getSessionId(),
 
-            page_path:
-                window.location.pathname,
+                page_url:window.location.href,
 
-            product_id:
-                product?.id || null,
+                page_path:window.location.pathname,
 
-            product_name:
-                product?.name || null,
+                product_id:product?.id || null,
 
-            source:
-                traffic.source,
+                product_name:product?.name || null,
 
-            medium:
-                traffic.medium,
+                source:traffic.source,
 
-            campaign:
-                traffic.campaign,
+                medium:traffic.medium,
 
-            referrer:
-                document.referrer || null,
+                campaign:traffic.campaign,
 
-            user_agent:
-                navigator.userAgent
+                referrer:document.referrer || null,
 
-        };
+                user_agent:navigator.userAgent
 
+            });
 
-        const result =
-            await supabaseClient
-                .from(
-                    "analytics_events"
-                )
-                .insert(event);
-
-
-        if (result.error) {
-
-            console.warn(
-                "Analytics:",
-                result.error.message
-            );
-
-        }
-
-    } catch (error) {
+    } catch(error) {
 
         console.warn(
             "Analytics unavailable:",
@@ -1679,11 +2102,10 @@ async function trackAnalyticsEvent(
 }
 
 
-function trackProductView(
-    product
-) {
+function trackProductView(product) {
 
-    if (!product?.id) return;
+    if (!product?.id)
+        return;
 
     trackAnalyticsEvent(
         "product_view",
@@ -1693,11 +2115,10 @@ function trackProductView(
 }
 
 
-function trackAddToCart(
-    product
-) {
+function trackAddToCart(product) {
 
-    if (!product?.id) return;
+    if (!product?.id)
+        return;
 
     trackAnalyticsEvent(
         "add_to_cart",
@@ -1707,25 +2128,109 @@ function trackAddToCart(
 }
 
 
-function trackOrderClick(
-    product = null
-) {
+/* =========================================================
+   LOAD CATEGORIES
+========================================================= */
 
-    trackAnalyticsEvent(
-        "order_click",
-        product
+async function loadCategories() {
+
+    const select =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+
+    if (
+        !select ||
+        !supabaseClient
+    )
+        return;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("products")
+        .select("category")
+        .not(
+            "category",
+            "is",
+            null
+        );
+
+
+    if (error) {
+
+        console.warn(
+            "Category loading error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    const categories =
+        [
+            ...new Set(
+                (data || [])
+                    .map(
+                        item =>
+                            String(
+                                item.category || ""
+                            ).trim()
+                    )
+                    .filter(Boolean)
+            )
+        ]
+        .sort(
+            (a,b) =>
+                a.localeCompare(b)
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+            All categories
+        </option>
+
+    `;
+
+
+    categories.forEach(
+        category => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value = category;
+
+            option.textContent = category;
+
+            select.appendChild(
+                option
+            );
+
+        }
     );
+
+
+    select.value =
+        activeCategory;
 
 }
 
 
-/* =========================================
-   LOAD PRODUCTS
-========================================= */
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
 
-async function loadHomepageProducts(
-    collectionFilter = ""
-) {
+function renderHomepageProducts() {
 
     const container =
         document.getElementById(
@@ -1733,84 +2238,64 @@ async function loadHomepageProducts(
         );
 
 
-    if (!container) return;
-
-
-    if (!supabaseClient) {
-
-        container.innerHTML = `
-            <div class="empty-card">
-                <h3>Unable to connect to our collection.</h3>
-                <p>Please refresh the page or contact us on WhatsApp.</p>
-            </div>
-        `;
-
+    if (!container)
         return;
 
-    }
+
+    let products =
+        [...allHomepageProducts];
 
 
-    let query =
-        supabaseClient
-            .from("products")
-            .select("*")
-            .order(
-                "id",
-                {
-                    ascending: false
-                }
-            );
+    if (activeCollection) {
 
-
-    if (collectionFilter) {
-
-        query =
-            query.eq(
-                "collection",
-                collectionFilter
+        products =
+            products.filter(
+                product =>
+                    String(
+                        product.collection || ""
+                    ).trim()
+                    .toLowerCase() ===
+                    activeCollection
+                        .trim()
+                        .toLowerCase()
             );
 
     }
 
 
-    const {
-        data: products,
-        error
-    } = await query;
+    if (activeCategory) {
 
-
-    if (error) {
-
-        console.error(
-            "Product loading error:",
-            error
-        );
-
-        container.innerHTML = `
-            <div class="empty-card">
-                <h3>Our collection is taking a moment.</h3>
-                <p>Please refresh the page or message us on WhatsApp.</p>
-            </div>
-        `;
-
-        return;
+        products =
+            products.filter(
+                product =>
+                    String(
+                        product.category || ""
+                    ).trim()
+                    .toLowerCase() ===
+                    activeCategory
+                        .trim()
+                        .toLowerCase()
+            );
 
     }
 
 
-    if (
-        !products ||
-        products.length === 0
-    ) {
+    if (!products.length) {
 
         container.innerHTML = `
+
             <div class="empty-card">
-                <h3>New pieces are coming soon.</h3>
+
+                <h3>
+                    No products found.
+                </h3>
+
                 <p>
-                    Follow @trendsbyak or message us
-                    for what's currently available.
+                    Try another category or collection.
                 </p>
+
             </div>
+
         `;
 
         return;
@@ -1822,6 +2307,12 @@ async function loadHomepageProducts(
         products
             .map(
                 product => {
+
+                    const id =
+                        String(
+                            product.id
+                        );
+
 
                     const name =
                         escapeHtml(
@@ -1850,7 +2341,7 @@ async function loadHomepageProducts(
                         );
 
 
-                    const outOfStock =
+                    const soldOut =
                         stock <= 0;
 
 
@@ -1862,152 +2353,156 @@ async function loadHomepageProducts(
                         product.sale_price;
 
 
-                    const productId =
-                        String(
-                            product.id
-                        );
-
-
                     return `
 
-                        <article
-                            class="product-card"
+                    <article class="product-card">
+
+                        <a
+                            class="product-image"
+                            href="product.html?id=${encodeURIComponent(id)}"
                         >
 
-                            <a
-                                class="product-image"
-                                href="product.html?id=${encodeURIComponent(productId)}"
-                            >
+                            ${
+                                salePrice
+                                ?
+                                `
+                                <span class="badge badge-sale">
+                                    SALE
+                                </span>
+                                `
+                                :
+                                ""
+                            }
+
+
+                            ${
+                                soldOut
+                                ?
+                                `
+                                <span class="badge badge-sold">
+                                    SOLD OUT
+                                </span>
+                                `
+                                :
+                                ""
+                            }
+
+
+                            ${productImage(
+                                product.image_url,
+                                product.name || "Product"
+                            )}
+
+                        </a>
+
+
+                        <div class="product-info">
+
+                            <p class="product-category">
+                                ${category}
+                            </p>
+
+
+                            <h3>
+
+                                <a
+                                    href="product.html?id=${encodeURIComponent(id)}"
+                                    data-product-id="${escapeHtml(id)}"
+                                >
+                                    ${name}
+                                </a>
+
+                            </h3>
+
+
+                            ${
+                                description
+                                ?
+                                `
+                                <p class="product-description">
+                                    ${description}
+                                </p>
+                                `
+                                :
+                                ""
+                            }
+
+
+                            <div class="price-row">
 
                                 ${
                                     salePrice
                                     ?
-                                    `<span class="badge badge-sale">SALE</span>`
+                                    `
+                                    <span class="old-price">
+                                        ${formatPrice(price)}
+                                    </span>
+
+                                    <strong>
+                                        ${formatPrice(salePrice)}
+                                    </strong>
+                                    `
                                     :
-                                    ""
+                                    `
+                                    <strong>
+                                        ${formatPrice(price)}
+                                    </strong>
+                                    `
                                 }
-
-                                ${
-                                    outOfStock
-                                    ?
-                                    `<span class="badge badge-sold">SOLD OUT</span>`
-                                    :
-                                    ""
-                                }
-
-                                ${productImage(
-                                    product.image_url,
-                                    product.name ||
-                                    "Product"
-                                )}
-
-                            </a>
-
-
-                            <div class="product-info">
-
-                                <p class="product-category">
-                                    ${category}
-                                </p>
-
-
-                                <h3>
-
-                                    <a
-                                        href="product.html?id=${encodeURIComponent(productId)}"
-                                        class="homepage-product-link"
-                                        data-product-id="${escapeHtml(productId)}"
-                                    >
-                                        ${name}
-                                    </a>
-
-                                </h3>
-
-
-                                ${
-                                    description
-                                    ?
-                                    `<p class="product-description">${description}</p>`
-                                    :
-                                    ""
-                                }
-
-
-                                <div class="price-row">
-
-                                    ${
-                                        salePrice
-                                        ?
-                                        `
-                                            <span class="old-price">
-                                                ${formatPrice(price)}
-                                            </span>
-
-                                            <strong>
-                                                ${formatPrice(salePrice)}
-                                            </strong>
-                                        `
-                                        :
-                                        `
-                                            <strong>
-                                                ${formatPrice(price)}
-                                            </strong>
-                                        `
-                                    }
-
-                                </div>
-
-
-                                <div class="product-actions">
-
-                                    <a
-                                        class="product-view"
-                                        href="product.html?id=${encodeURIComponent(productId)}"
-                                        data-product-id="${escapeHtml(productId)}"
-                                    >
-                                        View Product
-                                    </a>
-
-
-                                    ${
-                                        !outOfStock
-                                        ?
-                                        `
-                                            <button
-                                                class="product-cart"
-                                                type="button"
-                                                data-product-id="${escapeHtml(productId)}"
-                                            >
-                                                Add to Cart
-                                            </button>
-
-
-                                            <a
-                                                class="product-order"
-                                                href="https://wa.me/918433998962?text=${encodeURIComponent(
-                                                    "Hi Trends by AK, I would like to order: " +
-                                                    (product.name || "this product")
-                                                )}"
-                                                target="_blank"
-                                                rel="noopener"
-                                                data-product-id="${escapeHtml(productId)}"
-                                            >
-                                                WhatsApp
-                                            </a>
-                                        `
-                                        :
-                                        `
-                                            <span class="product-unavailable">
-                                                Currently unavailable
-                                            </span>
-                                        `
-                                    }
-
-                                </div>
 
                             </div>
 
-                        </article>
+
+                            <div class="product-actions">
+
+                                <a
+                                    class="product-view"
+                                    href="product.html?id=${encodeURIComponent(id)}"
+                                    data-product-id="${escapeHtml(id)}"
+                                >
+                                    View Product
+                                </a>
+
+
+                                ${
+                                    !soldOut
+                                    ?
+                                    `
+                                    <button
+                                        class="product-cart"
+                                        type="button"
+                                        data-product-id="${escapeHtml(id)}"
+                                    >
+                                        Add to Cart
+                                    </button>
+
+
+                                    <a
+                                        class="product-order"
+                                        href="https://wa.me/918433998962?text=${encodeURIComponent(
+                                            "Hi Trends by AK, I would like to order: " +
+                                            (product.name || "this product")
+                                        )}"
+                                        target="_blank"
+                                        rel="noopener"
+                                        data-product-id="${escapeHtml(id)}"
+                                    >
+                                        WhatsApp
+                                    </a>
+                                    `
+                                    :
+                                    `
+                                    <span class="product-unavailable">
+                                        Currently unavailable
+                                    </span>
+                                    `
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </article>
 
                     `;
 
@@ -2016,14 +2511,12 @@ async function loadHomepageProducts(
             .join("");
 
 
-    /*
-        Add cart events after rendering.
-    */
+    /* =====================================================
+       CART BUTTONS
+    ===================================================== */
 
     container
-        .querySelectorAll(
-            ".product-cart"
-        )
+        .querySelectorAll(".product-cart")
         .forEach(
             button => {
 
@@ -2036,21 +2529,89 @@ async function loadHomepageProducts(
 
 
                         const product =
-                            products.find(
+                            allHomepageProducts.find(
                                 item =>
                                     String(item.id) ===
                                     String(id)
                             );
 
 
-                        if (product) {
+                        if (!product)
+                            return;
 
-                            addHomepageToCart(
-                                product,
-                                button
+
+                        const cart =
+                            getCart();
+
+
+                        const existing =
+                            cart.find(
+                                item =>
+                                    String(
+                                        item.product_id
+                                    ) ===
+                                    String(
+                                        product.id
+                                    )
                             );
 
+
+                        if (existing) {
+
+                            existing.quantity =
+                                Number(
+                                    existing.quantity || 0
+                                ) + 1;
+
+                        } else {
+
+                            cart.push({
+
+                                product_id:
+                                    product.id,
+
+                                name:
+                                    product.name,
+
+                                price:
+                                    Number(
+                                        product.sale_price ??
+                                        product.price ??
+                                        0
+                                    ),
+
+                                image_url:
+                                    product.image_url || "",
+
+                                quantity:1
+
+                            });
+
                         }
+
+
+                        saveCart(cart);
+
+                        trackAddToCart(product);
+
+
+                        const original =
+                            button.textContent;
+
+
+                        button.textContent =
+                            "Added ✓";
+
+
+                        setTimeout(
+                            () => {
+
+                                button.textContent =
+                                    original;
+
+                            },
+                            1200
+                        );
 
                     }
                 );
@@ -2059,9 +2620,9 @@ async function loadHomepageProducts(
         );
 
 
-    /*
-        Track product clicks.
-    */
+    /* =====================================================
+       PRODUCT VIEW TRACKING
+    ===================================================== */
 
     container
         .querySelectorAll(
@@ -2069,15 +2630,6 @@ async function loadHomepageProducts(
         )
         .forEach(
             element => {
-
-                if (
-                    element.classList.contains(
-                        "product-cart"
-                    )
-                ) {
-                    return;
-                }
-
 
                 element.addEventListener(
                     "click",
@@ -2088,34 +2640,15 @@ async function loadHomepageProducts(
 
 
                         const product =
-                            products.find(
+                            allHomepageProducts.find(
                                 item =>
                                     String(item.id) ===
                                     String(id)
                             );
 
 
-                        if (product) {
-
-                            if (
-                                element.classList.contains(
-                                    "product-order"
-                                )
-                            ) {
-
-                                trackOrderClick(
-                                    product
-                                );
-
-                            } else {
-
-                                trackProductView(
-                                    product
-                                );
-
-                            }
-
-                        }
+                        if (product)
+                            trackProductView(product);
 
                     }
                 );
@@ -2126,138 +2659,99 @@ async function loadHomepageProducts(
 }
 
 
-/* =========================================
-   ADD TO CART
-========================================= */
+/* =========================================================
+   LOAD ALL PRODUCTS
+========================================================= */
 
-function addHomepageToCart(
-    product,
-    button
-) {
+async function loadHomepageProducts() {
 
-    const stock =
-        Number(
-            product.stock || 0
+    const container =
+        document.getElementById(
+            "homepageProducts"
         );
 
 
-    if (stock <= 0) {
+    if (!container)
+        return;
 
-        alert(
-            "This product is currently out of stock."
-        );
+
+    if (!supabaseClient) {
+
+        container.innerHTML = `
+
+            <div class="empty-card">
+
+                <h3>
+                    Our collection is taking a moment.
+                </h3>
+
+                <p>
+                    Please refresh the page or message us on WhatsApp.
+                </p>
+
+            </div>
+
+        `;
 
         return;
 
     }
 
 
-    const cart =
-        getCart();
-
-
-    const productId =
-        String(
-            product.id
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("products")
+        .select("*")
+        .order(
+            "id",
+            {
+                ascending:false
+            }
         );
 
 
-    const existing =
-        cart.find(
-            item =>
-                String(
-                    item.product_id
-                ) === productId
+    if (error) {
+
+        console.error(
+            "Product loading error:",
+            error
         );
 
+        container.innerHTML = `
 
-    if (existing) {
+            <div class="empty-card">
 
-        if (
-            Number(
-                existing.quantity || 0
-            ) >= stock
-        ) {
+                <h3>
+                    Our collection is taking a moment.
+                </h3>
 
-            alert(
-                `Only ${stock} available.`
-            );
+                <p>
+                    Please refresh the page.
+                </p>
 
-            return;
+            </div>
 
-        }
+        `;
 
-
-        existing.quantity =
-            Number(
-                existing.quantity || 0
-            ) + 1;
-
-    } else {
-
-        cart.push({
-
-            product_id:
-                product.id,
-
-            name:
-                product.name,
-
-            price:
-                Number(
-                    product.sale_price ??
-                    product.price ??
-                    0
-                ),
-
-            image_url:
-                product.image_url ||
-                "",
-
-            quantity:
-                1
-
-        });
+        return;
 
     }
 
 
-    saveCart(cart);
+    allHomepageProducts =
+        data || [];
 
 
-    trackAddToCart(
-        product
-    );
-
-
-    if (button) {
-
-        const original =
-            button.textContent;
-
-
-        button.textContent =
-            "Added ✓";
-
-
-        setTimeout(
-            () => {
-
-                button.textContent =
-                    original;
-
-            },
-            1200
-        );
-
-    }
+    renderHomepageProducts();
 
 }
 
 
-/* =========================================
-   LOAD COLLECTIONS
-========================================= */
+/* =========================================================
+   LOAD COLLECTIONS FROM SUPABASE
+========================================================= */
 
 async function loadHomepageCollections() {
 
@@ -2267,14 +2761,15 @@ async function loadHomepageCollections() {
         );
 
 
-    if (!container) return;
-
-
-    if (!supabaseClient) return;
+    if (
+        !container ||
+        !supabaseClient
+    )
+        return;
 
 
     const {
-        data: collections,
+        data,
         error
     } = await supabaseClient
         .from("collections")
@@ -2282,10 +2777,9 @@ async function loadHomepageCollections() {
         .order(
             "id",
             {
-                ascending: true
+                ascending:true
             }
-        )
-        .limit(4);
+        );
 
 
     if (error) {
@@ -2295,15 +2789,44 @@ async function loadHomepageCollections() {
             error
         );
 
+        container.innerHTML = `
+
+            <div class="empty-card">
+
+                <h3>
+                    Collections unavailable.
+                </h3>
+
+                <p>
+                    Please refresh the page.
+                </p>
+
+            </div>
+
+        `;
+
         return;
 
     }
 
 
-    if (
-        !collections ||
-        collections.length === 0
-    ) {
+    if (!data || !data.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-card">
+
+                <h3>
+                    Collections coming soon.
+                </h3>
+
+                <p>
+                    New collections will appear here.
+                </p>
+
+            </div>
+
+        `;
 
         return;
 
@@ -2311,9 +2834,9 @@ async function loadHomepageCollections() {
 
 
     container.innerHTML =
-        collections
+        data
             .map(
-                (collection, index) => {
+                (collection,index) => {
 
                     const name =
                         escapeHtml(
@@ -2346,60 +2869,58 @@ async function loadHomepageCollections() {
 
                     return `
 
-                        <a
-                            class="collection-card"
-                            href="#products"
-                            data-collection="${escapeHtml(
-                                collection.name || ""
-                            )}"
-                        >
+                    <a
+                        class="collection-card"
+                        href="#products"
+                        data-collection="${escapeHtml(
+                            collection.name || ""
+                        )}"
+                    >
 
-                            <div
-                                class="collection-art ${
-                                    image
-                                    ? "has-image"
-                                    : ""
-                                }"
-                            >
+                        <div class="collection-art">
 
-                                ${
-                                    image
-                                    ?
-                                    `
-                                        <img
-                                            src="${escapeHtml(image)}"
-                                            alt="${name}"
-                                            loading="lazy"
-                                        >
-                                    `
-                                    :
-                                    `
-                                        <span>
-                                            ${number}
-                                        </span>
-                                    `
-                                }
+                            ${
+                                image
+                                ?
+                                `
+                                <img
+                                    src="${escapeHtml(image)}"
+                                    alt="${name}"
+                                    loading="lazy"
+                                >
 
-                            </div>
-
-
-                            <div>
-
-                                <span>
+                                <span class="collection-number">
                                     ${number}
                                 </span>
+                                `
+                                :
+                                `
+                                <span class="collection-number">
+                                    ${number}
+                                </span>
+                                `
+                            }
 
-                                <h3>
-                                    ${name}
-                                </h3>
+                        </div>
 
-                                <p>
-                                    ${description}
-                                </p>
 
-                            </div>
+                        <div class="collection-info">
 
-                        </a>
+                            <span>
+                                ${number}
+                            </span>
+
+                            <h3>
+                                ${name}
+                            </h3>
+
+                            <p>
+                                ${description}
+                            </p>
+
+                        </div>
+
+                    </a>
 
                     `;
 
@@ -2407,6 +2928,10 @@ async function loadHomepageCollections() {
             )
             .join("");
 
+
+    /* =====================================================
+       COLLECTION CLICK
+    ===================================================== */
 
     container
         .querySelectorAll(
@@ -2419,29 +2944,51 @@ async function loadHomepageCollections() {
                     "click",
                     event => {
 
-                        const collectionName =
-                            card.dataset.collection;
-
-
-                        if (!collectionName) {
-                            return;
-                        }
-
-
                         event.preventDefault();
 
 
-                        loadHomepageProducts(
-                            collectionName
-                        );
+                        activeCollection =
+                            card.dataset.collection || "";
+
+
+                        activeCategory = "";
+
+
+                        const categoryFilter =
+                            document.getElementById(
+                                "categoryFilter"
+                            );
+
+
+                        if (categoryFilter)
+                            categoryFilter.value = "";
+
+
+                        const heading =
+                            document.getElementById(
+                                "productsHeading"
+                            );
+
+
+                        if (heading) {
+
+                            heading.textContent =
+                                activeCollection ||
+                                "Featured favourites.";
+
+                        }
+
+
+                        updateCollectionStatus();
+
+
+                        renderHomepageProducts();
 
 
                         document
-                            .getElementById(
-                                "products"
-                            )
+                            .getElementById("products")
                             ?.scrollIntoView({
-                                behavior: "smooth"
+                                behavior:"smooth"
                             });
 
                     }
@@ -2453,239 +3000,209 @@ async function loadHomepageCollections() {
 }
 
 
-/* =========================================
-   LOAD INSTAGRAM REELS
-========================================= */
+/* =========================================================
+   COLLECTION STATUS
+========================================================= */
 
-async function loadInstagramReels() {
+function updateCollectionStatus() {
 
-    const container =
+    const status =
         document.getElementById(
-            "instagramReelsGrid"
+            "collectionStatus"
         );
 
 
-    if (!container) return;
-
-
-    if (!supabaseClient) {
-
-        console.error(
-            "Supabase client unavailable."
+    const name =
+        document.getElementById(
+            "activeCollectionName"
         );
 
+
+    if (
+        !status ||
+        !name
+    )
         return;
 
-    }
 
+    if (activeCollection) {
 
-    console.log(
-        "Loading Instagram reels..."
-    );
+        status.style.display =
+            "flex";
 
+        name.textContent =
+            activeCollection;
 
-    try {
+    } else {
 
-        const {
-            data: reels,
-            error
-        } = await supabaseClient
+        status.style.display =
+            "none";
 
-            .from(
-                "instagram_reels"
-            )
-
-            .select(
-                "id,reel_url,title,caption,thumbnail_url,is_active,display_order,created_at"
-            )
-
-            .eq(
-                "is_active",
-                true
-            )
-
-            .order(
-                "display_order",
-                {
-                    ascending: true
-                }
-            )
-
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            )
-
-            .limit(4);
-
-
-        if (error) {
-
-            console.error(
-                "Instagram reels loading error:",
-                error
-            );
-
-
-            container.innerHTML = `
-
-                <div class="instagram-reel-placeholder">
-
-                    <span class="instagram-icon">
-                        ◎
-                    </span>
-
-                    <span class="reel-label">
-                        INSTAGRAM
-                    </span>
-
-                    <strong>
-                        Follow @trendsbyak for our latest reels
-                    </strong>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        console.log(
-            "Instagram reels received:",
-            reels
-        );
-
-
-        if (
-            !reels ||
-            reels.length === 0
-        ) {
-
-            container.innerHTML = `
-
-                <div class="instagram-reel-placeholder">
-
-                    <span class="instagram-icon">
-                        ◎
-                    </span>
-
-                    <span class="reel-label">
-                        INSTAGRAM
-                    </span>
-
-                    <strong>
-                        Follow @trendsbyak for our latest reels
-                    </strong>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        container.innerHTML =
-            reels
-                .map(
-                    (reel, index) => {
-
-                        const reelUrl =
-                            escapeHtml(
-                                reel.reel_url
-                            );
-
-
-                        const title =
-                            escapeHtml(
-                                reel.title ||
-                                "Watch our Reel"
-                            );
-
-
-                        const thumbnail =
-                            reel.thumbnail_url
-                            ?
-                            `
-                                <img
-                                    src="${escapeHtml(
-                                        reel.thumbnail_url
-                                    )}"
-                                    alt="${title}"
-                                    loading="lazy"
-                                >
-                            `
-                            :
-                            "";
-
-
-                        return `
-
-                            <a
-                                class="instagram-reel-card"
-                                href="${reelUrl}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-
-                                <div class="instagram-reel-placeholder">
-
-                                    ${thumbnail}
-
-
-                                    <span class="instagram-icon">
-                                        ◎
-                                    </span>
-
-
-                                    <span class="reel-label">
-
-                                        ${
-                                            index === 0
-                                            ?
-                                            "LATEST REEL"
-                                            :
-                                            "ON INSTAGRAM"
-                                        }
-
-                                    </span>
-
-
-                                    <strong>
-                                        ${title}
-                                    </strong>
-
-                                </div>
-
-                            </a>
-
-                        `;
-
-                    }
-                )
-                .join("");
-
-
-    } catch (error) {
-
-        console.error(
-            "Instagram reels exception:",
-            error
-        );
+        name.textContent =
+            "";
 
     }
 
 }
 
 
-/* =========================================
-   HERO BANNER
-========================================= */
+/* =========================================================
+   CATEGORY FILTER
+========================================================= */
+
+function setupCategoryFilter() {
+
+    const select =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+
+    if (!select)
+        return;
+
+
+    select.addEventListener(
+        "change",
+        () => {
+
+            activeCategory =
+                select.value || "";
+
+
+            renderHomepageProducts();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR COLLECTION
+========================================================= */
+
+function setupClearCollection() {
+
+    const button =
+        document.getElementById(
+            "clearCollection"
+        );
+
+
+    if (!button)
+        return;
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            activeCollection = "";
+
+            activeCategory = "";
+
+
+            const categoryFilter =
+                document.getElementById(
+                    "categoryFilter"
+                );
+
+
+            if (categoryFilter)
+                categoryFilter.value = "";
+
+
+            const heading =
+                document.getElementById(
+                    "productsHeading"
+                );
+
+
+            if (heading)
+                heading.textContent =
+                    "Featured favourites.";
+
+
+            updateCollectionStatus();
+
+            renderHomepageProducts();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SHOP ALL
+========================================================= */
+
+function setupShopAll() {
+
+    const button =
+        document.getElementById(
+            "shopAllButton"
+        );
+
+
+    if (!button)
+        return;
+
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+
+            activeCollection = "";
+
+            activeCategory = "";
+
+
+            const categoryFilter =
+                document.getElementById(
+                    "categoryFilter"
+                );
+
+
+            if (categoryFilter)
+                categoryFilter.value = "";
+
+
+            const heading =
+                document.getElementById(
+                    "productsHeading"
+                );
+
+
+            if (heading)
+                heading.textContent =
+                    "Featured favourites.";
+
+
+            updateCollectionStatus();
+
+            renderHomepageProducts();
+
+
+            document
+                .getElementById("products")
+                ?.scrollIntoView({
+                    behavior:"smooth"
+                });
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BANNER
+========================================================= */
 
 function loadLatestBanner() {
 
@@ -2699,9 +3216,8 @@ function loadLatestBanner() {
             ) || [];
 
 
-        if (!banners.length) {
+        if (!banners.length)
             return;
-        }
 
 
         const latest =
@@ -2716,7 +3232,8 @@ function loadLatestBanner() {
             );
 
 
-        if (!hero) return;
+        if (!hero)
+            return;
 
 
         if (latest.image) {
@@ -2740,12 +3257,9 @@ function loadLatestBanner() {
                     "h1"
                 );
 
-            if (heading) {
-
+            if (heading)
                 heading.innerHTML =
                     latest.headline;
-
-            }
 
         }
 
@@ -2757,19 +3271,16 @@ function loadLatestBanner() {
                     ".hero-text"
                 );
 
-            if (text) {
-
+            if (text)
                 text.textContent =
                     latest.subheading;
 
-            }
-
         }
 
-    } catch (error) {
+    } catch(error) {
 
         console.warn(
-            "Banner loading skipped:",
+            "Banner skipped:",
             error
         );
 
@@ -2778,45 +3289,42 @@ function loadLatestBanner() {
 }
 
 
-/* =========================================
+/* =========================================================
    MOBILE MENU
-========================================= */
+========================================================= */
 
 function setupMenu() {
 
-    const menuToggle =
+    const toggle =
         document.getElementById(
             "menuToggle"
         );
 
 
-    const mainNav =
+    const nav =
         document.getElementById(
             "mainNav"
         );
 
 
     if (
-        !menuToggle ||
-        !mainNav
-    ) {
-
+        !toggle ||
+        !nav
+    )
         return;
 
-    }
 
-
-    menuToggle.addEventListener(
+    toggle.addEventListener(
         "click",
         () => {
 
             const open =
-                mainNav.classList.toggle(
+                nav.classList.toggle(
                     "is-open"
                 );
 
 
-            menuToggle.setAttribute(
+            toggle.setAttribute(
                 "aria-expanded",
                 String(open)
             );
@@ -2825,7 +3333,7 @@ function setupMenu() {
     );
 
 
-    mainNav
+    nav
         .querySelectorAll("a")
         .forEach(
             link => {
@@ -2834,12 +3342,11 @@ function setupMenu() {
                     "click",
                     () => {
 
-                        mainNav.classList.remove(
+                        nav.classList.remove(
                             "is-open"
                         );
 
-
-                        menuToggle.setAttribute(
+                        toggle.setAttribute(
                             "aria-expanded",
                             "false"
                         );
@@ -2853,28 +3360,26 @@ function setupMenu() {
 }
 
 
-/* =========================================
-   START WEBSITE
-========================================= */
+/* =========================================================
+   START
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        console.log(
-            "Trends by AK website loaded."
-        );
-
-
         updateCartCount();
-
 
         setupMenu();
 
+        setupCategoryFilter();
 
-        /*
-            Load independent sections.
-        */
+        setupClearCollection();
+
+        setupShopAll();
+
+        loadLatestBanner();
+
 
         await Promise.allSettled([
 
@@ -2882,17 +3387,10 @@ document.addEventListener(
 
             loadHomepageCollections(),
 
-            loadInstagramReels()
+            loadCategories()
 
         ]);
 
-
-        loadLatestBanner();
-
-
-        /*
-            Track homepage visit.
-        */
 
         trackAnalyticsEvent(
             "page_view"
@@ -2906,8 +3404,23 @@ document.addEventListener(
     }
 );
 
+
+/* =========================================================
+   BACK/FORWARD CACHE
+========================================================= */
+
+window.addEventListener(
+    "pageshow",
+    () => {
+
+        updateCartCount();
+
+    }
+);
+
 </script>
 
 
 </body>
+
 </html>
