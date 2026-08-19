@@ -696,130 +696,183 @@ function renderReels(reels){
 
 
 /* =========================================
-   SAVE REEL
+   SAVE
 ========================================= */
 
-async function saveReel(event){
+async function saveReel(e){
 
-  event.preventDefault();
+  e.preventDefault();
 
+  const saveBtn = document.getElementById("saveBtn");
 
-  const saveBtn =
-    $("saveBtn");
+  const reelUrlEl = document.getElementById("reelUrl");
+  const titleEl = document.getElementById("title");
+  const captionEl = document.getElementById("caption");
+  const thumbnailUrlEl = document.getElementById("thumbnailUrl");
+  const displayOrderEl = document.getElementById("displayOrder");
+  const isActiveEl = document.getElementById("isActive");
+  const reelIdEl = document.getElementById("reelId");
 
+  if(!reelUrlEl){
+    message("Reel URL field not found.", "error");
+    return;
+  }
 
-  const id =
-    $("reelId").value.trim();
-
-
-  const reelUrl =
-    $("reelUrl")
-      .value
-      .trim();
-
-
-  const displayOrder =
-    Number(
-      $("displayOrder")
-        .value || 0
-    );
-
+  const reelUrl = reelUrlEl.value.trim();
 
   if(!reelUrl){
 
     message(
-      "Please enter an Instagram URL.",
+      "Please enter an Instagram Reel URL.",
       "error"
     );
 
     return;
-
   }
 
+  let parsedUrl;
 
-  if(!validateInstagramUrl(reelUrl)){
+  try{
+
+    parsedUrl = new URL(reelUrl);
+
+  }catch{
 
     message(
-      "Please enter a valid Instagram Reel or Instagram post URL.",
+      "Please enter a valid URL.",
       "error"
     );
 
     return;
-
   }
 
+  const hostname =
+    parsedUrl.hostname.toLowerCase();
+
+  if(
+    hostname !== "instagram.com" &&
+    hostname !== "www.instagram.com"
+  ){
+
+    message(
+      "Please enter a valid Instagram URL.",
+      "error"
+    );
+
+    return;
+  }
+
+  const validPath =
+    /^\/(reel|p)\/[^\/]+\/?/.test(
+      parsedUrl.pathname
+    );
+
+  if(!validPath){
+
+    message(
+      "Please enter a valid Instagram Reel URL.",
+      "error"
+    );
+
+    return;
+  }
+
+  const payload = {
+
+    reel_url: reelUrl,
+
+    title:
+      titleEl
+        ? titleEl.value.trim() || null
+        : null,
+
+    caption:
+      captionEl
+        ? captionEl.value.trim() || null
+        : null,
+
+    thumbnail_url:
+      thumbnailUrlEl
+        ? thumbnailUrlEl.value.trim() || null
+        : null,
+
+    display_order:
+      displayOrderEl
+        ? Number(displayOrderEl.value || 0)
+        : 0,
+
+    is_active:
+      isActiveEl
+        ? isActiveEl.value === "true"
+        : true
+
+  };
+
+  const reelId =
+    reelIdEl
+      ? reelIdEl.value.trim()
+      : "";
 
   saveBtn.disabled = true;
 
   saveBtn.textContent =
-    id
+    reelId
       ? "Updating..."
       : "Saving...";
-
 
   try{
 
     let result;
 
-
-    if(id){
+    if(reelId){
 
       result =
         await supabaseClient
           .from("instagram_reels")
-          .update({
-            reel_url:reelUrl,
-            display_order:displayOrder
-          })
-          .eq("id",id);
+          .update(payload)
+          .eq("id", reelId);
 
     }else{
 
       result =
         await supabaseClient
           .from("instagram_reels")
-          .insert({
-            reel_url:reelUrl,
-            display_order:displayOrder,
-            is_active:true
-          });
+          .insert(payload);
 
     }
-
 
     if(result.error){
 
-      throw result.error;
+      console.error(
+        "SUPABASE ERROR:",
+        result.error
+      );
 
+      throw result.error;
     }
 
-
     message(
-      id
+      reelId
         ? "Reel updated successfully."
         : "Reel saved successfully."
     );
-
 
     newReel();
 
     await loadReels();
 
-
-  }catch(error){
+  }catch(err){
 
     console.error(
       "SAVE REEL ERROR:",
-      error
+      err
     );
 
-
     message(
-      error.message ||
+      err.message ||
       "Could not save Reel.",
       "error"
     );
-
 
   }finally{
 
@@ -831,7 +884,6 @@ async function saveReel(event){
   }
 
 }
-
 
 /* =========================================
    EDIT

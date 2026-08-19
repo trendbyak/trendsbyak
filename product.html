@@ -516,7 +516,57 @@ function changeQuantity(amount){
 
   document.getElementById("quantity").textContent=quantity;
 }
+async function trackAnalyticsEvent(eventName, data = {}) {
+  try {
+    const visitorId =
+      localStorage.getItem("trendsbyak_visitor_id") ||
+      crypto.randomUUID();
 
+    localStorage.setItem(
+      "trendsbyak_visitor_id",
+      visitorId
+    );
+
+    const sessionId =
+      sessionStorage.getItem("trendsbyak_session_id") ||
+      crypto.randomUUID();
+
+    sessionStorage.setItem(
+      "trendsbyak_session_id",
+      sessionId
+    );
+
+    const params = new URLSearchParams(
+      window.location.search
+    );
+
+    await supabaseClient
+      .from("analytics_events")
+      .insert({
+        event_name: eventName,
+        session_id: sessionId,
+        visitor_id: visitorId,
+        page_url: window.location.href,
+        page_path: window.location.pathname,
+        referrer: document.referrer || null,
+        source: params.get("utm_source") || "direct",
+        medium: params.get("utm_medium") || null,
+        campaign: params.get("utm_campaign") || null,
+        device_type: /Mobi|Android/i.test(navigator.userAgent)
+          ? "mobile"
+          : "desktop",
+        user_agent: navigator.userAgent,
+        product_id: data.product_id || null,
+        product_name: data.product_name || null,
+        value: data.value || null,
+        currency: data.currency || "INR",
+        metadata: data.metadata || {}
+      });
+
+  } catch (error) {
+    console.error("Analytics tracking error:", error);
+  }
+}
 function addToCart(goCheckout=false){
   if(!currentProduct)return;
 
@@ -559,7 +609,19 @@ function addToCart(goCheckout=false){
   }
 
   saveCart(cart);
-
+trackAnalyticsEvent("add_to_cart", {
+  product_id: currentProduct.id,
+  product_name: currentProduct.name,
+  value: Number(
+    currentProduct.sale_price ??
+    currentProduct.price ??
+    0
+  ) * quantity,
+  currency: "INR",
+  metadata: {
+    quantity: quantity
+  }
+});
   if(goCheckout){
     window.location.href="checkout.html";
     return;
@@ -575,7 +637,61 @@ function mobileMenu(){
       ? "none"
       : "block";
 }
+async function trackProductView(product) {
+  try {
+    const visitorId =
+      localStorage.getItem("trendsbyak_visitor_id") ||
+      (() => {
+        const id = crypto.randomUUID();
+        localStorage.setItem("trendsbyak_visitor_id", id);
+        return id;
+      })();
 
+    const sessionId =
+      sessionStorage.getItem("trendsbyak_session_id") ||
+      (() => {
+        const id = crypto.randomUUID();
+        sessionStorage.setItem("trendsbyak_session_id", id);
+        return id;
+      })();
+
+    const params = new URLSearchParams(window.location.search);
+
+    const event = {
+      event_name: "product_view",
+      session_id: sessionId,
+      visitor_id: visitorId,
+      page_url: window.location.href,
+      page_path: window.location.pathname,
+      referrer: document.referrer || null,
+      source: params.get("utm_source") || "direct",
+      medium: params.get("utm_medium") || null,
+      campaign: params.get("utm_campaign") || null,
+      device_type:
+        window.innerWidth <= 768 ? "mobile" : "desktop",
+      user_agent: navigator.userAgent,
+      product_id: product?.id || null,
+      product_name: product?.name || null,
+      value: Number(
+        product?.sale_price ??
+        product?.price ??
+        0
+      ),
+      currency: "INR",
+      metadata: {}
+    };
+
+    const { error } = await supabaseClient
+      .from("analytics_events")
+      .insert(event);
+
+    if (error) {
+      console.error("Analytics error:", error);
+    }
+  } catch (error) {
+    console.error("Analytics tracking failed:", error);
+  }
+}
 async function loadProduct(){
 
   const params=new URLSearchParams(
@@ -617,8 +733,9 @@ async function loadProduct(){
     return;
   }
 
-  currentProduct=data;
-  quantity=1;
+ currentProduct = data;
+trackProductView(data);
+quantity = 1;
 
   const price=Number(data.price||0);
   const sale=

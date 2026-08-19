@@ -474,7 +474,114 @@ th{
 
   </section>
 
+<!-- BULK PRODUCT SCRAPER -->
 
+<section class="card importer-card">
+
+  <h3 class="importer-title">
+    📦 Bulk Product Scraper
+  </h3>
+
+  <div class="help">
+    Paste multiple product URLs below — one URL per line.
+    We'll fetch the product details and let you review everything
+    before adding the products to your store.
+  </div>
+
+  <textarea
+    id="bulkUrls"
+    style="min-height:150px;margin-top:15px"
+    placeholder="https://example.com/product-1
+https://example.com/product-2
+https://example.com/product-3"
+  ></textarea>
+
+  <div class="actions">
+
+    <button
+      type="button"
+      class="btn primary"
+      id="bulkScrapeBtn"
+      onclick="bulkScrapeProducts()"
+    >
+      🔍 Scrape Products
+    </button>
+
+    <button
+      type="button"
+      class="btn secondary"
+      onclick="clearBulkScraper()"
+    >
+      Clear
+    </button>
+
+  </div>
+
+  <div
+    id="bulkProgress"
+    class="help"
+    style="margin-top:15px"
+  ></div>
+
+  <div
+    id="bulkResults"
+    class="import-preview hidden"
+  >
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      flex-wrap:wrap;
+    ">
+
+      <strong>
+        Scraped Products
+      </strong>
+
+      <button
+        type="button"
+        class="btn primary"
+        id="bulkSaveBtn"
+        onclick="saveBulkProducts()"
+      >
+        💾 Save Selected Products
+      </button>
+
+    </div>
+
+    <div class="table-wrap" style="margin-top:18px">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                id="selectAllBulk"
+                onchange="toggleAllBulk(this.checked)"
+              >
+            </th>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Collection</th>
+            <th>Stock</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="bulkResultsBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
   <!-- PRODUCT FORM -->
 
   <section class="card">
@@ -502,19 +609,21 @@ th{
 
         </div>
 
+<div class="field">
 
-        <div class="field">
+  <label>
+    Collection
+  </label>
 
-          <label>
-            Category
-          </label>
+  <select id="collection">
+    <option value="">Select collection</option>
+  </select>
 
-          <input
-            id="category"
-            placeholder="Scrunchies, Jewellery, Hampers..."
-          >
+  <div class="help">
+    Choose the collection this product belongs to.
+  </div>
 
-        </div>
+</div>
 
 
         <div class="field">
@@ -820,6 +929,38 @@ const supabaseClient =
 
 let imageMode = "upload";
 let products = [];
+let collections = [];
+
+async function loadCollections() {
+
+  const select = document.getElementById("collection");
+
+  if (!select) return;
+
+  const { data, error } = await supabaseClient
+    .from("collections")
+    .select("id,name")
+    .order("name", { ascending: true });
+
+  if (error) {
+    console.error("Collections loading error:", error);
+
+    select.innerHTML =
+      '<option value="">Could not load collections</option>';
+
+    return;
+  }
+
+  collections = data || [];
+
+  select.innerHTML =
+    '<option value="">Select collection</option>' +
+    collections.map(collection => `
+      <option value="${escapeHtml(collection.name)}">
+        ${escapeHtml(collection.name)}
+      </option>
+    `).join("");
+}
 let importedProduct = null;
 
 
@@ -1248,7 +1389,7 @@ function useImportedProduct(){
     importedProduct.name || "";
 
 
-  $("category").value = "";
+  $("collection").value = "";
 
 
   $("price").value =
@@ -1673,10 +1814,8 @@ async function saveProduct(e){
           .value
           .trim(),
 
-      category:
-        $("category")
-          .value
-          .trim(),
+  collection:
+  $("collection").value || null,
 
       price:
         Number(
@@ -1816,8 +1955,7 @@ function editProduct(id){
     p.name || "";
 
 
-  $("category").value =
-    p.category || "";
+$("collection").value = p.collection || "";
 
 
   $("price").value =
@@ -1964,7 +2102,706 @@ function newProduct(){
 
 }
 
+/* =========================================
+   BULK PRODUCT SCRAPER
+========================================= */
 
+let bulkProducts = [];
+
+
+async function bulkScrapeProducts(){
+
+  const textarea = $("bulkUrls");
+  const btn = $("bulkScrapeBtn");
+
+  const urls = textarea.value
+    .split(/\r?\n/)
+    .map(url => url.trim())
+    .filter(Boolean);
+
+  if(!urls.length){
+
+    message(
+      "Please paste at least one product URL.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const uniqueUrls = [...new Set(urls)];
+
+
+  btn.disabled = true;
+  btn.textContent = "Scraping...";
+
+  $("bulkProgress").textContent =
+    "Preparing " + uniqueUrls.length + " product(s)...";
+
+  $("bulkResults")
+    .classList
+    .add("hidden");
+
+
+  bulkProducts = [];
+
+
+  try{
+
+    for(let i = 0; i < uniqueUrls.length; i++){
+
+      const url = uniqueUrls[i];
+
+      $("bulkProgress").textContent =
+        "Scraping product " +
+        (i + 1) +
+        " of " +
+        uniqueUrls.length +
+        "...";
+
+
+      try{
+
+        new URL(url);
+
+      }catch{
+
+        bulkProducts.push({
+          url:url,
+          error:"Invalid URL"
+        });
+
+        continue;
+      }
+
+
+      try{
+
+        const {
+          data,
+          error
+        } =
+        await supabaseClient.functions.invoke(
+          "import-product",
+          {
+            body:{
+              url:url
+            }
+          }
+        );
+
+
+        if(error){
+
+          throw new Error(
+            error.message ||
+            "Import failed"
+          );
+
+        }
+
+
+        if(!data){
+
+          throw new Error(
+            "No product data returned"
+          );
+
+        }
+
+
+        if(data.error){
+
+          throw new Error(
+            data.error
+          );
+
+        }
+
+
+        bulkProducts.push({
+
+          url:url,
+
+          name:data.name || "",
+
+          price:data.price ?? "",
+
+          sale_price:
+            data.sale_price ?? "",
+
+          image_url:
+            data.image_url || "",
+
+          description:
+            data.description || "",
+
+          brand:
+            data.brand || "",
+
+          sku:
+            data.sku || "",
+
+          collection:"",
+
+          stock:0,
+
+          status:"inactive",
+
+          selected:true
+
+        });
+
+
+      }catch(err){
+
+        console.error(
+          "Bulk scrape failed:",
+          url,
+          err
+        );
+
+
+        bulkProducts.push({
+
+          url:url,
+
+          name:"",
+
+          price:"",
+
+          sale_price:"",
+
+          image_url:"",
+
+          description:"",
+
+          brand:"",
+
+          sku:"",
+
+          collection:"",
+
+          stock:0,
+
+          status:"inactive",
+
+          selected:false,
+
+          error:
+            err.message ||
+            "Could not scrape product"
+
+        });
+
+      }
+
+    }
+
+
+    renderBulkProducts();
+
+
+    $("bulkResults")
+      .classList
+      .remove("hidden");
+
+
+    const successful =
+      bulkProducts.filter(
+        p => !p.error
+      ).length;
+
+
+    $("bulkProgress").textContent =
+      "Finished: " +
+      successful +
+      " of " +
+      bulkProducts.length +
+      " products imported successfully.";
+
+
+  }catch(err){
+
+    console.error(
+      "BULK SCRAPER ERROR:",
+      err
+    );
+
+
+    message(
+      err.message ||
+      "Bulk scraping failed.",
+      "error"
+    );
+
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "🔍 Scrape Products";
+
+  }
+
+}
+
+
+function renderBulkProducts(){
+
+  const body =
+    $("bulkResultsBody");
+
+
+  if(!bulkProducts.length){
+
+    body.innerHTML = `
+      <tr>
+        <td
+          colspan="7"
+          style="text-align:center;padding:30px"
+        >
+          No products found.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  body.innerHTML =
+    bulkProducts.map(
+      (p,index)=>{
+
+        const image =
+          p.image_url
+          ?
+          `
+          <img
+            class="thumb"
+            src="${escapeHtml(p.image_url)}"
+            onerror="this.style.display='none'"
+          >
+          `
+          :
+          `<div class="thumb"></div>`;
+
+
+        const price =
+          p.sale_price !== "" &&
+          p.sale_price != null
+          ?
+          Number(p.sale_price)
+          :
+          Number(p.price || 0);
+
+
+        const collectionOptions =
+          `
+          <option value="">
+            Select
+          </option>
+          ` +
+          collections.map(c => `
+            <option
+              value="${escapeHtml(c.name)}"
+            >
+              ${escapeHtml(c.name)}
+            </option>
+          `).join("");
+
+
+        if(p.error){
+
+          return `
+            <tr>
+
+              <td>❌</td>
+
+              <td colspan="6">
+
+                <b>
+                  Failed
+                </b>
+
+                <div
+                  class="help"
+                  style="margin-top:5px"
+                >
+                  ${escapeHtml(p.url)}
+                </div>
+
+                <div
+                  style="color:#a33;margin-top:5px"
+                >
+                  ${escapeHtml(p.error)}
+                </div>
+
+              </td>
+
+            </tr>
+          `;
+
+        }
+
+
+        return `
+          <tr>
+
+            <td>
+
+              <input
+                type="checkbox"
+                class="bulk-select"
+                data-index="${index}"
+                ${p.selected ? "checked" : ""}
+                onchange="updateBulkSelection(${index},this.checked)"
+              >
+
+            </td>
+
+
+            <td>
+              ${image}
+            </td>
+
+
+            <td style="min-width:220px">
+
+              <input
+                value="${escapeHtml(p.name)}"
+                onchange="updateBulkField(${index},'name',this.value)"
+              >
+
+              ${
+                p.brand
+                ?
+                `<div class="help">
+                  ${escapeHtml(p.brand)}
+                </div>`
+                :
+                ""
+              }
+
+            </td>
+
+
+            <td style="min-width:120px">
+
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value="${escapeHtml(p.price)}"
+                onchange="updateBulkField(${index},'price',this.value)"
+              >
+
+            </td>
+
+
+            <td style="min-width:160px">
+
+              <select
+                onchange="updateBulkField(${index},'collection',this.value)"
+              >
+
+                ${collectionOptions}
+
+              </select>
+
+            </td>
+
+
+            <td style="min-width:90px">
+
+              <input
+                type="number"
+                min="0"
+                value="${p.stock || 0}"
+                onchange="updateBulkField(${index},'stock',this.value)"
+              >
+
+            </td>
+
+
+            <td style="min-width:120px">
+
+              <select
+                onchange="updateBulkField(${index},'status',this.value)"
+              >
+
+                <option
+                  value="active"
+                  ${p.status === "active" ? "selected" : ""}
+                >
+                  Active
+                </option>
+
+                <option
+                  value="inactive"
+                  ${p.status === "inactive" ? "selected" : ""}
+                >
+                  Inactive
+                </option>
+
+              </select>
+
+            </td>
+
+          </tr>
+        `;
+
+      }
+    ).join("");
+
+
+  bulkProducts.forEach(
+    (p,index)=>{
+
+      const selects =
+        body.querySelectorAll(
+          "tr"
+        )[index]
+          ?.querySelectorAll(
+            "select"
+          );
+
+      if(
+        selects &&
+        selects[0] &&
+        p.collection
+      ){
+
+        selects[0].value =
+          p.collection;
+
+      }
+
+    }
+  );
+
+}
+
+
+function updateBulkSelection(
+  index,
+  selected
+){
+
+  if(
+    bulkProducts[index]
+  ){
+
+    bulkProducts[index].selected =
+      selected;
+
+  }
+
+}
+
+
+function updateBulkField(
+  index,
+  field,
+  value
+){
+
+  if(
+    !bulkProducts[index]
+  )
+    return;
+
+
+  bulkProducts[index][field] =
+    value;
+
+}
+
+
+function toggleAllBulk(
+  checked
+){
+
+  bulkProducts.forEach(
+    p=>{
+      if(!p.error){
+        p.selected =
+          checked;
+      }
+    }
+  );
+
+
+  document
+    .querySelectorAll(".bulk-select")
+    .forEach(
+      checkbox=>{
+        checkbox.checked =
+          checked;
+      }
+    );
+
+}
+
+
+async function saveBulkProducts(){
+
+  const selected =
+    bulkProducts.filter(
+      p =>
+        p.selected &&
+        !p.error
+    );
+
+
+  if(!selected.length){
+
+    message(
+      "Please select at least one product.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const btn =
+    $("bulkSaveBtn");
+
+
+  btn.disabled = true;
+
+  btn.textContent =
+    "Saving...";
+
+
+  try{
+
+    const payload =
+      selected.map(
+        p=>({
+
+          name:
+            p.name.trim(),
+
+          collection:
+            p.collection || null,
+
+          price:
+            Number(p.price || 0),
+
+          sale_price:
+            p.sale_price === "" ||
+            p.sale_price == null
+            ?
+            null
+            :
+            Number(p.sale_price),
+
+          stock:
+            Number(p.stock || 0),
+
+          status:
+            p.status || "inactive",
+
+          image_url:
+            p.image_url || "",
+
+          description:
+            p.description || ""
+
+        })
+      );
+
+
+    const invalid =
+      payload.find(
+        p => !p.name
+      );
+
+
+    if(invalid){
+
+      throw new Error(
+        "One or more products are missing a name."
+      );
+
+    }
+
+
+    const {
+      error
+    } =
+    await supabaseClient
+      .from("products")
+      .insert(payload);
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    message(
+      selected.length +
+      " product(s) added successfully."
+    );
+
+
+    clearBulkScraper();
+
+    await loadProducts();
+
+
+  }catch(err){
+
+    console.error(
+      "BULK SAVE ERROR:",
+      err
+    );
+
+
+    message(
+      err.message ||
+      "Could not save products.",
+      "error"
+    );
+
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "💾 Save Selected Products";
+
+  }
+
+}
+
+
+function clearBulkScraper(){
+
+  bulkProducts = [];
+
+  $("bulkUrls").value = "";
+
+  $("bulkProgress").textContent = "";
+
+  $("bulkResults")
+    .classList
+    .add("hidden");
+
+  $("bulkResultsBody").innerHTML = "";
+
+  $("selectAllBulk").checked = false;
+
+}
 /* =========================================
    START
 ========================================= */

@@ -1289,167 +1289,140 @@ img {
    INSTAGRAM REELS
    ========================================= */
 
+./* =========================================
+   INSTAGRAM SECTION
+========================================= */
+
 .instagram-section {
-    background: #f7f3ed;
-}
-
-.instagram-heading {
-    align-items: flex-end;
-}
-
-.instagram-reels-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-top: 34px;
-}
-
-.instagram-reel-card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    border-radius: 18px;
+    padding: 100px 6%;
+    background: #f7f2ea;
     overflow: hidden;
-    background: #1d1b19;
-    box-shadow: 0 12px 30px rgba(29, 27, 25, 0.10);
-    transition: transform .25s ease, box-shadow .25s ease;
 }
 
-.instagram-reel-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 38px rgba(29, 27, 25, 0.16);
+.instagram-section .section-heading {
+    max-width: 700px;
+    margin: 0 auto 50px;
+    text-align: center;
 }
 
-.instagram-reel-placeholder {
-    aspect-ratio: 9 / 12;
-    min-height: 330px;
-    padding: 28px 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    position: relative;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(178,138,75,.28), transparent 34%),
-        linear-gradient(145deg, #292522, #171513);
-    color: #fff;
-}
-
-.instagram-reel-placeholder::before {
-    content: "REEL";
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    padding: 7px 10px;
-    border: 1px solid rgba(255,255,255,.35);
-    border-radius: 999px;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-}
-
-.instagram-icon {
-    width: 52px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255,255,255,.65);
-    border-radius: 50%;
-    font-size: 27px;
-    margin-bottom: auto;
-}
-
-.reel-label {
-    font-size: 9px;
-    letter-spacing: 1.7px;
-    opacity: .72;
-    margin-bottom: 8px;
-}
-
-.instagram-reel-placeholder strong {
-    font-family: "Playfair Display", serif;
-    font-size: 22px;
+.instagram-section .eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #9a7443;
     font-weight: 600;
 }
 
-.instagram-follow-bar {
-    margin-top: 26px;
-    padding: 22px 26px;
+.instagram-section h2 {
+    margin: 0 0 16px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 1;
+    color: #211f1d;
+    font-weight: 500;
+}
+
+.instagram-section .section-heading p {
+    margin: 0 auto;
+    max-width: 560px;
+    color: #66605a;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.instagram-grid {
+    max-width: 1250px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+}
+
+.instagram-card {
     background: #fff;
-    border: 1px solid rgba(29,27,25,.08);
-    border-radius: 16px;
-    display: flex;
+    border-radius: 2px;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.instagram-card .instagram-media {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+}
+
+.instagram-follow {
+    text-align: center;
+    margin-top: 45px;
+}
+
+.instagram-button {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: #211f1d;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform .2s ease, opacity .2s ease;
 }
 
-.instagram-follow-bar > div {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+.instagram-button:hover {
+    transform: translateY(-2px);
+    opacity: .9;
 }
 
-.instagram-follow-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #b28a4b;
-    display: inline-block;
-}
 
-.instagram-follow-bar strong {
-    font-size: 15px;
-}
-
-.instagram-follow-bar small {
-    color: #777;
-    font-size: 12px;
-}
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 900px) {
-    .instagram-reels-grid {
-        grid-template-columns: repeat(2, 1fr);
+
+    .instagram-section {
+        padding: 75px 20px;
     }
+
+    .instagram-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
 }
 
 @media (max-width: 600px) {
-    .instagram-heading {
-        align-items: flex-start;
+
+    .instagram-section {
+        padding: 60px 14px;
     }
 
-    .instagram-reels-grid {
-        display: flex;
-        overflow-x: auto;
-        gap: 12px;
-        margin-right: -20px;
-        padding-right: 20px;
-        padding-bottom: 8px;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
+    .instagram-section .section-heading {
+        margin-bottom: 30px;
     }
 
-    .instagram-reels-grid::-webkit-scrollbar {
-        display: none;
+    .instagram-section h2 {
+        font-size: 38px;
     }
 
-    .instagram-reel-card {
-        min-width: 72%;
-        scroll-snap-align: start;
+    .instagram-section .section-heading p {
+        font-size: 14px;
     }
 
-    .instagram-reel-placeholder {
-        min-height: 390px;
+    .instagram-grid {
+        grid-template-columns: 1fr;
+        max-width: 540px;
+        margin: 0 auto;
     }
 
-    .instagram-follow-bar {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .instagram-follow-bar .btn {
+    .instagram-card {
         width: 100%;
-        text-align: center;
     }
-}
 
+}
