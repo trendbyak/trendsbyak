@@ -1,1 +1,1750 @@
-<h1>Collections</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Collections | Trends by AK</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f5f0;
+            color: #292929;
+        }
+
+        .header {
+            background: #292929;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #d1ad72;
+            font-size: 22px;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .title h2 {
+            font-size: 30px;
+        }
+
+        .status {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            background: #eee;
+        }
+
+        .status.success {
+            background: #e7f6e7;
+            color: #287a28;
+        }
+
+        .status.error {
+            background: #fde8e8;
+            color: #a33;
+        }
+
+        .status.loading {
+            background: #fff3d9;
+            color: #8b6b42;
+        }
+
+        .form-box,
+        .manager {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.06);
+            margin-bottom: 35px;
+        }
+
+        .form-box h2 {
+            margin-bottom: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #d1ad72;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .image-preview {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+            border: 1px solid #eee;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            border: none;
+            padding: 14px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .save-btn {
+            background: #292929;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #d1ad72;
+        }
+
+        .save-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            color: #333;
+            display: none;
+        }
+
+        .manager h2 {
+            margin-bottom: 8px;
+        }
+
+        .manager-subtitle {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .collection-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .collection-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .collection-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f5f0eb;
+            display: block;
+        }
+
+        .collection-info {
+            padding: 18px;
+        }
+
+        .collection-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .collection-info p {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .collection-id {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #d1ad72;
+        }
+
+        .delete-btn {
+            background: #b85c5c;
+        }
+
+        .empty {
+            grid-column: 1 / -1;
+            padding: 40px;
+            text-align: center;
+            background: #faf8f5;
+            border-radius: 10px;
+            color: #777;
+        }
+
+        .loading {
+            grid-column: 1 / -1;
+            padding: 40px;
+            text-align: center;
+            color: #777;
+        }
+
+        .login-box {
+            max-width: 500px;
+            margin: 100px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.06);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 12px;
+        }
+
+        .login-box p {
+            color: #777;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media(max-width:700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .header {
+                padding: 16px 18px;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <h1>Trends by AK</h1>
+
+    <a href="index.html" class="back">
+        ← Back to Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="title">
+
+        <h2>Collections</h2>
+
+        <div
+            id="status"
+            class="status loading"
+        >
+            Connecting...
+        </div>
+
+    </div>
+
+
+    <!-- LOGIN MESSAGE -->
+
+    <div
+        id="loginMessage"
+        class="login-box hidden"
+    >
+
+        <h2>
+            Admin login required
+        </h2>
+
+        <p>
+            Please log in to your Trends by AK admin account
+            before creating or editing collections.
+        </p>
+
+    </div>
+
+
+    <!-- COLLECTION FORM -->
+
+    <div
+        id="adminContent"
+        class="hidden"
+    >
+
+
+        <div class="form-box">
+
+            <h2 id="formTitle">
+                Add Collection
+            </h2>
+
+
+            <form id="collectionForm">
+
+
+                <div class="form-grid">
+
+
+                    <div class="field full">
+
+                        <label for="collectionName">
+                            Collection Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="collectionName"
+                            placeholder="Example: Scrunchies"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="collectionImage">
+                            Collection Image
+                        </label>
+
+                        <input
+                            type="file"
+                            id="collectionImage"
+                            accept="image/*"
+                        >
+
+                        <small style="color:#777;">
+                            JPG, PNG or WEBP recommended.
+                        </small>
+
+                        <img
+                            id="imagePreview"
+                            class="image-preview"
+                            alt="Collection preview"
+                        >
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="collectionDescription">
+                            Collection Description
+                        </label>
+
+                        <textarea
+                            id="collectionDescription"
+                            placeholder="Describe this collection..."
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        id="saveButton"
+                        class="save-btn"
+                    >
+                        Save Collection
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelButton"
+                        class="cancel-btn"
+                    >
+                        Cancel Edit
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- COLLECTION MANAGER -->
+
+        <div class="manager">
+
+            <h2>
+                Collection Manager
+            </h2>
+
+            <p class="manager-subtitle">
+                These collections are stored in Supabase
+                and will appear on your main website.
+            </p>
+
+
+            <div
+                id="collectionList"
+                class="collection-list"
+            >
+
+                <div class="loading">
+                    Loading collections...
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+    "https://ltxrycmreumoqfpcbwnb.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/*
+   Supabase Storage bucket.
+
+   We will first try "collections".
+   If your bucket has a different name, the
+   error will tell us exactly what needs changing.
+*/
+
+const STORAGE_BUCKET =
+    "collections";
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let editingCollectionId = null;
+
+let existingImageUrl = "";
+
+let selectedImageFile = null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const form =
+    document.getElementById(
+        "collectionForm"
+    );
+
+
+const nameInput =
+    document.getElementById(
+        "collectionName"
+    );
+
+
+const descriptionInput =
+    document.getElementById(
+        "collectionDescription"
+    );
+
+
+const imageInput =
+    document.getElementById(
+        "collectionImage"
+    );
+
+
+const imagePreview =
+    document.getElementById(
+        "imagePreview"
+    );
+
+
+const collectionList =
+    document.getElementById(
+        "collectionList"
+    );
+
+
+const saveButton =
+    document.getElementById(
+        "saveButton"
+    );
+
+
+const cancelButton =
+    document.getElementById(
+        "cancelButton"
+    );
+
+
+const formTitle =
+    document.getElementById(
+        "formTitle"
+    );
+
+
+const statusElement =
+    document.getElementById(
+        "status"
+    );
+
+
+const adminContent =
+    document.getElementById(
+        "adminContent"
+    );
+
+
+const loginMessage =
+    document.getElementById(
+        "loginMessage"
+    );
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function setStatus(
+    message,
+    type = "loading"
+) {
+
+    statusElement.textContent =
+        message;
+
+    statusElement.className =
+        "status " + type;
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   AUTH CHECK
+===================================================== */
+
+async function checkAuth() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+
+        if (error)
+            throw error;
+
+
+        const session =
+            data?.session;
+
+
+        if (!session) {
+
+            adminContent.classList.add(
+                "hidden"
+            );
+
+            loginMessage.classList.remove(
+                "hidden"
+            );
+
+            setStatus(
+                "Not logged in",
+                "error"
+            );
+
+            return false;
+
+        }
+
+
+        adminContent.classList.remove(
+            "hidden"
+        );
+
+        loginMessage.classList.add(
+            "hidden"
+        );
+
+
+        setStatus(
+            "Connected to Supabase",
+            "success"
+        );
+
+
+        return true;
+
+
+    } catch (error) {
+
+        console.error(
+            "Auth error:",
+            error
+        );
+
+
+        setStatus(
+            "Authentication error",
+            "error"
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+imageInput.addEventListener(
+    "change",
+    function() {
+
+        const file =
+            this.files?.[0];
+
+
+        if (!file) {
+
+            selectedImageFile = null;
+
+            return;
+
+        }
+
+
+        selectedImageFile =
+            file;
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(event) {
+
+                imagePreview.src =
+                    event.target.result;
+
+                imagePreview.style.display =
+                    "block";
+
+            };
+
+
+        reader.readAsDataURL(
+            file
+        );
+
+    }
+);
+
+
+/* =====================================================
+   CREATE SAFE FILE NAME
+===================================================== */
+
+function createFileName(
+    file
+) {
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const random =
+        Math.random()
+            .toString(36)
+            .substring(2);
+
+
+    return (
+        Date.now() +
+        "-" +
+        random +
+        "." +
+        extension
+    );
+
+}
+
+
+/* =====================================================
+   UPLOAD IMAGE
+===================================================== */
+
+async function uploadCollectionImage(
+    file
+) {
+
+    if (!file) {
+
+        return existingImageUrl || "";
+
+    }
+
+
+    const fileName =
+        createFileName(
+            file
+        );
+
+
+    const filePath =
+        "collections/" +
+        fileName;
+
+
+    const {
+        error:
+            uploadError
+    } =
+        await supabaseClient
+            .storage
+            .from(STORAGE_BUCKET)
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl:
+                        "3600",
+                    upsert:
+                        false
+                }
+            );
+
+
+    if (uploadError) {
+
+        console.error(
+            "Image upload error:",
+            uploadError
+        );
+
+
+        throw new Error(
+            "Image upload failed: " +
+            uploadError.message
+        );
+
+    }
+
+
+    const {
+        data
+    } =
+        supabaseClient
+            .storage
+            .from(
+                STORAGE_BUCKET
+            )
+            .getPublicUrl(
+                filePath
+            );
+
+
+    return (
+        data?.publicUrl ||
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   SAVE COLLECTION
+===================================================== */
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const name =
+            nameInput.value.trim();
+
+
+        const description =
+            descriptionInput.value.trim();
+
+
+        if (!name) {
+
+            alert(
+                "Please enter a collection name."
+            );
+
+            return;
+
+        }
+
+
+        saveButton.disabled =
+            true;
+
+
+        saveButton.textContent =
+            editingCollectionId
+                ? "Updating..."
+                : "Saving...";
+
+
+        try {
+
+
+            /*
+               Upload new image if selected.
+               During edit, if no new image is
+               selected, keep the existing image.
+            */
+
+            let imageUrl =
+                existingImageUrl;
+
+
+            if (selectedImageFile) {
+
+                setStatus(
+                    "Uploading image...",
+                    "loading"
+                );
+
+
+                imageUrl =
+                    await uploadCollectionImage(
+                        selectedImageFile
+                    );
+
+            }
+
+
+            setStatus(
+                "Saving collection...",
+                "loading"
+            );
+
+
+            /*
+               EDIT
+            */
+
+            if (
+                editingCollectionId
+            ) {
+
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from(
+                            "collections"
+                        )
+                        .update({
+
+                            name:
+                                name,
+
+                            description:
+                                description,
+
+                            image_url:
+                                imageUrl
+
+                        })
+                        .eq(
+                            "id",
+                            editingCollectionId
+                        );
+
+
+                if (error)
+                    throw error;
+
+
+                alert(
+                    "Collection updated successfully!"
+                );
+
+
+            }
+
+
+            /*
+               CREATE
+            */
+
+            else {
+
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from(
+                            "collections"
+                        )
+                        .insert({
+
+                            name:
+                                name,
+
+                            description:
+                                description,
+
+                            image_url:
+                                imageUrl
+
+                        });
+
+
+                if (error)
+                    throw error;
+
+
+                alert(
+                    "Collection saved successfully!"
+                );
+
+            }
+
+
+            resetForm();
+
+
+            await loadCollections();
+
+
+            setStatus(
+                "Saved successfully",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Save collection error:",
+                error
+            );
+
+
+            console.error(
+                "Full error:",
+                JSON.stringify(
+                    error,
+                    null,
+                    2
+                )
+            );
+
+
+            alert(
+                "Could not save collection.\n\n" +
+                error.message
+            );
+
+
+            setStatus(
+                "Save failed",
+                "error"
+            );
+
+
+        } finally {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                editingCollectionId
+                    ? "Update Collection"
+                    : "Save Collection";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   LOAD COLLECTIONS
+===================================================== */
+
+async function loadCollections() {
+
+    collectionList.innerHTML = `
+
+        <div class="loading">
+            Loading collections...
+        </div>
+
+    `;
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "collections"
+                )
+                .select("*")
+                .order(
+                    "id",
+                    {
+                        ascending:
+                            true
+                    }
+                );
+
+
+        if (error)
+            throw error;
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            collectionList.innerHTML = `
+
+                <div class="empty">
+
+                    <h3>
+                        No collections yet
+                    </h3>
+
+                    <p style="margin-top:8px;">
+                        Add your first collection above.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        collectionList.innerHTML =
+            data
+                .map(
+                    collection =>
+                        renderCollection(
+                            collection
+                        )
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Load collections error:",
+            error
+        );
+
+
+        collectionList.innerHTML = `
+
+            <div class="empty">
+
+                <h3>
+                    Unable to load collections
+                </h3>
+
+                <p style="margin-top:8px;">
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+
+        setStatus(
+            "Could not load collections",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER COLLECTION
+===================================================== */
+
+function renderCollection(
+    collection
+) {
+
+    const image =
+        collection.image_url ||
+        "";
+
+
+    const name =
+        escapeHtml(
+            collection.name ||
+            "Collection"
+        );
+
+
+    const description =
+        escapeHtml(
+            collection.description ||
+            ""
+        );
+
+
+    return `
+
+        <div class="collection-card">
+
+
+            ${
+                image
+
+                ?
+
+                `
+                    <img
+                        src="${escapeHtml(image)}"
+                        alt="${name}"
+                        loading="lazy"
+                    >
+                `
+
+                :
+
+                `
+                    <div
+                        style="
+                            width:100%;
+                            height:180px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            background:#f5f0eb;
+                            color:#b28a4b;
+                            font-family:'Playfair Display',serif;
+                            font-size:40px;
+                        "
+                    >
+                        AK
+                    </div>
+                `
+
+            }
+
+
+            <div class="collection-info">
+
+
+                <div class="collection-id">
+                    ID: ${escapeHtml(
+                        collection.id
+                    )}
+                </div>
+
+
+                <h3>
+                    ${name}
+                </h3>
+
+
+                <p>
+                    ${description}
+                </p>
+
+
+                <div class="buttons">
+
+
+                    <button
+                        class="edit-btn"
+                        onclick="editCollection(${Number(collection.id)})"
+                    >
+                        Edit
+                    </button>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteCollection(${Number(collection.id)})"
+                    >
+                        Delete
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   EDIT COLLECTION
+===================================================== */
+
+async function editCollection(
+    id
+) {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "collections"
+                )
+                .select("*")
+                .eq(
+                    "id",
+                    id
+                )
+                .single();
+
+
+        if (error)
+            throw error;
+
+
+        editingCollectionId =
+            data.id;
+
+
+        existingImageUrl =
+            data.image_url ||
+            "";
+
+
+        selectedImageFile =
+            null;
+
+
+        nameInput.value =
+            data.name ||
+            "";
+
+
+        descriptionInput.value =
+            data.description ||
+            "";
+
+
+        imageInput.value =
+            "";
+
+
+        if (
+            data.image_url
+        ) {
+
+            imagePreview.src =
+                data.image_url;
+
+            imagePreview.style.display =
+                "block";
+
+        } else {
+
+            imagePreview.src =
+                "";
+
+            imagePreview.style.display =
+                "none";
+
+        }
+
+
+        formTitle.textContent =
+            "Edit Collection";
+
+
+        saveButton.textContent =
+            "Update Collection";
+
+
+        cancelButton.style.display =
+            "block";
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior:
+                "smooth"
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Edit collection error:",
+            error
+        );
+
+
+        alert(
+            "Could not load collection.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   DELETE COLLECTION
+===================================================== */
+
+async function deleteCollection(
+    id
+) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this collection?"
+        );
+
+
+    if (!confirmed)
+        return;
+
+
+    try {
+
+        setStatus(
+            "Deleting...",
+            "loading"
+        );
+
+
+        /*
+           Get image first so we can
+           optionally remove it from storage.
+        */
+
+        const {
+            data:
+                collection
+        } =
+            await supabaseClient
+                .from(
+                    "collections"
+                )
+                .select(
+                    "image_url"
+                )
+                .eq(
+                    "id",
+                    id
+                )
+                .single();
+
+
+        /*
+           Delete database record.
+        */
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "collections"
+                )
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
+
+
+        if (error)
+            throw error;
+
+
+        /*
+           We intentionally don't delete the
+           storage file automatically here.
+           This prevents accidentally deleting
+           a file still being used elsewhere.
+        */
+
+
+        alert(
+            "Collection deleted successfully."
+        );
+
+
+        await loadCollections();
+
+
+        setStatus(
+            "Collection deleted",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete collection error:",
+            error
+        );
+
+
+        alert(
+            "Could not delete collection.\n\n" +
+            error.message
+        );
+
+
+        setStatus(
+            "Delete failed",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RESET FORM
+===================================================== */
+
+function resetForm() {
+
+    editingCollectionId =
+        null;
+
+
+    existingImageUrl =
+        "";
+
+
+    selectedImageFile =
+        null;
+
+
+    form.reset();
+
+
+    imagePreview.src =
+        "";
+
+
+    imagePreview.style.display =
+        "none";
+
+
+    formTitle.textContent =
+        "Add Collection";
+
+
+    saveButton.textContent =
+        "Save Collection";
+
+
+    cancelButton.style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   CANCEL EDIT
+===================================================== */
+
+cancelButton.addEventListener(
+    "click",
+    function() {
+
+        resetForm();
+
+    }
+);
+
+
+/* =====================================================
+   AUTH STATE LISTENER
+===================================================== */
+
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        async function(
+            event,
+            session
+        ) {
+
+            console.log(
+                "Auth event:",
+                event
+            );
+
+
+            if (session) {
+
+                adminContent.classList.remove(
+                    "hidden"
+                );
+
+                loginMessage.classList.add(
+                    "hidden"
+                );
+
+                setStatus(
+                    "Connected to Supabase",
+                    "success"
+                );
+
+
+                await loadCollections();
+
+            } else {
+
+                adminContent.classList.add(
+                    "hidden"
+                );
+
+                loginMessage.classList.remove(
+                    "hidden"
+                );
+
+                setStatus(
+                    "Not logged in",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   START
+===================================================== */
+
+async function start() {
+
+    const loggedIn =
+        await checkAuth();
+
+
+    if (loggedIn) {
+
+        await loadCollections();
+
+    }
+
+}
+
+
+start();
+
+</script>
+
+
+</body>
+
+</html>
