@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Bulk Products | Trends by AK</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@Supabase/supabase-js@2"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
+
 <style>
-*{box-sizing:border-box}
+
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -18,6 +29,11 @@ body{
     background:#f8f5f1;
     color:#292929;
 }
+
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header{
     background:#292929;
@@ -30,6 +46,11 @@ body{
     font-size:24px;
 }
 
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
 .layout{
     display:flex;
     min-height:calc(100vh - 70px);
@@ -39,6 +60,7 @@ body{
     width:230px;
     background:#171717;
     padding:25px 18px;
+    flex-shrink:0;
 }
 
 .sidebar a{
@@ -59,8 +81,13 @@ body{
 .main{
     flex:1;
     padding:35px;
-    max-width:1300px;
+    max-width:1500px;
 }
+
+
+/* =====================================================
+   BOX
+===================================================== */
 
 .box{
     background:white;
@@ -74,6 +101,15 @@ h2{
     margin-top:0;
 }
 
+h3{
+    margin-top:0;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
 .gold-btn{
     background:#d1ad72;
     color:white;
@@ -82,11 +118,90 @@ h2{
     border-radius:8px;
     cursor:pointer;
     font-size:14px;
+    font-weight:bold;
+}
+
+.gold-btn:hover{
+    background:#bd985f;
+}
+
+.gold-btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
 }
 
 .secondary{
     background:#292929;
 }
+
+.danger{
+    background:#b33a3a;
+}
+
+.light-btn{
+    background:#f4efe8;
+    color:#292929;
+    border:1px solid #ddd;
+    padding:11px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.button-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+    gap:18px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:13px;
+    font-weight:bold;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px 13px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:white;
+    font-family:inherit;
+    font-size:14px;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#d1ad72;
+}
+
+
+/* =====================================================
+   FILE UPLOAD
+===================================================== */
 
 .file-box{
     border:2px dashed #d1ad72;
@@ -99,6 +214,11 @@ h2{
 input[type=file]{
     margin:15px 0;
 }
+
+
+/* =====================================================
+   STATUS
+===================================================== */
 
 .status{
     margin-top:15px;
@@ -125,18 +245,32 @@ input[type=file]{
     color:#8a6500;
 }
 
+.info{
+    display:block;
+    background:#eef5ff;
+    color:#24558a;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
 .table-wrap{
     overflow:auto;
-    max-height:500px;
+    max-height:600px;
+    border:1px solid #eee;
+    border-radius:10px;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:900px;
+    min-width:1050px;
 }
 
-th,td{
+th,
+td{
     border-bottom:1px solid #eee;
     padding:10px;
     text-align:left;
@@ -148,17 +282,29 @@ th{
     color:white;
     position:sticky;
     top:0;
+    z-index:2;
 }
 
-.bad{
-    color:#c62828;
-    font-weight:bold;
+tbody tr:hover{
+    background:#faf8f5;
 }
 
-.good{
-    color:#2e7d32;
-    font-weight:bold;
+.checkbox-cell{
+    width:45px;
+    text-align:center;
 }
+
+.product-checkbox,
+#selectAll{
+    width:17px;
+    height:17px;
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
 
 .summary{
     display:flex;
@@ -171,6 +317,12 @@ th{
     background:#faf8f5;
     padding:15px 20px;
     border-radius:10px;
+    min-width:130px;
+}
+
+.summary span{
+    font-size:12px;
+    color:#777;
 }
 
 .summary strong{
@@ -179,7 +331,115 @@ th{
     margin-top:5px;
 }
 
-@media(max-width:700px){
+
+/* =====================================================
+   BULK UPDATE TOOLBAR
+===================================================== */
+
+.bulk-toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+    padding:15px;
+    background:#faf8f5;
+    border-radius:10px;
+}
+
+.bulk-toolbar-left,
+.bulk-toolbar-right{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.selected-count{
+    font-weight:bold;
+    color:#8b6b42;
+}
+
+
+/* =====================================================
+   PRODUCT TABLE
+===================================================== */
+
+.product-name{
+    font-weight:bold;
+}
+
+.product-sku{
+    color:#777;
+    font-size:11px;
+    margin-top:3px;
+}
+
+.tag{
+    display:inline-block;
+    padding:5px 9px;
+    background:#f3eee6;
+    border-radius:999px;
+    font-size:11px;
+}
+
+.empty-state{
+    text-align:center;
+    padding:50px 20px;
+    color:#777;
+}
+
+
+/* =====================================================
+   PREVIEW
+===================================================== */
+
+.preview-change{
+    background:#fff8e1;
+    border:1px solid #ead59b;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+.preview-change strong{
+    color:#8a6500;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading{
+    padding:35px;
+    text-align:center;
+    color:#777;
+}
+
+.loader{
+    width:30px;
+    height:30px;
+    margin:0 auto 15px;
+    border:3px solid #e8e3db;
+    border-top-color:#d1ad72;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:900px){
 
     .layout{
         display:block;
@@ -192,190 +452,2352 @@ th{
     .main{
         padding:20px;
     }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
 }
+
+@media(max-width:600px){
+
+    .header{
+        padding:18px 20px;
+    }
+
+    .header h1{
+        font-size:20px;
+    }
+
+    .box{
+        padding:20px;
+    }
+
+    .bulk-toolbar{
+        align-items:stretch;
+    }
+
+    .bulk-toolbar-left,
+    .bulk-toolbar-right{
+        width:100%;
+    }
+
+    .bulk-toolbar input,
+    .bulk-toolbar select{
+        width:100%;
+    }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <header class="header">
-    <h1>Trends by AK — Bulk Product Import</h1>
+
+    <h1>
+        Trends by AK — Bulk Product Management
+    </h1>
+
 </header>
+
 
 <div class="layout">
 
+
 <aside class="sidebar">
 
-<a href="index.html">🏠 Dashboard</a>
-<a href="products.html">🛍️ Products</a>
-<a href="bulk-products.html" class="active">📥 Bulk Upload</a>
-<a href="collections.html">🎀 Collections</a>
-<a href="banners.html">🖼️ Banners</a>
-<a href="orders.html">📦 Orders</a>
+    <a href="index.html">
+        🏠 Dashboard
+    </a>
+
+    <a href="products.html">
+        🛍️ Products
+    </a>
+
+    <a
+        href="bulk-products.html"
+        class="active"
+    >
+        📥 Bulk Products
+    </a>
+
+    <a href="collections.html">
+        🎀 Collections
+    </a>
+
+    <a href="banners.html">
+        🖼️ Banners
+    </a>
+
+    <a href="orders.html">
+        📦 Orders
+    </a>
 
 </aside>
 
+
 <main class="main">
 
-<div class="box">
 
-<h2>Bulk Product Upload</h2>
-
-<p>
-Upload an Excel or CSV file to add multiple products at once.
-</p>
-
-<button
-class="gold-btn"
-onclick="downloadTemplate()">
-Download Excel Template
-</button>
-
-</div>
-
+<!-- =====================================================
+     BULK UPDATE PRODUCTS
+===================================================== -->
 
 <div class="box">
 
-<h2>1. Upload File</h2>
+    <h2>
+        Bulk Update Selected Products
+    </h2>
 
-<div class="file-box">
+    <p>
+        Select multiple products and update their
+        <strong>category</strong> or
+        <strong>collection</strong> at once.
+    </p>
 
-<p>
-<strong>CSV or Excel</strong>
-</p>
 
-<p>
-Accepted: .csv, .xlsx, .xls
-</p>
+    <div class="summary">
 
-<input
-type="file"
-id="fileInput"
-accept=".csv,.xlsx,.xls">
+        <div>
+
+            <span>
+                Products
+            </span>
+
+            <strong id="productCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Selected
+            </span>
+
+            <strong id="selectedCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Collections
+            </span>
+
+            <strong id="collectionCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Categories
+            </span>
+
+            <strong id="categoryCount">
+                0
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="form-grid">
+
+        <div class="form-group">
+
+            <label>
+                Search Products
+            </label>
+
+            <input
+                type="search"
+                id="productSearch"
+                placeholder="Search by product name or SKU..."
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Filter Collection
+            </label>
+
+            <select id="collectionFilter">
+
+                <option value="">
+                    All Collections
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- BULK ACTIONS -->
+
+    <div class="bulk-toolbar">
+
+        <div class="bulk-toolbar-left">
+
+            <button
+                type="button"
+                class="light-btn"
+                id="selectAllButton"
+            >
+                ☑ Select All
+            </button>
+
+
+            <button
+                type="button"
+                class="light-btn"
+                id="clearSelectionButton"
+            >
+                Clear Selection
+            </button>
+
+
+            <span class="selected-count">
+
+                <span id="toolbarSelectedCount">
+                    0
+                </span>
+
+                selected
+
+            </span>
+
+        </div>
+
+
+        <div class="bulk-toolbar-right">
+
+            <button
+                type="button"
+                class="light-btn"
+                id="refreshProductsButton"
+            >
+                ↻ Refresh
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRODUCT TABLE -->
+
+    <div
+        class="table-wrap"
+        id="productTableWrap"
+    >
+
+        <div class="loading">
+
+            <div class="loader"></div>
+
+            Loading products...
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- UPDATE FORM -->
+
+    <div
+        class="preview-change"
+        id="bulkUpdatePanel"
+        style="display:none"
+    >
+
+        <h3>
+            Update Selected Products
+        </h3>
+
+
+        <p>
+            Leave a field unchanged if you do not want
+            to modify it.
+        </p>
+
+
+        <div class="form-grid">
+
+
+            <!-- CATEGORY -->
+
+            <div class="form-group">
+
+                <label>
+                    Category
+                </label>
+
+                <select id="bulkCategory">
+
+                    <option value="">
+                        — Do not change category —
+                    </option>
+
+                    <option value="__CLEAR__">
+                        Clear category
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- COLLECTION -->
+
+            <div class="form-group">
+
+                <label>
+                    Collection
+                </label>
+
+                <select id="bulkCollection">
+
+                    <option value="">
+                        — Do not change collection —
+                    </option>
+
+                    <option value="__CLEAR__">
+                        Clear collection
+                    </option>
+
+                </select>
+
+            </div>
+
+
+        </div>
+
+
+        <br>
+
+
+        <div class="button-row">
+
+            <button
+                type="button"
+                class="gold-btn"
+                id="previewUpdateButton"
+            >
+                Preview Changes
+            </button>
+
+            <button
+                type="button"
+                class="light-btn"
+                id="cancelUpdateButton"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+
+        <div
+            id="updatePreview"
+            style="display:none"
+        >
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="bulkStatus"
+        class="status"
+    ></div>
 
 </div>
 
-<div id="status" class="status"></div>
+
+
+<!-- =====================================================
+     ADD COLLECTION
+===================================================== -->
+
+<div class="box">
+
+    <h2>
+        Collections
+    </h2>
+
+    <p>
+        Collections created in your Admin
+        <strong>Collections</strong> table will automatically
+        appear in the product dropdown above.
+    </p>
+
+
+    <div class="form-grid">
+
+        <div class="form-group">
+
+            <label>
+                Create New Collection
+            </label>
+
+            <input
+                type="text"
+                id="newCollectionName"
+                placeholder="Example: Rakhi Collection"
+            >
+
+        </div>
+
+
+        <div
+            class="form-group"
+            style="justify-content:end"
+        >
+
+            <button
+                type="button"
+                class="gold-btn"
+                id="addCollectionButton"
+            >
+                + Add Collection
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="collectionStatus"
+        class="status"
+    ></div>
 
 </div>
 
+
+
+<!-- =====================================================
+     BULK EXCEL UPLOAD
+===================================================== -->
+
+<div class="box">
+
+    <h2>
+        Bulk Product Upload
+    </h2>
+
+    <p>
+        Upload an Excel or CSV file to add multiple
+        products at once.
+    </p>
+
+
+    <button
+        class="gold-btn"
+        onclick="downloadTemplate()"
+    >
+        Download Excel Template
+    </button>
+
+</div>
+
+
+
+<div class="box">
+
+    <h2>
+        1. Upload File
+    </h2>
+
+
+    <div class="file-box">
+
+        <p>
+            <strong>
+                CSV or Excel
+            </strong>
+        </p>
+
+        <p>
+            Accepted: .csv, .xlsx, .xls
+        </p>
+
+
+        <input
+            type="file"
+            id="fileInput"
+            accept=".csv,.xlsx,.xls"
+        >
+
+    </div>
+
+
+    <div
+        id="status"
+        class="status"
+    ></div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PREVIEW
+===================================================== -->
 
 <div
-class="box"
-id="previewBox"
-style="display:none">
+    class="box"
+    id="previewBox"
+    style="display:none"
+>
 
-<h2>2. Preview & Validate</h2>
+    <h2>
+        2. Preview & Validate
+    </h2>
 
-<div class="summary">
 
-<div>
-Rows
-<strong id="rowCount">0</strong>
+    <div class="summary">
+
+        <div>
+            Rows
+            <strong id="rowCount">
+                0
+            </strong>
+        </div>
+
+        <div>
+            Valid
+            <strong id="validCount">
+                0
+            </strong>
+        </div>
+
+        <div>
+            Errors
+            <strong id="errorCount">
+                0
+            </strong>
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Row
+                    </th>
+
+                    <th>
+                        SKU
+                    </th>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <th>
+                        Price
+                    </th>
+
+                    <th>
+                        Sale Price
+                    </th>
+
+                    <th>
+                        Category
+                    </th>
+
+                    <th>
+                        Stock
+                    </th>
+
+                    <th>
+                        Collection
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Validation
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="previewBody"></tbody>
+
+        </table>
+
+    </div>
+
+
+    <br>
+
+
+    <button
+        id="importButton"
+        class="gold-btn"
+        onclick="importProducts()"
+        disabled
+    >
+        Import Products
+    </button>
+
 </div>
 
-<div>
-Valid
-<strong id="validCount">0</strong>
-</div>
 
-<div>
-Errors
-<strong id="errorCount">0</strong>
-</div>
 
-</div>
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Row</th>
-<th>SKU</th>
-<th>Name</th>
-<th>Price</th>
-<th>Sale Price</th>
-<th>Category</th>
-<th>Stock</th>
-<th>Collection</th>
-<th>Status</th>
-<th>Validation</th>
-
-</tr>
-
-</thead>
-
-<tbody id="previewBody"></tbody>
-
-</table>
-
-</div>
-
-<br>
-
-<button
-id="importButton"
-class="gold-btn"
-onclick="importProducts()"
-disabled>
-
-Import Products
-
-</button>
-
-</div>
-
+<!-- =====================================================
+     RESULT
+===================================================== -->
 
 <div
-class="box"
-id="resultBox"
-style="display:none">
+    class="box"
+    id="resultBox"
+    style="display:none"
+>
 
-<h2>Import Result</h2>
+    <h2>
+        Import Result
+    </h2>
 
-<div id="resultText"></div>
+    <div id="resultText"></div>
 
 </div>
+
 
 </main>
 
 </div>
 
 
+
 <script>
 
-/* ================================
+"use strict";
+
+
+/* =====================================================
    SUPABASE
-================================ */
+===================================================== */
 
 const SUPABASE_URL =
-"https://ltxrycmreumoqfpcbwnb.supabase.co";
+    "https://ltxrycmreumoqfpcbwnb.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
 
 const supabaseClient =
-window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let importedRows = [];
+
+let validRows = [];
+
+let allProducts = [];
+
+let allCollections = [];
+
+let selectedProductIds = new Set();
+
+let categories = new Set();
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function showStatus(
+    elementId,
+    message,
+    type
+){
+
+    const box =
+        document.getElementById(
+            elementId
+        );
+
+    if(!box)
+        return;
+
+    box.textContent =
+        message;
+
+    box.className =
+        "status " + type;
+
+}
+
+
+/* =====================================================
+   LOAD EVERYTHING
+===================================================== */
+
+async function loadAdminData(){
+
+    await Promise.all([
+        loadProducts(),
+        loadCollections()
+    ]);
+
+}
+
+
+/* =====================================================
+   LOAD PRODUCTS
+===================================================== */
+
+async function loadProducts(){
+
+    const tableWrap =
+        document.getElementById(
+            "productTableWrap"
+        );
+
+
+    tableWrap.innerHTML = `
+        <div class="loading">
+            <div class="loader"></div>
+            Loading products...
+        </div>
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("products")
+        .select("*")
+        .order(
+            "id",
+            {
+                ascending:false
+            }
+        );
+
+
+    if(error){
+
+        console.error(
+            "Products error:",
+            error
+        );
+
+
+        tableWrap.innerHTML = `
+            <div class="empty-state">
+                Unable to load products.
+                <br><br>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    allProducts =
+        data || [];
+
+
+    categories =
+        new Set();
+
+
+    allProducts.forEach(
+        product => {
+
+            const category =
+                String(
+                    product.category || ""
+                ).trim();
+
+            if(category){
+
+                categories.add(
+                    category
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "productCount"
+    ).textContent =
+        allProducts.length;
+
+
+    document.getElementById(
+        "categoryCount"
+    ).textContent =
+        categories.size;
+
+
+    renderCategoryDropdown();
+
+    renderProducts();
+
+    updateSelectedCount();
+
+}
+
+
+/* =====================================================
+   LOAD COLLECTIONS
+===================================================== */
+
+async function loadCollections(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("collections")
+        .select("*")
+        .order(
+            "id",
+            {
+                ascending:true
+            }
+        );
+
+
+    if(error){
+
+        console.error(
+            "Collections error:",
+            error
+        );
+
+        allCollections = [];
+
+        /*
+         * We still populate the dropdown with
+         * collections already used by products.
+         */
+
+        buildProductCollectionFallback();
+
+        return;
+
+    }
+
+
+    allCollections =
+        data || [];
+
+
+    /*
+     * If collection records exist,
+     * use them for the dropdown.
+     */
+
+    renderCollectionDropdowns();
+
+}
+
+
+/* =====================================================
+   COLLECTION NAME
+===================================================== */
+
+function getCollectionName(collection){
+
+    return String(
+        collection?.name ||
+        collection?.title ||
+        collection?.collection_name ||
+        ""
+    ).trim();
+
+}
+
+
+/* =====================================================
+   COLLECTION DROPDOWNS
+===================================================== */
+
+function renderCollectionDropdowns(){
+
+    const names = new Set();
+
+
+    /*
+     * Collections from Admin
+     */
+
+    allCollections.forEach(
+        collection => {
+
+            const name =
+                getCollectionName(
+                    collection
+                );
+
+            if(name){
+
+                names.add(
+                    name
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Also include collections already
+     * assigned to products.
+     */
+
+    allProducts.forEach(
+        product => {
+
+            const collection =
+                String(
+                    product.collection || ""
+                ).trim();
+
+            if(collection){
+
+                names.add(
+                    collection
+                );
+
+            }
+
+        }
+    );
+
+
+    const sorted =
+        Array.from(names)
+            .sort(
+                (a,b) =>
+                a.localeCompare(b)
+            );
+
+
+    document.getElementById(
+        "collectionCount"
+    ).textContent =
+        sorted.length;
+
+
+    const bulk =
+        document.getElementById(
+            "bulkCollection"
+        );
+
+
+    const filter =
+        document.getElementById(
+            "collectionFilter"
+        );
+
+
+    bulk.innerHTML = `
+        <option value="">
+            — Do not change collection —
+        </option>
+
+        <option value="__CLEAR__">
+            Clear collection
+        </option>
+    `;
+
+
+    filter.innerHTML = `
+        <option value="">
+            All Collections
+        </option>
+    `;
+
+
+    sorted.forEach(
+        name => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                name;
+
+            option.textContent =
+                name;
+
+            bulk.appendChild(
+                option
+            );
+
+
+            const filterOption =
+                document.createElement(
+                    "option"
+                );
+
+            filterOption.value =
+                name;
+
+            filterOption.textContent =
+                name;
+
+            filter.appendChild(
+                filterOption
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FALLBACK COLLECTIONS
+===================================================== */
+
+function buildProductCollectionFallback(){
+
+    renderCollectionDropdowns();
+
+}
+
+
+/* =====================================================
+   CATEGORY DROPDOWN
+===================================================== */
+
+function renderCategoryDropdown(){
+
+    const select =
+        document.getElementById(
+            "bulkCategory"
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+            — Do not change category —
+        </option>
+
+        <option value="__CLEAR__">
+            Clear category
+        </option>
+
+    `;
+
+
+    Array.from(categories)
+        .sort(
+            (a,b) =>
+            a.localeCompare(b)
+        )
+        .forEach(
+            category => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    category;
+
+                option.textContent =
+                    category;
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+    /*
+     * Custom category option
+     */
+
+    const custom =
+        document.createElement(
+            "option"
+        );
+
+    custom.value =
+        "__CUSTOM__";
+
+    custom.textContent =
+        "+ Custom Category...";
+
+    select.appendChild(
+        custom
+    );
+
+}
+
+
+/* =====================================================
+   CUSTOM CATEGORY
+===================================================== */
+
+document
+.getElementById("bulkCategory")
+.addEventListener(
+    "change",
+    function(){
+
+        if(
+            this.value ===
+            "__CUSTOM__"
+        ){
+
+            const custom =
+                prompt(
+                    "Enter the new category:"
+                );
+
+
+            if(
+                custom &&
+                custom.trim()
+            ){
+
+                const name =
+                    custom.trim();
+
+
+                categories.add(
+                    name
+                );
+
+
+                renderCategoryDropdown();
+
+
+                document.getElementById(
+                    "bulkCategory"
+                ).value =
+                    name;
+
+            }else{
+
+                this.value = "";
+
+            }
+
+        }
+
+    }
 );
 
 
-/* ================================
-   VARIABLES
-================================ */
+/* =====================================================
+   RENDER PRODUCTS
+===================================================== */
 
-let importedRows = [];
-let validRows = [];
+function renderProducts(){
+
+    const tableWrap =
+        document.getElementById(
+            "productTableWrap"
+        );
 
 
-/* ================================
-   TEMPLATE
-================================ */
+    const search =
+        String(
+            document.getElementById(
+                "productSearch"
+            ).value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const collectionFilter =
+        String(
+            document.getElementById(
+                "collectionFilter"
+            ).value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        allProducts.filter(
+            product => {
+
+                const name =
+                    String(
+                        product.name || ""
+                    )
+                    .toLowerCase();
+
+
+                const sku =
+                    String(
+                        product.sku || ""
+                    )
+                    .toLowerCase();
+
+
+                const collection =
+                    String(
+                        product.collection || ""
+                    )
+                    .toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    name.includes(search) ||
+                    sku.includes(search);
+
+
+                const matchesCollection =
+                    !collectionFilter ||
+                    collection ===
+                    collectionFilter;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCollection
+                );
+
+            }
+        );
+
+
+    if(!filtered.length){
+
+        tableWrap.innerHTML = `
+            <div class="empty-state">
+                No products found.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    tableWrap.innerHTML = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th class="checkbox-cell">
+
+                        <input
+                            type="checkbox"
+                            id="selectAll"
+                        >
+
+                    </th>
+
+                    <th>
+                        Product
+                    </th>
+
+                    <th>
+                        SKU
+                    </th>
+
+                    <th>
+                        Category
+                    </th>
+
+                    <th>
+                        Collection
+                    </th>
+
+                    <th>
+                        Price
+                    </th>
+
+                    <th>
+                        Stock
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                ${
+                    filtered
+                    .map(
+                        product =>
+                        productRow(product)
+                    )
+                    .join("")
+                }
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    const selectAll =
+        document.getElementById(
+            "selectAll"
+        );
+
+
+    if(selectAll){
+
+        selectAll.addEventListener(
+            "change",
+            function(){
+
+                filtered.forEach(
+                    product => {
+
+                        if(this.checked){
+
+                            selectedProductIds.add(
+                                product.id
+                            );
+
+                        }else{
+
+                            selectedProductIds.delete(
+                                product.id
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                renderProducts();
+
+                updateSelectedCount();
+
+            }
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".product-checkbox"
+        )
+        .forEach(
+            checkbox => {
+
+                checkbox.addEventListener(
+                    "change",
+                    function(){
+
+                        const id =
+                            this.dataset.id;
+
+
+                        if(this.checked){
+
+                            selectedProductIds.add(
+                                id
+                            );
+
+                        }else{
+
+                            selectedProductIds.delete(
+                                id
+                            );
+
+                        }
+
+
+                        updateSelectedCount();
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+     * Restore checked state.
+     */
+
+    document
+        .querySelectorAll(
+            ".product-checkbox"
+        )
+        .forEach(
+            checkbox => {
+
+                if(
+                    selectedProductIds.has(
+                        checkbox.dataset.id
+                    )
+                ){
+
+                    checkbox.checked =
+                        true;
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   PRODUCT ROW
+===================================================== */
+
+function productRow(product){
+
+    const id =
+        String(
+            product.id
+        );
+
+
+    const selected =
+        selectedProductIds.has(
+            id
+        );
+
+
+    const image =
+        product.image_url ||
+        product.image ||
+        "";
+
+
+    const name =
+        escapeHtml(
+            product.name ||
+            "Unnamed Product"
+        );
+
+
+    const sku =
+        escapeHtml(
+            product.sku ||
+            "-"
+        );
+
+
+    const category =
+        escapeHtml(
+            product.category ||
+            "—"
+        );
+
+
+    const collection =
+        escapeHtml(
+            product.collection ||
+            "—"
+        );
+
+
+    const price =
+        Number(
+            product.sale_price ??
+            product.price ??
+            0
+        );
+
+
+    const stock =
+        product.stock ??
+        product.quantity ??
+        0;
+
+
+    const status =
+        escapeHtml(
+            product.status ||
+            (
+                product.is_active === false
+                ? "inactive"
+                : "active"
+            )
+        );
+
+
+    return `
+
+        <tr>
+
+            <td class="checkbox-cell">
+
+                <input
+                    type="checkbox"
+                    class="product-checkbox"
+                    data-id="${escapeHtml(id)}"
+                    ${selected ? "checked" : ""}
+                >
+
+            </td>
+
+
+            <td>
+
+                <div class="product-name">
+                    ${name}
+                </div>
+
+                ${
+                    image
+                    ?
+                    `
+                        <div
+                            style="
+                                color:#777;
+                                font-size:11px;
+                                margin-top:4px;
+                            "
+                        >
+                            Image available
+                        </div>
+                    `
+                    :
+                    ""
+                }
+
+            </td>
+
+
+            <td>
+
+                <span class="product-sku">
+                    ${sku}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <span class="tag">
+                    ${category}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <span class="tag">
+                    ${collection}
+                </span>
+
+            </td>
+
+
+            <td>
+                ₹${Number.isFinite(price) ? price.toLocaleString("en-IN") : "0"}
+            </td>
+
+
+            <td>
+                ${escapeHtml(stock)}
+            </td>
+
+
+            <td>
+                ${status}
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =====================================================
+   SELECT COUNT
+===================================================== */
+
+function updateSelectedCount(){
+
+    const count =
+        selectedProductIds.size;
+
+
+    document.getElementById(
+        "selectedCount"
+    ).textContent =
+        count;
+
+
+    document.getElementById(
+        "toolbarSelectedCount"
+    ).textContent =
+        count;
+
+
+    const panel =
+        document.getElementById(
+            "bulkUpdatePanel"
+        );
+
+
+    panel.style.display =
+        count > 0
+        ? "block"
+        : "none";
+
+}
+
+
+/* =====================================================
+   SELECT ALL
+===================================================== */
+
+document
+.getElementById(
+    "selectAllButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        const search =
+            String(
+                document.getElementById(
+                    "productSearch"
+                ).value || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        const filter =
+            String(
+                document.getElementById(
+                    "collectionFilter"
+                ).value || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        allProducts.forEach(
+            product => {
+
+                const name =
+                    String(
+                        product.name || ""
+                    ).toLowerCase();
+
+
+                const sku =
+                    String(
+                        product.sku || ""
+                    ).toLowerCase();
+
+
+                const collection =
+                    String(
+                        product.collection || ""
+                    ).toLowerCase();
+
+
+                const matchSearch =
+                    !search ||
+                    name.includes(search) ||
+                    sku.includes(search);
+
+
+                const matchCollection =
+                    !filter ||
+                    collection === filter;
+
+
+                if(
+                    matchSearch &&
+                    matchCollection
+                ){
+
+                    selectedProductIds.add(
+                        product.id
+                    );
+
+                }
+
+            }
+        );
+
+
+        renderProducts();
+
+        updateSelectedCount();
+
+    }
+);
+
+
+/* =====================================================
+   CLEAR SELECTION
+===================================================== */
+
+document
+.getElementById(
+    "clearSelectionButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        selectedProductIds.clear();
+
+        renderProducts();
+
+        updateSelectedCount();
+
+    }
+);
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document
+.getElementById(
+    "productSearch"
+)
+.addEventListener(
+    "input",
+    renderProducts
+);
+
+
+/* =====================================================
+   COLLECTION FILTER
+===================================================== */
+
+document
+.getElementById(
+    "collectionFilter"
+)
+.addEventListener(
+    "change",
+    renderProducts
+);
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+document
+.getElementById(
+    "refreshProductsButton"
+)
+.addEventListener(
+    "click",
+    async function(){
+
+        selectedProductIds.clear();
+
+        await loadAdminData();
+
+    }
+);
+
+
+/* =====================================================
+   CANCEL UPDATE
+===================================================== */
+
+document
+.getElementById(
+    "cancelUpdateButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        document.getElementById(
+            "bulkCategory"
+        ).value = "";
+
+
+        document.getElementById(
+            "bulkCollection"
+        ).value = "";
+
+
+        document.getElementById(
+            "updatePreview"
+        ).style.display =
+            "none";
+
+    }
+);
+
+
+/* =====================================================
+   PREVIEW BULK UPDATE
+===================================================== */
+
+document
+.getElementById(
+    "previewUpdateButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        const selected =
+            Array.from(
+                selectedProductIds
+            );
+
+
+        if(!selected.length){
+
+            showStatus(
+                "bulkStatus",
+                "Please select at least one product.",
+                "warning"
+            );
+
+            return;
+
+        }
+
+
+        const category =
+            document.getElementById(
+                "bulkCategory"
+            ).value;
+
+
+        const collection =
+            document.getElementById(
+                "bulkCollection"
+            ).value;
+
+
+        if(
+            category === "" &&
+            collection === ""
+        ){
+
+            showStatus(
+                "bulkStatus",
+                "Choose a category or collection to update.",
+                "warning"
+            );
+
+            return;
+
+        }
+
+
+        const categoryText =
+            category === "__CLEAR__"
+            ? "Clear category"
+            : category || "No change";
+
+
+        const collectionText =
+            collection === "__CLEAR__"
+            ? "Clear collection"
+            : collection || "No change";
+
+
+        const preview =
+            document.getElementById(
+                "updatePreview"
+            );
+
+
+        preview.innerHTML = `
+
+            <div class="preview-change">
+
+                <strong>
+                    Ready to update ${selected.length} product(s)
+                </strong>
+
+                <br><br>
+
+                Category:
+                <strong>
+                    ${escapeHtml(categoryText)}
+                </strong>
+
+                <br>
+
+                Collection:
+                <strong>
+                    ${escapeHtml(collectionText)}
+                </strong>
+
+                <br><br>
+
+                <button
+                    type="button"
+                    class="gold-btn"
+                    id="confirmBulkUpdateButton"
+                >
+                    ✓ Confirm & Update ${selected.length} Product(s)
+                </button>
+
+            </div>
+
+        `;
+
+
+        preview.style.display =
+            "block";
+
+
+        document
+        .getElementById(
+            "confirmBulkUpdateButton"
+        )
+        .addEventListener(
+            "click",
+            performBulkUpdate
+        );
+
+    }
+);
+
+
+/* =====================================================
+   PERFORM BULK UPDATE
+===================================================== */
+
+async function performBulkUpdate(){
+
+    const selected =
+        Array.from(
+            selectedProductIds
+        );
+
+
+    if(!selected.length){
+
+        return;
+
+    }
+
+
+    const category =
+        document.getElementById(
+            "bulkCategory"
+        ).value;
+
+
+    const collection =
+        document.getElementById(
+            "bulkCollection"
+        ).value;
+
+
+    const updates = {};
+
+
+    /*
+     * Only update fields that were selected.
+     */
+
+    if(category !== ""){
+
+        updates.category =
+            category === "__CLEAR__"
+            ? null
+            : category;
+
+    }
+
+
+    if(collection !== ""){
+
+        updates.collection =
+            collection === "__CLEAR__"
+            ? null
+            : collection;
+
+    }
+
+
+    if(
+        Object.keys(updates).length === 0
+    ){
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "confirmBulkUpdateButton"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Updating...";
+
+
+    try{
+
+        /*
+         * Update each selected product by ID.
+         *
+         * This works even if products have
+         * different SKUs.
+         */
+
+        let updated = 0;
+
+
+        for(
+            const id of selected
+        ){
+
+            const {
+                error
+            } =
+            await supabaseClient
+                .from("products")
+                .update(updates)
+                .eq(
+                    "id",
+                    id
+                );
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            updated++;
+
+        }
+
+
+        showStatus(
+            "bulkStatus",
+            `Successfully updated ${updated} product(s).`,
+            "success"
+        );
+
+
+        /*
+         * Reset
+         */
+
+        selectedProductIds.clear();
+
+
+        document.getElementById(
+            "bulkCategory"
+        ).value = "";
+
+
+        document.getElementById(
+            "bulkCollection"
+        ).value = "";
+
+
+        document.getElementById(
+            "updatePreview"
+        ).style.display =
+            "none";
+
+
+        await loadProducts();
+
+
+        updateSelectedCount();
+
+
+    }catch(error){
+
+        console.error(
+            "Bulk update error:",
+            error
+        );
+
+
+        showStatus(
+            "bulkStatus",
+            error.message ||
+            "Bulk update failed.",
+            "error"
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "✓ Confirm & Update";
+
+    }
+
+}
+
+
+/* =====================================================
+   ADD COLLECTION
+===================================================== */
+
+document
+.getElementById(
+    "addCollectionButton"
+)
+.addEventListener(
+    "click",
+    addCollection
+);
+
+
+async function addCollection(){
+
+    const input =
+        document.getElementById(
+            "newCollectionName"
+        );
+
+
+    const name =
+        String(
+            input.value || ""
+        ).trim();
+
+
+    if(!name){
+
+        showStatus(
+            "collectionStatus",
+            "Enter a collection name.",
+            "warning"
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "addCollectionButton"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Adding...";
+
+
+    try{
+
+        /*
+         * Check duplicate locally first.
+         */
+
+        const duplicate =
+            allCollections.some(
+                collection =>
+                getCollectionName(
+                    collection
+                ).toLowerCase() ===
+                name.toLowerCase()
+            );
+
+
+        if(duplicate){
+
+            throw new Error(
+                "This collection already exists."
+            );
+
+        }
+
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("collections")
+            .insert([
+                {
+                    name:name
+                }
+            ])
+            .select();
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        if(data?.length){
+
+            allCollections.push(
+                data[0]
+            );
+
+        }else{
+
+            allCollections.push({
+                name:name
+            });
+
+        }
+
+
+        renderCollectionDropdowns();
+
+
+        input.value = "";
+
+
+        showStatus(
+            "collectionStatus",
+            `"${name}" was added successfully and is now available in the product dropdown.`,
+            "success"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Add collection error:",
+            error
+        );
+
+
+        showStatus(
+            "collectionStatus",
+            error.message ||
+            "Could not create collection.",
+            "error"
+        );
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "+ Add Collection";
+
+}
+
+
+/* =====================================================
+   EXCEL TEMPLATE
+===================================================== */
 
 function downloadTemplate(){
 
@@ -409,11 +2831,16 @@ function downloadTemplate(){
 
     ];
 
+
     const worksheet =
-        XLSX.utils.json_to_sheet(data);
+        XLSX.utils.json_to_sheet(
+            data
+        );
+
 
     const workbook =
         XLSX.utils.book_new();
+
 
     XLSX.utils.book_append_sheet(
         workbook,
@@ -421,35 +2848,23 @@ function downloadTemplate(){
         "Products"
     );
 
+
     XLSX.writeFile(
         workbook,
         "Trends-by-AK-Product-Template.xlsx"
     );
+
 }
 
 
-/* ================================
-   STATUS
-================================ */
-
-function showStatus(message,type){
-
-    const box =
-        document.getElementById("status");
-
-    box.textContent = message;
-
-    box.className =
-        "status " + type;
-}
-
-
-/* ================================
+/* =====================================================
    FILE UPLOAD
-================================ */
+===================================================== */
 
 document
-.getElementById("fileInput")
+.getElementById(
+    "fileInput"
+)
 .addEventListener(
     "change",
     handleFile
@@ -461,12 +2876,17 @@ function handleFile(event){
     const file =
         event.target.files[0];
 
+
     if(!file){
+
         return;
+
     }
+
 
     const reader =
         new FileReader();
+
 
     reader.onload =
         function(e){
@@ -481,10 +2901,12 @@ function handleFile(event){
                         }
                     );
 
+
                 const firstSheet =
                     workbook.Sheets[
                         workbook.SheetNames[0]
                     ];
+
 
                 const rows =
                     XLSX.utils.sheet_to_json(
@@ -494,15 +2916,25 @@ function handleFile(event){
                         }
                     );
 
-                importedRows = rows;
 
-                validateRows(rows);
+                importedRows =
+                    rows;
+
+
+                validateRows(
+                    rows
+                );
+
 
             }catch(error){
 
-                console.error(error);
+                console.error(
+                    error
+                );
+
 
                 showStatus(
+                    "status",
                     "Could not read the file.",
                     "error"
                 );
@@ -511,28 +2943,38 @@ function handleFile(event){
 
         };
 
-    reader.readAsArrayBuffer(file);
+
+    reader.readAsArrayBuffer(
+        file
+    );
+
 }
 
 
-/* ================================
-   VALIDATION
-================================ */
+/* =====================================================
+   EXCEL VALIDATION
+===================================================== */
 
 function validateRows(rows){
 
     validRows = [];
+
 
     const preview =
         document.getElementById(
             "previewBody"
         );
 
+
     preview.innerHTML = "";
+
 
     let errors = 0;
 
-    const skuSet = new Set();
+
+    const skuSet =
+        new Set();
+
 
     rows.forEach(
         function(row,index){
@@ -540,39 +2982,49 @@ function validateRows(rows){
             const rowNumber =
                 index + 2;
 
+
             const sku =
                 String(
                     row.sku || ""
                 ).trim();
+
 
             const name =
                 String(
                     row.name || ""
                 ).trim();
 
+
             const price =
                 Number(
                     row.price
                 );
 
+
             const salePrice =
                 row.sale_price === ""
-                    ? null
-                    : Number(
-                        row.sale_price
-                    );
+                ?
+                null
+                :
+                Number(
+                    row.sale_price
+                );
+
 
             const category =
                 String(
                     row.category || ""
                 ).trim();
 
+
             const stock =
                 Number(
                     row.stock
                 );
 
+
             let rowErrors = [];
+
 
             if(!sku){
 
@@ -582,6 +3034,7 @@ function validateRows(rows){
 
             }
 
+
             if(!name){
 
                 rowErrors.push(
@@ -589,6 +3042,7 @@ function validateRows(rows){
                 );
 
             }
+
 
             if(
                 !Number.isFinite(price) ||
@@ -600,6 +3054,7 @@ function validateRows(rows){
                 );
 
             }
+
 
             if(
                 salePrice !== null &&
@@ -617,6 +3072,7 @@ function validateRows(rows){
 
             }
 
+
             if(
                 salePrice !== null &&
                 salePrice > price
@@ -628,6 +3084,7 @@ function validateRows(rows){
 
             }
 
+
             if(!category){
 
                 rowErrors.push(
@@ -635,6 +3092,7 @@ function validateRows(rows){
                 );
 
             }
+
 
             if(
                 !Number.isFinite(stock) ||
@@ -646,6 +3104,7 @@ function validateRows(rows){
                 );
 
             }
+
 
             if(
                 sku &&
@@ -660,6 +3119,7 @@ function validateRows(rows){
 
             }
 
+
             if(sku){
 
                 skuSet.add(
@@ -668,35 +3128,47 @@ function validateRows(rows){
 
             }
 
+
             const valid =
                 rowErrors.length === 0;
+
 
             if(valid){
 
                 validRows.push({
 
                     sku,
+
                     name,
+
                     price,
+
                     sale_price:
                         salePrice,
+
                     category,
+
                     stock,
+
                     description:
                         String(
                             row.description || ""
                         ),
+
                     image_url:
                         String(
                             row.image_url || ""
                         ),
+
                     collection:
                         String(
                             row.collection || ""
                         ),
+
                     status:
                         String(
-                            row.status || "active"
+                            row.status ||
+                            "active"
                         )
 
                 });
@@ -707,47 +3179,112 @@ function validateRows(rows){
 
             }
 
+
             const tr =
-                document.createElement("tr");
+                document.createElement(
+                    "tr"
+                );
+
 
             tr.innerHTML = `
 
-                <td>${rowNumber}</td>
-
-                <td>${escapeHtml(sku)}</td>
-
-                <td>${escapeHtml(name)}</td>
-
-                <td>₹${Number.isFinite(price) ? price : "-"}</td>
+                <td>
+                    ${rowNumber}
+                </td>
 
                 <td>
-                    ${
-                        salePrice !== null &&
-                        Number.isFinite(salePrice)
-                        ? "₹" + salePrice
+                    ${escapeHtml(sku)}
+                </td>
+
+                <td>
+                    ${escapeHtml(name)}
+                </td>
+
+                <td>
+                    ₹${
+                        Number.isFinite(price)
+                        ? price
                         : "-"
                     }
                 </td>
 
-                <td>${escapeHtml(category)}</td>
+                <td>
+                    ${
+                        salePrice !== null &&
+                        Number.isFinite(
+                            salePrice
+                        )
+                        ?
+                        "₹" + salePrice
+                        :
+                        "-"
+                    }
+                </td>
 
-                <td>${Number.isFinite(stock) ? stock : "-"}</td>
+                <td>
+                    ${escapeHtml(category)}
+                </td>
 
-                <td>${escapeHtml(String(row.collection || ""))}</td>
+                <td>
+                    ${
+                        Number.isFinite(stock)
+                        ?
+                        stock
+                        :
+                        "-"
+                    }
+                </td>
 
-                <td>${escapeHtml(String(row.status || "active"))}</td>
+                <td>
+                    ${
+                        escapeHtml(
+                            String(
+                                row.collection ||
+                                ""
+                            )
+                        )
+                    }
+                </td>
 
-                <td class="${valid ? "good" : "bad"}">
+                <td>
+                    ${
+                        escapeHtml(
+                            String(
+                                row.status ||
+                                "active"
+                            )
+                        )
+                    }
+                </td>
+
+                <td
+                    class="${
+                        valid
+                        ?
+                        "good"
+                        :
+                        "bad"
+                    }"
+                >
+
                     ${
                         valid
-                        ? "✓ Ready"
-                        : rowErrors.join(", ")
+                        ?
+                        "✓ Ready"
+                        :
+                        rowErrors.join(
+                            ", "
+                        )
                     }
+
                 </td>
 
             `;
 
-            preview.appendChild(tr);
+
+            preview.appendChild(
+                tr
+            );
 
         }
     );
@@ -755,32 +3292,43 @@ function validateRows(rows){
 
     document.getElementById(
         "previewBox"
-    ).style.display = "block";
+    ).style.display =
+        "block";
+
 
     document.getElementById(
         "rowCount"
-    ).textContent = rows.length;
+    ).textContent =
+        rows.length;
+
 
     document.getElementById(
         "validCount"
-    ).textContent = validRows.length;
+    ).textContent =
+        validRows.length;
+
 
     document.getElementById(
         "errorCount"
-    ).textContent = errors;
+    ).textContent =
+        errors;
+
 
     const importButton =
         document.getElementById(
             "importButton"
         );
 
+
     importButton.disabled =
         validRows.length === 0 ||
         errors > 0;
 
+
     if(errors > 0){
 
         showStatus(
+            "status",
             errors +
             " row(s) need fixing before import.",
             "warning"
@@ -789,6 +3337,7 @@ function validateRows(rows){
     }else{
 
         showStatus(
+            "status",
             rows.length +
             " product(s) ready to import.",
             "success"
@@ -799,32 +3348,37 @@ function validateRows(rows){
 }
 
 
-/* ================================
-   IMPORT
-================================ */
+/* =====================================================
+   IMPORT PRODUCTS
+===================================================== */
 
 async function importProducts(){
 
-    if(validRows.length === 0){
+    if(
+        validRows.length === 0
+    ){
 
         return;
 
     }
+
 
     const button =
         document.getElementById(
             "importButton"
         );
 
+
     button.disabled = true;
 
     button.textContent =
         "Importing...";
 
+
     try{
 
         /*
-         * Check authentication.
+         * Authentication
          */
 
         const {
@@ -836,6 +3390,7 @@ async function importProducts(){
             .auth
             .getUser();
 
+
         if(!user){
 
             throw new Error(
@@ -846,13 +3401,15 @@ async function importProducts(){
 
 
         /*
-         * Check existing SKUs.
+         * Check existing SKUs
          */
 
         const skus =
             validRows.map(
-                row => row.sku
+                row =>
+                row.sku
             );
+
 
         const {
             data:existing,
@@ -866,6 +3423,7 @@ async function importProducts(){
                 skus
             );
 
+
         if(existingError){
 
             throw existingError;
@@ -878,7 +3436,9 @@ async function importProducts(){
                 (existing || [])
                 .map(
                     row =>
-                    String(row.sku)
+                    String(
+                        row.sku
+                    )
                     .toLowerCase()
                 )
             );
@@ -893,12 +3453,17 @@ async function importProducts(){
             );
 
 
-        if(duplicates.length){
+        if(
+            duplicates.length
+        ){
 
             throw new Error(
                 "These SKU(s) already exist: " +
                 duplicates
-                .map(row => row.sku)
+                .map(
+                    row =>
+                    row.sku
+                )
                 .join(", ")
             );
 
@@ -906,7 +3471,7 @@ async function importProducts(){
 
 
         /*
-         * Insert products.
+         * Insert
          */
 
         const {
@@ -918,6 +3483,7 @@ async function importProducts(){
                 validRows
             );
 
+
         if(error){
 
             throw error;
@@ -927,40 +3493,65 @@ async function importProducts(){
 
         document.getElementById(
             "resultBox"
-        ).style.display = "block";
+        ).style.display =
+            "block";
+
 
         document.getElementById(
             "resultText"
         ).innerHTML = `
+
             <div class="success">
+
                 Successfully imported
+
                 <strong>
                     ${validRows.length}
                 </strong>
+
                 product(s).
+
             </div>
+
         `;
 
+
         showStatus(
+            "status",
             "Import completed successfully.",
             "success"
         );
+
 
         button.textContent =
             "Imported ✓";
 
 
+        /*
+         * Refresh product list
+         */
+
+        await loadProducts();
+
+
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         showStatus(
+            "status",
             error.message ||
             "Import failed.",
             "error"
         );
 
-        button.disabled = false;
+
+        button.disabled =
+            false;
+
 
         button.textContent =
             "Import Products";
@@ -970,22 +3561,22 @@ async function importProducts(){
 }
 
 
-/* ================================
-   HTML ESCAPE
-================================ */
+/* =====================================================
+   START
+===================================================== */
 
-function escapeHtml(value){
+document.addEventListener(
+    "DOMContentLoaded",
+    async function(){
 
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        await loadAdminData();
 
-}
+    }
+);
 
 </script>
 
+
 </body>
+
 </html>
