@@ -582,6 +582,147 @@ https://example.com/product-3"
   </div>
 
 </section>
+<!-- BULK PRODUCT CSV MANAGER -->
+<section class="card importer-card">
+
+  <h3 class="importer-title">
+    📊 Bulk Product List
+  </h3>
+
+  <div class="help">
+    Download your complete product list as CSV, edit it in Excel or
+    Google Sheets, and upload it again to update your store in bulk.
+  </div>
+
+  <div class="actions">
+
+    <button
+      type="button"
+      class="btn primary"
+      onclick="downloadProductsCSV()"
+    >
+      ⬇️ Download Product CSV
+    </button>
+
+    <label
+      class="btn secondary"
+      style="display:inline-flex;align-items:center;cursor:pointer"
+    >
+      ⬆️ Upload Edited CSV
+      <input
+        type="file"
+        id="productCsvFile"
+        accept=".csv,text/csv"
+        style="display:none"
+        onchange="handleProductCSV(this)"
+      >
+    </label>
+
+    <button
+      type="button"
+      class="btn secondary"
+      onclick="downloadProductTemplate()"
+    >
+      📄 Download Blank Template
+    </button>
+
+  </div>
+
+  <div
+    class="help"
+    style="margin-top:15px"
+  >
+    <b>How it works:</b>
+    Download → edit → save as CSV → upload.
+    Existing products are updated using their ID.
+    Products with a blank ID are added as new products.
+  </div>
+
+  <div
+    id="csvProgress"
+    class="help"
+    style="margin-top:15px"
+  ></div>
+
+  <div
+    id="csvPreview"
+    class="import-preview hidden"
+  >
+
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:15px;
+        flex-wrap:wrap;
+      "
+    >
+
+      <div>
+        <strong>CSV Preview</strong>
+
+        <div
+          id="csvSummary"
+          class="help"
+          style="margin-top:5px"
+        ></div>
+      </div>
+
+      <div class="actions" style="margin-top:0">
+
+        <button
+          type="button"
+          class="btn primary"
+          id="csvSaveBtn"
+          onclick="saveCSVProducts()"
+        >
+          💾 Update Store
+        </button>
+
+        <button
+          type="button"
+          class="btn secondary"
+          onclick="clearCSVImport()"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </div>
+
+    <div
+      class="table-wrap"
+      style="margin-top:18px"
+    >
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>SKU</th>
+            <th>Category</th>
+            <th>Collection</th>
+            <th>Price</th>
+            <th>Sale Price</th>
+            <th>Stock</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="csvPreviewBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
   <!-- PRODUCT FORM -->
 
   <section class="card">
@@ -2120,128 +2261,146 @@ async function bulkScrapeProducts(){
     .filter(Boolean);
 
   if(!urls.length){
-
     message(
       "Please paste at least one product URL.",
       "error"
     );
-
     return;
   }
 
-
   const uniqueUrls = [...new Set(urls)];
 
+  if(uniqueUrls.length > 25){
+    message(
+      "You can scrape a maximum of 25 products at once.",
+      "error"
+    );
+    return;
+  }
+
+  for(const url of uniqueUrls){
+    try{
+      new URL(url);
+    }catch{
+      message(
+        "One or more URLs are invalid. Please check them.",
+        "error"
+      );
+      return;
+    }
+  }
 
   btn.disabled = true;
   btn.textContent = "Scraping...";
 
   $("bulkProgress").textContent =
-    "Preparing " + uniqueUrls.length + " product(s)...";
+    "Sending " +
+    uniqueUrls.length +
+    " product(s) to the bulk scraper...";
 
   $("bulkResults")
     .classList
     .add("hidden");
 
-
   bulkProducts = [];
-
 
   try{
 
-    for(let i = 0; i < uniqueUrls.length; i++){
-
-      const url = uniqueUrls[i];
-
-      $("bulkProgress").textContent =
-        "Scraping product " +
-        (i + 1) +
-        " of " +
-        uniqueUrls.length +
-        "...";
-
-
-      try{
-
-        new URL(url);
-
-      }catch{
-
-        bulkProducts.push({
-          url:url,
-          error:"Invalid URL"
-        });
-
-        continue;
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.functions.invoke(
+      "bulk-import-products",
+      {
+        body:{
+          urls: uniqueUrls
+        }
       }
+    );
 
+    console.log(
+      "BULK IMPORT RESPONSE:",
+      data
+    );
 
-      try{
+    console.log(
+      "BULK IMPORT ERROR:",
+      error
+    );
 
-        const {
-          data,
-          error
-        } =
-        await supabaseClient.functions.invoke(
-          "import-product",
-          {
-            body:{
-              url:url
-            }
-          }
-        );
+    if(error){
+      throw new Error(
+        error.message ||
+        "Bulk import failed."
+      );
+    }
 
+    if(!data){
+      throw new Error(
+        "The bulk scraper returned no data."
+      );
+    }
 
-        if(error){
+    if(data.error){
+      throw new Error(
+        data.error
+      );
+    }
 
-          throw new Error(
-            error.message ||
-            "Import failed"
-          );
+    const results =
+      Array.isArray(data.results)
+        ? data.results
+        : [];
+
+    bulkProducts =
+      results.map(result => {
+
+        if(!result.ok){
+
+          return {
+            url:
+              result.source_url || "",
+
+            error:
+              result.error ||
+              "Could not scrape product",
+
+            selected:false
+          };
 
         }
 
+        return {
 
-        if(!data){
+          url:
+            result.source_url || "",
 
-          throw new Error(
-            "No product data returned"
-          );
+          name:
+            result.name || "",
 
-        }
-
-
-        if(data.error){
-
-          throw new Error(
-            data.error
-          );
-
-        }
-
-
-        bulkProducts.push({
-
-          url:url,
-
-          name:data.name || "",
-
-          price:data.price ?? "",
+          price:
+            result.price ?? "",
 
           sale_price:
-            data.sale_price ?? "",
+            result.sale_price ?? "",
 
           image_url:
-            data.image_url || "",
+            result.image_url || "",
+
+          images:
+            Array.isArray(result.images)
+              ? result.images
+              : [],
 
           description:
-            data.description || "",
+            result.description || "",
 
           brand:
-            data.brand || "",
+            result.brand || "",
 
           sku:
-            data.sku || "",
+            result.sku || "",
 
           collection:"",
 
@@ -2251,56 +2410,73 @@ async function bulkScrapeProducts(){
 
           selected:true
 
-        });
+        };
 
-
-      }catch(err){
-
-        console.error(
-          "Bulk scrape failed:",
-          url,
-          err
-        );
-
-
-        bulkProducts.push({
-
-          url:url,
-
-          name:"",
-
-          price:"",
-
-          sale_price:"",
-
-          image_url:"",
-
-          description:"",
-
-          brand:"",
-
-          sku:"",
-
-          collection:"",
-
-          stock:0,
-
-          status:"inactive",
-
-          selected:false,
-
-          error:
-            err.message ||
-            "Could not scrape product"
-
-        });
-
-      }
-
-    }
-
+      });
 
     renderBulkProducts();
+
+    $("bulkResults")
+      .classList
+      .remove("hidden");
+
+    const successful =
+      bulkProducts.filter(
+        p => !p.error
+      ).length;
+
+    const failed =
+      bulkProducts.filter(
+        p => p.error
+      ).length;
+
+    $("bulkProgress").textContent =
+      "Finished: " +
+      successful +
+      " of " +
+      bulkProducts.length +
+      " products imported successfully." +
+      (
+        failed
+          ? " " + failed + " failed."
+          : ""
+      );
+
+    if(successful){
+      message(
+        successful +
+        " product(s) scraped successfully. Review them before saving."
+      );
+    }else{
+      message(
+        "No products could be imported.",
+        "error"
+      );
+    }
+
+  }catch(err){
+
+    console.error(
+      "BULK SCRAPER ERROR:",
+      err
+    );
+
+    message(
+      err.message ||
+      "Bulk scraping failed.",
+      "error"
+    );
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "🔍 Scrape Products";
+
+  }
+
+}
 
 
     $("bulkResults")
@@ -2800,6 +2976,811 @@ function clearBulkScraper(){
   $("bulkResultsBody").innerHTML = "";
 
   $("selectAllBulk").checked = false;
+
+}
+/* =========================================
+   BULK PRODUCT CSV MANAGER
+========================================= */
+
+let csvProducts = [];
+
+
+/* =========================================
+   CSV ESCAPE
+========================================= */
+
+function csvEscape(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  value = String(value);
+
+  if(
+    value.includes('"') ||
+    value.includes(',') ||
+    value.includes('\n') ||
+    value.includes('\r')
+  ){
+    return '"' +
+      value.replace(/"/g,'""') +
+      '"';
+  }
+
+  return value;
+}
+
+
+/* =========================================
+   DOWNLOAD PRODUCT CSV
+========================================= */
+
+function downloadProductsCSV(){
+
+  if(!products || !products.length){
+
+    message(
+      "No products available to download.",
+      "error"
+    );
+
+    return;
+  }
+
+  const headers = [
+    "id",
+    "name",
+    "sku",
+    "category",
+    "collection",
+    "price",
+    "sale_price",
+    "stock",
+    "status",
+    "image_url",
+    "description"
+  ];
+
+  const rows = products.map(p => {
+
+    return [
+      p.id,
+      p.name,
+      p.sku,
+      p.category,
+      p.collection,
+      p.price,
+      p.sale_price,
+      p.stock,
+      p.status,
+      p.image_url,
+      p.description
+    ].map(csvEscape).join(",");
+
+  });
+
+  const csv =
+    "\uFEFF" +
+    headers.join(",") +
+    "\n" +
+    rows.join("\n");
+
+  downloadCSVFile(
+    csv,
+    "trends-by-ak-products-" +
+    new Date().toISOString().slice(0,10) +
+    ".csv"
+  );
+
+  message(
+    products.length +
+    " products downloaded successfully."
+  );
+}
+
+
+/* =========================================
+   BLANK TEMPLATE
+========================================= */
+
+function downloadProductTemplate(){
+
+  const headers = [
+    "id",
+    "name",
+    "sku",
+    "category",
+    "collection",
+    "price",
+    "sale_price",
+    "stock",
+    "status",
+    "image_url",
+    "description"
+  ];
+
+  const example = [
+    "",
+    "Example Product",
+    "SKU001",
+    "Jewellery",
+    "Jewellery",
+    "999",
+    "799",
+    "10",
+    "active",
+    "https://example.com/image.jpg",
+    "Product description"
+  ];
+
+  const csv =
+    "\uFEFF" +
+    headers.join(",") +
+    "\n" +
+    example.map(csvEscape).join(",");
+
+  downloadCSVFile(
+    csv,
+    "trends-by-ak-product-template.csv"
+  );
+
+  message(
+    "Blank product template downloaded."
+  );
+}
+
+
+/* =========================================
+   ACTUAL DOWNLOAD
+========================================= */
+
+function downloadCSVFile(csv, filename){
+
+  const blob = new Blob(
+    [csv],
+    {
+      type:"text/csv;charset=utf-8;"
+    }
+  );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
+
+/* =========================================
+   CSV PARSER
+========================================= */
+
+function parseCSV(text){
+
+  const rows = [];
+
+  let row = [];
+
+  let cell = "";
+
+  let insideQuotes = false;
+
+  for(let i = 0; i < text.length; i++){
+
+    const char = text[i];
+
+    const next = text[i + 1];
+
+    if(char === '"' && insideQuotes && next === '"'){
+
+      cell += '"';
+
+      i++;
+
+      continue;
+    }
+
+    if(char === '"'){
+
+      insideQuotes =
+        !insideQuotes;
+
+      continue;
+    }
+
+    if(char === "," && !insideQuotes){
+
+      row.push(cell);
+
+      cell = "";
+
+      continue;
+    }
+
+    if(
+      (char === "\n" || char === "\r") &&
+      !insideQuotes
+    ){
+
+      if(
+        char === "\r" &&
+        next === "\n"
+      ){
+        i++;
+      }
+
+      row.push(cell);
+
+      if(
+        row.some(
+          value =>
+            String(value).trim() !== ""
+        )
+      ){
+        rows.push(row);
+      }
+
+      row = [];
+
+      cell = "";
+
+      continue;
+    }
+
+    cell += char;
+  }
+
+  row.push(cell);
+
+  if(
+    row.some(
+      value =>
+        String(value).trim() !== ""
+    )
+  ){
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+
+/* =========================================
+   HANDLE CSV UPLOAD
+========================================= */
+
+async function handleProductCSV(input){
+
+  const file =
+    input.files[0];
+
+  if(!file){
+    return;
+  }
+
+  try{
+
+    $("csvProgress").textContent =
+      "Reading CSV...";
+
+    const text =
+      await file.text();
+
+    const rows =
+      parseCSV(text);
+
+    if(rows.length < 2){
+
+      throw new Error(
+        "The CSV file is empty or has no product rows."
+      );
+    }
+
+    const headers =
+      rows[0].map(
+        h =>
+          String(h)
+            .trim()
+            .toLowerCase()
+      );
+
+    const requiredHeaders = [
+      "id",
+      "name",
+      "sku",
+      "category",
+      "collection",
+      "price",
+      "sale_price",
+      "stock",
+      "status",
+      "image_url",
+      "description"
+    ];
+
+    const missing =
+      requiredHeaders.filter(
+        h =>
+          !headers.includes(h)
+      );
+
+    if(missing.length){
+
+      throw new Error(
+        "Missing CSV columns: " +
+        missing.join(", ")
+      );
+    }
+
+    csvProducts =
+      rows.slice(1).map(row => {
+
+        const obj = {};
+
+        headers.forEach(
+          (header,index) => {
+
+            obj[header] =
+              String(
+                row[index] ?? ""
+              ).trim();
+
+          }
+        );
+
+        return obj;
+
+      }).filter(
+        p =>
+          p.name ||
+          p.id
+      );
+
+    if(!csvProducts.length){
+
+      throw new Error(
+        "No valid products found in CSV."
+      );
+    }
+
+    renderCSVPreview();
+
+    $("csvPreview")
+      .classList
+      .remove("hidden");
+
+    $("csvProgress").textContent =
+      "CSV loaded successfully.";
+
+  }catch(err){
+
+    console.error(
+      "CSV IMPORT ERROR:",
+      err
+    );
+
+    message(
+      err.message ||
+      "Could not read CSV file.",
+      "error"
+    );
+
+    clearCSVImport();
+
+  }finally{
+
+    input.value = "";
+
+  }
+}
+
+
+/* =========================================
+   CSV PREVIEW
+========================================= */
+
+function renderCSVPreview(){
+
+  const body =
+    $("csvPreviewBody");
+
+  let updates = 0;
+
+  let additions = 0;
+
+  csvProducts.forEach(
+    p => {
+
+      if(p.id){
+        updates++;
+      }else{
+        additions++;
+      }
+
+    }
+  );
+
+  $("csvSummary").textContent =
+    csvProducts.length +
+    " products • " +
+    updates +
+    " updates • " +
+    additions +
+    " new products";
+
+
+  body.innerHTML =
+    csvProducts.map(
+      (p,index) => {
+
+        const action =
+          p.id
+          ? "UPDATE"
+          : "NEW";
+
+        return `
+
+          <tr>
+
+            <td>
+              <b>
+                ${action}
+              </b>
+            </td>
+
+            <td>
+              ${escapeHtml(p.id || "-")}
+            </td>
+
+            <td>
+              ${escapeHtml(p.name || "-")}
+            </td>
+
+            <td>
+              ${escapeHtml(p.sku || "-")}
+            </td>
+
+            <td>
+              ${escapeHtml(p.category || "-")}
+            </td>
+
+            <td>
+              ${escapeHtml(p.collection || "-")}
+            </td>
+
+            <td>
+              ₹${escapeHtml(p.price || "0")}
+            </td>
+
+            <td>
+              ${
+                p.sale_price
+                ? "₹" +
+                  escapeHtml(p.sale_price)
+                : "-"
+              }
+            </td>
+
+            <td>
+              ${escapeHtml(p.stock || "0")}
+            </td>
+
+            <td>
+              ${escapeHtml(p.status || "active")}
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    ).join("");
+}
+
+
+/* =========================================
+   SAVE CSV PRODUCTS
+========================================= */
+
+async function saveCSVProducts(){
+
+  if(!csvProducts.length){
+
+    message(
+      "No CSV products to save.",
+      "error"
+    );
+
+    return;
+  }
+
+  const btn =
+    $("csvSaveBtn");
+
+  btn.disabled = true;
+
+  btn.textContent =
+    "Saving...";
+
+  $("csvProgress").textContent =
+    "Updating products...";
+
+  try{
+
+    const updates =
+      csvProducts.filter(
+        p => p.id
+      );
+
+    const additions =
+      csvProducts.filter(
+        p => !p.id
+      );
+
+
+    /* =====================================
+       VALIDATE
+    ===================================== */
+
+    for(const p of csvProducts){
+
+      if(!p.name){
+
+        throw new Error(
+          "A product is missing its name."
+        );
+
+      }
+
+      if(
+        p.price !== "" &&
+        isNaN(Number(p.price))
+      ){
+
+        throw new Error(
+          "Invalid price for: " +
+          p.name
+        );
+
+      }
+
+      if(
+        p.sale_price !== "" &&
+        isNaN(Number(p.sale_price))
+      ){
+
+        throw new Error(
+          "Invalid sale price for: " +
+          p.name
+        );
+
+      }
+
+      if(
+        p.stock !== "" &&
+        isNaN(Number(p.stock))
+      ){
+
+        throw new Error(
+          "Invalid stock for: " +
+          p.name
+        );
+
+      }
+
+    }
+
+
+    /* =====================================
+       PREPARE UPDATE DATA
+    ===================================== */
+
+    const updatePayload =
+      updates.map(
+        p => ({
+
+          id:
+            Number(p.id),
+
+          name:
+            p.name,
+
+          sku:
+            p.sku || null,
+
+          category:
+            p.category || null,
+
+          collection:
+            p.collection || null,
+
+          price:
+            Number(p.price || 0),
+
+          sale_price:
+            p.sale_price === ""
+            ? null
+            : Number(p.sale_price),
+
+          stock:
+            Number(p.stock || 0),
+
+          status:
+            p.status || "active",
+
+          image_url:
+            p.image_url || null,
+
+          description:
+            p.description || null
+
+        })
+      );
+
+
+    /* =====================================
+       PREPARE NEW PRODUCTS
+    ===================================== */
+
+    const insertPayload =
+      additions.map(
+        p => ({
+
+          name:
+            p.name,
+
+          sku:
+            p.sku || null,
+
+          category:
+            p.category || null,
+
+          collection:
+            p.collection || null,
+
+          price:
+            Number(p.price || 0),
+
+          sale_price:
+            p.sale_price === ""
+            ? null
+            : Number(p.sale_price),
+
+          stock:
+            Number(p.stock || 0),
+
+          status:
+            p.status || "active",
+
+          image_url:
+            p.image_url || null,
+
+          description:
+            p.description || null
+
+        })
+      );
+
+
+    /* =====================================
+       UPDATE EXISTING PRODUCTS
+    ===================================== */
+
+    if(updatePayload.length){
+
+      const {
+        error
+      } =
+      await supabaseClient
+        .from("products")
+        .upsert(
+          updatePayload,
+          {
+            onConflict:"id"
+          }
+        );
+
+      if(error){
+        throw error;
+      }
+
+    }
+
+
+    /* =====================================
+       INSERT NEW PRODUCTS
+    ===================================== */
+
+    if(insertPayload.length){
+
+      const {
+        error
+      } =
+      await supabaseClient
+        .from("products")
+        .insert(
+          insertPayload
+        );
+
+      if(error){
+        throw error;
+      }
+
+    }
+
+
+    $("csvProgress").textContent =
+      "All products updated successfully.";
+
+    message(
+      updates.length +
+      " products updated and " +
+      additions.length +
+      " new products added."
+    );
+
+
+    clearCSVImport();
+
+    await loadProducts();
+
+
+  }catch(err){
+
+    console.error(
+      "CSV SAVE ERROR:",
+      err
+    );
+
+    message(
+      err.message ||
+      "Could not update products.",
+      "error"
+    );
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "💾 Update Store";
+
+  }
+}
+
+
+/* =========================================
+   CLEAR CSV
+========================================= */
+
+function clearCSVImport(){
+
+  csvProducts = [];
+
+  $("csvPreview")
+    .classList
+    .add("hidden");
+
+  $("csvPreviewBody")
+    .innerHTML = "";
+
+  $("csvSummary")
+    .textContent = "";
+
+  $("csvProgress")
+    .textContent = "";
 
 }
 /* =========================================
