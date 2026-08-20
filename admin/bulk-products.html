@@ -4,10 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bulk Products | Trends by AK</title>
+<title>Bulk Product Update | Trends by AK</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -66,7 +65,7 @@ body{
 .main{
     flex:1;
     padding:35px;
-    max-width:1500px;
+    max-width:1600px;
 }
 
 .box{
@@ -119,6 +118,16 @@ h3{
     background:#ebe4da;
 }
 
+.danger-btn{
+    background:#c62828;
+    color:white;
+    border:0;
+    padding:13px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
 .button-row{
     display:flex;
     gap:10px;
@@ -129,6 +138,10 @@ h3{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:18px;
+}
+
+.form-grid.three{
+    grid-template-columns:repeat(3,minmax(0,1fr));
 }
 
 .form-group{
@@ -147,7 +160,8 @@ label{
 }
 
 input,
-select{
+select,
+textarea{
     width:100%;
     padding:12px 13px;
     border:1px solid #ddd;
@@ -157,22 +171,42 @@ select{
     font-size:14px;
 }
 
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
 input:focus,
-select:focus{
+select:focus,
+textarea:focus{
     outline:none;
     border-color:#d1ad72;
 }
 
-.file-box{
-    border:2px dashed #d1ad72;
-    padding:35px;
-    text-align:center;
-    border-radius:12px;
-    background:#faf8f5;
+.info-box{
+    background:#eef5ff;
+    color:#24558a;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+    line-height:1.6;
 }
 
-input[type=file]{
-    margin:15px 0;
+.warning-box{
+    background:#fff8e1;
+    color:#8a6500;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+    line-height:1.6;
+}
+
+.success-box{
+    background:#e8f5e9;
+    color:#2e7d32;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
 }
 
 .status{
@@ -217,7 +251,7 @@ input[type=file]{
     background:#faf8f5;
     padding:15px 20px;
     border-radius:10px;
-    min-width:130px;
+    min-width:140px;
 }
 
 .summary span{
@@ -266,7 +300,7 @@ input[type=file]{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:1050px;
+    min-width:1200px;
 }
 
 th,
@@ -325,18 +359,6 @@ tbody tr:hover{
     color:#777;
 }
 
-.preview-change{
-    background:#fff8e1;
-    border:1px solid #ead59b;
-    padding:15px;
-    border-radius:10px;
-    margin-top:15px;
-}
-
-.preview-change strong{
-    color:#8a6500;
-}
-
 .loading{
     padding:35px;
     text-align:center;
@@ -359,14 +381,64 @@ tbody tr:hover{
     }
 }
 
-.debug-box{
+.preview-change{
+    background:#fff8e1;
+    border:1px solid #ead59b;
+    padding:18px;
+    border-radius:10px;
     margin-top:15px;
-    padding:12px;
-    background:#f5f5f5;
-    border-radius:8px;
-    font-size:12px;
-    color:#666;
-    display:none;
+}
+
+.preview-change strong{
+    color:#8a6500;
+}
+
+.excel-drop{
+    border:2px dashed #d1ad72;
+    padding:35px;
+    text-align:center;
+    border-radius:12px;
+    background:#faf8f5;
+}
+
+.excel-drop input[type=file]{
+    margin:15px 0;
+}
+
+.help-table{
+    width:100%;
+    min-width:0;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+.help-table th{
+    position:static;
+}
+
+.help-table th,
+.help-table td{
+    border:1px solid #eee;
+    padding:10px;
+}
+
+.change{
+    color:#8b6b42;
+    font-weight:bold;
+}
+
+.not-found{
+    color:#c62828;
+    font-weight:bold;
+}
+
+.ready{
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+.skip{
+    color:#777;
 }
 
 @media(max-width:900px){
@@ -383,7 +455,8 @@ tbody tr:hover{
         padding:20px;
     }
 
-    .form-grid{
+    .form-grid,
+    .form-grid.three{
         grid-template-columns:1fr;
     }
 
@@ -403,29 +476,18 @@ tbody tr:hover{
         padding:20px;
     }
 
-    .bulk-toolbar{
-        align-items:stretch;
-    }
-
-    .bulk-toolbar-left,
-    .bulk-toolbar-right{
-        width:100%;
-    }
-
 }
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <header class="header">
 
 <h1>
-Trends by AK — Bulk Product Management
+Trends by AK — Bulk Product Update
 </h1>
 
 </header>
@@ -445,7 +507,7 @@ Trends by AK — Bulk Product Management
 </a>
 
 <a href="bulk-products.html" class="active">
-📥 Bulk Products
+🔄 Bulk Product Update
 </a>
 
 <a href="collections.html">
@@ -467,73 +529,223 @@ Trends by AK — Bulk Product Management
 
 
 <!-- =====================================================
-     BULK UPDATE
+     EXCEL UPDATE
 ===================================================== -->
 
 <div class="box">
 
 <h2>
-Bulk Update Selected Products
+🔄 Update Existing Products Using Excel
+</h2>
+
+<div class="info-box">
+
+<strong>How this works:</strong><br>
+
+Your Excel file must contain the product's existing
+<strong>SKU</strong>.<br>
+
+The system will find that SKU in your database and
+<strong>UPDATE the existing product.</strong><br>
+
+<strong>No new products will be created.</strong>
+
+</div>
+
+
+<div class="warning-box">
+
+<strong>Important:</strong><br>
+
+Blank Excel cells mean <strong>DO NOT CHANGE</strong>.<br>
+
+To intentionally remove a value, enter
+<strong>CLEAR</strong> in that cell.
+
+</div>
+
+
+<div class="button-row">
+
+<button
+type="button"
+class="gold-btn"
+id="downloadTemplateButton"
+>
+⬇ Download Update Template
+</button>
+
+</div>
+
+<br>
+
+
+<div class="excel-drop">
+
+<h3>
+Upload Your Product Update Excel
+</h3>
+
+<p>
+Accepted: CSV, XLSX, XLS
+</p>
+
+<input
+type="file"
+id="fileInput"
+accept=".csv,.xlsx,.xls"
+>
+
+</div>
+
+
+<div
+id="excelStatus"
+class="status"
+>
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     EXCEL PREVIEW
+===================================================== -->
+
+<div
+class="box"
+id="excelPreviewBox"
+style="display:none"
+>
+
+<h2>
+📋 Review Excel Updates
+</h2>
+
+
+<div class="summary">
+
+<div>
+<span>Total Rows</span>
+<strong id="excelRowCount">0</strong>
+</div>
+
+<div>
+<span>Will Update</span>
+<strong id="excelUpdateCount">0</strong>
+</div>
+
+<div>
+<span>Not Found</span>
+<strong id="excelNotFoundCount">0</strong>
+</div>
+
+<div>
+<span>Errors</span>
+<strong id="excelErrorCount">0</strong>
+</div>
+
+</div>
+
+
+<div
+class="table-wrap"
+style="max-height:550px"
+>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Row</th>
+<th>SKU</th>
+<th>Product</th>
+<th>Changes</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="excelPreviewBody"></tbody>
+
+</table>
+
+</div>
+
+
+<br>
+
+
+<div class="button-row">
+
+<button
+type="button"
+class="gold-btn"
+id="confirmExcelButton"
+disabled
+>
+✓ Confirm & Update Products
+</button>
+
+
+<button
+type="button"
+class="light-btn"
+id="cancelExcelButton"
+>
+Cancel
+</button>
+
+</div>
+
+
+<div
+id="excelConfirmStatus"
+class="status"
+>
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MANUAL BULK UPDATE
+===================================================== -->
+
+<div class="box">
+
+<h2>
+✏️ Manual Bulk Update
 </h2>
 
 <p>
-Select multiple products and update their
-<strong>category</strong> or
-<strong>collection</strong> at once.
+Select products below and update multiple attributes at once.
 </p>
 
 
 <div class="summary">
 
 <div>
-
-<span>
-Products
-</span>
-
-<strong id="productCount">
-0
-</strong>
-
+<span>Products</span>
+<strong id="productCount">0</strong>
 </div>
 
-
 <div>
-
-<span>
-Selected
-</span>
-
-<strong id="selectedCount">
-0
-</strong>
-
+<span>Selected</span>
+<strong id="selectedCount">0</strong>
 </div>
 
-
 <div>
-
-<span>
-Collections
-</span>
-
-<strong id="collectionCount">
-0
-</strong>
-
+<span>Categories</span>
+<strong id="categoryCount">0</strong>
 </div>
 
-
 <div>
-
-<span>
-Categories
-</span>
-
-<strong id="categoryCount">
-0
-</strong>
-
+<span>Collections</span>
+<strong id="collectionCount">0</strong>
 </div>
 
 </div>
@@ -544,7 +756,7 @@ Categories
 <div class="form-group">
 
 <label>
-Search Products
+Search Product / SKU
 </label>
 
 <input
@@ -587,7 +799,7 @@ type="button"
 class="light-btn"
 id="selectAllButton"
 >
-☑ Select All
+☑ Select All Visible
 </button>
 
 
@@ -602,10 +814,7 @@ Clear Selection
 
 <span class="selected-count">
 
-<span id="toolbarSelectedCount">
-0
-</span>
-
+<span id="toolbarSelectedCount">0</span>
 selected
 
 </span>
@@ -646,32 +855,94 @@ Loading products...
 
 <div
 id="productDebug"
-class="debug-box"
+style="display:none"
 >
 </div>
 
+</div>
 
-<br>
 
-
-<!-- UPDATE PANEL -->
+<!-- =====================================================
+     MANUAL UPDATE PANEL
+===================================================== -->
 
 <div
-class="preview-change"
-id="bulkUpdatePanel"
+class="box"
+id="manualUpdateBox"
 style="display:none"
 >
 
-<h3>
+<h2>
 Update Selected Products
-</h3>
+</h2>
 
-<p>
-Leave a field unchanged if you do not want to modify it.
-</p>
+<div class="warning-box">
+
+<strong>
+Leave a field blank to keep the existing value.
+</strong>
+
+<br>
+
+For text fields, enter
+<strong>CLEAR</strong>
+if you want to remove the existing value.
+
+</div>
 
 
-<div class="form-grid">
+<div class="form-grid three">
+
+
+<div class="form-group">
+
+<label>
+Price
+</label>
+
+<input
+type="number"
+step="0.01"
+min="0"
+id="manualPrice"
+placeholder="Leave blank = no change"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Sale Price
+</label>
+
+<input
+type="number"
+step="0.01"
+min="0"
+id="manualSalePrice"
+placeholder="Leave blank = no change"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Stock / Inventory
+</label>
+
+<input
+type="number"
+step="1"
+min="0"
+id="manualStock"
+placeholder="Leave blank = no change"
+>
+
+</div>
 
 
 <div class="form-group">
@@ -680,10 +951,10 @@ Leave a field unchanged if you do not want to modify it.
 Category
 </label>
 
-<select id="bulkCategory">
+<select id="manualCategory">
 
 <option value="">
-— Do not change category —
+— Do not change —
 </option>
 
 <option value="__CLEAR__">
@@ -701,10 +972,10 @@ Clear category
 Collection
 </label>
 
-<select id="bulkCollection">
+<select id="manualCollection">
 
 <option value="">
-— Do not change collection —
+— Do not change —
 </option>
 
 <option value="__CLEAR__">
@@ -715,6 +986,30 @@ Clear collection
 
 </div>
 
+
+<div class="form-group">
+
+<label>
+Status
+</label>
+
+<select id="manualStatus">
+
+<option value="">
+— Do not change —
+</option>
+
+<option value="active">
+Active
+</option>
+
+<option value="inactive">
+Inactive
+</option>
+
+</select>
+
+</div>
 
 </div>
 
@@ -727,7 +1022,7 @@ Clear collection
 <button
 type="button"
 class="gold-btn"
-id="previewUpdateButton"
+id="previewManualButton"
 >
 Preview Changes
 </button>
@@ -736,7 +1031,7 @@ Preview Changes
 <button
 type="button"
 class="light-btn"
-id="cancelUpdateButton"
+id="cancelManualButton"
 >
 Cancel
 </button>
@@ -745,16 +1040,14 @@ Cancel
 
 
 <div
-id="updatePreview"
+id="manualPreview"
 style="display:none"
 >
 </div>
 
-</div>
-
 
 <div
-id="bulkStatus"
+id="manualStatus"
 class="status"
 >
 </div>
@@ -763,222 +1056,145 @@ class="status"
 
 
 <!-- =====================================================
-     COLLECTION MANAGEMENT
+     EXCEL FORMAT HELP
 ===================================================== -->
 
 <div class="box">
 
 <h2>
-Collections
+📊 Excel Format
 </h2>
 
 <p>
-Collections created in the Admin Collections section will
-automatically appear in the bulk update dropdown.
+Use the following column names in your Excel file.
 </p>
 
 
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
-Create New Collection
-</label>
-
-<input
-type="text"
-id="newCollectionName"
-placeholder="Example: Rakhi Collection"
->
-
-</div>
-
-
-<div class="form-group">
-
-<label>
-&nbsp;
-</label>
-
-<button
-type="button"
-class="gold-btn"
-id="addCollectionButton"
->
-+ Add Collection
-</button>
-
-</div>
-
-</div>
-
-
-<div
-id="collectionStatus"
-class="status"
->
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     EXCEL UPLOAD
-===================================================== -->
-
-<div class="box">
-
-<h2>
-Bulk Product Upload
-</h2>
-
-<p>
-Upload an Excel or CSV file to add multiple products at once.
-</p>
-
-
-<button
-class="gold-btn"
-onclick="downloadTemplate()"
->
-Download Excel Template
-</button>
-
-</div>
-
-
-<div class="box">
-
-<h2>
-1. Upload File
-</h2>
-
-
-<div class="file-box">
-
-<p>
-<strong>CSV or Excel</strong>
-</p>
-
-<p>
-Accepted: .csv, .xlsx, .xls
-</p>
-
-
-<input
-type="file"
-id="fileInput"
-accept=".csv,.xlsx,.xls"
->
-
-</div>
-
-
-<div
-id="status"
-class="status"
->
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     PREVIEW
-===================================================== -->
-
-<div
-class="box"
-id="previewBox"
-style="display:none"
->
-
-<h2>
-2. Preview & Validate
-</h2>
-
-
-<div class="summary">
-
-<div>
-Rows
-<strong id="rowCount">0</strong>
-</div>
-
-<div>
-Valid
-<strong id="validCount">0</strong>
-</div>
-
-<div>
-Errors
-<strong id="errorCount">0</strong>
-</div>
-
-</div>
-
-
-<div class="table-wrap">
-
-<table>
+<table class="help-table">
 
 <thead>
 
 <tr>
-
-<th>Row</th>
-<th>SKU</th>
-<th>Name</th>
-<th>Price</th>
-<th>Sale Price</th>
-<th>Category</th>
-<th>Stock</th>
-<th>Collection</th>
-<th>Status</th>
-<th>Validation</th>
-
+<th>Column</th>
+<th>Required?</th>
+<th>Example</th>
+<th>How it works</th>
 </tr>
 
 </thead>
 
-<tbody id="previewBody"></tbody>
+<tbody>
+
+<tr>
+<td><strong>sku</strong></td>
+<td>YES</td>
+<td>TBK-SCR-001</td>
+<td>Used to find the existing product.</td>
+</tr>
+
+<tr>
+<td>name</td>
+<td>No</td>
+<td>Premium Satin Scrunchie</td>
+<td>Updates product name.</td>
+</tr>
+
+<tr>
+<td>price</td>
+<td>No</td>
+<td>45</td>
+<td>Updates regular price.</td>
+</tr>
+
+<tr>
+<td>sale_price</td>
+<td>No</td>
+<td>35</td>
+<td>Updates sale price.</td>
+</tr>
+
+<tr>
+<td>stock</td>
+<td>No</td>
+<td>100</td>
+<td>Updates inventory quantity.</td>
+</tr>
+
+<tr>
+<td>category</td>
+<td>No</td>
+<td>Scrunchies</td>
+<td>Updates category.</td>
+</tr>
+
+<tr>
+<td>collection</td>
+<td>No</td>
+<td>Best Sellers</td>
+<td>Updates collection.</td>
+</tr>
+
+<tr>
+<td>description</td>
+<td>No</td>
+<td>Premium satin scrunchie</td>
+<td>Updates description.</td>
+</tr>
+
+<tr>
+<td>image_url</td>
+<td>No</td>
+<td>https://...</td>
+<td>Updates product image URL.</td>
+</tr>
+
+<tr>
+<td>status</td>
+<td>No</td>
+<td>active</td>
+<td>Updates product status.</td>
+</tr>
+
+</tbody>
 
 </table>
 
-</div>
+<br>
 
+<div class="info-box">
+
+<strong>Example:</strong>
+
+<br><br>
+
+If your database currently has:
 
 <br>
 
+SKU: <strong>TBK-SCR-001</strong><br>
+Stock: <strong>20</strong><br>
+Price: <strong>45</strong>
 
-<button
-id="importButton"
-class="gold-btn"
-onclick="importProducts()"
-disabled
->
-Import Products
-</button>
+<br><br>
+
+And your Excel contains:
+
+<br>
+
+SKU: <strong>TBK-SCR-001</strong><br>
+Stock: <strong>100</strong><br>
+Price: blank
+
+<br><br>
+
+The result will be:
+
+<br>
+
+Stock → <strong>100</strong><br>
+Price → <strong>45 remains unchanged</strong>
 
 </div>
-
-
-<!-- =====================================================
-     RESULT
-===================================================== -->
-
-<div
-class="box"
-id="resultBox"
-style="display:none"
->
-
-<h2>
-Import Result
-</h2>
-
-<div id="resultText"></div>
 
 </div>
 
@@ -1014,21 +1230,17 @@ SUPABASE_KEY
    VARIABLES
 ===================================================== */
 
-let importedRows = [];
-
-let validRows = [];
-
 let allProducts = [];
-
 let allCollections = [];
+let categories = new Set();
 
 let selectedProductIds = new Set();
 
-let categories = new Set();
+let excelUpdates = [];
 
 
 /* =====================================================
-   ESCAPE HTML
+   HELPERS
 ===================================================== */
 
 function escapeHtml(value){
@@ -1043,10 +1255,6 @@ return String(value ?? "")
 }
 
 
-/* =====================================================
-   STATUS
-===================================================== */
-
 function showStatus(
 elementId,
 message,
@@ -1056,9 +1264,7 @@ type
 const box =
 document.getElementById(elementId);
 
-if(!box){
-return;
-}
+if(!box) return;
 
 box.textContent =
 message;
@@ -1082,8 +1288,10 @@ return {
 id:
 product.id !== null &&
 product.id !== undefined
-? String(product.id)
-: "",
+?
+String(product.id)
+:
+"",
 
 name:
 String(product.name || "").trim(),
@@ -1097,6 +1305,12 @@ String(product.category || "").trim(),
 collection:
 String(product.collection || "").trim(),
 
+description:
+String(product.description || "").trim(),
+
+image_url:
+String(product.image_url || "").trim(),
+
 price:
 product.price,
 
@@ -1104,17 +1318,10 @@ sale_price:
 product.sale_price,
 
 stock:
-product.stock ??
-product.quantity ??
-0,
+product.stock ?? 0,
 
 status:
-product.status ||
-(
-product.is_active === false
-? "inactive"
-: "active"
-)
+String(product.status || "active").trim()
 
 };
 
@@ -1122,7 +1329,7 @@ product.is_active === false
 
 
 /* =====================================================
-   LOAD ALL DATA
+   LOAD DATA
 ===================================================== */
 
 async function loadAdminData(){
@@ -1161,11 +1368,6 @@ Loading products...
 
 try{
 
-/*
- * First query.
- * Do NOT depend on id ordering.
- */
-
 let response =
 await supabaseClient
 .from("products")
@@ -1179,16 +1381,6 @@ ascending:false
 
 
 if(response.error){
-
-console.warn(
-"created_at ordering failed. Retrying without ordering.",
-response.error
-);
-
-
-/*
- * Fallback query.
- */
 
 response =
 await supabaseClient
@@ -1207,9 +1399,7 @@ throw response.error;
 
 allProducts =
 (response.data || [])
-.map(
-normalizeProduct
-);
+.map(normalizeProduct);
 
 
 categories =
@@ -1242,55 +1432,18 @@ document.getElementById(
 categories.size;
 
 
-renderCategoryDropdown();
+renderCategoryDropdowns();
+
+renderCollectionDropdowns();
 
 renderProducts();
 
 updateSelectedCount();
 
 
-/*
- * Debug information.
- */
-
-const debug =
-document.getElementById(
-"productDebug"
-);
-
-if(debug){
-
-debug.style.display =
-"block";
-
-debug.textContent =
-`Loaded ${allProducts.length} product(s) from Supabase.`;
-
-}
-
-
 }catch(error){
 
-console.error(
-"Products loading error:",
-error
-);
-
-
-allProducts = [];
-
-
-document.getElementById(
-"productCount"
-).textContent =
-"0";
-
-
-document.getElementById(
-"categoryCount"
-).textContent =
-"0";
-
+console.error(error);
 
 tableWrap.innerHTML = `
 
@@ -1321,23 +1474,6 @@ Try Again
 
 `;
 
-
-const debug =
-document.getElementById(
-"productDebug"
-);
-
-if(debug){
-
-debug.style.display =
-"block";
-
-debug.textContent =
-"Supabase error: " +
-(error.message || "Unknown error");
-
-}
-
 }
 
 }
@@ -1359,8 +1495,8 @@ await supabaseClient
 
 if(response.error){
 
-console.error(
-"Collections error:",
+console.warn(
+"Collections could not be loaded:",
 response.error
 );
 
@@ -1373,20 +1509,11 @@ response.data || [];
 
 }
 
-
-renderCollectionDropdowns();
-
-
 }catch(error){
 
-console.error(
-"Collections loading error:",
-error
-);
+console.error(error);
 
 allCollections = [];
-
-renderCollectionDropdowns();
 
 }
 
@@ -1410,54 +1537,37 @@ collection?.collection_name ||
 
 
 /* =====================================================
-   COLLECTION DROPDOWNS
+   COLLECTION OPTIONS
 ===================================================== */
 
-function renderCollectionDropdowns(){
+function getCollectionNames(){
 
 const names =
 new Set();
 
 
-/*
- * Add collections from collections table.
- */
-
 allCollections.forEach(
 collection => {
 
 const name =
-getCollectionName(
-collection
-);
+getCollectionName(collection);
 
 if(name){
 
-names.add(
-name
-);
+names.add(name);
 
 }
 
 });
 
-
-/*
- * Add collections already used by products.
- */
 
 allProducts.forEach(
 product => {
 
-const collection =
-String(
-product.collection || ""
-).trim();
-
-if(collection){
+if(product.collection){
 
 names.add(
-collection
+product.collection
 );
 
 }
@@ -1465,52 +1575,36 @@ collection
 });
 
 
-const sorted =
-Array.from(names)
+return Array.from(names)
 .sort(
 (a,b) =>
-a.localeCompare(
-b
-)
+a.localeCompare(b)
 );
+
+}
+
+
+/* =====================================================
+   RENDER COLLECTION DROPDOWNS
+===================================================== */
+
+function renderCollectionDropdowns(){
+
+const names =
+getCollectionNames();
 
 
 document.getElementById(
 "collectionCount"
 ).textContent =
-sorted.length;
+names.length;
 
-
-/*
- * Bulk update dropdown.
- */
-
-const bulk =
-document.getElementById(
-"bulkCollection"
-);
-
-bulk.innerHTML = `
-
-<option value="">
-— Do not change collection —
-</option>
-
-<option value="__CLEAR__">
-Clear collection
-</option>
-
-`;
-
-
-/*
- * Filter dropdown.
- */
 
 const filter =
 document.getElementById(
 "collectionFilter"
 );
+
 
 filter.innerHTML = `
 
@@ -1521,24 +1615,27 @@ All Collections
 `;
 
 
-sorted.forEach(
+const manual =
+document.getElementById(
+"manualCollection"
+);
+
+
+manual.innerHTML = `
+
+<option value="">
+— Do not change —
+</option>
+
+<option value="__CLEAR__">
+Clear collection
+</option>
+
+`;
+
+
+names.forEach(
 name => {
-
-const bulkOption =
-document.createElement(
-"option"
-);
-
-bulkOption.value =
-name;
-
-bulkOption.textContent =
-name;
-
-bulk.appendChild(
-bulkOption
-);
-
 
 const filterOption =
 document.createElement(
@@ -1555,26 +1652,51 @@ filter.appendChild(
 filterOption
 );
 
+
+const manualOption =
+document.createElement(
+"option"
+);
+
+manualOption.value =
+name;
+
+manualOption.textContent =
+name;
+
+manual.appendChild(
+manualOption
+);
+
 });
 
 }
 
 
 /* =====================================================
-   CATEGORY DROPDOWN
+   CATEGORY DROPDOWNS
 ===================================================== */
 
-function renderCategoryDropdown(){
+function renderCategoryDropdowns(){
 
-const select =
-document.getElementById(
-"bulkCategory"
+const names =
+Array.from(categories)
+.sort(
+(a,b) =>
+a.localeCompare(b)
 );
 
-select.innerHTML = `
+
+const manual =
+document.getElementById(
+"manualCategory"
+);
+
+
+manual.innerHTML = `
 
 <option value="">
-— Do not change category —
+— Do not change —
 </option>
 
 <option value="__CLEAR__">
@@ -1584,15 +1706,8 @@ Clear category
 `;
 
 
-Array.from(categories)
-.sort(
-(a,b) =>
-a.localeCompare(
-b
-)
-)
-.forEach(
-category => {
+names.forEach(
+name => {
 
 const option =
 document.createElement(
@@ -1600,92 +1715,22 @@ document.createElement(
 );
 
 option.value =
-category;
+name;
 
 option.textContent =
-category;
+name;
 
-select.appendChild(
+manual.appendChild(
 option
 );
 
 });
 
-
-const custom =
-document.createElement(
-"option"
-);
-
-custom.value =
-"__CUSTOM__";
-
-custom.textContent =
-"+ Custom Category...";
-
-select.appendChild(
-custom
-);
-
 }
 
 
 /* =====================================================
-   CUSTOM CATEGORY
-===================================================== */
-
-document
-.getElementById(
-"bulkCategory"
-)
-.addEventListener(
-"change",
-function(){
-
-if(
-this.value !== "__CUSTOM__"
-){
-return;
-}
-
-
-const custom =
-prompt(
-"Enter the new category:"
-);
-
-
-if(
-custom &&
-custom.trim()
-){
-
-const name =
-custom.trim();
-
-categories.add(
-name
-);
-
-renderCategoryDropdown();
-
-document.getElementById(
-"bulkCategory"
-).value =
-name;
-
-}else{
-
-this.value = "";
-
-}
-
-}
-);
-
-
-/* =====================================================
-   FILTER PRODUCTS
+   FILTER
 ===================================================== */
 
 function getFilteredProducts(){
@@ -1700,7 +1745,7 @@ document.getElementById(
 .toLowerCase();
 
 
-const collectionFilter =
+const collection =
 String(
 document.getElementById(
 "collectionFilter"
@@ -1714,41 +1759,31 @@ return allProducts.filter(
 product => {
 
 const name =
-String(
-product.name || ""
-)
-.toLowerCase();
+product.name.toLowerCase();
 
 
 const sku =
-String(
-product.sku || ""
-)
-.toLowerCase();
+product.sku.toLowerCase();
 
 
-const collection =
-String(
-product.collection || ""
-)
-.toLowerCase();
+const productCollection =
+product.collection.toLowerCase();
 
 
-const matchesSearch =
+const searchMatch =
 !search ||
 name.includes(search) ||
 sku.includes(search);
 
 
-const matchesCollection =
-!collectionFilter ||
-collection ===
-collectionFilter;
+const collectionMatch =
+!collection ||
+productCollection === collection;
 
 
 return (
-matchesSearch &&
-matchesCollection
+searchMatch &&
+collectionMatch
 );
 
 });
@@ -1762,28 +1797,23 @@ matchesCollection
 
 function renderProducts(){
 
-const tableWrap =
+const wrap =
 document.getElementById(
 "productTableWrap"
 );
 
 
-const filtered =
+const products =
 getFilteredProducts();
 
 
-if(!filtered.length){
+if(!products.length){
 
-tableWrap.innerHTML = `
+wrap.innerHTML = `
 
 <div class="empty-state">
 
 No products found.
-
-<br><br>
-
-Try clearing the search/filter
-or click Refresh.
 
 </div>
 
@@ -1794,7 +1824,7 @@ return;
 }
 
 
-tableWrap.innerHTML = `
+wrap.innerHTML = `
 
 <table>
 
@@ -1811,47 +1841,22 @@ id="selectAll"
 
 </th>
 
-<th>
-Product
-</th>
-
-<th>
-SKU
-</th>
-
-<th>
-Category
-</th>
-
-<th>
-Collection
-</th>
-
-<th>
-Price
-</th>
-
-<th>
-Stock
-</th>
-
-<th>
-Status
-</th>
+<th>Product</th>
+<th>SKU</th>
+<th>Category</th>
+<th>Collection</th>
+<th>Price</th>
+<th>Sale Price</th>
+<th>Stock</th>
+<th>Status</th>
 
 </tr>
 
 </thead>
 
-
 <tbody>
 
-${filtered
-.map(
-product =>
-productRow(product)
-)
-.join("")}
+${products.map(productRow).join("")}
 
 </tbody>
 
@@ -1859,10 +1864,6 @@ productRow(product)
 
 `;
 
-
-/*
- * Restore selected checkboxes.
- */
 
 document
 .querySelectorAll(
@@ -1891,30 +1892,21 @@ this.dataset.id
 
 if(this.checked){
 
-selectedProductIds.add(
-id
-);
+selectedProductIds.add(id);
 
 }else{
 
-selectedProductIds.delete(
-id
-);
+selectedProductIds.delete(id);
 
 }
 
 
 updateSelectedCount();
 
-}
-);
+});
 
 });
 
-
-/*
- * Select all visible.
- */
 
 const selectAll =
 document.getElementById(
@@ -1922,45 +1914,35 @@ document.getElementById(
 );
 
 
-if(selectAll){
-
-const visibleIds =
-filtered.map(
+const ids =
+products.map(
 product =>
 String(product.id)
 );
 
 
-const allSelected =
-visibleIds.length > 0 &&
-visibleIds.every(
+selectAll.checked =
+ids.length > 0 &&
+ids.every(
 id =>
 selectedProductIds.has(id)
 );
-
-
-selectAll.checked =
-allSelected;
 
 
 selectAll.addEventListener(
 "change",
 function(){
 
-visibleIds.forEach(
+ids.forEach(
 id => {
 
 if(this.checked){
 
-selectedProductIds.add(
-id
-);
+selectedProductIds.add(id);
 
 }else{
 
-selectedProductIds.delete(
-id
-);
+selectedProductIds.delete(id);
 
 }
 
@@ -1971,10 +1953,7 @@ renderProducts();
 
 updateSelectedCount();
 
-}
-);
-
-}
+});
 
 }
 
@@ -1986,63 +1965,7 @@ updateSelectedCount();
 function productRow(product){
 
 const id =
-String(
-product.id || ""
-);
-
-
-const selected =
-selectedProductIds.has(
-id
-);
-
-
-const name =
-escapeHtml(
-product.name ||
-"Unnamed Product"
-);
-
-
-const sku =
-escapeHtml(
-product.sku ||
-"—"
-);
-
-
-const category =
-escapeHtml(
-product.category ||
-"—"
-);
-
-
-const collection =
-escapeHtml(
-product.collection ||
-"—"
-);
-
-
-const priceValue =
-Number(
-product.sale_price ??
-product.price ??
-0
-);
-
-
-const stock =
-product.stock ??
-0;
-
-
-const status =
-escapeHtml(
-product.status ||
-"active"
-);
+String(product.id);
 
 
 return `
@@ -2055,7 +1978,7 @@ return `
 type="checkbox"
 class="product-checkbox"
 data-id="${escapeHtml(id)}"
-${selected ? "checked" : ""}
+${selectedProductIds.has(id) ? "checked" : ""}
 >
 
 </td>
@@ -2064,7 +1987,7 @@ ${selected ? "checked" : ""}
 <td>
 
 <div class="product-name">
-${name}
+${escapeHtml(product.name || "Unnamed")}
 </div>
 
 </td>
@@ -2073,7 +1996,7 @@ ${name}
 <td>
 
 <span class="product-sku">
-${sku}
+${escapeHtml(product.sku || "—")}
 </span>
 
 </td>
@@ -2082,7 +2005,7 @@ ${sku}
 <td>
 
 <span class="tag">
-${category}
+${escapeHtml(product.category || "—")}
 </span>
 
 </td>
@@ -2091,35 +2014,60 @@ ${category}
 <td>
 
 <span class="tag">
-${collection}
+${escapeHtml(product.collection || "—")}
 </span>
 
 </td>
 
 
 <td>
-
-₹${
-Number.isFinite(priceValue)
-? priceValue.toLocaleString("en-IN")
-: "0"
-}
-
+₹${formatNumber(product.price)}
 </td>
 
 
 <td>
-${escapeHtml(stock)}
+₹${formatNumber(product.sale_price)}
 </td>
 
 
 <td>
-${status}
+${escapeHtml(product.stock)}
+</td>
+
+
+<td>
+${escapeHtml(product.status)}
 </td>
 
 </tr>
 
 `;
+
+}
+
+
+function formatNumber(value){
+
+if(
+value === null ||
+value === undefined ||
+value === ""
+){
+
+return "—";
+
+}
+
+
+const number =
+Number(value);
+
+
+return Number.isFinite(number)
+?
+number.toLocaleString("en-IN")
+:
+"—";
 
 }
 
@@ -2146,22 +2094,20 @@ document.getElementById(
 count;
 
 
-const panel =
 document.getElementById(
-"bulkUpdatePanel"
-);
-
-
-panel.style.display =
+"manualUpdateBox"
+).style.display =
 count > 0
-? "block"
-: "none";
+?
+"block"
+:
+"none";
 
 }
 
 
 /* =====================================================
-   SELECT ALL BUTTON
+   SELECT ALL
 ===================================================== */
 
 document
@@ -2172,26 +2118,19 @@ document
 "click",
 function(){
 
-const filtered =
-getFilteredProducts();
-
-
-filtered.forEach(
-product => {
-
+getFilteredProducts()
+.forEach(
+product =>
 selectedProductIds.add(
 String(product.id)
+)
 );
-
-});
-
 
 renderProducts();
 
 updateSelectedCount();
 
-}
-);
+});
 
 
 /* =====================================================
@@ -2212,8 +2151,7 @@ renderProducts();
 
 updateSelectedCount();
 
-}
-);
+});
 
 
 /* =====================================================
@@ -2231,7 +2169,7 @@ renderProducts
 
 
 /* =====================================================
-   COLLECTION FILTER
+   FILTER
 ===================================================== */
 
 document
@@ -2256,8 +2194,6 @@ document
 "click",
 async function(){
 
-selectedProductIds.clear();
-
 this.disabled = true;
 
 this.textContent =
@@ -2266,13 +2202,9 @@ this.textContent =
 
 try{
 
-await loadAdminData();
+selectedProductIds.clear();
 
-showStatus(
-"bulkStatus",
-"Products and collections refreshed.",
-"success"
-);
+await loadAdminData();
 
 }catch(error){
 
@@ -2287,52 +2219,24 @@ this.textContent =
 
 }
 
-}
-);
+});
 
 
 /* =====================================================
-   CANCEL UPDATE
+   MANUAL PREVIEW
 ===================================================== */
 
 document
 .getElementById(
-"cancelUpdateButton"
+"previewManualButton"
 )
 .addEventListener(
 "click",
-function(){
-
-document.getElementById(
-"bulkCategory"
-).value = "";
-
-
-document.getElementById(
-"bulkCollection"
-).value = "";
-
-
-document.getElementById(
-"updatePreview"
-).style.display =
-"none";
-
-}
+previewManualUpdate
 );
 
 
-/* =====================================================
-   PREVIEW UPDATE
-===================================================== */
-
-document
-.getElementById(
-"previewUpdateButton"
-)
-.addEventListener(
-"click",
-function(){
+function previewManualUpdate(){
 
 const selected =
 Array.from(
@@ -2342,37 +2246,170 @@ selectedProductIds
 
 if(!selected.length){
 
-showStatus(
-"bulkStatus",
-"Please select at least one product.",
-"warning"
-);
-
 return;
 
 }
 
 
+const updates = {};
+
+
+const price =
+document.getElementById(
+"manualPrice"
+).value.trim();
+
+
+const salePrice =
+document.getElementById(
+"manualSalePrice"
+).value.trim();
+
+
+const stock =
+document.getElementById(
+"manualStock"
+).value.trim();
+
+
 const category =
 document.getElementById(
-"bulkCategory"
+"manualCategory"
 ).value;
 
 
 const collection =
 document.getElementById(
-"bulkCollection"
+"manualCollection"
 ).value;
 
 
+const status =
+document.getElementById(
+"manualStatus"
+).value;
+
+
+if(price !== ""){
+
+const value =
+Number(price);
+
+
 if(
-category === "" &&
-collection === ""
+!Number.isFinite(value) ||
+value < 0
 ){
 
 showStatus(
-"bulkStatus",
-"Choose a category or collection to update.",
+"manualStatus",
+"Invalid price.",
+"error"
+);
+
+return;
+
+}
+
+updates.price =
+value;
+
+}
+
+
+if(salePrice !== ""){
+
+const value =
+Number(salePrice);
+
+
+if(
+!Number.isFinite(value) ||
+value < 0
+){
+
+showStatus(
+"manualStatus",
+"Invalid sale price.",
+"error"
+);
+
+return;
+
+}
+
+updates.sale_price =
+value;
+
+}
+
+
+if(stock !== ""){
+
+const value =
+Number(stock);
+
+
+if(
+!Number.isInteger(value) ||
+value < 0
+){
+
+showStatus(
+"manualStatus",
+"Stock must be a whole number.",
+"error"
+);
+
+return;
+
+}
+
+updates.stock =
+value;
+
+}
+
+
+if(category !== ""){
+
+updates.category =
+category === "__CLEAR__"
+?
+null
+:
+category;
+
+}
+
+
+if(collection !== ""){
+
+updates.collection =
+collection === "__CLEAR__"
+?
+null
+:
+collection;
+
+}
+
+
+if(status !== ""){
+
+updates.status =
+status;
+
+}
+
+
+if(
+Object.keys(updates).length === 0
+){
+
+showStatus(
+"manualStatus",
+"Choose at least one field to update.",
 "warning"
 );
 
@@ -2381,21 +2418,9 @@ return;
 }
 
 
-const categoryText =
-category === "__CLEAR__"
-? "Clear category"
-: category || "No change";
-
-
-const collectionText =
-collection === "__CLEAR__"
-? "Clear collection"
-: collection || "No change";
-
-
 const preview =
 document.getElementById(
-"updatePreview"
+"manualPreview"
 );
 
 
@@ -2409,26 +2434,36 @@ Ready to update ${selected.length} product(s)
 
 <br><br>
 
-Category:
+${Object.entries(updates)
+.map(
+([key,value]) => `
+
+<div>
+
 <strong>
-${escapeHtml(categoryText)}
+${escapeHtml(
+formatFieldName(key)
+)}:
 </strong>
+
+${value === null
+? "CLEAR"
+: escapeHtml(value)}
+
+</div>
+
+`
+)
+.join("")}
 
 <br>
-
-Collection:
-<strong>
-${escapeHtml(collectionText)}
-</strong>
-
-<br><br>
 
 <button
 type="button"
 class="gold-btn"
-id="confirmBulkUpdateButton"
+id="confirmManualButton"
 >
-✓ Confirm & Update ${selected.length} Product(s)
+✓ Confirm Update
 </button>
 
 </div>
@@ -2442,83 +2477,53 @@ preview.style.display =
 
 document
 .getElementById(
-"confirmBulkUpdateButton"
+"confirmManualButton"
 )
 .addEventListener(
 "click",
-performBulkUpdate
+() =>
+performManualUpdate(updates)
 );
 
 }
-);
+
+
+function formatFieldName(key){
+
+return {
+
+price:"Price",
+
+sale_price:"Sale Price",
+
+stock:"Stock",
+
+category:"Category",
+
+collection:"Collection",
+
+status:"Status"
+
+}[key] || key;
+
+}
 
 
 /* =====================================================
-   PERFORM BULK UPDATE
+   MANUAL UPDATE
 ===================================================== */
 
-async function performBulkUpdate(){
+async function performManualUpdate(updates){
 
-const selected =
+const ids =
 Array.from(
 selectedProductIds
 );
 
 
-if(!selected.length){
-
-return;
-
-}
-
-
-const category =
-document.getElementById(
-"bulkCategory"
-).value;
-
-
-const collection =
-document.getElementById(
-"bulkCollection"
-).value;
-
-
-const updates = {};
-
-
-if(category !== ""){
-
-updates.category =
-category === "__CLEAR__"
-? null
-: category;
-
-}
-
-
-if(collection !== ""){
-
-updates.collection =
-collection === "__CLEAR__"
-? null
-: collection;
-
-}
-
-
-if(
-Object.keys(updates).length === 0
-){
-
-return;
-
-}
-
-
 const button =
 document.getElementById(
-"confirmBulkUpdateButton"
+"confirmManualButton"
 );
 
 
@@ -2528,27 +2533,24 @@ button.textContent =
 "Updating...";
 
 
-try{
-
-/*
- * Important:
- * IDs are normalized to strings in the UI,
- * but Supabase can still compare them correctly.
- */
-
 let updated = 0;
-
 let failed = [];
 
 
+try{
+
 for(
-const id of selected
+const id of ids
 ){
 
 const response =
 await supabaseClient
 .from("products")
-.update(updates)
+.update({
+...updates,
+updated_at:
+new Date().toISOString()
+})
 .eq(
 "id",
 id
@@ -2557,10 +2559,13 @@ id
 
 if(response.error){
 
-failed.push({
+failed.push(
+{
 id:id,
-error:response.error.message
-});
+error:
+response.error.message
+}
+);
 
 }else{
 
@@ -2574,20 +2579,14 @@ updated++;
 if(failed.length){
 
 throw new Error(
-`${updated} product(s) updated, but ${failed.length} failed. ` +
-failed
-.map(
-item =>
-item.error
-)
-.join("; ")
+`${updated} product(s) updated, ${failed.length} failed.`
 );
 
 }
 
 
 showStatus(
-"bulkStatus",
+"manualStatus",
 `Successfully updated ${updated} product(s).`,
 "success"
 );
@@ -2595,50 +2594,34 @@ showStatus(
 
 selectedProductIds.clear();
 
+clearManualForm();
 
 document.getElementById(
-"bulkCategory"
-).value = "";
-
-
-document.getElementById(
-"bulkCollection"
-).value = "";
-
-
-document.getElementById(
-"updatePreview"
+"manualPreview"
 ).style.display =
 "none";
 
 
 await loadAdminData();
 
-
 updateSelectedCount();
 
 
 }catch(error){
 
-console.error(
-"Bulk update error:",
-error
-);
-
+console.error(error);
 
 showStatus(
-"bulkStatus",
+"manualStatus",
 error.message ||
-"Bulk update failed.",
+"Update failed.",
 "error"
 );
 
-
-button.disabled =
-false;
+button.disabled = false;
 
 button.textContent =
-"✓ Confirm & Update";
+"✓ Confirm Update";
 
 }
 
@@ -2646,149 +2629,52 @@ button.textContent =
 
 
 /* =====================================================
-   ADD COLLECTION
+   CANCEL MANUAL UPDATE
 ===================================================== */
 
 document
 .getElementById(
-"addCollectionButton"
+"cancelManualButton"
 )
 .addEventListener(
 "click",
-addCollection
-);
+function(){
 
+clearManualForm();
 
-async function addCollection(){
-
-const input =
 document.getElementById(
-"newCollectionName"
-);
+"manualPreview"
+).style.display =
+"none";
 
-
-const name =
-String(
-input.value || ""
-).trim();
-
-
-if(!name){
-
-showStatus(
-"collectionStatus",
-"Enter a collection name.",
-"warning"
-);
-
-return;
-
-}
-
-
-const button =
-document.getElementById(
-"addCollectionButton"
-);
-
-
-button.disabled =
-true;
-
-button.textContent =
-"Adding...";
-
-
-try{
-
-const duplicate =
-allCollections.some(
-collection =>
-getCollectionName(
-collection
-).toLowerCase() ===
-name.toLowerCase()
-);
-
-
-if(duplicate){
-
-throw new Error(
-"This collection already exists."
-);
-
-}
-
-
-const response =
-await supabaseClient
-.from("collections")
-.insert([
-{
-name:name
-}
-])
-.select();
-
-
-if(response.error){
-
-throw response.error;
-
-}
-
-
-if(response.data?.length){
-
-allCollections.push(
-response.data[0]
-);
-
-}else{
-
-allCollections.push({
-name:name
 });
 
-}
 
+function clearManualForm(){
 
-renderCollectionDropdowns();
+document.getElementById(
+"manualPrice"
+).value = "";
 
+document.getElementById(
+"manualSalePrice"
+).value = "";
 
-input.value = "";
+document.getElementById(
+"manualStock"
+).value = "";
 
+document.getElementById(
+"manualCategory"
+).value = "";
 
-showStatus(
-"collectionStatus",
-`"${name}" was added successfully.`,
-"success"
-);
+document.getElementById(
+"manualCollection"
+).value = "";
 
-
-}catch(error){
-
-console.error(
-"Add collection error:",
-error
-);
-
-
-showStatus(
-"collectionStatus",
-error.message ||
-"Could not create collection.",
-"error"
-);
-
-}
-
-
-button.disabled =
-false;
-
-button.textContent =
-"+ Add Collection";
+document.getElementById(
+"manualStatus"
+).value = "";
 
 }
 
@@ -2797,34 +2683,44 @@ button.textContent =
    EXCEL TEMPLATE
 ===================================================== */
 
-function downloadTemplate(){
+document
+.getElementById(
+"downloadTemplateButton"
+)
+.addEventListener(
+"click",
+downloadUpdateTemplate
+);
+
+
+function downloadUpdateTemplate(){
 
 const data = [
 
 {
 sku:"TBK-SCR-001",
-name:"Premium Satin Scrunchie",
-price:45,
-sale_price:35,
-category:"Scrunchies",
-stock:20,
-description:"Premium satin scrunchie.",
+name:"",
+price:"",
+sale_price:"",
+stock:100,
+category:"",
+collection:"",
+description:"",
 image_url:"",
-collection:"Best Sellers",
-status:"active"
+status:""
 },
 
 {
 sku:"TBK-JWL-001",
-name:"Anti Tarnish Necklace",
-price:599,
-sale_price:499,
-category:"Jewellery",
-stock:10,
-description:"Elegant anti-tarnish necklace.",
+name:"",
+price:"",
+sale_price:"",
+stock:50,
+category:"",
+collection:"",
+description:"",
 image_url:"",
-collection:"Jewellery",
-status:"active"
+status:""
 }
 
 ];
@@ -2843,20 +2739,29 @@ XLSX.utils.book_new();
 XLSX.utils.book_append_sheet(
 workbook,
 worksheet,
-"Products"
+"Product Updates"
 );
 
 
 XLSX.writeFile(
 workbook,
-"Trends-by-AK-Product-Template.xlsx"
+"Trends-by-AK-Product-Update-Template.xlsx"
+);
+
+
+/* Inform user */
+
+showStatus(
+"excelStatus",
+"Update template downloaded.",
+"success"
 );
 
 }
 
 
 /* =====================================================
-   FILE UPLOAD
+   FILE INPUT
 ===================================================== */
 
 document
@@ -2865,11 +2770,11 @@ document
 )
 .addEventListener(
 "change",
-handleFile
+handleExcelFile
 );
 
 
-function handleFile(event){
+function handleExcelFile(event){
 
 const file =
 event.target.files[0];
@@ -2900,7 +2805,7 @@ type:"array"
 );
 
 
-const firstSheet =
+const sheet =
 workbook.Sheets[
 workbook.SheetNames[0]
 ];
@@ -2908,32 +2813,24 @@ workbook.SheetNames[0]
 
 const rows =
 XLSX.utils.sheet_to_json(
-firstSheet,
+sheet,
 {
 defval:""
 }
 );
 
 
-importedRows =
-rows;
-
-
-validateRows(
-rows
-);
+processExcelRows(rows);
 
 
 }catch(error){
 
-console.error(
-error
-);
-
+console.error(error);
 
 showStatus(
-"status",
-"Could not read the file.",
+"excelStatus",
+"Could not read Excel file: " +
+error.message,
 "error"
 );
 
@@ -2942,244 +2839,404 @@ showStatus(
 };
 
 
-reader.readAsArrayBuffer(
-file
-);
+reader.readAsArrayBuffer(file);
 
 }
 
 
 /* =====================================================
-   VALIDATE EXCEL
+   NORMALIZE EXCEL VALUE
 ===================================================== */
 
-function validateRows(rows){
+function excelValue(value){
 
-validRows = [];
+if(
+value === null ||
+value === undefined
+){
+
+return "";
+
+}
+
+return String(value).trim();
+
+}
+
+
+function isClear(value){
+
+return String(value)
+.trim()
+.toUpperCase() ===
+"CLEAR";
+
+}
+
+
+/* =====================================================
+   PROCESS EXCEL
+===================================================== */
+
+function processExcelRows(rows){
+
+excelUpdates = [];
 
 
 const preview =
 document.getElementById(
-"previewBody"
+"excelPreviewBody"
 );
 
 
 preview.innerHTML = "";
 
 
-let errors = 0;
+let updateCount = 0;
+let notFoundCount = 0;
+let errorCount = 0;
 
 
-const skuSet =
+const productBySku =
+new Map();
+
+
+allProducts.forEach(
+product => {
+
+if(product.sku){
+
+productBySku.set(
+product.sku.toLowerCase(),
+product
+);
+
+}
+
+});
+
+
+const seenSkus =
 new Set();
 
 
 rows.forEach(
-function(row,index){
+(row,index) => {
 
 const rowNumber =
 index + 2;
 
 
 const sku =
-String(
-row.sku || ""
-).trim();
+excelValue(row.sku);
 
 
-const name =
-String(
-row.name || ""
-).trim();
+let status =
+"ready";
 
 
-const price =
-Number(
-row.price
-);
+let errorMessage = "";
 
 
-const salePrice =
-row.sale_price === ""
-?
-null
-:
-Number(
-row.sale_price
-);
+let product = null;
 
 
-const category =
-String(
-row.category || ""
-).trim();
-
-
-const stock =
-Number(
-row.stock
-);
-
-
-let rowErrors = [];
+let changes = [];
 
 
 if(!sku){
 
-rowErrors.push(
-"SKU missing"
-);
+status = "error";
 
-}
+errorMessage =
+"SKU is missing";
 
+errorCount++;
 
-if(!name){
-
-rowErrors.push(
-"Name missing"
-);
-
-}
-
-
-if(
-!Number.isFinite(price) ||
-price < 0
-){
-
-rowErrors.push(
-"Invalid price"
-);
-
-}
-
-
-if(
-salePrice !== null &&
-(
-!Number.isFinite(
-salePrice
-) ||
-salePrice < 0
-)
-){
-
-rowErrors.push(
-"Invalid sale price"
-);
-
-}
-
-
-if(
-salePrice !== null &&
-salePrice > price
-){
-
-rowErrors.push(
-"Sale price > price"
-);
-
-}
-
-
-if(!category){
-
-rowErrors.push(
-"Category missing"
-);
-
-}
-
-
-if(
-!Number.isFinite(stock) ||
-stock < 0
-){
-
-rowErrors.push(
-"Invalid stock"
-);
-
-}
-
-
-if(
-sku &&
-skuSet.has(
+}else if(
+seenSkus.has(
 sku.toLowerCase()
 )
 ){
 
-rowErrors.push(
-"Duplicate SKU in file"
-);
+status = "error";
 
-}
+errorMessage =
+"Duplicate SKU in Excel";
 
-
-if(sku){
-
-skuSet.add(
-sku.toLowerCase()
-);
-
-}
-
-
-const valid =
-rowErrors.length === 0;
-
-
-if(valid){
-
-validRows.push({
-
-sku:sku,
-
-name:name,
-
-price:price,
-
-sale_price:salePrice,
-
-category:category,
-
-stock:stock,
-
-description:
-String(
-row.description || ""
-),
-
-image_url:
-String(
-row.image_url || ""
-),
-
-collection:
-String(
-row.collection || ""
-),
-
-status:
-String(
-row.status || "active"
-)
-
-});
+errorCount++;
 
 }else{
 
-errors++;
+seenSkus.add(
+sku.toLowerCase()
+);
+
+
+product =
+productBySku.get(
+sku.toLowerCase()
+);
+
+
+if(!product){
+
+status =
+"not-found";
+
+errorMessage =
+"SKU not found in database";
+
+notFoundCount++;
+
+}
 
 }
 
 
-const tr =
-document.createElement(
-"tr"
+const updates = {};
+
+
+if(product){
+
+const fields = [
+"name",
+"price",
+"sale_price",
+"stock",
+"category",
+"collection",
+"description",
+"image_url",
+"status"
+];
+
+
+fields.forEach(
+field => {
+
+if(
+!Object.prototype.hasOwnProperty
+.call(row,field)
+){
+
+return;
+
+}
+
+
+const raw =
+excelValue(row[field]);
+
+
+if(raw === ""){
+
+return;
+
+}
+
+
+if(isClear(raw)){
+
+updates[field] =
+null;
+
+changes.push(
+`${formatFieldName(field)} → CLEAR`
 );
+
+return;
+
+}
+
+
+if(
+field === "price" ||
+field === "sale_price"
+){
+
+const value =
+Number(raw);
+
+
+if(
+!Number.isFinite(value) ||
+value < 0
+){
+
+errorMessage =
+`Invalid ${formatFieldName(field)}`;
+
+return;
+
+}
+
+
+updates[field] =
+value;
+
+changes.push(
+`${formatFieldName(field)} → ₹${value}`
+);
+
+return;
+
+}
+
+
+if(field === "stock"){
+
+const value =
+Number(raw);
+
+
+if(
+!Number.isInteger(value) ||
+value < 0
+){
+
+errorMessage =
+"Stock must be a whole number";
+
+return;
+
+}
+
+
+updates[field] =
+value;
+
+changes.push(
+`Stock → ${value}`
+);
+
+return;
+
+}
+
+
+if(field === "status"){
+
+const value =
+raw.toLowerCase();
+
+
+if(
+value !== "active" &&
+value !== "inactive"
+){
+
+errorMessage =
+"Status must be active or inactive";
+
+return;
+
+}
+
+
+updates[field] =
+value;
+
+changes.push(
+`Status → ${value}`
+);
+
+return;
+
+}
+
+
+updates[field] =
+raw;
+
+changes.push(
+`${formatFieldName(field)} → ${raw}`
+);
+
+});
+
+}
+
+
+if(
+product &&
+errorMessage
+){
+
+status = "error";
+
+errorCount++;
+
+}else if(
+product &&
+Object.keys(updates).length === 0
+){
+
+status = "skip";
+
+}else if(
+product
+){
+
+status = "ready";
+
+updateCount++;
+
+}
+
+
+const record = {
+
+rowNumber,
+sku,
+product,
+updates,
+status,
+errorMessage,
+changes
+
+};
+
+
+excelUpdates.push(record);
+
+
+const tr =
+document.createElement("tr");
+
+
+let statusText = "";
+
+
+if(status === "ready"){
+
+statusText =
+`<span class="ready">
+✓ Ready to update
+</span>`;
+
+}else if(status === "not-found"){
+
+statusText =
+`<span class="not-found">
+✕ SKU not found
+</span>`;
+
+}else if(status === "error"){
+
+statusText =
+`<span class="not-found">
+✕ ${escapeHtml(errorMessage)}
+</span>`;
+
+}else{
+
+statusText =
+`<span class="skip">
+— No changes
+</span>`;
+
+}
 
 
 tr.innerHTML = `
@@ -3189,143 +3246,117 @@ ${rowNumber}
 </td>
 
 <td>
-${escapeHtml(sku)}
-</td>
-
-<td>
-${escapeHtml(name)}
-</td>
-
-<td>
-₹${
-Number.isFinite(price)
-? price
-: "-"
-}
+<strong>
+${escapeHtml(sku || "—")}
+</strong>
 </td>
 
 <td>
 ${
-salePrice !== null &&
-Number.isFinite(salePrice)
+product
 ?
-"₹" + salePrice
+escapeHtml(product.name)
 :
-"-"
+"—"
 }
 </td>
 
 <td>
-${escapeHtml(category)}
-</td>
 
-<td>
 ${
-Number.isFinite(stock)
+changes.length
 ?
-stock
-:
-"-"
-}
-</td>
-
-<td>
-${escapeHtml(
-String(
-row.collection || ""
+changes
+.map(
+change =>
+`<div class="change">
+${escapeHtml(change)}
+</div>`
 )
-)}
+.join("")
+:
+errorMessage
+?
+escapeHtml(errorMessage)
+:
+"No changes"
+}
+
 </td>
 
 <td>
-${escapeHtml(
-String(
-row.status || "active"
-)
-)}
-</td>
-
-<td
-class="${
-valid
-?
-"good"
-:
-"bad"
-}"
->
-
-${
-valid
-?
-"✓ Ready"
-:
-rowErrors.join(", ")
-}
-
+${statusText}
 </td>
 
 `;
 
 
-preview.appendChild(
-tr
-);
+preview.appendChild(tr);
 
-}
-);
+});
 
 
 document.getElementById(
-"previewBox"
-).style.display =
-"block";
-
-
-document.getElementById(
-"rowCount"
+"excelRowCount"
 ).textContent =
 rows.length;
 
 
 document.getElementById(
-"validCount"
+"excelUpdateCount"
 ).textContent =
-validRows.length;
+updateCount;
 
 
 document.getElementById(
-"errorCount"
+"excelNotFoundCount"
 ).textContent =
-errors;
+notFoundCount;
 
 
-const importButton =
 document.getElementById(
-"importButton"
+"excelErrorCount"
+).textContent =
+errorCount;
+
+
+document.getElementById(
+"excelPreviewBox"
+).style.display =
+"block";
+
+
+const confirm =
+document.getElementById(
+"confirmExcelButton"
 );
 
 
-importButton.disabled =
-validRows.length === 0 ||
-errors > 0;
+confirm.disabled =
+updateCount === 0;
 
 
-if(errors > 0){
+if(errorCount){
 
 showStatus(
-"status",
-errors +
-" row(s) need fixing before import.",
+"excelStatus",
+`${errorCount} row(s) contain errors. They will not be updated.`,
+"warning"
+);
+
+}else if(notFoundCount){
+
+showStatus(
+"excelStatus",
+`${updateCount} product(s) ready. ${notFoundCount} SKU(s) were not found and will not be created.`,
 "warning"
 );
 
 }else{
 
 showStatus(
-"status",
-rows.length +
-" product(s) ready to import.",
+"excelStatus",
+`${updateCount} existing product(s) ready to update.`,
 "success"
 );
 
@@ -3335,14 +3366,30 @@ rows.length +
 
 
 /* =====================================================
-   IMPORT PRODUCTS
+   CONFIRM EXCEL UPDATE
 ===================================================== */
 
-async function importProducts(){
+document
+.getElementById(
+"confirmExcelButton"
+)
+.addEventListener(
+"click",
+confirmExcelUpdates
+);
 
-if(
-validRows.length === 0
-){
+
+async function confirmExcelUpdates(){
+
+const ready =
+excelUpdates.filter(
+record =>
+record.status === "ready" &&
+Object.keys(record.updates).length > 0
+);
+
+
+if(!ready.length){
 
 return;
 
@@ -3351,178 +3398,184 @@ return;
 
 const button =
 document.getElementById(
-"importButton"
+"confirmExcelButton"
 );
 
 
-button.disabled =
-true;
+button.disabled = true;
 
 button.textContent =
-"Importing...";
+"Updating...";
+
+
+let updated = 0;
+
+let failed = [];
 
 
 try{
 
-const {
-data:{
-user
-}
-} =
-await supabaseClient
-.auth
-.getUser();
-
-
-if(!user){
-
-throw new Error(
-"Please log in to the admin account before importing products."
-);
-
-}
-
-
-const skus =
-validRows.map(
-row =>
-row.sku
-);
-
+for(
+const record of ready
+){
 
 const response =
 await supabaseClient
 .from("products")
-.select("sku")
-.in(
-"sku",
-skus
+.update({
+...record.updates,
+updated_at:
+new Date().toISOString()
+})
+.eq(
+"id",
+record.product.id
 );
 
 
 if(response.error){
 
-throw response.error;
+failed.push(
+{
+sku:record.sku,
+error:
+response.error.message
+}
+);
+
+}else{
+
+updated++;
+
+}
 
 }
 
 
-const existingSkus =
-new Set(
-(response.data || [])
-.map(
-row =>
-String(
-row.sku
-).toLowerCase()
-)
-);
-
-
-const duplicates =
-validRows.filter(
-row =>
-existingSkus.has(
-row.sku.toLowerCase()
-)
-);
-
-
-if(
-duplicates.length
-){
-
-throw new Error(
-"These SKU(s) already exist: " +
-duplicates
-.map(
-row =>
-row.sku
-)
-.join(", ")
-);
-
-}
-
-
-const insertResponse =
-await supabaseClient
-.from("products")
-.insert(
-validRows
-);
-
-
-if(insertResponse.error){
-
-throw insertResponse.error;
-
-}
-
-
-document.getElementById(
-"resultBox"
-).style.display =
-"block";
-
-
-document.getElementById(
-"resultText"
-).innerHTML = `
-
-<div class="success">
-
-Successfully imported
-
-<strong>
-${validRows.length}
-</strong>
-
-product(s).
-
-</div>
-
-`;
-
+if(failed.length){
 
 showStatus(
-"status",
-"Import completed successfully.",
+"excelConfirmStatus",
+`${updated} product(s) updated. ${failed.length} failed.`,
+"warning"
+);
+
+}else{
+
+showStatus(
+"excelConfirmStatus",
+`Successfully updated ${updated} existing product(s).`,
 "success"
 );
 
+}
 
-button.textContent =
-"Imported ✓";
 
+/*
+ * Reload current database values.
+ */
 
 await loadAdminData();
+
+
+/*
+ * Re-process Excel so preview reflects
+ * the updated database.
+ */
+
+const rows =
+excelUpdates
+.map(
+record => {
+
+const row = {
+sku:record.sku,
+...record.updates
+};
+
+return row;
+
+});
+
+
+/*
+ * Do not automatically reprocess because
+ * CLEAR values are represented as null.
+ */
+
+excelUpdates = [];
+
+
+button.textContent =
+"✓ Update Completed";
 
 
 }catch(error){
 
 console.error(
+"Excel update error:",
 error
 );
 
 
 showStatus(
-"status",
+"excelConfirmStatus",
 error.message ||
-"Import failed.",
+"Bulk update failed.",
 "error"
 );
 
 
-button.disabled =
-false;
+button.disabled = false;
 
 button.textContent =
-"Import Products";
+"✓ Confirm & Update Products";
 
 }
 
 }
+
+
+/* =====================================================
+   CANCEL EXCEL
+===================================================== */
+
+document
+.getElementById(
+"cancelExcelButton"
+)
+.addEventListener(
+"click",
+function(){
+
+excelUpdates = [];
+
+document.getElementById(
+"excelPreviewBody"
+).innerHTML = "";
+
+
+document.getElementById(
+"excelPreviewBox"
+).style.display =
+"none";
+
+
+document.getElementById(
+"fileInput"
+).value = "";
+
+
+const status =
+document.getElementById(
+"excelStatus"
+);
+
+
+status.style.display =
+"none";
+
+});
 
 
 /* =====================================================
@@ -3535,8 +3588,7 @@ async function(){
 
 await loadAdminData();
 
-}
-);
+});
 
 </script>
 

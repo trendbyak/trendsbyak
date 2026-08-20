@@ -550,33 +550,58 @@
 
 "use strict";
 
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
     "https://ltxrycmreumoqfpcbwnb.supabase.co";
 
-
 const SUPABASE_KEY =
     "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
-
 
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_KEY
+        SUPABASE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
     );
 
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
 const loginView =
     document.getElementById("loginView");
 
-
 const signupView =
     document.getElementById("signupView");
-
 
 const dashboardView =
     document.getElementById("dashboardView");
 
+
+/* =========================================================
+   HOMEPAGE REDIRECT
+========================================================= */
+
+function goToHomepage() {
+
+    window.location.replace("index.html");
+
+}
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
 
 function showMessage(
     element,
@@ -591,6 +616,10 @@ function showMessage(
 
 }
 
+
+/* =========================================================
+   LOGIN / SIGNUP SWITCH
+========================================================= */
 
 function showLogin() {
 
@@ -614,157 +643,360 @@ function showSignup() {
 }
 
 
-async function loadCustomer() {
-
-    const {
-        data: {
-            user
-        }
-    } = await supabaseClient.auth.getUser();
-
-
-    if (!user) {
-
-        showLogin();
-
-        return;
-
-    }
-
-
-    const {
-        data: profile
-    } = await supabaseClient
-        .from("customer_profiles")
-        .select("*")
-        .eq("id", user.id)
-        .maybeSingle();
-
-
-    const metadata =
-        user.user_metadata || {};
-
-
-    document.getElementById(
-        "customerName"
-    ).textContent =
-        profile?.full_name ||
-        metadata.full_name ||
-        "there";
-
-
-    document.getElementById(
-        "customerEmail"
-    ).textContent =
-        user.email || "-";
-
-
-    document.getElementById(
-        "customerPhone"
-    ).textContent =
-        profile?.phone ||
-        user.phone ||
-        "-";
-
-
-    dashboardView.classList.add(
-        "show"
+document
+    .getElementById("showSignup")
+    .addEventListener(
+        "click",
+        showSignup
     );
 
-    loginView.style.display =
-        "none";
 
-    signupView.style.display =
-        "none";
-
-}
-
-
-document.getElementById(
-    "showSignup"
-).addEventListener(
-    "click",
-    showSignup
-);
+document
+    .getElementById("showLogin")
+    .addEventListener(
+        "click",
+        showLogin
+    );
 
 
-document.getElementById(
-    "showLogin"
-).addEventListener(
-    "click",
-    showLogin
-);
+/* =========================================================
+   CUSTOMER LOGIN
+========================================================= */
+
+document
+    .getElementById("loginForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const email =
+                document
+                    .getElementById("loginEmail")
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById("loginPassword")
+                    .value;
+
+            const button =
+                event.target.querySelector("button");
+
+            const message =
+                document.getElementById(
+                    "loginMessage"
+                );
 
 
-document.getElementById(
-    "signupForm"
-).addEventListener(
-    "submit",
-    async function(event) {
+            button.disabled = true;
 
-        event.preventDefault();
+            button.textContent =
+                "Signing in...";
 
-
-        const name =
-            document.getElementById(
-                "signupName"
-            ).value.trim();
+            message.className =
+                "message";
 
 
-        const phone =
-            document.getElementById(
-                "signupPhone"
-            ).value.trim();
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                await supabaseClient.auth
+                    .signInWithPassword({
+
+                        email: email,
+
+                        password: password
+
+                    });
 
 
-        const email =
-            document.getElementById(
-                "signupEmail"
-            ).value.trim();
+                if (error) {
+
+                    throw error;
+
+                }
 
 
-        const password =
-            document.getElementById(
-                "signupPassword"
-            ).value;
+                /* Make absolutely sure
+                   a session exists */
+
+                if (!data.session) {
+
+                    throw new Error(
+                        "Login succeeded but no session was created."
+                    );
+
+                }
 
 
-        const message =
-            document.getElementById(
-                "signupMessage"
-            );
+                /*
+                 * CUSTOMER LOGIN SUCCESS
+                 *
+                 * Go directly to homepage.
+                 */
 
+                goToHomepage();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Customer login error:",
+                    error
+                );
+
+
+                showMessage(
+                    message,
+                    error.message ||
+                    "Unable to sign in. Please try again."
+                );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Sign In";
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   CUSTOMER SIGNUP
+========================================================= */
+
+document
+    .getElementById("signupForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("signupName")
+                    .value
+                    .trim();
+
+
+            const phone =
+                document
+                    .getElementById("signupPhone")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("signupEmail")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("signupPassword")
+                    .value;
+
+
+            const button =
+                event.target.querySelector("button");
+
+
+            const message =
+                document.getElementById(
+                    "signupMessage"
+                );
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Creating account...";
+
+            message.className =
+                "message";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                await supabaseClient.auth
+                    .signUp({
+
+                        email: email,
+
+                        password: password,
+
+                        options: {
+
+                            data: {
+
+                                full_name: name,
+
+                                phone: phone
+
+                            }
+
+                        }
+
+                    });
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                /*
+                 * Create / update customer profile
+                 */
+
+                if (data.user) {
+
+                    const {
+                        error: profileError
+                    } =
+                    await supabaseClient
+                        .from(
+                            "customer_profiles"
+                        )
+                        .upsert({
+
+                            id: data.user.id,
+
+                            full_name: name,
+
+                            phone: phone,
+
+                            email: email
+
+                        });
+
+
+                    if (profileError) {
+
+                        console.error(
+                            "Profile error:",
+                            profileError
+                        );
+
+                    }
+
+                }
+
+
+                /*
+                 * If Supabase immediately
+                 * created a session, go home.
+                 *
+                 * If email confirmation is enabled,
+                 * show the verification message.
+                 */
+
+                if (data.session) {
+
+                    goToHomepage();
+
+                    return;
+
+                }
+
+
+                showMessage(
+                    message,
+                    "Account created successfully. Please check your email to verify your account.",
+                    "success"
+                );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Create Account";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Signup error:",
+                    error
+                );
+
+
+                showMessage(
+                    message,
+                    error.message ||
+                    "Unable to create your account."
+                );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Create Account";
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        async function() {
+
+            await supabaseClient.auth.signOut();
+
+            showLogin();
+
+        }
+    );
+
+
+/* =========================================================
+   CHECK EXISTING CUSTOMER SESSION
+========================================================= */
+
+async function checkCustomerSession() {
+
+    try {
 
         const {
             data,
             error
         } =
-        await supabaseClient.auth.signUp({
-
-            email,
-
-            password,
-
-            options: {
-
-                data: {
-
-                    full_name: name,
-
-                    phone
-
-                }
-
-            }
-
-        });
+        await supabaseClient.auth
+            .getSession();
 
 
         if (error) {
 
-            showMessage(
-                message,
-                error.message
+            console.error(
+                "Session check error:",
+                error
             );
 
             return;
@@ -772,130 +1004,55 @@ document.getElementById(
         }
 
 
-        if (data.user) {
+        /*
+         * Customer is already logged in.
+         *
+         * Do NOT show the account dashboard.
+         * Send them straight to the homepage.
+         */
 
-            const {
-                error:
-                profileError
-            } =
-            await supabaseClient
-                .from(
-                    "customer_profiles"
-                )
-                .upsert({
+        if (data.session) {
 
-                    id: data.user.id,
-
-                    full_name: name,
-
-                    phone: phone,
-
-                    email: email
-
-                });
-
-
-            if (profileError) {
-
-                console.error(
-                    profileError
-                );
-
-            }
+            goToHomepage();
 
         }
 
+    } catch (error) {
 
-        showMessage(
-            message,
-            "Account created. Please check your email to verify your account.",
-            "success"
+        console.error(
+            "Session check failed:",
+            error
         );
 
     }
-);
+
+}
 
 
-document.getElementById(
-    "loginForm"
-).addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-
-        const email =
-            document.getElementById(
-                "loginEmail"
-            ).value.trim();
-
-
-        const password =
-            document.getElementById(
-                "loginPassword"
-            ).value;
-
-
-        const message =
-            document.getElementById(
-                "loginMessage"
-            );
-
-
-        const {
-            error
-        } =
-        await supabaseClient.auth
-            .signInWithPassword({
-
-                email,
-
-                password
-
-            });
-
-
-        if (error) {
-
-            showMessage(
-                message,
-                error.message
-            );
-
-            return;
-
-        }
-
-
-        await loadCustomer();
-
-    }
-);
-
-
-document.getElementById(
-    "logoutButton"
-).addEventListener(
-    "click",
-    async function() {
-
-        await supabaseClient.auth.signOut();
-
-        showLogin();
-
-    }
-);
-
+/* =========================================================
+   AUTH STATE LISTENER
+========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-    function(event) {
+    function(event, session) {
+
+        console.log(
+            "Customer auth event:",
+            event
+        );
+
+
+        /*
+         * If customer signs in anywhere,
+         * account.html should not remain open.
+         */
 
         if (
-            event === "SIGNED_IN"
+            event === "SIGNED_IN" &&
+            session
         ) {
 
-            loadCustomer();
+            goToHomepage();
 
         }
 
@@ -903,9 +1060,14 @@ supabaseClient.auth.onAuthStateChange(
 );
 
 
-loadCustomer();
+/* =========================================================
+   START
+========================================================= */
+
+checkCustomerSession();
 
 </script>
+
 
 </body>
 

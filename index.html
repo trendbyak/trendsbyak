@@ -353,49 +353,92 @@
            REVIEWS
         ================================================= */
 
-        .reviews-section {
-            background: #f8f4ed;
-        }
+        <section class="reviews-section">
 
-        .reviews-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 20px;
-        }
+    <div class="reviews-heading">
+        <span>LOVE FROM OUR CUSTOMERS</span>
+        <h2>What They’re Saying</h2>
+    </div>
 
-        .review-card {
-            background: #fff;
-            border: 1px solid #e8e3db;
-            border-radius: 16px;
-            padding: 28px;
-            box-shadow: 0 8px 25px rgba(0,0,0,.04);
-        }
+    <div id="customerReviews" class="reviews-grid">
+        <p>Loading reviews...</p>
+    </div>
 
-        .review-stars {
-            color: #b28a4b;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
+</section>
 
-        .review-text {
-            font-family: "Playfair Display", serif;
-            font-size: 18px;
-            line-height: 1.5;
-            margin: 0 0 22px;
-        }
+<script type="module">
 
-        .review-name {
-            font-size: 13px;
-            font-weight: 700;
-        }
+import { createClient }
+from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-        .review-product {
-            display: block;
-            margin-top: 4px;
-            color: #888;
-            font-size: 12px;
-        }
+const supabase = createClient(
+    "YOUR_SUPABASE_URL",
+    "YOUR_SUPABASE_ANON_KEY"
+);
 
+async function loadCustomerReviews() {
+
+    const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false });
+
+    const container =
+        document.getElementById("customerReviews");
+
+    if (error || !data) {
+        container.innerHTML = "";
+        return;
+    }
+
+    if (!data.length) {
+        container.innerHTML =
+            "<p>Be the first to leave us a review ✨</p>";
+        return;
+    }
+
+    container.innerHTML = data.map(review => `
+
+        <div class="review-card">
+
+            <div class="review-stars">
+                ${"★".repeat(review.rating)}
+                ${"☆".repeat(5 - review.rating)}
+            </div>
+
+            <p class="review-text">
+                “${escapeHtml(review.review_text)}”
+            </p>
+
+            <strong>
+                ${escapeHtml(review.customer_name)}
+            </strong>
+
+            ${
+                review.product_name
+                ? `<small>${escapeHtml(review.product_name)}</small>`
+                : ""
+            }
+
+        </div>
+
+    `).join("");
+}
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+loadCustomerReviews();
+
+</script>
 
         /* =================================================
            LOADER
@@ -2821,7 +2864,200 @@ window.addEventListener(
 
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
 
+    const reviewsGrid =
+        document.getElementById("reviewsGrid");
+
+    if (!reviewsGrid) return;
+
+
+    /*
+     * USE THE SAME SUPABASE VALUES
+     * ALREADY USED BY YOUR WEBSITE.
+     */
+
+    const SUPABASE_URL =
+        "YOUR_EXISTING_SUPABASE_ANON_KEY";
+
+    const SUPABASE_KEY =
+        "YOUR_EXISTING_SUPABASE_ANON_KEY";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    try {
+
+        const { data, error } =
+            await supabaseClient
+                .from("reviews")
+                .select(`
+                    id,
+                    customer_name,
+                    rating,
+                    review_text,
+                    product_name,
+                    customer_image,
+                    created_at
+                `)
+                .eq("is_approved", true)
+                .order("created_at", {
+                    ascending: false
+                });
+
+
+        if (error) {
+
+            console.error(
+                "Reviews error:",
+                error
+            );
+
+            reviewsGrid.innerHTML = "";
+
+            return;
+        }
+
+
+        /*
+         * No reviews yet
+         */
+
+        if (!data || data.length === 0) {
+
+            reviewsGrid.innerHTML = `
+
+                <article class="review-card">
+
+                    <div class="review-stars">
+                        ★★★★★
+                    </div>
+
+                    <p class="review-text">
+                        Be the first to share your
+                        Trends by AK experience.
+                    </p>
+
+                    <span class="review-name">
+                        Our Customers
+                    </span>
+
+                </article>
+
+            `;
+
+            return;
+        }
+
+
+        /*
+         * Display approved reviews
+         */
+
+        reviewsGrid.innerHTML =
+            data.map(review => {
+
+                const rating =
+                    Math.max(
+                        1,
+                        Math.min(
+                            5,
+                            Number(review.rating) || 5
+                        )
+                    );
+
+
+                const stars =
+                    "★".repeat(rating) +
+                    "☆".repeat(5 - rating);
+
+
+                const customerName =
+                    escapeReviewHTML(
+                        review.customer_name ||
+                        "Happy Customer"
+                    );
+
+
+                const reviewText =
+                    escapeReviewHTML(
+                        review.review_text || ""
+                    );
+
+
+                const productName =
+                    escapeReviewHTML(
+                        review.product_name ||
+                        "Trends by AK"
+                    );
+
+
+                return `
+
+                    <article class="review-card">
+
+                        <div class="review-stars">
+                            ${stars}
+                        </div>
+
+
+                        <p class="review-text">
+                            “${reviewText}”
+                        </p>
+
+
+                        <span class="review-name">
+                            ${customerName}
+                        </span>
+
+
+                        <span class="review-product">
+                            ${productName}
+                        </span>
+
+                    </article>
+
+                `;
+
+            }).join("");
+
+
+    } catch (err) {
+
+        console.error(
+            "Unable to load reviews:",
+            err
+        );
+
+        reviewsGrid.innerHTML = "";
+
+    }
+
+
+    /*
+     * Prevent customer-entered text
+     * from becoming HTML.
+     */
+
+    function escapeReviewHTML(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+});
+</script>
 </body>
 
 </html>
