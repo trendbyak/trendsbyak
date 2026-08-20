@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -141,7 +141,7 @@ body {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     margin-bottom: 25px;
 }
@@ -575,30 +575,30 @@ body {
     <div class="menu">
 
         <a class="active" href="index.html">
-            🏠 <span>Dashboard</span>
+            ðŸ  <span>Dashboard</span>
         </a>
 
         <a href="products.html">
-            🛍️ <span>Products</span>
+            ðŸ›ï¸ <span>Products</span>
         </a>
 
         <a href="bulk-products.html">
-            📥 <span>Bulk Upload</span>
+            ðŸ“¥ <span>Bulk Upload</span>
         </a>
 
         <a href="collections.html">
-            🎀 <span>Collections</span>
+            ðŸŽ€ <span>Collections</span>
         </a>
 
         <a href="banners.html">
-            🖼️ <span>Banners</span>
+            ðŸ–¼ï¸ <span>Banners</span>
         </a>
 
         <a href="orders.html">
-            📦 <span>Orders</span>
+            ðŸ“¦ <span>Orders</span>
         </a>
         <a href="reviews.html">
-    ⭐ <span>Reviews</span>
+    â­ <span>Reviews</span>
 </a>
 
     </div>
@@ -630,7 +630,7 @@ body {
                 class="btn gold"
                 href="../index.html"
             >
-                View Store →
+                View Store â†’
             </a>
 
             <button
@@ -679,7 +679,7 @@ body {
     <section class="section">
 
         <h3>
-            📦 Product Inventory & Pricing
+            ðŸ“¦ Product Inventory & Pricing
         </h3>
 
         <p class="muted">
@@ -726,7 +726,7 @@ body {
                 class="btn white"
                 onclick="loadInventory()"
             >
-                ↻ Refresh
+                â†» Refresh
             </button>
 
         </div>
@@ -737,7 +737,7 @@ body {
         <div class="bulk-controls">
 
             <div class="bulk-controls-title">
-                ⚡ Bulk Update Selected Products
+                âš¡ Bulk Update Selected Products
             </div>
 
             <div class="bulk-control-row">
@@ -931,7 +931,7 @@ body {
                 class="btn gold"
                 onclick="saveInventoryChanges()"
             >
-                💾 Save Inventory Changes
+                ðŸ’¾ Save Inventory Changes
             </button>
 
         </div>
@@ -952,7 +952,7 @@ body {
     <section class="section">
 
         <h3>
-            🚀 Bulk Product Scraper
+            ðŸš€ Bulk Product Scraper
         </h3>
 
         <p class="muted">
@@ -982,7 +982,7 @@ https://example.com/product-3"
                 class="btn gold"
                 onclick="scrapeBulk()"
             >
-                🔍 Scrape Products
+                ðŸ” Scrape Products
             </button>
 
             <button
@@ -996,7 +996,7 @@ https://example.com/product-3"
                 class="btn white"
                 href="bulk-products.html"
             >
-                Excel / CSV Upload →
+                Excel / CSV Upload â†’
             </a>
 
         </div>
@@ -1058,7 +1058,7 @@ https://example.com/product-3"
                     class="btn gold"
                     onclick="saveBulkProducts()"
                 >
-                    💾 Save Selected Products
+                    ðŸ’¾ Save Selected Products
                 </button>
 
             </div>
@@ -1079,23 +1079,23 @@ https://example.com/product-3"
         <div class="quick">
 
             <a href="products.html">
-                ➕ Add / Manage Product
+                âž• Add / Manage Product
             </a>
 
             <a href="bulk-products.html">
-                📥 Excel / CSV Bulk Upload
+                ðŸ“¥ Excel / CSV Bulk Upload
             </a>
 
             <a href="collections.html">
-                🎀 Manage Collections
+                ðŸŽ€ Manage Collections
             </a>
 
             <a href="banners.html">
-                🖼️ Manage Banners
+                ðŸ–¼ï¸ Manage Banners
             </a>
 
             <a href="orders.html">
-                📦 View Orders
+                ðŸ“¦ View Orders
             </a>
 
         </div>
@@ -1515,7 +1515,7 @@ function renderInventory() {
                     <strong>
 
                         ${escapeHtml(
-                            product.sku || "—"
+                            product.sku || "â€”"
                         )}
 
                     </strong>
@@ -2194,7 +2194,7 @@ async function saveInventoryChanges() {
         button.disabled = false;
 
         button.textContent =
-            "💾 Save Inventory Changes";
+            "ðŸ’¾ Save Inventory Changes";
 
     }
 
@@ -2511,7 +2511,7 @@ async function scrapeBulk() {
         button.disabled = false;
 
         button.textContent =
-            "🔍 Scrape Products";
+            "ðŸ” Scrape Products";
 
     }
 
@@ -2981,7 +2981,7 @@ async function saveBulkProducts() {
         button.disabled = false;
 
         button.textContent =
-            "💾 Save Selected Products";
+            "ðŸ’¾ Save Selected Products";
 
     }
 
@@ -3032,6 +3032,46 @@ async function loadOrderCount() {
 }
 
 
+
+/* =====================================================
+   PENDING REVIEWS COUNT
+===================================================== */
+
+async function loadPendingReviewCount() {
+
+    try {
+
+        const { count, error } =
+            await supabaseClient
+                .from("reviews")
+                .select("*", {
+                    count: "exact",
+                    head: true
+                })
+                .eq("is_approved", false);
+
+        if (error) {
+            console.error("Pending reviews error:", error);
+            return;
+        }
+
+        const element =
+            document.getElementById("pendingReviewCount");
+
+        if (element) {
+            element.textContent = count || 0;
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Pending review count error:",
+            error
+        );
+
+    }
+
+}
 /* =====================================================
    START ADMIN
 ===================================================== */
