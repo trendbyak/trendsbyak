@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Your Trends by AK account."
+    >
+
+    <title>My Account | Trends by AK</title>
+
+    <link rel="icon" href="assets/logo.png">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #faf8f4;
+            color: #1d1b19;
+            font-family: "DM Sans", sans-serif;
+        }
+
+        .account-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 18px;
+        }
+
+        .account-card {
+            width: 100%;
+            max-width: 480px;
+            background: #fff;
+            border: 1px solid #e8e3db;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 50px rgba(0,0,0,.06);
+        }
+
+        .account-logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .account-logo img {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .account-logo strong {
+            display: block;
+            margin-top: 10px;
+            font-family: "Playfair Display", serif;
+            font-size: 23px;
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 10px;
+            color: #8b6b42;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 32px;
+            margin: 8px 0 10px;
+        }
+
+        .intro {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .offer {
+            background: #f8f4ed;
+            border: 1px solid #e5dccd;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+        }
+
+        .offer strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .offer span {
+            font-size: 12px;
+            color: #777;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid #ddd6cb;
+            border-radius: 10px;
+            padding: 13px 14px;
+            font: inherit;
+            outline: none;
+            margin-bottom: 16px;
+            background: #fff;
+        }
+
+        input:focus {
+            border-color: #8b6b42;
+        }
+
+        button {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 14px;
+            background: #1d1b19;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        button:hover {
+            opacity: .92;
+        }
+
+        .secondary {
+            background: transparent;
+            color: #1d1b19;
+            border: 1px solid #ddd6cb;
+            margin-top: 10px;
+        }
+
+        .switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .switch a {
+            color: #8b6b42;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            background: #fff0f0;
+            color: #a33;
+        }
+
+        .message.success {
+            background: #eef8ee;
+            color: #357335;
+        }
+
+        .account-dashboard {
+            display: none;
+        }
+
+        .account-dashboard.show {
+            display: block;
+        }
+
+        .account-detail {
+            background: #faf8f4;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .account-detail small {
+            display: block;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .account-detail strong {
+            font-size: 14px;
+        }
+
+        .welcome-offer {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 14px;
+            background: #1d1b19;
+            color: #fff;
+        }
+
+        .welcome-offer strong {
+            font-family: "Playfair Display", serif;
+            font-size: 20px;
+        }
+
+        .welcome-offer p {
+            font-size: 12px;
+            opacity: .8;
+            margin-bottom: 15px;
+        }
+
+        .coupon {
+            display: inline-block;
+            background: #fff;
+            color: #1d1b19;
+            padding: 8px 12px;
+            border-radius: 7px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        @media(max-width:600px) {
+
+            .account-card {
+                padding: 25px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="account-page">
+
+    <div class="account-card">
+
+        <div class="account-logo">
+
+            <img
+                src="assets/logo.png"
+                alt="Trends by AK"
+            >
+
+            <strong>
+                Trends by AK
+            </strong>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginView">
+
+            <p class="eyebrow">
+                WELCOME BACK
+            </p>
+
+            <h1>
+                Sign in.
+            </h1>
+
+            <p class="intro">
+                Sign in to manage your account,
+                view your orders and access your
+                first-order offer.
+            </p>
+
+
+            <div class="offer">
+
+                <strong>
+                    🎁 New here?
+                </strong>
+
+                <span>
+                    Create an account and get
+                    10% OFF your first order.
+                </span>
+
+            </div>
+
+
+            <form id="loginForm">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    required
+                >
+
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    required
+                >
+
+
+                <button type="submit">
+                    Sign In
+                </button>
+
+            </form>
+
+
+            <div
+                id="loginMessage"
+                class="message"
+            ></div>
+
+
+            <div class="switch">
+
+                Don't have an account?
+
+                <a id="showSignup">
+                    Create one
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- SIGNUP -->
+
+        <div id="signupView" style="display:none">
+
+            <p class="eyebrow">
+                JOIN TRENDS BY AK
+            </p>
+
+            <h1>
+                Create your account.
+            </h1>
+
+            <p class="intro">
+                Join us and get 10% OFF your
+                first order.
+            </p>
+
+
+            <div class="offer">
+
+                <strong>
+                    🎁 Your welcome gift
+                </strong>
+
+                <span>
+                    Get 10% OFF your first order
+                    with code WELCOME10.
+                </span>
+
+            </div>
+
+
+            <form id="signupForm">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="signupName"
+                    required
+                >
+
+
+                <label>
+                    Mobile Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="signupPhone"
+                    placeholder="+91XXXXXXXXXX"
+                    required
+                >
+
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="signupEmail"
+                    required
+                >
+
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="signupPassword"
+                    minlength="6"
+                    required
+                >
+
+
+                <button type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <div
+                id="signupMessage"
+                class="message"
+            ></div>
+
+
+            <div class="switch">
+
+                Already have an account?
+
+                <a id="showLogin">
+                    Sign in
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- DASHBOARD -->
+
+        <div
+            id="dashboardView"
+            class="account-dashboard"
+        >
+
+            <p class="eyebrow">
+                MY ACCOUNT
+            </p>
+
+            <h1>
+                Hello, <span id="customerName">
+                </span>.
+            </h1>
+
+            <p class="intro">
+                Welcome back to Trends by AK.
+            </p>
+
+
+            <div class="account-detail">
+
+                <small>
+                    Email
+                </small>
+
+                <strong id="customerEmail">
+                </strong>
+
+            </div>
+
+
+            <div class="account-detail">
+
+                <small>
+                    Mobile
+                </small>
+
+                <strong id="customerPhone">
+                </strong>
+
+            </div>
+
+
+            <div
+                id="welcomeOffer"
+                class="welcome-offer"
+            >
+
+                <strong>
+                    Your 10% OFF is waiting ✨
+                </strong>
+
+                <p>
+                    Use this code on your first order.
+                </p>
+
+                <span class="coupon">
+                    WELCOME10
+                </span>
+
+            </div>
+
+
+            <button
+                class="secondary"
+                id="logoutButton"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+const SUPABASE_URL =
+    "https://ltxrycmreumoqfpcbwnb.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+const loginView =
+    document.getElementById("loginView");
+
+
+const signupView =
+    document.getElementById("signupView");
+
+
+const dashboardView =
+    document.getElementById("dashboardView");
+
+
+function showMessage(
+    element,
+    text,
+    type = "error"
+) {
+
+    element.textContent = text;
+
+    element.className =
+        `message show ${type}`;
+
+}
+
+
+function showLogin() {
+
+    loginView.style.display = "block";
+
+    signupView.style.display = "none";
+
+    dashboardView.classList.remove("show");
+
+}
+
+
+function showSignup() {
+
+    loginView.style.display = "none";
+
+    signupView.style.display = "block";
+
+    dashboardView.classList.remove("show");
+
+}
+
+
+async function loadCustomer() {
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user) {
+
+        showLogin();
+
+        return;
+
+    }
+
+
+    const {
+        data: profile
+    } = await supabaseClient
+        .from("customer_profiles")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle();
+
+
+    const metadata =
+        user.user_metadata || {};
+
+
+    document.getElementById(
+        "customerName"
+    ).textContent =
+        profile?.full_name ||
+        metadata.full_name ||
+        "there";
+
+
+    document.getElementById(
+        "customerEmail"
+    ).textContent =
+        user.email || "-";
+
+
+    document.getElementById(
+        "customerPhone"
+    ).textContent =
+        profile?.phone ||
+        user.phone ||
+        "-";
+
+
+    dashboardView.classList.add(
+        "show"
+    );
+
+    loginView.style.display =
+        "none";
+
+    signupView.style.display =
+        "none";
+
+}
+
+
+document.getElementById(
+    "showSignup"
+).addEventListener(
+    "click",
+    showSignup
+);
+
+
+document.getElementById(
+    "showLogin"
+).addEventListener(
+    "click",
+    showLogin
+);
+
+
+document.getElementById(
+    "signupForm"
+).addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const name =
+            document.getElementById(
+                "signupName"
+            ).value.trim();
+
+
+        const phone =
+            document.getElementById(
+                "signupPhone"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "signupEmail"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "signupPassword"
+            ).value;
+
+
+        const message =
+            document.getElementById(
+                "signupMessage"
+            );
+
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.signUp({
+
+            email,
+
+            password,
+
+            options: {
+
+                data: {
+
+                    full_name: name,
+
+                    phone
+
+                }
+
+            }
+
+        });
+
+
+        if (error) {
+
+            showMessage(
+                message,
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        if (data.user) {
+
+            const {
+                error:
+                profileError
+            } =
+            await supabaseClient
+                .from(
+                    "customer_profiles"
+                )
+                .upsert({
+
+                    id: data.user.id,
+
+                    full_name: name,
+
+                    phone: phone,
+
+                    email: email
+
+                });
+
+
+            if (profileError) {
+
+                console.error(
+                    profileError
+                );
+
+            }
+
+        }
+
+
+        showMessage(
+            message,
+            "Account created. Please check your email to verify your account.",
+            "success"
+        );
+
+    }
+);
+
+
+document.getElementById(
+    "loginForm"
+).addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document.getElementById(
+                "loginEmail"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "loginPassword"
+            ).value;
+
+
+        const message =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        const {
+            error
+        } =
+        await supabaseClient.auth
+            .signInWithPassword({
+
+                email,
+
+                password
+
+            });
+
+
+        if (error) {
+
+            showMessage(
+                message,
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        await loadCustomer();
+
+    }
+);
+
+
+document.getElementById(
+    "logoutButton"
+).addEventListener(
+    "click",
+    async function() {
+
+        await supabaseClient.auth.signOut();
+
+        showLogin();
+
+    }
+);
+
+
+supabaseClient.auth.onAuthStateChange(
+    function(event) {
+
+        if (
+            event === "SIGNED_IN"
+        ) {
+
+            loadCustomer();
+
+        }
+
+    }
+);
+
+
+loadCustomer();
+
+</script>
+
+</body>
+
+</html>
