@@ -2053,47 +2053,58 @@ supabaseClient.auth.onAuthStateChange(
 async function loadNewLaunches() {
 
     const container =
-        document.getElementById(
-            "newLaunchesGrid"
-        );
+        document.getElementById("newLaunchesGrid");
 
-
-    if (!container)
-        return;
-
+    if (!container) return;
 
     try {
 
-        const {
-            data,
-            error
-        } =
+        const { data, error } =
             await supabaseClient
                 .from("products")
-                .select("*")
-                .order(
-                    "id",
-                    {
-                        ascending: false
-                    }
-                )
+                .select(`
+                    id,
+                    name,
+                    price,
+                    sale_price,
+                    category,
+                    image_url,
+                    status,
+                    created_at
+                `)
+                .eq("status", "active")
+                .order("created_at", {
+                    ascending: false
+                })
                 .limit(6);
 
-
-        if (error)
+        if (error) {
             throw error;
+        }
+
+        const products = (data || [])
+            .filter(product => {
+
+                if (product.status !== "active") {
+                    return false;
+                }
+
+                const price =
+                    Number(
+                        product.sale_price ??
+                        product.price ??
+                        0
+                    );
+
+                return price > 0;
+
+            })
+            .slice(0, 6);
 
 
-        const products =
-            (data || [])
-                .filter(
-                    isProductActive
-                )
-                .slice(
-                    0,
-                    6
-                );
-
+        /* =========================================
+           NO ACTIVE PRODUCTS
+        ========================================= */
 
         if (!products.length) {
 
@@ -2114,15 +2125,16 @@ async function loadNewLaunches() {
             `;
 
             return;
-
         }
 
 
+        /* =========================================
+           DISPLAY PRODUCTS
+        ========================================= */
+
         container.innerHTML =
             products
-                .map(
-                    newLaunchCard
-                )
+                .map(newLaunchCard)
                 .join("");
 
 
@@ -2132,7 +2144,6 @@ async function loadNewLaunches() {
             "New launches error:",
             error
         );
-
 
         container.innerHTML = `
 
@@ -2159,15 +2170,11 @@ async function loadNewLaunches() {
    NEW LAUNCH CARD
 ===================================================== */
 
-function newLaunchCard(
-    product
-) {
+function newLaunchCard(product) {
 
     const id =
         encodeURIComponent(
-            String(
-                product.id
-            )
+            String(product.id)
         );
 
 
@@ -2187,27 +2194,37 @@ function newLaunchCard(
 
     const image =
         product.image_url ||
-        product.image ||
         "";
 
 
     const mrp =
-        product.price ??
-        product.mrp ??
-        0;
+        Number(
+            product.price || 0
+        );
 
 
     const sale =
-        product.sale_price ??
-        product.sp ??
-        null;
+        product.sale_price !== null &&
+        product.sale_price !== ""
+            ? Number(product.sale_price)
+            : null;
 
 
     const hasSale =
         sale !== null &&
-        sale !== "" &&
-        Number(sale) <
-        Number(mrp);
+        sale > 0 &&
+        mrp > 0 &&
+        sale < mrp;
+
+
+    const displayPrice =
+        hasSale
+            ? sale
+            : (
+                sale > 0
+                    ? sale
+                    : mrp
+            );
 
 
     return `
@@ -2228,32 +2245,37 @@ function newLaunchCard(
                     NEW
                 </span>
 
+
                 ${
                     image
+
                     ?
+
                     `
-                        <img
-                            src="${escapeHtml(image)}"
-                            alt="${name}"
-                            loading="lazy"
-                        >
+                    <img
+                        src="${escapeHtml(image)}"
+                        alt="${name}"
+                        loading="lazy"
+                    >
                     `
+
                     :
+
                     `
-                        <div
-                            style="
-                                width:100%;
-                                height:100%;
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                font-family:'Playfair Display',serif;
-                                font-size:34px;
-                                color:#a8895e;
-                            "
-                        >
-                            AK
-                        </div>
+                    <div
+                        style="
+                            width:100%;
+                            height:100%;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            font-family:'Playfair Display',serif;
+                            font-size:34px;
+                            color:#a8895e;
+                        "
+                    >
+                        AK
+                    </div>
                     `
                 }
 
@@ -2289,23 +2311,25 @@ function newLaunchCard(
 
                     ${
                         hasSale
-                        ?
-                        `
-                            <span class="old-price">
-                                ${formatPrice(mrp)}
-                            </span>
 
-                            <strong>
-                                ${formatPrice(sale)}
-                            </strong>
+                        ?
+
                         `
+                        <span class="old-price">
+                            ${formatPrice(mrp)}
+                        </span>
+
+                        <strong>
+                            ${formatPrice(sale)}
+                        </strong>
+                        `
+
                         :
+
                         `
-                            <strong>
-                                ${formatPrice(
-                                    sale ?? mrp
-                                )}
-                            </strong>
+                        <strong>
+                            ${formatPrice(displayPrice)}
+                        </strong>
                         `
                     }
 
