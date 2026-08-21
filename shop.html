@@ -2584,124 +2584,126 @@ document
 ===================================================== */
 
 function applyCollectionFromUrl() {
+
     const params = new URLSearchParams(
         window.location.search
     );
 
-    const collection = params.get("collection");
+    const requestedCollection =
+        params.get("collection");
 
-    if (!collection) {
+    if (!requestedCollection) {
         return;
     }
 
-    const requested = normalizeCategory(collection);
+    const requested =
+        normalizeCategory(requestedCollection);
+
+    console.log(
+        "Requested collection:",
+        requestedCollection
+    );
 
     /*
-     * Match the homepage collection against:
-     * 1. product.collection
-     * 2. product.category
-     * 3. product.collection_name
+     * Match ONLY the requested collection.
      *
-     * This makes the collection links work even
-     * if Supabase uses a different field.
+     * We check collection first, then category,
+     * because your homepage collections may be
+     * stored in either field.
      */
+    const matching =
+        allProducts.filter(product => {
 
-    const matching = allProducts.filter(product => {
+            const productCollection =
+                normalizeCategory(
+                    product.collection
+                );
 
-        const collectionValue =
-            normalizeCategory(product.collection);
+            const productCategory =
+                normalizeCategory(
+                    product.category
+                );
 
-        const categoryValue =
-            normalizeCategory(product.category);
-
-        const collectionNameValue =
-            normalizeCategory(product.collection_name);
-
-        return (
-            collectionValue === requested ||
-            categoryValue === requested ||
-            collectionNameValue === requested
-        );
-    });
-
-    /*
-     * Update active category button if the
-     * collection also exists as a category.
-     */
-    selectedCategory = "all";
-
-    if (matching.length) {
-
-        const categoryMatch = allProducts.find(product => {
+            const productCollectionName =
+                normalizeCategory(
+                    product.collection_name
+                );
 
             return (
-                normalizeCategory(product.category) ===
-                requested
+                productCollection === requested ||
+                productCollectionName === requested ||
+                productCategory === requested
             );
         });
 
-        if (categoryMatch) {
-            selectedCategory = requested;
-            updateCategoryButtons();
-        }
-
-        renderSpecificCollection(matching);
-
-        return;
-    }
-
-    /*
-     * Nothing matched
-     */
-    const grid =
-        document.getElementById("shopProductGrid");
-
-    const count =
-        document.getElementById("shopCount");
-
-    if (count) {
-        count.textContent = "0 products";
-    }
-
-    if (grid) {
-        grid.innerHTML = `
-            <div class="shop-message">
-                <h3>Collection coming soon.</h3>
-                <p>
-                    We couldn't find products in
-                    "${escapeHtml(collection)}" yet.
-                </p>
-            </div>
-        `;
-    }
-}
-function renderSpecificCollection(products) {
+    console.log(
+        "Matching products:",
+        matching
+    );
 
     const grid =
-        document.getElementById("shopProductGrid");
+        document.getElementById(
+            "shopProductGrid"
+        );
 
     const count =
-        document.getElementById("shopCount");
+        document.getElementById(
+            "shopCount"
+        );
 
     if (!grid) {
         return;
     }
 
-    if (count) {
-        count.textContent =
-            `${products.length} ${
-                products.length === 1
-                    ? "product"
-                    : "products"
-            }`;
+    /*
+     * COLLECTION FOUND
+     */
+    if (matching.length > 0) {
+
+        if (count) {
+            count.textContent =
+                `${matching.length} ${
+                    matching.length === 1
+                        ? "product"
+                        : "products"
+                }`;
+        }
+
+        grid.innerHTML =
+            matching
+                .map(product =>
+                    productCard(product)
+                )
+                .join("");
+
+        attachCartButtons();
+
+        return;
     }
 
-    grid.innerHTML =
-        products
-            .map(product => productCard(product))
-            .join("");
+    /*
+     * COLLECTION NOT FOUND
+     *
+     * IMPORTANT:
+     * Do NOT show all products.
+     */
+    if (count) {
+        count.textContent =
+            "0 products";
+    }
 
-    attachCartButtons();
+    grid.innerHTML = `
+        <div class="shop-message">
+            <h3>
+                ${escapeHtml(requestedCollection)}
+            </h3>
+
+            <p>
+                No products are currently available
+                in this collection.
+            </p>
+        </div>
+    `;
 }
 /* =====================================================
    MOBILE MENU
