@@ -2470,100 +2470,385 @@ async function loadCollections() {
    COLLECTION CARD
 ===================================================== */
 
-function collectionCard(
-    collection,
-    index
-) {
+<!-- =========================
+     EXPLORE COLLECTIONS
+========================= -->
+<section class="explore-section">
 
-    const name =
-        escapeHtml(
-            collection.name ||
-            "Collection"
-        );
+    <div class="explore-header">
+        <h2>Explore what you love.</h2>
 
+        <p>
+            Discover thoughtfully curated collections made for everyday
+            luxury, gifting and everything in between.
+        </p>
+    </div>
 
-    const description =
-        escapeHtml(
-            collection.description ||
-            "Explore the collection"
-        );
+    <div class="collection-grid">
 
+        <!-- SCRUNCHIES -->
+        <a href="scrunchies.html" class="collection-card">
 
-    const image =
-        collection.image_url ||
-        "";
-
-
-    const number =
-        String(
-            index + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return `
-
-        <a
-            class="collection-card"
-            href="shop.html?collection=${encodeURIComponent(
-                collection.name || ""
-            )}"
-        >
-
-            <div
-                class="collection-art ${
-                    image
-                    ? "has-image"
-                    : ""
-                }"
+            <img
+                src="assets/scrunchies.jpg"
+                alt="Scrunchies collection"
+                loading="lazy"
             >
 
-                ${
-                    image
-                    ?
-                    `
-                        <img
-                            src="${escapeHtml(image)}"
-                            alt="${name}"
-                            loading="lazy"
-                        >
-                    `
-                    :
-                    `
-                        <span>
-                            ${number}
-                        </span>
-                    `
-                }
+            <div class="collection-overlay"></div>
 
-            </div>
+            <div class="collection-content">
+                <span class="collection-number">01</span>
 
+                <h3>Scrunchies</h3>
 
-            <div>
-
-                <span>
-                    ${number}
+                <span class="collection-link">
+                    Explore the collection
                 </span>
-
-
-                <h3>
-                    ${name}
-                </h3>
-
-
-                <p>
-                    ${description}
-                </p>
-
             </div>
 
         </a>
 
-    `;
+
+        <!-- JEWELLERY -->
+        <a href="jewellery.html" class="collection-card">
+
+            <img
+                src="assets/jewellery.jpg"
+                alt="Anti Tarnished Jewellery collection"
+                loading="lazy"
+            >
+
+            <div class="collection-overlay"></div>
+
+            <div class="collection-content">
+                <span class="collection-number">02</span>
+
+                <h3>Anti Tarnished Jewellery</h3>
+
+                <span class="collection-link">
+                    Explore the collection
+                </span>
+            </div>
+
+        </a>
+
+
+        <!-- GIFTS -->
+        <a href="gifts.html" class="collection-card">
+
+            <img
+                src="assets/gifts.jpg"
+                alt="Gifts collection"
+                loading="lazy"
+            >
+
+            <div class="collection-overlay"></div>
+
+            <div class="collection-content">
+                <span class="collection-number">03</span>
+
+                <h3>Gifts</h3>
+
+                <span class="collection-link">
+                    Explore the collection
+                </span>
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<style>
+
+/* =========================
+   EXPLORE COLLECTIONS
+========================= */
+
+.explore-section {
+    width: 100%;
+    padding: 70px 36px 80px;
+    background: #f8f5ef;
+    box-sizing: border-box;
+}
+
+.explore-header {
+    max-width: 1200px;
+    margin: 0 auto 42px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 50px;
+}
+
+.explore-header h2 {
+    margin: 0;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(42px, 4.2vw, 64px);
+    line-height: 0.98;
+    font-weight: 500;
+    letter-spacing: -2.5px;
+    color: #171513;
+}
+
+.explore-header p {
+    max-width: 390px;
+    margin: 2px 0 0;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #5e554d;
+}
+
+
+/* GRID */
+
+.collection-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+
+/* CARD */
+
+.collection-card {
+    position: relative;
+    display: block;
+
+    height: 310px;
+
+    overflow: hidden;
+    border-radius: 20px;
+
+    text-decoration: none;
+    color: #171513;
+
+    background: #ddd;
+}
+
+
+/* IMAGE */
+
+.collection-card img {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    /* IMPORTANT:
+       No blur */
+    filter: none;
+
+    transform: scale(1);
+    transition: transform 0.6s ease;
+}
+
+
+/* VERY LIGHT OVERLAY
+   Keeps image visible */
+
+.collection-overlay {
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.04) 0%,
+            rgba(255,255,255,0.00) 45%,
+            rgba(255,255,255,0.10) 100%
+        );
+
+    pointer-events: none;
+}
+
+
+/* CONTENT */
+
+.collection-content {
+    position: absolute;
+    inset: 0;
+
+    padding: 32px 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    z-index: 2;
+}
+
+
+/* NUMBER */
+
+.collection-number {
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+    font-weight: 500;
+
+    letter-spacing: 0.5px;
+
+    color: rgba(30, 25, 20, 0.75);
+
+    margin-bottom: 16px;
+}
+
+
+/* TITLE */
+
+.collection-content h3 {
+    margin: 0;
+
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: clamp(25px, 2.1vw, 31px);
+    line-height: 1.05;
+
+    font-weight: 500;
+
+    letter-spacing: -0.8px;
+
+    color: #171513;
+
+    text-shadow:
+        0 1px 8px rgba(255,255,255,0.15);
+}
+
+
+/* LINK */
+
+.collection-link {
+    margin-top: 12px;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    color: #302a25;
+
+    opacity: 0.9;
+}
+
+
+/* HOVER */
+
+.collection-card:hover img {
+    transform: scale(1.04);
+}
+
+.collection-card:hover .collection-link {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .explore-section {
+        padding: 55px 24px 65px;
+    }
+
+    .explore-header {
+        gap: 30px;
+    }
+
+    .collection-grid {
+        gap: 14px;
+    }
+
+    .collection-card {
+        height: 280px;
+    }
 
 }
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .explore-section {
+        padding: 48px 18px 55px;
+    }
+
+    .explore-header {
+        display: block;
+        margin-bottom: 28px;
+    }
+
+    .explore-header h2 {
+        font-size: 42px;
+        letter-spacing: -1.8px;
+        margin-bottom: 20px;
+    }
+
+    .explore-header p {
+        max-width: 330px;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .collection-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .collection-card {
+        height: 300px;
+        border-radius: 18px;
+    }
+
+    .collection-content {
+        padding: 25px 22px;
+    }
+
+    .collection-content h3 {
+        font-size: 28px;
+    }
+
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+
+    .explore-header h2 {
+        font-size: 36px;
+    }
+
+    .collection-card {
+        height: 270px;
+    }
+
+}
+
+</style>
 
 
 /* =====================================================
