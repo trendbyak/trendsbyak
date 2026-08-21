@@ -5,7 +5,7 @@
 
     <!-- =====================================================
          GOOGLE ANALYTICS 4
-    ===================================================== -->
+    ====================================================== -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L22XEV7688"></script>
 
@@ -24,7 +24,7 @@
 
     <!-- =====================================================
          BASIC META
-    ===================================================== -->
+    ====================================================== -->
 
     <meta charset="UTF-8">
 
@@ -56,7 +56,7 @@
 
     <!-- =====================================================
          FONTS
-    ===================================================== -->
+    ====================================================== -->
 
     <link
         rel="preconnect"
@@ -77,7 +77,7 @@
 
     <!-- =====================================================
          MAIN CSS
-    ===================================================== -->
+    ====================================================== -->
 
     <link
         rel="stylesheet"
@@ -87,16 +87,20 @@
 
     <!-- =====================================================
          SUPABASE
-    ===================================================== -->
+    ====================================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
     <!-- =====================================================
-         HOMEPAGE EXTRA CSS
-    ===================================================== -->
+         HOMEPAGE ADDITIONAL CSS
+    ====================================================== -->
 
     <style>
+
+        /* =================================================
+           LOGO
+        ================================================= */
 
         .site-logo-image {
             width: 58px;
@@ -104,6 +108,41 @@
             object-fit: contain;
             border-radius: 50%;
             flex-shrink: 0;
+        }
+
+
+        /* =================================================
+           LOADER
+        ================================================= */
+
+        .loader {
+            width: 30px;
+            height: 30px;
+            margin: 0 auto 15px;
+            border: 3px solid #e8e3db;
+            border-top-color: #b28a4b;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* =================================================
+           GENERIC LOADING CARD
+        ================================================= */
+
+        .loading-card {
+            grid-column: 1 / -1;
+            padding: 45px 20px;
+            text-align: center;
+            border: 1px solid #e8e3db;
+            border-radius: 16px;
+            background: #faf8f4;
         }
 
 
@@ -200,8 +239,7 @@
             letter-spacing: 1px;
         }
 
-        .new-launch-empty,
-        .loading-card {
+        .new-launch-empty {
             grid-column: 1 / -1;
             padding: 45px 20px;
             text-align: center;
@@ -209,7 +247,6 @@
             border-radius: 16px;
             background: #faf8f4;
         }
-
 
         .new-launch-actions {
             display: flex;
@@ -353,116 +390,60 @@
            REVIEWS
         ================================================= */
 
-        <section class="reviews-section">
-
-    <div class="reviews-heading">
-        <span>LOVE FROM OUR CUSTOMERS</span>
-        <h2>What They’re Saying</h2>
-    </div>
-
-    <div id="customerReviews" class="reviews-grid">
-        <p>Loading reviews...</p>
-    </div>
-
-</section>
-
-<script type="module">
-
-import { createClient }
-from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-const supabase = createClient(
-    "YOUR_SUPABASE_URL",
-    "YOUR_SUPABASE_ANON_KEY"
-);
-
-async function loadCustomerReviews() {
-
-    const { data, error } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("is_approved", true)
-        .order("created_at", { ascending: false });
-
-    const container =
-        document.getElementById("customerReviews");
-
-    if (error || !data) {
-        container.innerHTML = "";
-        return;
-    }
-
-    if (!data.length) {
-        container.innerHTML =
-            "<p>Be the first to leave us a review ✨</p>";
-        return;
-    }
-
-    container.innerHTML = data.map(review => `
-
-        <div class="review-card">
-
-            <div class="review-stars">
-                ${"★".repeat(review.rating)}
-                ${"☆".repeat(5 - review.rating)}
-            </div>
-
-            <p class="review-text">
-                “${escapeHtml(review.review_text)}”
-            </p>
-
-            <strong>
-                ${escapeHtml(review.customer_name)}
-            </strong>
-
-            ${
-                review.product_name
-                ? `<small>${escapeHtml(review.product_name)}</small>`
-                : ""
-            }
-
-        </div>
-
-    `).join("");
-}
-
-function escapeHtml(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-loadCustomerReviews();
-
-</script>
-
-        /* =================================================
-           LOADER
-        ================================================= */
-
-        .loader {
-            width: 30px;
-            height: 30px;
-            margin: 0 auto 15px;
-            border: 3px solid #e8e3db;
-            border-top-color: #b28a4b;
-            border-radius: 50%;
-            animation: spin .8s linear infinite;
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        .review-card {
+            background: #fff;
+            border: 1px solid #e8e3db;
+            border-radius: 16px;
+            padding: 25px;
+            min-width: 0;
+        }
+
+        .review-stars {
+            color: #b28a4b;
+            font-size: 15px;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+        }
+
+        .review-text {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 0 0 18px;
+        }
+
+        .review-name {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1d1b19;
+        }
+
+        .review-product {
+            display: block;
+            margin-top: 4px;
+            color: #888;
+            font-size: 11px;
+        }
+
+        .review-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            border: 1px solid #e8e3db;
+            border-radius: 16px;
+            background: #faf8f4;
         }
 
 
         /* =================================================
-           ACCOUNT STATUS
+           ACCOUNT
         ================================================= */
 
         .nav-account {
@@ -471,7 +452,7 @@ loadCustomerReviews();
 
 
         /* =================================================
-           MOBILE
+           MOBILE / TABLET
         ================================================= */
 
         @media (max-width: 900px) {
@@ -561,7 +542,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      ANNOUNCEMENT
-===================================================== -->
+====================================================== -->
 
 <div class="announcement">
 
@@ -576,7 +557,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      HEADER
-===================================================== -->
+====================================================== -->
 
 <header class="site-header">
 
@@ -612,6 +593,7 @@ loadCustomerReviews();
         id="menuToggle"
         aria-label="Open menu"
         aria-expanded="false"
+        type="button"
     >
 
         <span></span>
@@ -650,15 +632,13 @@ loadCustomerReviews();
             Our Story
         </a>
 
-
         <a
             class="nav-account"
             href="account.html"
             id="accountLink"
         >
-            ♡ Account
+            ♡ Login / Account
         </a>
-
 
         <a
             class="nav-cart"
@@ -672,7 +652,6 @@ loadCustomerReviews();
             </span>
 
         </a>
-
 
         <a
             class="nav-whatsapp"
@@ -693,7 +672,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      HERO
-===================================================== -->
+====================================================== -->
 
 <section
     class="hero"
@@ -702,13 +681,11 @@ loadCustomerReviews();
 
     <div class="hero-overlay"></div>
 
-
     <div class="hero-content">
 
         <p class="eyebrow">
             TRENDS BY AK · CURATED WITH LOVE
         </p>
-
 
         <h1>
 
@@ -720,7 +697,6 @@ loadCustomerReviews();
 
         </h1>
 
-
         <p class="hero-text">
 
             Beautiful scrunchies, jewellery,
@@ -731,7 +707,6 @@ loadCustomerReviews();
 
         </p>
 
-
         <div class="hero-actions">
 
             <a
@@ -740,7 +715,6 @@ loadCustomerReviews();
             >
                 Shop the collection →
             </a>
-
 
             <a
                 href="https://wa.me/918433998962"
@@ -752,7 +726,6 @@ loadCustomerReviews();
             </a>
 
         </div>
-
 
         <div class="hero-note">
 
@@ -776,8 +749,8 @@ loadCustomerReviews();
 
 
 <!-- =====================================================
-     TRUST
-===================================================== -->
+     TRUST STRIP
+====================================================== -->
 
 <section class="trust-strip">
 
@@ -795,7 +768,6 @@ loadCustomerReviews();
 
     </div>
 
-
     <div>
 
         <span>02</span>
@@ -810,7 +782,6 @@ loadCustomerReviews();
 
     </div>
 
-
     <div>
 
         <span>03</span>
@@ -824,7 +795,6 @@ loadCustomerReviews();
         </small>
 
     </div>
-
 
     <div>
 
@@ -845,7 +815,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      COLLECTIONS
-===================================================== -->
+====================================================== -->
 
 <section
     class="section"
@@ -865,7 +835,6 @@ loadCustomerReviews();
             </h2>
 
         </div>
-
 
         <p class="section-intro">
 
@@ -901,7 +870,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      NEW LAUNCHES
-===================================================== -->
+====================================================== -->
 
 <section
     class="section new-launches-section"
@@ -921,7 +890,6 @@ loadCustomerReviews();
             </h2>
 
         </div>
-
 
         <p class="section-intro">
 
@@ -967,7 +935,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      INSTAGRAM
-===================================================== -->
+====================================================== -->
 
 <section
     class="section instagram-section"
@@ -982,11 +950,9 @@ loadCustomerReviews();
                 FROM @TRENDSBYAK
             </p>
 
-
             <h2>
                 A little Trends by AK on your feed.
             </h2>
-
 
             <p>
                 New launches, styling ideas & little luxuries.
@@ -1007,116 +973,24 @@ loadCustomerReviews();
     </div>
 
 
-    <div class="instagram-grid">
+    <div
+        class="instagram-grid"
+        id="instagramGrid"
+    >
 
-
-        <a
-            href="https://www.instagram.com/p/Db8PMxlDZIC/"
-            target="_blank"
-            rel="noopener"
-            class="instagram-link-card"
-        >
+        <div class="instagram-link-card">
 
             <div class="instagram-placeholder">
 
-                <div class="instagram-icon">
-                    ◎
-                </div>
+                <div class="loader"></div>
 
                 <strong>
-                    View on Instagram
+                    Loading Instagram...
                 </strong>
-
-                <span>
-                    @trendsbyak
-                </span>
 
             </div>
 
-        </a>
-
-
-        <a
-            href="https://www.instagram.com/p/DcGTuQujdB3/"
-            target="_blank"
-            rel="noopener"
-            class="instagram-link-card"
-        >
-
-            <div class="instagram-placeholder">
-
-                <div class="instagram-icon">
-                    ◎
-                </div>
-
-                <strong>
-                    View on Instagram
-                </strong>
-
-                <span>
-                    @trendsbyak
-                </span>
-
-            </div>
-
-        </a>
-
-
-        <a
-            href="https://www.instagram.com/p/DcI7egfNnWW/"
-            target="_blank"
-            rel="noopener"
-            class="instagram-link-card"
-        >
-
-            <div class="instagram-placeholder">
-
-                <div class="instagram-icon">
-                    ◎
-                </div>
-
-                <strong>
-                    View on Instagram
-                </strong>
-
-                <span>
-                    @trendsbyak
-                </span>
-
-            </div>
-
-        </a>
-
-
-        <a
-            href="https://www.instagram.com/reel/DXj7eOwDenX/"
-            target="_blank"
-            rel="noopener"
-            class="instagram-link-card"
-        >
-
-            <div class="instagram-placeholder">
-
-                <div class="instagram-reel-label">
-                    INSTAGRAM REEL
-                </div>
-
-                <div class="instagram-icon">
-                    ▶
-                </div>
-
-                <strong>
-                    Watch the Reel
-                </strong>
-
-                <span>
-                    @trendsbyak
-                </span>
-
-            </div>
-
-        </a>
-
+        </div>
 
     </div>
 
@@ -1155,7 +1029,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      REVIEWS
-===================================================== -->
+====================================================== -->
 
 <section
     class="section reviews-section"
@@ -1177,7 +1051,6 @@ loadCustomerReviews();
 
         </div>
 
-
         <p class="section-intro">
 
             A few words from the people
@@ -1188,83 +1061,20 @@ loadCustomerReviews();
     </div>
 
 
-    <div class="reviews-grid">
+    <div
+        class="reviews-grid"
+        id="reviewsGrid"
+    >
 
+        <div class="loading-card">
 
-        <article class="review-card">
+            <div class="loader"></div>
 
-            <div class="review-stars">
-                ★★★★★
-            </div>
-
-            <p class="review-text">
-
-                “The quality is so much better
-                than I expected. Everything looked
-                even prettier in person.”
-
+            <p>
+                Loading customer reviews...
             </p>
 
-            <span class="review-name">
-                Happy Customer
-            </span>
-
-            <span class="review-product">
-                Trends by AK
-            </span>
-
-        </article>
-
-
-        <article class="review-card">
-
-            <div class="review-stars">
-                ★★★★★
-            </div>
-
-            <p class="review-text">
-
-                “Absolutely loved the jewellery.
-                Elegant, affordable and perfect
-                for everyday wear.”
-
-            </p>
-
-            <span class="review-name">
-                Happy Customer
-            </span>
-
-            <span class="review-product">
-                Jewellery
-            </span>
-
-        </article>
-
-
-        <article class="review-card">
-
-            <div class="review-stars">
-                ★★★★★
-            </div>
-
-            <p class="review-text">
-
-                “The gifting pieces were beautiful
-                and the packaging made everything
-                feel extra special.”
-
-            </p>
-
-            <span class="review-name">
-                Happy Customer
-            </span>
-
-            <span class="review-product">
-                Gifting
-            </span>
-
-        </article>
-
+        </div>
 
     </div>
 
@@ -1273,7 +1083,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      BULK ORDERS
-===================================================== -->
+====================================================== -->
 
 <section
     class="bulk-section"
@@ -1286,7 +1096,6 @@ loadCustomerReviews();
             FOR BUSINESSES · EVENTS · GIFTING
         </p>
 
-
         <h2>
 
             Need more than one?<br>
@@ -1296,7 +1105,6 @@ loadCustomerReviews();
             </em>
 
         </h2>
-
 
         <p>
 
@@ -1379,7 +1187,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      ABOUT
-===================================================== -->
+====================================================== -->
 
 <section
     class="about-section section"
@@ -1450,7 +1258,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      WHATSAPP CTA
-===================================================== -->
+====================================================== -->
 
 <section class="whatsapp-cta">
 
@@ -1491,7 +1299,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      FOOTER
-===================================================== -->
+====================================================== -->
 
 <footer class="site-footer">
 
@@ -1625,7 +1433,7 @@ loadCustomerReviews();
 
 <!-- =====================================================
      JAVASCRIPT
-===================================================== -->
+====================================================== -->
 
 <script>
 
@@ -1638,7 +1446,6 @@ loadCustomerReviews();
 
 const SUPABASE_URL =
     "https://ltxrycmreumoqfpcbwnb.supabase.co";
-
 
 const SUPABASE_KEY =
     "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
@@ -1679,6 +1486,24 @@ function formatPrice(value) {
 }
 
 
+function getDeviceType() {
+
+    const width =
+        window.innerWidth;
+
+    if (width <= 600) {
+        return "mobile";
+    }
+
+    if (width <= 1024) {
+        return "tablet";
+    }
+
+    return "desktop";
+
+}
+
+
 /* =====================================================
    GA4 TRACKING
 ===================================================== */
@@ -1690,9 +1515,7 @@ function trackEvent(
 
     try {
 
-        if (
-            typeof gtag === "function"
-        ) {
+        if (typeof gtag === "function") {
 
             gtag(
                 "event",
@@ -1715,39 +1538,104 @@ function trackEvent(
 
 
 /* =====================================================
-   PRODUCT STATUS
+   VISITOR ID
 ===================================================== */
 
-function isProductActive(product) {
+function getVisitorId() {
 
-    if (
-        product.is_active === false ||
-        product.active === false
-    ) {
-
-        return false;
-
-    }
+    let visitorId =
+        localStorage.getItem(
+            "trendsbyak_visitor_id"
+        );
 
 
-    if (
-        typeof product.status === "string" &&
-        [
-            "inactive",
-            "disabled",
-            "draft",
-            "hidden"
-        ].includes(
-            product.status.toLowerCase()
-        )
-    ) {
+    if (!visitorId) {
 
-        return false;
+        visitorId =
+            "v_" +
+            Date.now() +
+            "_" +
+            Math.random()
+                .toString(36)
+                .substring(2, 12);
+
+
+        localStorage.setItem(
+            "trendsbyak_visitor_id",
+            visitorId
+        );
 
     }
 
 
-    return true;
+    return visitorId;
+
+}
+
+
+/* =====================================================
+   SESSION ID
+===================================================== */
+
+function getSessionId() {
+
+    let sessionId =
+        sessionStorage.getItem(
+            "trendsbyak_session_id"
+        );
+
+
+    if (!sessionId) {
+
+        sessionId =
+            "s_" +
+            Date.now() +
+            "_" +
+            Math.random()
+                .toString(36)
+                .substring(2, 10);
+
+
+        sessionStorage.setItem(
+            "trendsbyak_session_id",
+            sessionId
+        );
+
+    }
+
+
+    return sessionId;
+
+}
+
+
+/* =====================================================
+   UTM PARAMETERS
+===================================================== */
+
+function getUtmData() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    return {
+
+        source:
+            params.get("utm_source") ||
+            null,
+
+        medium:
+            params.get("utm_medium") ||
+            null,
+
+        campaign:
+            params.get("utm_campaign") ||
+            null
+
+    };
 
 }
 
@@ -1812,42 +1700,6 @@ function updateCartCount() {
 
 
 /* =====================================================
-   VISITOR ID
-===================================================== */
-
-function getVisitorId() {
-
-    let visitorId =
-        localStorage.getItem(
-            "trendsbyak_visitor_id"
-        );
-
-
-    if (!visitorId) {
-
-        visitorId =
-            "v_" +
-            Date.now() +
-            "_" +
-            Math.random()
-                .toString(36)
-                .substring(2, 12);
-
-
-        localStorage.setItem(
-            "trendsbyak_visitor_id",
-            visitorId
-        );
-
-    }
-
-
-    return visitorId;
-
-}
-
-
-/* =====================================================
    WEBSITE VISITOR TRACKING
 ===================================================== */
 
@@ -1855,6 +1707,14 @@ async function trackWebsiteVisit() {
 
     const visitorId =
         getVisitorId();
+
+
+    const sessionId =
+        getSessionId();
+
+
+    const utm =
+        getUtmData();
 
 
     const visitData = {
@@ -1880,14 +1740,6 @@ async function trackWebsiteVisit() {
     };
 
 
-    /*
-       This expects a Supabase table called:
-       website_visitors
-
-       If the table doesn't exist yet,
-       the error is safely ignored.
-    */
-
     try {
 
         const {
@@ -1907,22 +1759,67 @@ async function trackWebsiteVisit() {
                 error.message
             );
 
-        } else {
-
-            trackEvent(
-                "website_visit",
-                {
-                    visitor_id:
-                        visitorId
-                }
-            );
-
         }
 
     } catch (error) {
 
         console.warn(
             "Visitor tracking failed:",
+            error
+        );
+
+    }
+
+
+    /* Also store in analytics_events */
+
+    try {
+
+        await supabaseClient
+            .from("analytics_events")
+            .insert({
+
+                event_name:
+                    "page_view",
+
+                session_id:
+                    sessionId,
+
+                visitor_id:
+                    visitorId,
+
+                page_url:
+                    window.location.href,
+
+                page_path:
+                    window.location.pathname,
+
+                referrer:
+                    document.referrer || null,
+
+                source:
+                    utm.source,
+
+                medium:
+                    utm.medium,
+
+                campaign:
+                    utm.campaign,
+
+                device_type:
+                    getDeviceType(),
+
+                user_agent:
+                    navigator.userAgent,
+
+                metadata: {}
+
+            });
+
+    } catch (error) {
+
+        console.warn(
+            "Analytics event error:",
             error
         );
 
@@ -1960,11 +1857,6 @@ async function updateLiveVisitor() {
 
     };
 
-
-    /*
-       This expects a table called:
-       live_visitors
-    */
 
     try {
 
@@ -2015,8 +1907,9 @@ async function updateAccountLink() {
         );
 
 
-    if (!accountLink)
+    if (!accountLink) {
         return;
+    }
 
 
     try {
@@ -2038,8 +1931,8 @@ async function updateAccountLink() {
 
             accountLink.textContent =
                 name
-                ? `♡ ${name}`
-                : "♡ My Account";
+                    ? `♡ ${name}`
+                    : "♡ My Account";
 
         } else {
 
@@ -2059,7 +1952,7 @@ async function updateAccountLink() {
 
 
 /* =====================================================
-   AUTH STATE LISTENER
+   AUTH STATE
 ===================================================== */
 
 supabaseClient.auth.onAuthStateChange(
@@ -2072,14 +1965,15 @@ supabaseClient.auth.onAuthStateChange(
 
 
         if (
+            event === "SIGNED_IN" &&
             session &&
             session.user
         ) {
 
             trackEvent(
-                "login_state",
+                "login",
                 {
-                    status: "logged_in"
+                    method: "supabase"
                 }
             );
 
@@ -2096,13 +1990,22 @@ supabaseClient.auth.onAuthStateChange(
 async function loadNewLaunches() {
 
     const container =
-        document.getElementById("newLaunchesGrid");
+        document.getElementById(
+            "newLaunchesGrid"
+        );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
+
 
     try {
 
-        const { data, error } =
+        const {
+            data,
+            error
+        } =
             await supabaseClient
                 .from("products")
                 .select(`
@@ -2115,39 +2018,42 @@ async function loadNewLaunches() {
                     status,
                     created_at
                 `)
-                .eq("status", "active")
-                .order("created_at", {
-                    ascending: false
-                })
+                .eq(
+                    "status",
+                    "active"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
                 .limit(6);
+
 
         if (error) {
             throw error;
         }
 
-        const products = (data || [])
-            .filter(product => {
 
-                if (product.status !== "active") {
-                    return false;
-                }
+        const products =
+            (data || [])
+                .filter(
+                    product => {
 
-                const price =
-                    Number(
-                        product.sale_price ??
-                        product.price ??
-                        0
-                    );
+                        const price =
+                            Number(
+                                product.sale_price ??
+                                product.price ??
+                                0
+                            );
 
-                return price > 0;
+                        return price > 0;
 
-            })
-            .slice(0, 6);
+                    }
+                )
+                .slice(0, 6);
 
-
-        /* =========================================
-           NO ACTIVE PRODUCTS
-        ========================================= */
 
         if (!products.length) {
 
@@ -2168,12 +2074,9 @@ async function loadNewLaunches() {
             `;
 
             return;
+
         }
 
-
-        /* =========================================
-           DISPLAY PRODUCTS
-        ========================================= */
 
         container.innerHTML =
             products
@@ -2187,6 +2090,7 @@ async function loadNewLaunches() {
             "New launches error:",
             error
         );
+
 
         container.innerHTML = `
 
@@ -2282,9 +2186,7 @@ function newLaunchCard(product) {
                 data-product-id="${escapeHtml(product.id)}"
             >
 
-                <span
-                    class="new-launch-badge"
-                >
+                <span class="new-launch-badge">
                     NEW
                 </span>
 
@@ -2325,13 +2227,9 @@ function newLaunchCard(product) {
             </a>
 
 
-            <div
-                class="new-launch-info"
-            >
+            <div class="new-launch-info">
 
-                <div
-                    class="new-launch-category"
-                >
+                <div class="new-launch-category">
                     ${category}
                 </div>
 
@@ -2348,9 +2246,7 @@ function newLaunchCard(product) {
                 </h3>
 
 
-                <div
-                    class="new-launch-price"
-                >
+                <div class="new-launch-price">
 
                     ${
                         hasSale
@@ -2399,8 +2295,9 @@ async function loadCollections() {
         );
 
 
-    if (!container)
+    if (!container) {
         return;
+    }
 
 
     try {
@@ -2421,14 +2318,20 @@ async function loadCollections() {
                 .limit(6);
 
 
-        if (error)
+        if (error) {
             throw error;
+        }
 
 
         if (!data?.length) {
 
-            container.innerHTML =
-                "";
+            container.innerHTML = `
+                <div class="loading-card">
+                    <p>
+                        Collections coming soon.
+                    </p>
+                </div>
+            `;
 
             return;
 
@@ -2458,8 +2361,13 @@ async function loadCollections() {
         );
 
 
-        container.innerHTML =
-            "";
+        container.innerHTML = `
+            <div class="loading-card">
+                <p>
+                    Collections are temporarily unavailable.
+                </p>
+            </div>
+        `;
 
     }
 
@@ -2470,385 +2378,623 @@ async function loadCollections() {
    COLLECTION CARD
 ===================================================== */
 
-<!-- =========================
-     EXPLORE COLLECTIONS
-========================= -->
-<section class="explore-section">
+function collectionCard(
+    collection,
+    index
+) {
 
-    <div class="explore-header">
-        <h2>Explore what you love.</h2>
-
-        <p>
-            Discover thoughtfully curated collections made for everyday
-            luxury, gifting and everything in between.
-        </p>
-    </div>
-
-    <div class="collection-grid">
-
-        <!-- SCRUNCHIES -->
-        <a href="scrunchies.html" class="collection-card">
-
-            <img
-                src="assets/scrunchies.jpg"
-                alt="Scrunchies collection"
-                loading="lazy"
-            >
-
-            <div class="collection-overlay"></div>
-
-            <div class="collection-content">
-                <span class="collection-number">01</span>
-
-                <h3>Scrunchies</h3>
-
-                <span class="collection-link">
-                    Explore the collection
-                </span>
-            </div>
-
-        </a>
-
-
-        <!-- JEWELLERY -->
-        <a href="jewellery.html" class="collection-card">
-
-            <img
-                src="assets/jewellery.jpg"
-                alt="Anti Tarnished Jewellery collection"
-                loading="lazy"
-            >
-
-            <div class="collection-overlay"></div>
-
-            <div class="collection-content">
-                <span class="collection-number">02</span>
-
-                <h3>Anti Tarnished Jewellery</h3>
-
-                <span class="collection-link">
-                    Explore the collection
-                </span>
-            </div>
-
-        </a>
-
-
-        <!-- GIFTS -->
-        <a href="gifts.html" class="collection-card">
-
-            <img
-                src="assets/gifts.jpg"
-                alt="Gifts collection"
-                loading="lazy"
-            >
-
-            <div class="collection-overlay"></div>
-
-            <div class="collection-content">
-                <span class="collection-number">03</span>
-
-                <h3>Gifts</h3>
-
-                <span class="collection-link">
-                    Explore the collection
-                </span>
-            </div>
-
-        </a>
-
-    </div>
-
-</section>
-
-
-<style>
-
-/* =========================
-   EXPLORE COLLECTIONS
-========================= */
-
-.explore-section {
-    width: 100%;
-    padding: 70px 36px 80px;
-    background: #f8f5ef;
-    box-sizing: border-box;
-}
-
-.explore-header {
-    max-width: 1200px;
-    margin: 0 auto 42px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 50px;
-}
-
-.explore-header h2 {
-    margin: 0;
-
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(42px, 4.2vw, 64px);
-    line-height: 0.98;
-    font-weight: 500;
-    letter-spacing: -2.5px;
-    color: #171513;
-}
-
-.explore-header p {
-    max-width: 390px;
-    margin: 2px 0 0;
-
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.65;
-    color: #5e554d;
-}
-
-
-/* GRID */
-
-.collection-grid {
-    max-width: 1200px;
-    margin: 0 auto;
-
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-}
-
-
-/* CARD */
-
-.collection-card {
-    position: relative;
-    display: block;
-
-    height: 310px;
-
-    overflow: hidden;
-    border-radius: 20px;
-
-    text-decoration: none;
-    color: #171513;
-
-    background: #ddd;
-}
-
-
-/* IMAGE */
-
-.collection-card img {
-    position: absolute;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: block;
-
-    object-fit: cover;
-
-    /* IMPORTANT:
-       No blur */
-    filter: none;
-
-    transform: scale(1);
-    transition: transform 0.6s ease;
-}
-
-
-/* VERY LIGHT OVERLAY
-   Keeps image visible */
-
-.collection-overlay {
-    position: absolute;
-    inset: 0;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,0.04) 0%,
-            rgba(255,255,255,0.00) 45%,
-            rgba(255,255,255,0.10) 100%
+    const collectionId =
+        encodeURIComponent(
+            String(
+                collection.id ?? ""
+            )
         );
 
-    pointer-events: none;
-}
+
+    const name =
+        escapeHtml(
+            collection.name ||
+            "Collection"
+        );
 
 
-/* CONTENT */
-
-.collection-content {
-    position: absolute;
-    inset: 0;
-
-    padding: 32px 24px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    z-index: 2;
-}
+    const description =
+        escapeHtml(
+            collection.description ||
+            ""
+        );
 
 
-/* NUMBER */
-
-.collection-number {
-    font-family: Arial, sans-serif;
-
-    font-size: 11px;
-    font-weight: 500;
-
-    letter-spacing: 0.5px;
-
-    color: rgba(30, 25, 20, 0.75);
-
-    margin-bottom: 16px;
-}
+    const image =
+        collection.image_url ||
+        "";
 
 
-/* TITLE */
-
-.collection-content h3 {
-    margin: 0;
-
-    font-family: Georgia, "Times New Roman", serif;
-
-    font-size: clamp(25px, 2.1vw, 31px);
-    line-height: 1.05;
-
-    font-weight: 500;
-
-    letter-spacing: -0.8px;
-
-    color: #171513;
-
-    text-shadow:
-        0 1px 8px rgba(255,255,255,0.15);
-}
+    const collectionName =
+        String(
+            collection.name || ""
+        ).toLowerCase();
 
 
-/* LINK */
-
-.collection-link {
-    margin-top: 12px;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 13px;
-    line-height: 1.4;
-
-    color: #302a25;
-
-    opacity: 0.9;
-}
+    let href =
+        "shop.html";
 
 
-/* HOVER */
+    if (
+        collectionName.includes(
+            "scrunch"
+        )
+    ) {
 
-.collection-card:hover img {
-    transform: scale(1.04);
-}
+        href =
+            "scrunchies.html";
 
-.collection-card:hover .collection-link {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-}
+    } else if (
+        collectionName.includes(
+            "jewell"
+        )
+    ) {
 
+        href =
+            "jewellery.html";
 
-/* =========================
-   TABLET
-========================= */
+    } else if (
+        collectionName.includes(
+            "gift"
+        )
+    ) {
 
-@media (max-width: 900px) {
+        href =
+            "gifts.html";
 
-    .explore-section {
-        padding: 55px 24px 65px;
     }
 
-    .explore-header {
-        gap: 30px;
-    }
 
-    .collection-grid {
-        gap: 14px;
-    }
+    return `
 
-    .collection-card {
-        height: 280px;
-    }
+        <a
+            href="${href}"
+            class="collection-card"
+            data-collection-id="${collectionId}"
+        >
 
-}
+            ${
+                image
+
+                ?
+
+                `
+                <img
+                    src="${escapeHtml(image)}"
+                    alt="${name}"
+                    loading="lazy"
+                >
+                `
+
+                :
+
+                `
+                <div
+                    style="
+                        position:absolute;
+                        inset:0;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:#e9e1d5;
+                        font-family:'Playfair Display',serif;
+                        font-size:42px;
+                        color:#8b6b42;
+                    "
+                >
+                    AK
+                </div>
+                `
+            }
 
 
-/* =========================
-   MOBILE
-========================= */
+            <div class="collection-overlay"></div>
 
-@media (max-width: 700px) {
 
-    .explore-section {
-        padding: 48px 18px 55px;
-    }
+            <div class="collection-content">
 
-    .explore-header {
-        display: block;
-        margin-bottom: 28px;
-    }
+                <span class="collection-number">
+                    ${String(index + 1).padStart(2, "0")}
+                </span>
 
-    .explore-header h2 {
-        font-size: 42px;
-        letter-spacing: -1.8px;
-        margin-bottom: 20px;
-    }
 
-    .explore-header p {
-        max-width: 330px;
-        font-size: 13px;
-        line-height: 1.6;
-    }
+                <h3>
+                    ${name}
+                </h3>
 
-    .collection-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
 
-    .collection-card {
-        height: 300px;
-        border-radius: 18px;
-    }
+                ${
+                    description
 
-    .collection-content {
-        padding: 25px 22px;
-    }
+                    ?
 
-    .collection-content h3 {
-        font-size: 28px;
-    }
+                    `
+                    <span class="collection-link">
+                        ${description}
+                    </span>
+                    `
+
+                    :
+
+                    `
+                    <span class="collection-link">
+                        Explore the collection →
+                    </span>
+                    `
+                }
+
+            </div>
+
+        </a>
+
+    `;
 
 }
 
 
-/* =========================
-   SMALL MOBILE
-========================= */
+/* =====================================================
+   REVIEWS
+===================================================== */
 
-@media (max-width: 400px) {
+async function loadReviews() {
 
-    .explore-header h2 {
-        font-size: 36px;
+    const reviewsGrid =
+        document.getElementById(
+            "reviewsGrid"
+        );
+
+
+    if (!reviewsGrid) {
+        return;
     }
 
-    .collection-card {
-        height: 270px;
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("reviews")
+                .select(`
+                    id,
+                    customer_name,
+                    rating,
+                    review_text,
+                    product_name,
+                    customer_image,
+                    created_at
+                `)
+                .eq(
+                    "is_approved",
+                    true
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(6);
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (
+            !data ||
+            !data.length
+        ) {
+
+            reviewsGrid.innerHTML = `
+
+                <div class="review-empty">
+
+                    <div class="review-stars">
+                        ★★★★★
+                    </div>
+
+                    <h3>
+                        Your experience could be here.
+                    </h3>
+
+                    <p>
+                        Be the first to share your
+                        Trends by AK experience.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        reviewsGrid.innerHTML =
+            data
+                .map(
+                    review => {
+
+                        const rating =
+                            Math.max(
+                                1,
+                                Math.min(
+                                    5,
+                                    Number(
+                                        review.rating
+                                    ) || 5
+                                )
+                            );
+
+
+                        const stars =
+                            "★".repeat(
+                                rating
+                            ) +
+                            "☆".repeat(
+                                5 - rating
+                            );
+
+
+                        const customerName =
+                            escapeHtml(
+                                review.customer_name ||
+                                "Happy Customer"
+                            );
+
+
+                        const reviewText =
+                            escapeHtml(
+                                review.review_text ||
+                                ""
+                            );
+
+
+                        const productName =
+                            escapeHtml(
+                                review.product_name ||
+                                "Trends by AK"
+                            );
+
+
+                        return `
+
+                            <article class="review-card">
+
+                                <div class="review-stars">
+                                    ${stars}
+                                </div>
+
+
+                                <p class="review-text">
+                                    “${reviewText}”
+                                </p>
+
+
+                                <span class="review-name">
+                                    ${customerName}
+                                </span>
+
+
+                                <span class="review-product">
+                                    ${productName}
+                                </span>
+
+                            </article>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Reviews error:",
+            error
+        );
+
+
+        reviewsGrid.innerHTML = "";
+
     }
 
 }
 
-</style>
+
+/* =====================================================
+   INSTAGRAM REELS
+===================================================== */
+
+async function loadInstagramReels() {
+
+    const grid =
+        document.getElementById(
+            "instagramGrid"
+        );
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("instagram_reels")
+                .select(`
+                    id,
+                    reel_url,
+                    title,
+                    caption,
+                    thumbnail_url,
+                    is_active,
+                    display_order
+                `)
+                .eq(
+                    "is_active",
+                    true
+                )
+                .order(
+                    "display_order",
+                    {
+                        ascending: true
+                    }
+                )
+                .limit(4);
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (
+            !data ||
+            !data.length
+        ) {
+
+            renderFallbackInstagram();
+
+            return;
+
+        }
+
+
+        grid.innerHTML =
+            data
+                .map(
+                    reel => {
+
+                        const url =
+                            escapeHtml(
+                                reel.reel_url ||
+                                "https://www.instagram.com/trendsbyak/"
+                            );
+
+
+                        const title =
+                            escapeHtml(
+                                reel.title ||
+                                "View on Instagram"
+                            );
+
+
+                        const caption =
+                            escapeHtml(
+                                reel.caption ||
+                                "@trendsbyak"
+                            );
+
+
+                        const thumbnail =
+                            reel.thumbnail_url
+                                ? escapeHtml(
+                                    reel.thumbnail_url
+                                )
+                                : "";
+
+
+                        return `
+
+                            <a
+                                href="${url}"
+                                target="_blank"
+                                rel="noopener"
+                                class="instagram-link-card"
+                            >
+
+                                ${
+                                    thumbnail
+
+                                    ?
+
+                                    `
+                                    <div
+                                        class="instagram-placeholder"
+                                        style="
+                                            padding:0;
+                                            background:#f5f0e8;
+                                        "
+                                    >
+
+                                        <img
+                                            src="${thumbnail}"
+                                            alt="${title}"
+                                            loading="lazy"
+                                            style="
+                                                width:100%;
+                                                height:100%;
+                                                object-fit:cover;
+                                                display:block;
+                                            "
+                                        >
+
+                                    </div>
+                                    `
+
+                                    :
+
+                                    `
+                                    <div class="instagram-placeholder">
+
+                                        <div class="instagram-reel-label">
+                                            INSTAGRAM REEL
+                                        </div>
+
+                                        <div class="instagram-icon">
+                                            ▶
+                                        </div>
+
+                                        <strong>
+                                            ${title}
+                                        </strong>
+
+                                        <span>
+                                            ${caption}
+                                        </span>
+
+                                    </div>
+                                    `
+                                }
+
+                            </a>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.warn(
+            "Instagram reels error:",
+            error
+        );
+
+
+        renderFallbackInstagram();
+
+    }
+
+}
+
+
+/* =====================================================
+   INSTAGRAM FALLBACK
+===================================================== */
+
+function renderFallbackInstagram() {
+
+    const grid =
+        document.getElementById(
+            "instagramGrid"
+        );
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    const posts = [
+
+        "https://www.instagram.com/p/Db8PMxlDZIC/",
+
+        "https://www.instagram.com/p/DcGTuQujdB3/",
+
+        "https://www.instagram.com/p/DcI7egfNnWW/",
+
+        "https://www.instagram.com/reel/DXj7eOwDenX/"
+
+    ];
+
+
+    grid.innerHTML =
+        posts
+            .map(
+                (url, index) => {
+
+                    const isReel =
+                        index === 3;
+
+
+                    return `
+
+                        <a
+                            href="${url}"
+                            target="_blank"
+                            rel="noopener"
+                            class="instagram-link-card"
+                        >
+
+                            <div class="instagram-placeholder">
+
+                                ${
+                                    isReel
+
+                                    ?
+
+                                    `
+                                    <div class="instagram-reel-label">
+                                        INSTAGRAM REEL
+                                    </div>
+                                    `
+
+                                    :
+
+                                    ""
+                                }
+
+
+                                <div class="instagram-icon">
+                                    ${isReel ? "▶" : "◎"}
+                                </div>
+
+
+                                <strong>
+                                    ${
+                                        isReel
+                                            ? "Watch the Reel"
+                                            : "View on Instagram"
+                                    }
+                                </strong>
+
+
+                                <span>
+                                    @trendsbyak
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
 
 
 /* =====================================================
@@ -2869,8 +3015,9 @@ function setupMenu() {
         );
 
 
-    if (!toggle || !nav)
+    if (!toggle || !nav) {
         return;
+    }
 
 
     toggle.addEventListener(
@@ -2934,8 +3081,9 @@ document.addEventListener(
             );
 
 
-        if (!link)
+        if (!link) {
             return;
+        }
 
 
         const href =
@@ -2963,13 +3111,55 @@ document.addEventListener(
         trackEvent(
             "whatsapp_click",
             {
+
                 button_type:
                     buttonType,
 
                 page_location:
                     window.location.href
+
             }
         );
+
+
+        /* Also save to Supabase analytics */
+
+        supabaseClient
+            .from("analytics_events")
+            .insert({
+
+                event_name:
+                    "whatsapp_click",
+
+                session_id:
+                    getSessionId(),
+
+                visitor_id:
+                    getVisitorId(),
+
+                page_url:
+                    window.location.href,
+
+                page_path:
+                    window.location.pathname,
+
+                referrer:
+                    document.referrer || null,
+
+                device_type:
+                    getDeviceType(),
+
+                user_agent:
+                    navigator.userAgent,
+
+                metadata: {
+                    button_type:
+                        buttonType
+                }
+
+            })
+            .then(() => {})
+            .catch(() => {});
 
     }
 );
@@ -2985,24 +3175,69 @@ document.addEventListener(
 
         const link =
             event.target.closest(
-                'a[data-product-id]'
+                "a[data-product-id]"
             );
 
 
-        if (!link)
+        if (!link) {
             return;
+        }
+
+
+        const productId =
+            link.dataset.productId;
 
 
         trackEvent(
             "product_click",
             {
+
                 product_id:
-                    link.dataset.productId,
+                    productId,
 
                 page_location:
                     window.location.href
+
             }
         );
+
+
+        supabaseClient
+            .from("analytics_events")
+            .insert({
+
+                event_name:
+                    "product_click",
+
+                session_id:
+                    getSessionId(),
+
+                visitor_id:
+                    getVisitorId(),
+
+                page_url:
+                    window.location.href,
+
+                page_path:
+                    window.location.pathname,
+
+                referrer:
+                    document.referrer || null,
+
+                device_type:
+                    getDeviceType(),
+
+                user_agent:
+                    navigator.userAgent,
+
+                product_id:
+                    Number(productId),
+
+                metadata: {}
+
+            })
+            .then(() => {})
+            .catch(() => {});
 
     }
 );
@@ -3022,8 +3257,9 @@ document.addEventListener(
             );
 
 
-        if (!link)
+        if (!link) {
             return;
+        }
 
 
         const eventName =
@@ -3033,8 +3269,85 @@ document.addEventListener(
         trackEvent(
             eventName,
             {
+
                 page_location:
                     window.location.href
+
+            }
+        );
+
+
+        supabaseClient
+            .from("analytics_events")
+            .insert({
+
+                event_name:
+                    eventName,
+
+                session_id:
+                    getSessionId(),
+
+                visitor_id:
+                    getVisitorId(),
+
+                page_url:
+                    window.location.href,
+
+                page_path:
+                    window.location.pathname,
+
+                referrer:
+                    document.referrer || null,
+
+                device_type:
+                    getDeviceType(),
+
+                user_agent:
+                    navigator.userAgent,
+
+                metadata: {}
+
+            })
+            .then(() => {})
+            .catch(() => {});
+
+    }
+);
+
+
+/* =====================================================
+   COLLECTION CLICK TRACKING
+===================================================== */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const link =
+            event.target.closest(
+                "a[data-collection-id]"
+            );
+
+
+        if (!link) {
+            return;
+        }
+
+
+        const collectionId =
+            link.dataset.collectionId;
+
+
+        trackEvent(
+            "collection_click",
+            {
+
+                collection_id:
+                    collectionId,
+
+                page_location:
+                    window.location.href
+
             }
         );
 
@@ -3071,31 +3384,32 @@ document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
+        /* Cart */
+
         updateCartCount();
 
+
+        /* Mobile navigation */
+
         setupMenu();
+
+
+        /* Account */
 
         updateAccountLink();
 
 
-        /*
-           Record the visit.
-        */
+        /* Visitor tracking */
 
         trackWebsiteVisit();
 
 
-        /*
-           Start live visitor tracking.
-        */
+        /* Live visitor */
 
         updateLiveVisitor();
 
 
-        /*
-           Refresh live visitor status
-           every 30 seconds.
-        */
+        /* Heartbeat */
 
         setInterval(
             updateLiveVisitor,
@@ -3103,28 +3417,30 @@ document.addEventListener(
         );
 
 
-        /*
-           Load homepage content.
-        */
+        /* Homepage content */
 
         await Promise.allSettled([
 
             loadCollections(),
 
-            loadNewLaunches()
+            loadNewLaunches(),
+
+            loadReviews(),
+
+            loadInstagramReels()
 
         ]);
 
 
-        /*
-           GA page view event.
-        */
+        /* GA homepage event */
 
         trackEvent(
             "homepage_view",
             {
+
                 page_location:
                     window.location.href
+
             }
         );
 
@@ -3133,7 +3449,7 @@ document.addEventListener(
 
 
 /* =====================================================
-   CART COUNT ON BACK/FORWARD
+   BACK / FORWARD CACHE
 ===================================================== */
 
 window.addEventListener(
@@ -3147,202 +3463,29 @@ window.addEventListener(
     }
 );
 
-</script>
 
-<script>
-document.addEventListener("DOMContentLoaded", async function () {
+/* =====================================================
+   CLEANUP LIVE VISITOR
+===================================================== */
 
-    const reviewsGrid =
-        document.getElementById("reviewsGrid");
-
-    if (!reviewsGrid) return;
-
-
-    /*
-     * USE THE SAME SUPABASE VALUES
-     * ALREADY USED BY YOUR WEBSITE.
-     */
-
-    const SUPABASE_URL =
-        "YOUR_EXISTING_SUPABASE_ANON_KEY";
-
-    const SUPABASE_KEY =
-        "YOUR_EXISTING_SUPABASE_ANON_KEY";
-
-
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
-
-
-    try {
-
-        const { data, error } =
-            await supabaseClient
-                .from("reviews")
-                .select(`
-                    id,
-                    customer_name,
-                    rating,
-                    review_text,
-                    product_name,
-                    customer_image,
-                    created_at
-                `)
-                .eq("is_approved", true)
-                .order("created_at", {
-                    ascending: false
-                });
-
-
-        if (error) {
-
-            console.error(
-                "Reviews error:",
-                error
-            );
-
-            reviewsGrid.innerHTML = "";
-
-            return;
-        }
-
+window.addEventListener(
+    "beforeunload",
+    function () {
 
         /*
-         * No reviews yet
+         * We intentionally don't delete
+         * the live visitor record here.
+         *
+         * The dashboard can determine
+         * whether a visitor is live based
+         * on last_seen.
          */
 
-        if (!data || data.length === 0) {
-
-            reviewsGrid.innerHTML = `
-
-                <article class="review-card">
-
-                    <div class="review-stars">
-                        ★★★★★
-                    </div>
-
-                    <p class="review-text">
-                        Be the first to share your
-                        Trends by AK experience.
-                    </p>
-
-                    <span class="review-name">
-                        Our Customers
-                    </span>
-
-                </article>
-
-            `;
-
-            return;
-        }
-
-
-        /*
-         * Display approved reviews
-         */
-
-        reviewsGrid.innerHTML =
-            data.map(review => {
-
-                const rating =
-                    Math.max(
-                        1,
-                        Math.min(
-                            5,
-                            Number(review.rating) || 5
-                        )
-                    );
-
-
-                const stars =
-                    "★".repeat(rating) +
-                    "☆".repeat(5 - rating);
-
-
-                const customerName =
-                    escapeReviewHTML(
-                        review.customer_name ||
-                        "Happy Customer"
-                    );
-
-
-                const reviewText =
-                    escapeReviewHTML(
-                        review.review_text || ""
-                    );
-
-
-                const productName =
-                    escapeReviewHTML(
-                        review.product_name ||
-                        "Trends by AK"
-                    );
-
-
-                return `
-
-                    <article class="review-card">
-
-                        <div class="review-stars">
-                            ${stars}
-                        </div>
-
-
-                        <p class="review-text">
-                            “${reviewText}”
-                        </p>
-
-
-                        <span class="review-name">
-                            ${customerName}
-                        </span>
-
-
-                        <span class="review-product">
-                            ${productName}
-                        </span>
-
-                    </article>
-
-                `;
-
-            }).join("");
-
-
-    } catch (err) {
-
-        console.error(
-            "Unable to load reviews:",
-            err
-        );
-
-        reviewsGrid.innerHTML = "";
-
     }
+);
 
-
-    /*
-     * Prevent customer-entered text
-     * from becoming HTML.
-     */
-
-    function escapeReviewHTML(value) {
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-});
 </script>
+
+
 </body>
-
 </html>
