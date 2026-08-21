@@ -662,10 +662,6 @@
             Collections
         </a>
 
-        <a href="shop.html">
-            Shop
-        </a>
-
         <a href="#instagram">
             Instagram
         </a>
@@ -2688,76 +2684,40 @@ async function loadCollections() {
    COLLECTION CARD
 ===================================================== */
 
-function collectionCard(
-    collection,
-    index
-) {
+function collectionCard(collection, index) {
 
     const collectionId =
         encodeURIComponent(
-            String(
-                collection.id ?? ""
-            )
+            String(collection.id ?? "")
         );
 
+    const rawName =
+        String(
+            collection.name || "Collection"
+        ).trim();
 
     const name =
-        escapeHtml(
-            collection.name ||
-            "Collection"
-        );
-
+        escapeHtml(rawName);
 
     const description =
         escapeHtml(
-            collection.description ||
-            ""
+            collection.description || ""
         );
 
-
     const image =
-        collection.image_url ||
-        "";
+        collection.image_url || "";
 
+    /*
+     * Dynamic collection URL
+     *
+     * Example:
+     * shop.html?collection=Scrunchies
+     * shop.html?collection=Jewellery
+     * shop.html?collection=Gift%20Hampers
+     */
 
-    const collectionName =
-        String(
-            collection.name || ""
-        ).toLowerCase();
-
-
-    let href =
-        "shop.html";
-
-
-    if (
-        collectionName.includes(
-            "scrunch"
-        )
-    ) {
-
-        href =
-            "scrunchies.html";
-
-    } else if (
-        collectionName.includes(
-            "jewell"
-        )
-    ) {
-
-        href =
-            "jewellery.html";
-
-    } else if (
-        collectionName.includes(
-            "gift"
-        )
-    ) {
-
-        href =
-            "gifts.html";
-
-    }
+    const href =
+        `shop.html?collection=${encodeURIComponent(rawName)}`;
 
 
     return `
@@ -2766,6 +2726,7 @@ function collectionCard(
             href="${href}"
             class="collection-card"
             data-collection-id="${collectionId}"
+            data-collection-name="${escapeHtml(rawName)}"
         >
 
             ${
@@ -2843,9 +2804,7 @@ function collectionCard(
         </a>
 
     `;
-
 }
-
 
 /* =====================================================
    REVIEWS
