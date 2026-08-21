@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -32,6 +33,10 @@ h1{
     margin-bottom:25px;
 }
 
+h2{
+    margin-top:0;
+}
+
 .card{
     background:#fff;
     padding:25px;
@@ -55,11 +60,16 @@ select{
     border:1px solid #ddd;
     border-radius:8px;
     font-size:15px;
+    font-family:inherit;
 }
 
 textarea{
     min-height:120px;
     resize:vertical;
+}
+
+input[type="checkbox"]{
+    width:auto;
 }
 
 button{
@@ -76,6 +86,10 @@ button{
     color:#fff;
 }
 
+.primary:hover{
+    background:#333;
+}
+
 .secondary{
     background:#eee;
     color:#222;
@@ -86,13 +100,30 @@ button{
     color:#a00000;
 }
 
+.instagram-btn{
+    background:#8b6b42;
+    color:#fff;
+}
+
 .review{
     border-top:1px solid #eee;
-    padding:20px 0;
+    padding:22px 0;
 }
 
 .review:first-child{
     border-top:0;
+}
+
+.review-type{
+    display:inline-block;
+    background:#f0e6d7;
+    color:#8b6b42;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.5px;
+    margin-bottom:8px;
 }
 
 .stars{
@@ -119,6 +150,31 @@ button{
     color:#777;
 }
 
+.instagram-link{
+    display:inline-block;
+    margin-top:8px;
+    color:#8b6b42;
+    font-size:13px;
+    word-break:break-all;
+}
+
+.instagram-preview{
+    margin-top:12px;
+    border:1px solid #eee;
+    border-radius:10px;
+    padding:12px;
+    background:#faf8f4;
+}
+
+.instagram-preview img{
+    width:120px;
+    height:150px;
+    object-fit:cover;
+    border-radius:8px;
+    display:block;
+    margin-bottom:8px;
+}
+
 .message{
     padding:12px;
     border-radius:8px;
@@ -136,81 +192,307 @@ button{
     color:#a00000;
 }
 
+.help{
+    font-size:12px;
+    color:#777;
+    margin-top:6px;
+    line-height:1.5;
+}
+
+.divider{
+    height:1px;
+    background:#eee;
+    margin:25px 0;
+}
+
+@media(max-width:600px){
+
+    .container{
+        padding:20px 14px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    button{
+        margin-bottom:8px;
+    }
+
+}
+
 </style>
 
 </head>
+
 
 <body>
 
 <div class="container">
 
-<h1>Customer Reviews</h1>
 
-<div id="message" class="message"></div>
+<h1>
+    Customer Reviews
+</h1>
 
-<!-- ADD REVIEW -->
+
+<div
+    id="message"
+    class="message"
+></div>
+
+
+<!-- =====================================================
+     ADD REVIEW
+====================================================== -->
 
 <div class="card">
 
-<h2>Add Customer Review</h2>
+<h2>
+    Add Customer Review
+</h2>
 
-<label>Customer Name</label>
 
-<input
-    id="customerName"
-    type="text"
-    placeholder="Example: Sana"
->
+<label>
+    Review Type
+</label>
 
-<label>Rating</label>
+<select id="reviewType">
 
-<select id="rating">
+    <option value="customer">
+        Customer Review
+    </option>
 
-    <option value="5">★★★★★ — 5 Stars</option>
-    <option value="4">★★★★☆ — 4 Stars</option>
-    <option value="3">★★★☆☆ — 3 Stars</option>
-    <option value="2">★★☆☆☆ — 2 Stars</option>
-    <option value="1">★☆☆☆☆ — 1 Star</option>
+    <option value="instagram">
+        Instagram Review
+    </option>
 
 </select>
 
-<label>Product Name</label>
 
-<input
-    id="productName"
-    type="text"
-    placeholder="Example: Pearl Necklace"
+<!-- CUSTOMER DETAILS -->
+
+<div id="customerFields">
+
+    <label>
+        Customer Name
+    </label>
+
+    <input
+        id="customerName"
+        type="text"
+        placeholder="Example: Sana"
+    >
+
+
+    <label>
+        Rating
+    </label>
+
+    <select id="rating">
+
+        <option value="5">
+            ★★★★★ — 5 Stars
+        </option>
+
+        <option value="4">
+            ★★★★☆ — 4 Stars
+        </option>
+
+        <option value="3">
+            ★★★☆☆ — 3 Stars
+        </option>
+
+        <option value="2">
+            ★★☆☆☆ — 2 Stars
+        </option>
+
+        <option value="1">
+            ★☆☆☆☆ — 1 Star
+        </option>
+
+    </select>
+
+
+    <label>
+        Product Name
+    </label>
+
+    <input
+        id="productName"
+        type="text"
+        placeholder="Example: Pearl Necklace"
+    >
+
+
+    <label>
+        Review
+    </label>
+
+    <textarea
+        id="reviewText"
+        placeholder="What did the customer say?"
+    ></textarea>
+
+
+    <label>
+        Customer Image URL
+        <span style="font-weight:normal">
+            (optional)
+        </span>
+    </label>
+
+    <input
+        id="customerImage"
+        type="text"
+        placeholder="https://..."
+    >
+
+</div>
+
+
+<!-- INSTAGRAM DETAILS -->
+
+<div
+    id="instagramFields"
+    style="display:none;"
 >
 
-<label>Review</label>
+    <label>
+        Instagram Post / Reel URL
+    </label>
 
-<textarea
-    id="reviewText"
-    placeholder="What did the customer say?"
-></textarea>
+    <input
+        id="instagramUrl"
+        type="url"
+        placeholder="https://www.instagram.com/reel/..."
+    >
 
-<label>Customer Image URL (optional)</label>
+    <div class="help">
 
-<input
-    id="customerImage"
-    type="text"
-    placeholder="https://..."
->
+        Paste the complete public Instagram post or Reel URL.
+        Example:
+        https://www.instagram.com/reel/XXXXXXXX/
+
+    </div>
+
+
+    <label>
+        Instagram Username
+    </label>
+
+    <input
+        id="instagramUsername"
+        type="text"
+        placeholder="@username"
+    >
+
+
+    <label>
+        Customer Name
+        <span style="font-weight:normal">
+            (optional)
+        </span>
+    </label>
+
+    <input
+        id="instagramCustomerName"
+        type="text"
+        placeholder="Example: Sana"
+    >
+
+
+    <label>
+        Rating
+    </label>
+
+    <select id="instagramRating">
+
+        <option value="5">
+            ★★★★★ — 5 Stars
+        </option>
+
+        <option value="4">
+            ★★★★☆ — 4 Stars
+        </option>
+
+        <option value="3">
+            ★★★☆☆ — 3 Stars
+        </option>
+
+        <option value="2">
+            ★★☆☆☆ — 2 Stars
+        </option>
+
+        <option value="1">
+            ★☆☆☆☆ — 1 Star
+        </option>
+
+    </select>
+
+
+    <label>
+        Review / Caption
+    </label>
+
+    <textarea
+        id="instagramReviewText"
+        placeholder="Paste the customer's review or Instagram caption here."
+    ></textarea>
+
+
+    <label>
+        Product Name
+    </label>
+
+    <input
+        id="instagramProductName"
+        type="text"
+        placeholder="Example: Anti-Tarnish Necklace"
+    >
+
+
+    <label>
+        Instagram Thumbnail URL
+        <span style="font-weight:normal">
+            (optional)
+        </span>
+    </label>
+
+    <input
+        id="instagramThumbnail"
+        type="url"
+        placeholder="https://..."
+    >
+
+    <div class="help">
+
+        Optional. If supplied, the homepage can display the image
+        alongside the Instagram review.
+
+    </div>
+
+</div>
+
+
+<div class="divider"></div>
+
 
 <label style="font-weight:normal">
 
-<input
-    id="approved"
-    type="checkbox"
-    checked
-    style="width:auto"
->
+    <input
+        id="approved"
+        type="checkbox"
+        checked
+    >
 
-Show this review on the website
+    Show this review on the website
 
 </label>
 
+
 <br>
+
 
 <button
     class="primary"
@@ -219,38 +501,52 @@ Show this review on the website
     Add Review
 </button>
 
+
 </div>
 
 
-<!-- EXISTING REVIEWS -->
+
+<!-- =====================================================
+     EXISTING REVIEWS
+====================================================== -->
 
 <div class="card">
 
-<h2>Existing Reviews</h2>
+<h2>
+    Existing Reviews
+</h2>
+
 
 <div id="reviews">
+
     Loading reviews...
-</div>
 
 </div>
 
 </div>
+
+
+</div>
+
 
 
 <script>
 
-/* ============================================
+
+"use strict";
+
+
+/* =====================================================
    SUPABASE CONFIG
-   ============================================ */
+===================================================== */
 
-const SUPABASE_URL = "https://ltxrycmreumoqfpcbwnb.supabase.co";
+const SUPABASE_URL =
+    "https://ltxrycmreumoqfpcbwnb.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
 
+const SUPABASE_KEY =
+    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
 
-/* ============================================
-   SUPABASE CLIENT
-   ============================================ */
 
 const supabaseClient =
     window.supabase.createClient(
@@ -266,253 +562,720 @@ const supabaseClient =
     );
 
 
-/* ============================================
-   MESSAGE
-   ============================================ */
 
-function showMessage(text, type){
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    type
+){
 
     const box =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
-    box.textContent = text;
+
+    box.textContent =
+        text;
+
 
     box.className =
         "message " + type;
 
-    box.style.display = "block";
 
-    setTimeout(() => {
+    box.style.display =
+        "block";
 
-        box.style.display = "none";
 
-    }, 4000);
+    setTimeout(
+        function(){
+
+            box.style.display =
+                "none";
+
+        },
+        4000
+    );
+
 }
 
 
-/* ============================================
+
+/* =====================================================
+   REVIEW TYPE SWITCH
+===================================================== */
+
+document
+    .getElementById("reviewType")
+    .addEventListener(
+        "change",
+        function(){
+
+            const type =
+                this.value;
+
+
+            const customerFields =
+                document.getElementById(
+                    "customerFields"
+                );
+
+
+            const instagramFields =
+                document.getElementById(
+                    "instagramFields"
+                );
+
+
+            if(type === "instagram"){
+
+                customerFields.style.display =
+                    "none";
+
+                instagramFields.style.display =
+                    "block";
+
+            }else{
+
+                customerFields.style.display =
+                    "block";
+
+                instagramFields.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+
+
+/* =====================================================
    LOAD REVIEWS
-   ============================================ */
+===================================================== */
 
 async function loadReviews(){
 
     const container =
-        document.getElementById("reviews");
+        document.getElementById(
+            "reviews"
+        );
+
 
     container.innerHTML =
         "Loading reviews...";
 
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
         .from("reviews")
         .select("*")
-        .order("created_at", {
-            ascending:false
-        });
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
 
 
     if(error){
 
         console.error(error);
 
-        container.innerHTML =
-            `<p style="color:red">
+
+        container.innerHTML = `
+            <p style="color:red">
                 ${escapeHtml(error.message)}
-            </p>`;
+            </p>
+        `;
+
 
         return;
+
     }
 
 
-    if(!data || data.length === 0){
+    if(
+        !data ||
+        data.length === 0
+    ){
 
         container.innerHTML =
             "<p>No reviews added yet.</p>";
 
+
         return;
+
     }
 
 
     container.innerHTML =
-        data.map(review => {
+        data
+        .map(
+            function(review){
 
-            const stars =
-                "★".repeat(review.rating || 0) +
-                "☆".repeat(5 - (review.rating || 0));
+                const rating =
+                    Math.max(
+                        1,
+                        Math.min(
+                            5,
+                            Number(
+                                review.rating
+                            ) || 5
+                        )
+                    );
 
 
-            return `
+                const stars =
+                    "★".repeat(
+                        rating
+                    ) +
+                    "☆".repeat(
+                        5 - rating
+                    );
 
-                <div class="review">
 
-                    <strong>
-                        ${escapeHtml(
-                            review.customer_name || ""
-                        )}
-                    </strong>
+                const isInstagram =
+                    !!review.instagram_url;
 
-                    <div class="stars">
-                        ${stars}
+
+                return `
+
+                    <div class="review">
+
+                        <span class="review-type">
+
+                            ${
+                                isInstagram
+                                ? "INSTAGRAM REVIEW"
+                                : "CUSTOMER REVIEW"
+                            }
+
+                        </span>
+
+
+                        <strong>
+
+                            ${
+                                escapeHtml(
+                                    review.customer_name ||
+                                    review.instagram_username ||
+                                    "Customer"
+                                )
+                            }
+
+                        </strong>
+
+
+                        <div class="stars">
+
+                            ${stars}
+
+                        </div>
+
+
+                        ${
+                            review.product_name
+
+                            ?
+
+                            `
+                            <small>
+
+                                ${escapeHtml(
+                                    review.product_name
+                                )}
+
+                            </small>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        <p>
+
+                            ${escapeHtml(
+                                review.review_text || ""
+                            )}
+
+                        </p>
+
+
+                        ${
+                            isInstagram
+
+                            ?
+
+                            `
+                            <a
+                                class="instagram-link"
+                                href="${escapeHtml(
+                                    review.instagram_url
+                                )}"
+                                target="_blank"
+                                rel="noopener"
+                            >
+
+                                View original Instagram post/reel ↗
+
+                            </a>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        ${
+                            review.customer_image
+
+                            ?
+
+                            `
+                            <div class="instagram-preview">
+
+                                <img
+                                    src="${escapeHtml(
+                                        review.customer_image
+                                    )}"
+                                    alt="Customer"
+                                >
+
+                            </div>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        ${
+                            isInstagram &&
+                            review.instagram_thumbnail
+
+                            ?
+
+                            `
+                            <div class="instagram-preview">
+
+                                <img
+                                    src="${escapeHtml(
+                                        review.instagram_thumbnail
+                                    )}"
+                                    alt="Instagram review"
+                                >
+
+                            </div>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        <span class="status ${
+                            review.is_approved
+                            ? "visible"
+                            : "hidden"
+                        }">
+
+                            ${
+                                review.is_approved
+                                ? "Visible on website"
+                                : "Hidden from website"
+                            }
+
+                        </span>
+
+
+                        <br>
+
+
+                        <button
+                            class="secondary"
+                            onclick="toggleReview(
+                                ${review.id},
+                                ${review.is_approved}
+                            )"
+                        >
+
+                            ${
+                                review.is_approved
+                                ? "Hide Review"
+                                : "Publish Review"
+                            }
+
+                        </button>
+
+
+                        ${
+                            isInstagram
+
+                            ?
+
+                            `
+                            <button
+                                class="instagram-btn"
+                                onclick="openInstagram(
+                                    '${escapeJs(
+                                        review.instagram_url
+                                    )}'
+                                )"
+                            >
+
+                                Open Instagram
+
+                            </button>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        <button
+                            class="delete"
+                            onclick="deleteReview(
+                                ${review.id}
+                            )"
+                        >
+
+                            Delete
+
+                        </button>
+
+
                     </div>
 
-                    ${
-                        review.product_name
-                        ?
-                        `<small>
-                            ${escapeHtml(
-                                review.product_name
-                            )}
-                        </small>`
-                        :
-                        ""
-                    }
+                `;
 
-                    <p>
-                        ${escapeHtml(
-                            review.review_text || ""
-                        )}
-                    </p>
+            }
+        )
+        .join("");
 
-                    <span class="status ${
-                        review.is_approved
-                        ? "visible"
-                        : "hidden"
-                    }">
-
-                        ${
-                            review.is_approved
-                            ? "Visible on website"
-                            : "Hidden from website"
-                        }
-
-                    </span>
-
-                    <br>
-
-                    <button
-                        class="secondary"
-                        onclick="toggleReview(
-                            ${review.id},
-                            ${review.is_approved}
-                        )"
-                    >
-
-                        ${
-                            review.is_approved
-                            ? "Hide Review"
-                            : "Publish Review"
-                        }
-
-                    </button>
-
-
-                    <button
-                        class="delete"
-                        onclick="deleteReview(${review.id})"
-                    >
-                        Delete
-                    </button>
-
-                </div>
-
-            `;
-
-        }).join("");
 }
 
 
-/* ============================================
+
+/* =====================================================
    ADD REVIEW
-   ============================================ */
+===================================================== */
 
 async function addReview(){
 
-    const customerName =
+    const type =
         document
-        .getElementById("customerName")
-        .value
-        .trim();
-
-
-    const rating =
-        Number(
-            document
-            .getElementById("rating")
-            .value
-        );
-
-
-    const productName =
-        document
-        .getElementById("productName")
-        .value
-        .trim();
-
-
-    const reviewText =
-        document
-        .getElementById("reviewText")
-        .value
-        .trim();
-
-
-    const customerImage =
-        document
-        .getElementById("customerImage")
-        .value
-        .trim();
+        .getElementById(
+            "reviewType"
+        )
+        .value;
 
 
     const approved =
         document
-        .getElementById("approved")
+        .getElementById(
+            "approved"
+        )
         .checked;
 
 
-    if(!customerName){
+    /* ============================================
+       CUSTOMER REVIEW
+    ============================================ */
+
+    if(type === "customer"){
+
+        const customerName =
+            document
+            .getElementById(
+                "customerName"
+            )
+            .value
+            .trim();
+
+
+        const rating =
+            Number(
+                document
+                .getElementById(
+                    "rating"
+                )
+                .value
+            );
+
+
+        const productName =
+            document
+            .getElementById(
+                "productName"
+            )
+            .value
+            .trim();
+
+
+        const reviewText =
+            document
+            .getElementById(
+                "reviewText"
+            )
+            .value
+            .trim();
+
+
+        const customerImage =
+            document
+            .getElementById(
+                "customerImage"
+            )
+            .value
+            .trim();
+
+
+        if(!customerName){
+
+            showMessage(
+                "Please enter customer name.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if(!reviewText){
+
+            showMessage(
+                "Please enter the review.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const {
+            error
+        } =
+            await supabaseClient
+            .from("reviews")
+            .insert({
+
+                customer_name:
+                    customerName,
+
+                rating:
+                    rating,
+
+                review_text:
+                    reviewText,
+
+                product_name:
+                    productName ||
+                    null,
+
+                customer_image:
+                    customerImage ||
+                    null,
+
+                is_approved:
+                    approved
+
+            });
+
+
+        if(error){
+
+            console.error(error);
+
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+
+            return;
+
+        }
+
+
+        clearCustomerForm();
+
 
         showMessage(
-            "Please enter customer name.",
+            approved
+            ? "Review added and published."
+            : "Review added as hidden.",
+            "success"
+        );
+
+
+        loadReviews();
+
+
+        return;
+
+    }
+
+
+
+    /* ============================================
+       INSTAGRAM REVIEW
+    ============================================ */
+
+    const instagramUrl =
+        document
+        .getElementById(
+            "instagramUrl"
+        )
+        .value
+        .trim();
+
+
+    const instagramUsername =
+        document
+        .getElementById(
+            "instagramUsername"
+        )
+        .value
+        .trim();
+
+
+    const instagramCustomerName =
+        document
+        .getElementById(
+            "instagramCustomerName"
+        )
+        .value
+        .trim();
+
+
+    const instagramRating =
+        Number(
+            document
+            .getElementById(
+                "instagramRating"
+            )
+            .value
+        );
+
+
+    const instagramReviewText =
+        document
+        .getElementById(
+            "instagramReviewText"
+        )
+        .value
+        .trim();
+
+
+    const instagramProductName =
+        document
+        .getElementById(
+            "instagramProductName"
+        )
+        .value
+        .trim();
+
+
+    const instagramThumbnail =
+        document
+        .getElementById(
+            "instagramThumbnail"
+        )
+        .value
+        .trim();
+
+
+    if(!instagramUrl){
+
+        showMessage(
+            "Please paste the Instagram post or Reel URL.",
             "error"
         );
 
         return;
+
     }
 
 
-    if(!reviewText){
+    if(!isInstagramUrl(instagramUrl)){
 
         showMessage(
-            "Please enter the review.",
+            "Please enter a valid Instagram URL.",
             "error"
         );
 
         return;
+
     }
 
 
-    const { error } =
+    if(!instagramReviewText){
+
+        showMessage(
+            "Please add the Instagram review/caption.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } =
         await supabaseClient
         .from("reviews")
         .insert({
 
             customer_name:
-                customerName,
+                instagramCustomerName ||
+                instagramUsername ||
+                "Instagram Customer",
 
             rating:
-                rating,
+                instagramRating,
 
             review_text:
-                reviewText,
+                instagramReviewText,
 
             product_name:
-                productName || null,
+                instagramProductName ||
+                null,
 
             customer_image:
-                customerImage || null,
+                null,
 
-            is_approved: false
+            is_approved:
+                approved,
+
+            instagram_url:
+                instagramUrl,
+
+            instagram_username:
+                instagramUsername ||
+                null,
+
+            instagram_thumbnail:
+                instagramThumbnail ||
+                null
 
         });
 
@@ -520,61 +1283,199 @@ async function addReview(){
     if(error){
 
         console.error(error);
+
 
         showMessage(
             error.message,
             "error"
         );
 
+
         return;
+
     }
 
 
-    document
-        .getElementById("customerName")
-        .value = "";
-
-
-    document
-        .getElementById("productName")
-        .value = "";
-
-
-    document
-        .getElementById("reviewText")
-        .value = "";
-
-
-    document
-        .getElementById("customerImage")
-        .value = "";
-
-
-    document
-        .getElementById("approved")
-        .checked = true;
+    clearInstagramForm();
 
 
     showMessage(
-        "Review added successfully.",
+        approved
+        ? "Instagram review added and published."
+        : "Instagram review added as hidden.",
         "success"
     );
 
 
     loadReviews();
+
 }
 
 
-/* ============================================
+
+/* =====================================================
+   INSTAGRAM URL VALIDATION
+===================================================== */
+
+function isInstagramUrl(url){
+
+    try{
+
+        const parsed =
+            new URL(url);
+
+
+        return (
+            parsed.hostname
+                .toLowerCase()
+                .includes("instagram.com")
+        );
+
+    }catch{
+
+        return false;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   OPEN INSTAGRAM
+===================================================== */
+
+function openInstagram(url){
+
+    if(!url){
+        return;
+    }
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener"
+    );
+
+}
+
+
+
+/* =====================================================
+   CLEAR CUSTOMER FORM
+===================================================== */
+
+function clearCustomerForm(){
+
+    document
+        .getElementById(
+            "customerName"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "productName"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "reviewText"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "customerImage"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "approved"
+        )
+        .checked = true;
+
+}
+
+
+
+/* =====================================================
+   CLEAR INSTAGRAM FORM
+===================================================== */
+
+function clearInstagramForm(){
+
+    document
+        .getElementById(
+            "instagramUrl"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "instagramUsername"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "instagramCustomerName"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "instagramReviewText"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "instagramProductName"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "instagramThumbnail"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "approved"
+        )
+        .checked = true;
+
+}
+
+
+
+/* =====================================================
    PUBLISH / HIDE
-   ============================================ */
+===================================================== */
 
 async function toggleReview(
     id,
     currentStatus
 ){
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
         .from("reviews")
         .update({
@@ -583,19 +1484,25 @@ async function toggleReview(
                 !currentStatus
 
         })
-        .eq("id", id);
+        .eq(
+            "id",
+            id
+        );
 
 
     if(error){
 
         console.error(error);
 
+
         showMessage(
             error.message,
             "error"
         );
 
+
         return;
+
     }
 
 
@@ -608,12 +1515,14 @@ async function toggleReview(
 
 
     loadReviews();
+
 }
 
 
-/* ============================================
+
+/* =====================================================
    DELETE
-   ============================================ */
+===================================================== */
 
 async function deleteReview(id){
 
@@ -624,26 +1533,35 @@ async function deleteReview(id){
     ){
 
         return;
+
     }
 
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
         .from("reviews")
         .delete()
-        .eq("id", id);
+        .eq(
+            "id",
+            id
+        );
 
 
     if(error){
 
         console.error(error);
 
+
         showMessage(
             error.message,
             "error"
         );
 
+
         return;
+
     }
 
 
@@ -654,32 +1572,79 @@ async function deleteReview(id){
 
 
     loadReviews();
+
 }
 
 
-/* ============================================
-   SECURITY
-   ============================================ */
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
 function escapeHtml(value){
 
-    return String(value)
+    return String(
+        value ?? ""
+    )
 
-        .replace(/&/g,"&amp;")
+    .replace(
+        /&/g,
+        "&amp;"
+    )
 
-        .replace(/</g,"&lt;")
+    .replace(
+        /</g,
+        "&lt;"
+    )
 
-        .replace(/>/g,"&gt;")
+    .replace(
+        />/g,
+        "&gt;"
+    )
 
-        .replace(/"/g,"&quot;")
+    .replace(
+        /"/g,
+        "&quot;"
+    )
 
-        .replace(/'/g,"&#039;");
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
 }
 
 
-/* ============================================
+
+/* =====================================================
+   ESCAPE JAVASCRIPT STRING
+===================================================== */
+
+function escapeJs(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    )
+    .replace(
+        /\r?\n/g,
+        "\\n"
+    );
+
+}
+
+
+
+/* =====================================================
    START
-   ============================================ */
+===================================================== */
 
 loadReviews();
 
