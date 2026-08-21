@@ -1,1143 +1,1298 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Trends by AK | Admin</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f8f5f0;
-    color: #292929;
-}
-
-.admin-layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* ================= SIDEBAR ================= */
-
-.sidebar {
-    width: 240px;
-    background: #292929;
-    color: white;
-    padding: 30px 20px;
-    flex-shrink: 0;
-}
-
-.logo {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.logo h1 {
-    font-size: 22px;
-    color: #d1ad72;
-}
-
-.logo p {
-    font-size: 11px;
-    color: #aaa;
-    margin-top: 5px;
-}
-
-.menu a,
-.menu button {
-    display: block;
-    width: 100%;
-    border: none;
-    background: transparent;
-    color: #ddd;
-    padding: 13px 15px;
-    margin-bottom: 6px;
-    text-align: left;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.menu a:hover,
-.menu button:hover,
-.menu .active {
-    background: #d1ad72;
-    color: white;
-}
-
-/* ================= MAIN ================= */
-
-.main {
-    flex: 1;
-    padding: 35px;
-    min-width: 0;
-}
-
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    gap: 15px;
-}
-
-.topbar h2 {
-    font-size: 28px;
-}
-
-.topbar p {
-    margin-top: 5px;
-    color: #777;
-}
-
-.top-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    border: none;
-    border-radius: 8px;
-    padding: 11px 16px;
-    cursor: pointer;
-    font-weight: 700;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn:disabled {
-    opacity: .6;
-    cursor: not-allowed;
-}
-
-.gold {
-    background: #d1ad72;
-    color: white;
-}
-
-.dark {
-    background: #292929;
-    color: white;
-}
-
-.white {
-    background: white;
-    color: #292929;
-    border: 1px solid #ddd;
-}
-
-/* ================= DASHBOARD CARDS ================= */
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.card {
-    background: white;
-    padding: 22px;
-    border-radius: 14px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.06);
-}
-
-.card span {
-    font-size: 13px;
-    color: #777;
-}
-
-.card h3 {
-    font-size: 30px;
-    margin-top: 9px;
-}
-
-
-/* ================= REVIEWS DASHBOARD CARD ================= */
-
-.review-dashboard-card {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    transition: transform .2s ease, box-shadow .2s ease;
-}
-
-.review-dashboard-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,.10);
-}
-
-.review-dashboard-card h3 {
-    color: #d1ad72;
-}
-
-.review-dashboard-card small {
-    display: block;
-    margin-top: 8px;
-    color: #d1ad72;
-    font-weight: 700;
-}
-
-/* ================= SECTIONS ================= */
-
-.section {
-    background: white;
-    padding: 26px;
-    border-radius: 14px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.06);
-    margin-bottom: 25px;
-}
-
-.section h3 {
-    margin-bottom: 7px;
-}
-
-.muted {
-    color: #777;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-/* ================= INVENTORY TOOLBAR ================= */
-
-.inventory-toolbar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-    margin-bottom: 15px;
-}
-
-.search-box {
-    flex: 1;
-    min-width: 220px;
-    padding: 11px 13px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-}
-
-.filter-select {
-    padding: 11px 13px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    font-size: 14px;
-}
-
-.search-box:focus,
-.filter-select:focus,
-.bulk-control input:focus,
-.bulk-control select:focus {
-    outline: none;
-    border-color: #d1ad72;
-}
-
-/* ================= BULK CONTROLS ================= */
-
-.bulk-controls {
-    background: #faf8f5;
-    border: 1px solid #e8e1d8;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 15px;
-}
-
-.bulk-controls-title {
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 12px;
-}
-
-.bulk-control-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.bulk-control {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-.bulk-control label {
-    font-size: 12px;
-    color: #666;
-}
-
-.bulk-control input,
-.bulk-control select {
-    padding: 9px;
-    border: 1px solid #ddd;
-    border-radius: 7px;
-    background: white;
-    width: 120px;
-}
-
-.bulk-control select {
-    width: 140px;
-}
-
-/* ================= INVENTORY TABLE ================= */
-
-.table-wrap {
-    overflow-x: auto;
-    margin-top: 15px;
-}
-
-.inventory-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 950px;
-}
-
-.inventory-table th,
-.inventory-table td {
-    text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    font-size: 12px;
-    vertical-align: middle;
-}
-
-.inventory-table th {
-    background: #292929;
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
-
-.inventory-table tbody tr:hover {
-    background: #faf8f5;
-}
-
-.product-thumb {
-    width: 58px;
-    height: 58px;
-    object-fit: cover;
-    border-radius: 7px;
-    background: #f3f3f3;
-}
-
-.product-name {
-    font-weight: 700;
-    max-width: 250px;
-}
-
-.product-sub {
-    font-size: 11px;
-    color: #888;
-    margin-top: 4px;
-    word-break: break-all;
-}
-
-.inventory-input {
-    width: 100px;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 12px;
-}
-
-.inventory-input:focus {
-    outline: none;
-    border-color: #d1ad72;
-}
-
-.inventory-status {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: white;
-    font-size: 12px;
-}
-
-.stock-zero {
-    color: #b83232;
-    font-weight: 700;
-}
-
-.stock-good {
-    color: #34733c;
-    font-weight: 700;
-}
-
-.check {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
-
-.save-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
-
-.selected-count {
-    color: #777;
-    font-size: 13px;
-}
-
-.loading {
-    text-align: center;
-    padding: 40px;
-    color: #777;
-}
-
-.empty {
-    text-align: center;
-    padding: 40px;
-    color: #777;
-}
-
-/* ================= STATUS ================= */
-
-.status {
-    margin-top: 14px;
-    padding: 11px;
-    border-radius: 8px;
-    display: none;
-    font-size: 13px;
-}
-
-.status.show {
-    display: block;
-}
-
-.status.success {
-    background: #edf7ed;
-    color: #356b35;
-}
-
-.status.error {
-    background: #fff0f0;
-    color: #9b3030;
-}
-
-.status.warning {
-    background: #fff8e1;
-    color: #8a6500;
-}
-
-/* ================= SCRAPER ================= */
-
-.bulk-input {
-    width: 100%;
-    min-height: 150px;
-    margin-top: 15px;
-    padding: 14px;
-    border: 1px solid #ddd;
-    border-radius: 9px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    resize: vertical;
-}
-
-.bulk-input:focus {
-    outline: none;
-    border-color: #d1ad72;
-}
-
-.bulk-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-}
-
-.thumb {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 7px;
-    background: #f3f3f3;
-}
-
-.cell-input,
-.cell-select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-}
-
-.cell-input:focus,
-.cell-select:focus {
-    outline: none;
-    border-color: #d1ad72;
-}
-
-.small {
-    font-size: 11px;
-    color: #777;
-    word-break: break-all;
-    margin-top: 4px;
-}
-
-/* ================= QUICK ACTIONS ================= */
-
-.quick {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.quick a {
-    padding: 13px 16px;
-    border: 1px solid #e5ded4;
-    background: #faf8f5;
-    border-radius: 9px;
-    text-decoration: none;
-    color: #292929;
-}
-
-.quick a:hover {
-    border-color: #d1ad72;
-}
-
-/* ================= MOBILE ================= */
-
-@media (max-width: 900px) {
-
-    .sidebar {
-        width: 75px;
-        padding: 20px 10px;
-    }
-
-    .logo h1,
-    .logo p {
-        display: none;
-    }
-
-    .menu a {
-        text-align: center;
-        font-size: 20px;
-        padding: 12px 5px;
-    }
-
-    .menu a span {
-        display: none;
-    }
-
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .main {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 600px) {
-
-    .cards {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .top-actions {
-        width: 100%;
-    }
-
-    .top-actions .btn {
-        flex: 1;
-        text-align: center;
-    }
-
-    .section {
-        padding: 18px;
-    }
-
-    .bulk-control {
-        width: 100%;
-    }
-
-    .bulk-control input,
-    .bulk-control select {
-        flex: 1;
-    }
-}
-
-</style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Trends by AK Admin Dashboard">
+
+    <title>Trends by AK | Admin Dashboard</title>
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --gold: #d1ad72;
+            --gold-dark: #b99258;
+            --dark: #292929;
+            --cream: #f8f5f0;
+            --border: #e5ded4;
+            --muted: #777;
+            --white: #ffffff;
+            --success: #34733c;
+            --danger: #b83232;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           LAYOUT
+        ===================================================== */
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            width: 240px;
+            background: var(--dark);
+            color: white;
+            padding: 30px 20px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            color: var(--gold);
+            line-height: 1.2;
+        }
+
+        .logo p {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 6px;
+            letter-spacing: .5px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #ddd;
+            padding: 13px 15px;
+            margin-bottom: 6px;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: var(--gold);
+            color: white;
+        }
+
+        .menu-icon {
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            flex: 1;
+            padding: 35px;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .topbar h2 {
+            font-size: 28px;
+            line-height: 1.2;
+        }
+
+        .topbar p {
+            margin-top: 6px;
+            color: var(--muted);
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 13px;
+            transition: .2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .gold {
+            background: var(--gold);
+            color: white;
+        }
+
+        .gold:hover {
+            background: var(--gold-dark);
+        }
+
+        .dark {
+            background: var(--dark);
+            color: white;
+        }
+
+        .white {
+            background: white;
+            color: var(--dark);
+            border: 1px solid #ddd;
+        }
+
+        .danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* =====================================================
+           DASHBOARD CARDS
+        ===================================================== */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .06);
+        }
+
+        .stat-card span {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .stat-card h3 {
+            font-size: 30px;
+            margin-top: 9px;
+        }
+
+        .stat-card.gold-stat h3 {
+            color: var(--gold-dark);
+        }
+
+        .stat-card.red-stat h3 {
+            color: var(--danger);
+        }
+
+        /* =====================================================
+           SECTIONS
+        ===================================================== */
+
+        .section {
+            background: white;
+            padding: 26px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .06);
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            margin-bottom: 5px;
+        }
+
+        .section h3 {
+            margin-bottom: 7px;
+            font-size: 18px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           INVENTORY TOOLBAR
+        ===================================================== */
+
+        .inventory-toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .filter-select {
+            padding: 11px 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            min-width: 125px;
+        }
+
+        .search-box:focus,
+        .filter-select:focus,
+        .bulk-control input:focus,
+        .bulk-control select:focus,
+        .inventory-input:focus,
+        .inventory-status:focus,
+        .bulk-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(209, 173, 114, .12);
+        }
+
+        /* =====================================================
+           BULK CONTROLS
+        ===================================================== */
+
+        .bulk-controls {
+            background: #faf8f5;
+            border: 1px solid #e8e1d8;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .bulk-controls-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .bulk-control-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .bulk-control {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .bulk-control label {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .bulk-control input,
+        .bulk-control select {
+            padding: 9px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            background: white;
+            width: 120px;
+        }
+
+        .bulk-control select {
+            width: 140px;
+        }
+
+        .apply-btn {
+            padding: 9px 12px;
+            border-radius: 7px;
+            border: 1px solid #ddd;
+            background: white;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .apply-btn:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: white;
+        }
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 15px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+        }
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        .inventory-table th,
+        .inventory-table td {
+            text-align: left;
+            padding: 11px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .inventory-table th {
+            background: var(--dark);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .inventory-table tbody tr:hover {
+            background: #faf8f5;
+        }
+
+        .inventory-table tbody tr.selected-row {
+            background: #fffaf0;
+        }
+
+        .inventory-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .product-thumb {
+            width: 58px;
+            height: 58px;
+            object-fit: cover;
+            border-radius: 7px;
+            background: #f3f3f3;
+            display: block;
+        }
+
+        .product-name {
+            font-weight: 700;
+            max-width: 250px;
+            line-height: 1.35;
+        }
+
+        .product-sub {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+            word-break: break-all;
+        }
+
+        .inventory-input {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 12px;
+            background: white;
+        }
+
+        .inventory-status {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 12px;
+            min-width: 105px;
+        }
+
+        .stock-zero {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .stock-good {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .check {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--gold);
+        }
+
+        .select-all-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           SAVE ROW
+        ===================================================== */
+
+        .save-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .selected-count {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .selected-count strong {
+            color: var(--gold-dark);
+        }
+
+        /* =====================================================
+           STATUS MESSAGE
+        ===================================================== */
+
+        .status {
+            margin-top: 14px;
+            padding: 11px 13px;
+            border-radius: 8px;
+            display: none;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            background: #edf7ed;
+            color: #356b35;
+        }
+
+        .status.error {
+            background: #fff0f0;
+            color: #9b3030;
+        }
+
+        .status.warning {
+            background: #fff8e1;
+            color: #8a6500;
+        }
+
+        .status.info {
+            background: #eef5ff;
+            color: #285b91;
+        }
+
+        /* =====================================================
+           LOADING / EMPTY
+        ===================================================== */
+
+        .loading {
+            text-align: center;
+            padding: 45px;
+            color: var(--muted);
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px;
+            color: var(--muted);
+        }
+
+        .empty h4 {
+            margin-bottom: 7px;
+            color: var(--dark);
+        }
+
+        /* =====================================================
+           QUICK ACTIONS
+        ===================================================== */
+
+        .quick {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .quick a {
+            padding: 13px 16px;
+            border: 1px solid var(--border);
+            background: #faf8f5;
+            border-radius: 9px;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .quick a:hover {
+            border-color: var(--gold);
+            background: white;
+        }
+
+        /* =====================================================
+           BULK TEXT
+        ===================================================== */
+
+        .bulk-input {
+            width: 100%;
+            min-height: 150px;
+            margin-top: 15px;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .scraper-help {
+            margin-top: 10px;
+            color: #888;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 76px;
+                padding: 20px 10px;
+            }
+
+            .logo h1,
+            .logo p {
+                display: none;
+            }
+
+            .menu a {
+                justify-content: center;
+                padding: 12px 5px;
+            }
+
+            .menu a span:not(.menu-icon) {
+                display: none;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .stat-card h3 {
+                font-size: 25px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .top-actions {
+                width: 100%;
+            }
+
+            .top-actions .btn {
+                flex: 1;
+            }
+
+            .section {
+                padding: 18px;
+            }
+
+            .bulk-control {
+                width: 100%;
+            }
+
+            .bulk-control input,
+            .bulk-control select {
+                flex: 1;
+                width: auto;
+            }
+
+            .inventory-toolbar {
+                flex-direction: column;
+            }
+
+            .search-box,
+            .filter-select {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
 <div class="admin-layout">
 
-<!-- ================= SIDEBAR ================= -->
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-<aside class="sidebar">
+    <aside class="sidebar">
 
-    <div class="logo">
-        <h1>Trends by AK</h1>
-        <p>ADMIN PANEL</p>
-    </div>
-
-    <div class="menu">
-
-        <a class="active" href="index.html">
-            ðŸ  <span>Dashboard</span>
-        </a>
-
-        <a href="products.html">
-            ðŸ›ï¸ <span>Products</span>
-        </a>
-
-        <a href="bulk-products.html">
-            ðŸ“¥ <span>Bulk Upload</span>
-        </a>
-
-        <a href="collections.html">
-            ðŸŽ€ <span>Collections</span>
-        </a>
-
-        <a href="banners.html">
-            ðŸ–¼ï¸ <span>Banners</span>
-        </a>
-
-        <a href="orders.html">
-            ðŸ“¦ <span>Orders</span>
-        </a>
-        <a href="reviews.html">
-    â­ <span>Reviews</span>
-</a>
-
-    </div>
-
-</aside>
-
-
-<!-- ================= MAIN ================= -->
-
-<main class="main">
-
-    <!-- TOP BAR -->
-
-    <div class="topbar">
-
-        <div>
-
-            <h2>Dashboard</h2>
-
-            <p>
-                Manage your Trends by AK store from one place.
-            </p>
-
+        <div class="logo">
+            <h1>Trends by AK</h1>
+            <p>ADMIN PANEL</p>
         </div>
 
-        <div class="top-actions">
+        <nav class="menu">
 
-            <a
-                class="btn gold"
-                href="../index.html"
-            >
-                View Store â†’
+            <a class="active" href="index.html">
+                <span class="menu-icon">🏠</span>
+                <span>Dashboard</span>
             </a>
 
-            <button
-                class="btn dark"
-                onclick="logoutAdmin()"
-            >
-                Logout
-            </button>
+            <a href="products.html">
+                <span class="menu-icon">🛍️</span>
+                <span>Products</span>
+            </a>
 
-        </div>
+            <a href="bulk-products.html">
+                <span class="menu-icon">📥</span>
+                <span>Bulk Upload</span>
+            </a>
 
-    </div>
+            <a href="collections.html">
+                <span class="menu-icon">🎀</span>
+                <span>Collections</span>
+            </a>
 
+            <a href="banners.html">
+                <span class="menu-icon">🖼️</span>
+                <span>Banners</span>
+            </a>
 
-    <!-- ================= DASHBOARD CARDS ================= -->
+            <a href="orders.html">
+                <span class="menu-icon">📦</span>
+                <span>Orders</span>
+            </a>
 
-    <div class="cards">
+            <a href="reviews.html">
+                <span class="menu-icon">⭐</span>
+                <span>Reviews</span>
+            </a>
 
-        <div class="card">
-            <span>Products</span>
-            <h3 id="productCount">0</h3>
-        </div>
+        </nav>
 
-        <div class="card">
-            <span>Active Products</span>
-            <h3 id="activeCount">0</h3>
-        </div>
-
-        <div class="card">
-            <span>Out of Stock</span>
-            <h3 id="outOfStockCount">0</h3>
-        </div>
-
-        <div class="card">
-            <span>Orders</span>
-            <h3 id="orderCount">0</h3>
-        </div>
-
-    </div>
+    </aside>
 
 
     <!-- =====================================================
-         PRODUCT INVENTORY & PRICING MANAGER
+         MAIN
     ====================================================== -->
 
-    <section class="section">
+    <main class="main">
 
-        <h3>
-            ðŸ“¦ Product Inventory & Pricing
-        </h3>
+        <!-- TOP BAR -->
 
-        <p class="muted">
-            All products already uploaded to your website are shown here.
-            Update MRP, Sale Price, Stock and Active / Inactive status.
-        </p>
+        <div class="topbar">
 
+            <div>
 
-        <!-- SEARCH + FILTER -->
+                <h2>Dashboard</h2>
 
-        <div class="inventory-toolbar">
-
-            <input
-                id="productSearch"
-                class="search-box"
-                type="search"
-                placeholder="Search product name or SKU..."
-                oninput="renderInventory()"
-            >
-
-            <select
-                id="statusFilter"
-                class="filter-select"
-                onchange="renderInventory()"
-            >
-                <option value="all">
-                    All Products
-                </option>
-
-                <option value="active">
-                    Active
-                </option>
-
-                <option value="inactive">
-                    Inactive
-                </option>
-
-                <option value="out">
-                    Out of Stock
-                </option>
-            </select>
-
-            <button
-                class="btn white"
-                onclick="loadInventory()"
-            >
-                â†» Refresh
-            </button>
-
-        </div>
-
-
-        <!-- BULK CONTROLS -->
-
-        <div class="bulk-controls">
-
-            <div class="bulk-controls-title">
-                âš¡ Bulk Update Selected Products
-            </div>
-
-            <div class="bulk-control-row">
-
-                <div class="bulk-control">
-
-                    <label>
-                        Stock
-                    </label>
-
-                    <input
-                        id="bulkStock"
-                        type="number"
-                        min="0"
-                        placeholder="Stock"
-                    >
-
-                    <button
-                        class="btn white"
-                        onclick="applyBulkStock()"
-                    >
-                        Apply
-                    </button>
-
-                </div>
-
-
-                <div class="bulk-control">
-
-                    <label>
-                        MRP
-                    </label>
-
-                    <input
-                        id="bulkMrp"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        placeholder="MRP"
-                    >
-
-                    <button
-                        class="btn white"
-                        onclick="applyBulkMrp()"
-                    >
-                        Apply
-                    </button>
-
-                </div>
-
-
-                <div class="bulk-control">
-
-                    <label>
-                        Sale Price
-                    </label>
-
-                    <input
-                        id="bulkSale"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        placeholder="Sale Price"
-                    >
-
-                    <button
-                        class="btn white"
-                        onclick="applyBulkSale()"
-                    >
-                        Apply
-                    </button>
-
-                </div>
-
-
-                <div class="bulk-control">
-
-                    <label>
-                        Status
-                    </label>
-
-                    <select id="bulkStatus">
-
-                        <option value="">
-                            Select
-                        </option>
-
-                        <option value="active">
-                            Active
-                        </option>
-
-                        <option value="inactive">
-                            Inactive
-                        </option>
-
-                    </select>
-
-                    <button
-                        class="btn white"
-                        onclick="applyBulkStatus()"
-                    >
-                        Apply
-                    </button>
-
-                </div>
+                <p>
+                    Manage your Trends by AK store from one place.
+                </p>
 
             </div>
 
-        </div>
+            <div class="top-actions">
 
-
-        <!-- TABLE -->
-
-        <div class="table-wrap">
-
-            <table class="inventory-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-
-                            <input
-                                id="inventorySelectAll"
-                                class="check"
-                                type="checkbox"
-                                onchange="toggleInventoryAll(this.checked)"
-                            >
-
-                        </th>
-
-                        <th>
-                            Image
-                        </th>
-
-                        <th>
-                            Product
-                        </th>
-
-                        <th>
-                            SKU
-                        </th>
-
-                        <th>
-                            MRP
-                        </th>
-
-                        <th>
-                            Sale Price
-                        </th>
-
-                        <th>
-                            Stock
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="inventoryBody">
-
-                    <tr>
-                        <td colspan="8" class="loading">
-                            Loading products...
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-        <div class="save-row">
-
-            <div
-                id="selectedInventoryCount"
-                class="selected-count"
-            >
-                0 products selected
-            </div>
-
-            <button
-                id="saveInventoryBtn"
-                class="btn gold"
-                onclick="saveInventoryChanges()"
-            >
-                ðŸ’¾ Save Inventory Changes
-            </button>
-
-        </div>
-
-
-        <div
-            id="inventoryStatus"
-            class="status"
-        ></div>
-
-    </section>
-
-
-    <!-- =====================================================
-         BULK PRODUCT SCRAPER
-    ====================================================== -->
-
-    <section class="section">
-
-        <h3>
-            ðŸš€ Bulk Product Scraper
-        </h3>
-
-        <p class="muted">
-
-            Paste product-page URLs below, one URL per line.
-            You can scrape up to 25 products at once.
-
-            Review the information before saving products
-            to your catalogue.
-
-        </p>
-
-
-        <textarea
-            id="bulkUrls"
-            class="bulk-input"
-            placeholder="https://example.com/product-1
-https://example.com/product-2
-https://example.com/product-3"
-        ></textarea>
-
-
-        <div class="bulk-actions">
-
-            <button
-                id="scrapeBtn"
-                class="btn gold"
-                onclick="scrapeBulk()"
-            >
-                ðŸ” Scrape Products
-            </button>
-
-            <button
-                class="btn white"
-                onclick="clearBulk()"
-            >
-                Clear
-            </button>
-
-            <a
-                class="btn white"
-                href="bulk-products.html"
-            >
-                Excel / CSV Upload â†’
-            </a>
-
-        </div>
-
-
-        <div
-            id="bulkStatus"
-            class="status"
-        ></div>
-
-
-        <!-- RESULTS -->
-
-        <div
-            id="bulkResults"
-            class="table-wrap"
-            style="display:none;"
-        >
-
-            <table class="inventory-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            <input
-                                class="check"
-                                type="checkbox"
-                                id="selectAll"
-                                onchange="toggleAll(this.checked)"
-                            >
-                        </th>
-
-                        <th>Image</th>
-                        <th>Product</th>
-                        <th>SKU</th>
-                        <th>Price</th>
-                        <th>Sale Price</th>
-                        <th>Category</th>
-                        <th>Collection</th>
-                        <th>Stock</th>
-                        <th>Status</th>
-                        <th>Source</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="bulkBody"></tbody>
-
-            </table>
-
-
-            <div class="bulk-actions">
+                <a
+                    class="btn gold"
+                    href="../index.html"
+                >
+                    View Store →
+                </a>
 
                 <button
-                    id="saveBulkBtn"
-                    class="btn gold"
-                    onclick="saveBulkProducts()"
+                    class="btn dark"
+                    type="button"
+                    onclick="logoutAdmin()"
                 >
-                    ðŸ’¾ Save Selected Products
+                    Logout
                 </button>
 
             </div>
 
         </div>
 
-    </section>
 
+        <!-- =================================================
+             DASHBOARD CARDS
+        ================================================== -->
 
-    <!-- ================= QUICK ACTIONS ================= -->
+        <div class="cards">
 
-    <section class="section">
+            <div class="card stat-card">
+                <span>Products</span>
+                <h3 id="productCount">0</h3>
+            </div>
 
-        <h3>
-            Quick Actions
-        </h3>
+            <div class="card stat-card gold-stat">
+                <span>Active Products</span>
+                <h3 id="activeCount">0</h3>
+            </div>
 
-        <div class="quick">
+            <div class="card stat-card red-stat">
+                <span>Out of Stock</span>
+                <h3 id="outOfStockCount">0</h3>
+            </div>
 
-            <a href="products.html">
-                âž• Add / Manage Product
-            </a>
-
-            <a href="bulk-products.html">
-                ðŸ“¥ Excel / CSV Bulk Upload
-            </a>
-
-            <a href="collections.html">
-                ðŸŽ€ Manage Collections
-            </a>
-
-            <a href="banners.html">
-                ðŸ–¼ï¸ Manage Banners
-            </a>
-
-            <a href="orders.html">
-                ðŸ“¦ View Orders
-            </a>
+            <div class="card stat-card">
+                <span>Orders</span>
+                <h3 id="orderCount">0</h3>
+            </div>
 
         </div>
 
-    </section>
 
-</main>
+        <!-- =================================================
+             PRODUCT INVENTORY
+        ================================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h3>
+                    📦 Product Inventory & Pricing
+                </h3>
+
+                <p class="muted">
+                    All products already uploaded to your website are shown here.
+                    Update MRP, Sale Price, Stock and Active / Inactive status.
+                </p>
+
+            </div>
+
+
+            <!-- SEARCH / FILTER -->
+
+            <div class="inventory-toolbar">
+
+                <input
+                    id="productSearch"
+                    class="search-box"
+                    type="search"
+                    placeholder="Search product name or SKU..."
+                    autocomplete="off"
+                >
+
+                <select
+                    id="productFilter"
+                    class="filter-select"
+                >
+
+                    <option value="all">
+                        All Products
+                    </option>
+
+                    <option value="active">
+                        Active
+                    </option>
+
+                    <option value="inactive">
+                        Inactive
+                    </option>
+
+                    <option value="stock">
+                        In Stock
+                    </option>
+
+                    <option value="out">
+                        Out of Stock
+                    </option>
+
+                </select>
+
+                <button
+                    class="btn white"
+                    type="button"
+                    onclick="loadProducts()"
+                >
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 BULK UPDATE
+            ================================================== -->
+
+            <div class="bulk-controls">
+
+                <div class="bulk-controls-title">
+                    ⚡ Bulk Update Selected Products
+                </div>
+
+                <div class="bulk-control-row">
+
+                    <div class="bulk-control">
+
+                        <label for="bulkStock">
+                            Stock
+                        </label>
+
+                        <input
+                            id="bulkStock"
+                            type="number"
+                            min="0"
+                            step="1"
+                            placeholder="Stock"
+                        >
+
+                        <button
+                            class="apply-btn"
+                            type="button"
+                            onclick="applyBulkStock()"
+                        >
+                            Apply
+                        </button>
+
+                    </div>
+
+
+                    <div class="bulk-control">
+
+                        <label for="bulkMrp">
+                            MRP
+                        </label>
+
+                        <input
+                            id="bulkMrp"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="MRP"
+                        >
+
+                        <button
+                            class="apply-btn"
+                            type="button"
+                            onclick="applyBulkMrp()"
+                        >
+                            Apply
+                        </button>
+
+                    </div>
+
+
+                    <div class="bulk-control">
+
+                        <label for="bulkSale">
+                            Sale Price
+                        </label>
+
+                        <input
+                            id="bulkSale"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="Sale Price"
+                        >
+
+                        <button
+                            class="apply-btn"
+                            type="button"
+                            onclick="applyBulkSale()"
+                        >
+                            Apply
+                        </button>
+
+                    </div>
+
+
+                    <div class="bulk-control">
+
+                        <label for="bulkStatus">
+                            Status
+                        </label>
+
+                        <select id="bulkStatus">
+
+                            <option value="">
+                                Select
+                            </option>
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="inactive">
+                                Inactive
+                            </option>
+
+                        </select>
+
+                        <button
+                            class="apply-btn"
+                            type="button"
+                            onclick="applyBulkStatus()"
+                        >
+                            Apply
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 INVENTORY TABLE
+            ================================================== -->
+
+            <div
+                id="inventoryLoading"
+                class="loading"
+            >
+                Loading products...
+            </div>
+
+            <div
+                id="inventoryEmpty"
+                class="empty"
+                style="display:none;"
+            >
+
+                <h4>No products found</h4>
+
+                <p>
+                    Try another search or filter.
+                </p>
+
+            </div>
+
+
+            <div
+                id="inventoryTableWrap"
+                class="table-wrap"
+                style="display:none;"
+            >
+
+                <table class="inventory-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+
+                                <label class="select-all-label">
+
+                                    <input
+                                        id="selectAll"
+                                        class="check"
+                                        type="checkbox"
+                                        onchange="toggleSelectAll(this)"
+                                    >
+
+                                    <span>All</span>
+
+                                </label>
+
+                            </th>
+
+                            <th>
+                                Image
+                            </th>
+
+                            <th>
+                                Product
+                            </th>
+
+                            <th>
+                                MRP
+                            </th>
+
+                            <th>
+                                Sale Price
+                            </th>
+
+                            <th>
+                                Stock
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="inventoryBody"></tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <div class="save-row">
+
+                <div class="selected-count">
+
+                    <strong id="selectedCount">
+                        0
+                    </strong>
+
+                    product(s) selected
+
+                </div>
+
+                <button
+                    id="saveInventoryBtn"
+                    class="btn gold"
+                    type="button"
+                    onclick="saveInventoryChanges()"
+                >
+                    💾 Save Inventory Changes
+                </button>
+
+            </div>
+
+
+            <div
+                id="inventoryStatus"
+                class="status"
+            ></div>
+
+        </section>
+
+
+        <!-- =================================================
+             QUICK ACTIONS
+        ================================================== -->
+
+        <section class="section">
+
+            <h3>
+                ⚡ Quick Actions
+            </h3>
+
+            <p
+                class="muted"
+                style="margin-bottom:15px;"
+            >
+                Open other areas of your admin panel.
+            </p>
+
+            <div class="quick">
+
+                <a href="products.html">
+                    🛍️ Manage Products
+                </a>
+
+                <a href="bulk-products.html">
+                    📥 Bulk Upload
+                </a>
+
+                <a href="collections.html">
+                    🎀 Collections
+                </a>
+
+                <a href="banners.html">
+                    🖼️ Banners
+                </a>
+
+                <a href="orders.html">
+                    📦 Orders
+                </a>
+
+                <a href="reviews.html">
+                    ⭐ Reviews
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PRODUCT DATA HELPER
+        ================================================== -->
+
+        <section class="section">
+
+            <h3>
+                📋 Product Data Helper
+            </h3>
+
+            <p class="muted">
+                Paste product information here if you need to prepare
+                data for the Bulk Upload page.
+            </p>
+
+            <textarea
+                id="bulkText"
+                class="bulk-input"
+                placeholder="Paste product data here..."
+            ></textarea>
+
+            <div class="bulk-actions">
+
+                <button
+                    class="btn dark"
+                    type="button"
+                    onclick="clearBulkText()"
+                >
+                    Clear
+                </button>
+
+                <button
+                    class="btn gold"
+                    type="button"
+                    onclick="copyBulkText()"
+                >
+                    Copy
+                </button>
+
+            </div>
+
+            <div class="scraper-help">
+                This helper does not change your database. Use the
+                Bulk Upload page when you want to create or import products.
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
 
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
+
 <script>
 
-/* =====================================================
+"use strict";
+
+
+/* =========================================================
    SUPABASE
-===================================================== */
+========================================================= */
 
 const SUPABASE_URL =
     "https://ltxrycmreumoqfpcbwnb.supabase.co";
@@ -1148,1058 +1303,1752 @@ const SUPABASE_KEY =
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        }
+        SUPABASE_KEY
     );
 
 
-/* =====================================================
-   GLOBAL DATA
-===================================================== */
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
 
-let inventoryProducts = [];
-let scrapedProducts = [];
+let allProducts = [];
 
+const selectedProductIds = new Set();
 
-/* =====================================================
-   ADMIN PROTECTION
-===================================================== */
-
-async function protectAdmin() {
-
-    const {
-        data: {
-            session
-        }
-    } =
-        await supabaseClient
-            .auth
-            .getSession();
-
-    if (!session) {
-
-        window.location.href =
-            "login.html";
-
-        return false;
-    }
-
-    return true;
-}
+let statusColumn = null;
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-async function logoutAdmin() {
-
-    await supabaseClient
-        .auth
-        .signOut();
-
-    window.location.href =
-        "login.html";
-}
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function escapeHtml(value) {
 
-    return String(
-        value ?? ""
-    ).replace(
-        /[&<>"']/g,
-        function(character) {
-
-            return {
-
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
-
-            }[character];
-
-        }
-    );
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
-/* =====================================================
-   INVENTORY STATUS
-===================================================== */
+function numberValue(value) {
 
-function showInventoryStatus(
-    text,
-    type
+    const number = Number(value);
+
+    return Number.isFinite(number)
+        ? number
+        : 0;
+
+}
+
+
+function showStatus(
+    message,
+    type = "success"
 ) {
 
-    const element =
+    const box =
         document.getElementById(
             "inventoryStatus"
         );
 
-    element.textContent =
-        text;
+    if (!box) {
+        return;
+    }
 
-    element.className =
+    box.textContent = message;
+
+    box.className =
         "status show " + type;
+
 }
 
 
-/* =====================================================
-   LOAD ALL PRODUCTS
-===================================================== */
+function hideStatus() {
 
-async function loadInventory() {
-
-    const body =
+    const box =
         document.getElementById(
-            "inventoryBody"
+            "inventoryStatus"
         );
 
-    body.innerHTML =
-        `<tr>
-            <td colspan="8" class="loading">
-                Loading all products...
-            </td>
-        </tr>`;
+    if (!box) {
+        return;
+    }
 
+    box.className = "status";
+
+}
+
+
+function getProductStatus(product) {
+
+    if (
+        typeof product.is_active !==
+        "undefined"
+    ) {
+
+        return Boolean(
+            product.is_active
+        );
+
+    }
+
+    if (
+        typeof product.active !==
+        "undefined"
+    ) {
+
+        return Boolean(
+            product.active
+        );
+
+    }
+
+    if (
+        typeof product.status !==
+        "undefined"
+    ) {
+
+        const value =
+            String(
+                product.status
+            ).toLowerCase();
+
+        return (
+            value === "active" ||
+            value === "true" ||
+            value === "1"
+        );
+
+    }
+
+    return true;
+
+}
+
+
+function detectStatusColumn() {
+
+    if (!allProducts.length) {
+
+        statusColumn = null;
+
+        return;
+
+    }
+
+    const sample =
+        allProducts.find(
+            product =>
+                product &&
+                typeof product === "object"
+        );
+
+    if (!sample) {
+
+        statusColumn = null;
+
+        return;
+
+    }
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            sample,
+            "is_active"
+        )
+    ) {
+
+        statusColumn = "is_active";
+
+        return;
+
+    }
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            sample,
+            "active"
+        )
+    ) {
+
+        statusColumn = "active";
+
+        return;
+
+    }
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            sample,
+            "status"
+        )
+    ) {
+
+        statusColumn = "status";
+
+        return;
+
+    }
+
+    statusColumn = null;
+
+}
+
+
+/* =========================================================
+   DASHBOARD COUNTS
+========================================================= */
+
+function updateDashboardCounts() {
+
+    const total =
+        allProducts.length;
+
+    const active =
+        allProducts.filter(
+            product =>
+                getProductStatus(product)
+        ).length;
+
+    const outOfStock =
+        allProducts.filter(
+            product =>
+                numberValue(
+                    product.stock
+                ) <= 0
+        ).length;
+
+    document.getElementById(
+        "productCount"
+    ).textContent = total;
+
+    document.getElementById(
+        "activeCount"
+    ).textContent = active;
+
+    document.getElementById(
+        "outOfStockCount"
+    ).textContent = outOfStock;
+
+}
+
+
+/* =========================================================
+   ORDERS COUNT
+========================================================= */
+
+async function loadOrderCount() {
+
+    const element =
+        document.getElementById(
+            "orderCount"
+        );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent = "…";
 
     try {
 
-        let allProducts = [];
-        let from = 0;
-        const pageSize = 1000;
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from("orders")
+            .select(
+                "*",
+                {
+                    count: "exact",
+                    head: true
+                }
+            );
 
-        /*
-         * Supabase can paginate large tables.
-         * Keep loading until no more records exist.
-         */
-
-        while (true) {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("products")
-                    .select("*")
-                    .order(
-                        "created_at",
-                        {
-                            ascending: false
-                        }
-                    )
-                    .range(
-                        from,
-                        from + pageSize - 1
-                    );
-
-            if (error) {
-                throw error;
-            }
-
-            if (!data || !data.length) {
-                break;
-            }
-
-            allProducts =
-                allProducts.concat(data);
-
-            if (data.length < pageSize) {
-                break;
-            }
-
-            from += pageSize;
+        if (error) {
+            throw error;
         }
 
+        element.textContent =
+            count || 0;
 
-        inventoryProducts =
-            allProducts;
+    } catch (error) {
 
-
-        renderInventory();
-
-        updateInventoryCards();
-
-    }
-    catch (error) {
-
-        console.error(
-            "Inventory loading error:",
+        console.warn(
+            "Orders count unavailable:",
             error
         );
 
-        body.innerHTML =
-            `<tr>
-                <td colspan="8" class="empty">
-                    Could not load products.
-                    <br><br>
-                    ${escapeHtml(error.message)}
-                </td>
-            </tr>`;
+        element.textContent = "0";
 
     }
 
 }
 
 
-/* =====================================================
-   RENDER INVENTORY
-===================================================== */
+/* =========================================================
+   LOAD PRODUCTS
+========================================================= */
 
-function renderInventory() {
+async function loadProducts() {
+
+    const loading =
+        document.getElementById(
+            "inventoryLoading"
+        );
+
+    const empty =
+        document.getElementById(
+            "inventoryEmpty"
+        );
+
+    const tableWrap =
+        document.getElementById(
+            "inventoryTableWrap"
+        );
+
+    if (loading) {
+        loading.style.display = "block";
+    }
+
+    if (empty) {
+        empty.style.display = "none";
+    }
+
+    if (tableWrap) {
+        tableWrap.style.display = "none";
+    }
+
+    hideStatus();
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("products")
+            .select("*")
+            .order(
+                "id",
+                {
+                    ascending: false
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        allProducts =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        detectStatusColumn();
+
+        updateDashboardCounts();
+
+        renderProducts();
+
+        loadOrderCount();
+
+    } catch (error) {
+
+        console.error(
+            "Product loading error:",
+            error
+        );
+
+        allProducts = [];
+
+        if (loading) {
+            loading.style.display = "none";
+        }
+
+        if (tableWrap) {
+            tableWrap.style.display = "none";
+        }
+
+        if (empty) {
+
+            empty.style.display = "block";
+
+            empty.innerHTML = `
+                <h4>Unable to load products</h4>
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Please check your Supabase connection."
+                    )}
+                </p>
+            `;
+
+        }
+
+        showStatus(
+            "Unable to load products. Check your Supabase connection and permissions.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTER PRODUCTS
+========================================================= */
+
+function getFilteredProducts() {
+
+    const searchInput =
+        document.getElementById(
+            "productSearch"
+        );
+
+    const filterSelect =
+        document.getElementById(
+            "productFilter"
+        );
+
+    const search =
+        (
+            searchInput?.value ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+    const filter =
+        filterSelect?.value ||
+        "all";
+
+    return allProducts.filter(
+        product => {
+
+            const name =
+                String(
+                    product.name ||
+                    ""
+                ).toLowerCase();
+
+            const sku =
+                String(
+                    product.sku ||
+                    ""
+                ).toLowerCase();
+
+            const category =
+                String(
+                    product.category ||
+                    ""
+                ).toLowerCase();
+
+            const matchesSearch =
+                !search ||
+                name.includes(search) ||
+                sku.includes(search) ||
+                category.includes(search);
+
+            if (!matchesSearch) {
+                return false;
+            }
+
+            const active =
+                getProductStatus(product);
+
+            const stock =
+                numberValue(
+                    product.stock
+                );
+
+            if (
+                filter === "active" &&
+                !active
+            ) {
+                return false;
+            }
+
+            if (
+                filter === "inactive" &&
+                active
+            ) {
+                return false;
+            }
+
+            if (
+                filter === "stock" &&
+                stock <= 0
+            ) {
+                return false;
+            }
+
+            if (
+                filter === "out" &&
+                stock > 0
+            ) {
+                return false;
+            }
+
+            return true;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProducts() {
+
+    const loading =
+        document.getElementById(
+            "inventoryLoading"
+        );
+
+    const empty =
+        document.getElementById(
+            "inventoryEmpty"
+        );
+
+    const tableWrap =
+        document.getElementById(
+            "inventoryTableWrap"
+        );
 
     const body =
         document.getElementById(
             "inventoryBody"
         );
 
-    const search =
-        document.getElementById(
-            "productSearch"
-        )
-        .value
-        .trim()
-        .toLowerCase();
+    if (!body) {
+        return;
+    }
 
-    const filter =
-        document.getElementById(
-            "statusFilter"
-        ).value;
+    const products =
+        getFilteredProducts();
 
-
-    let products =
-        inventoryProducts.filter(
-            function(product) {
-
-                const name =
-                    String(
-                        product.name || ""
-                    ).toLowerCase();
-
-                const sku =
-                    String(
-                        product.sku || ""
-                    ).toLowerCase();
-
-                const matchesSearch =
-                    !search ||
-                    name.includes(search) ||
-                    sku.includes(search);
-
-
-                let matchesFilter = true;
-
-                if (filter === "active") {
-
-                    matchesFilter =
-                        product.status === "active";
-
-                }
-
-                if (filter === "inactive") {
-
-                    matchesFilter =
-                        product.status !== "active";
-
-                }
-
-                if (filter === "out") {
-
-                    matchesFilter =
-                        Number(
-                            product.stock
-                        ) <= 0;
-
-                }
-
-
-                return (
-                    matchesSearch &&
-                    matchesFilter
-                );
-
-            }
-        );
-
+    if (loading) {
+        loading.style.display = "none";
+    }
 
     if (!products.length) {
 
-        body.innerHTML =
-            `<tr>
-                <td colspan="8" class="empty">
-                    No products found.
-                </td>
-            </tr>`;
+        body.innerHTML = "";
+
+        if (tableWrap) {
+            tableWrap.style.display = "none";
+        }
+
+        if (empty) {
+            empty.style.display = "block";
+        }
 
         updateSelectedCount();
 
+        updateSelectAllState();
+
         return;
+
     }
 
+    if (empty) {
+        empty.style.display = "none";
+    }
 
-    body.innerHTML = "";
+    if (tableWrap) {
+        tableWrap.style.display = "block";
+    }
 
+    body.innerHTML =
+        products
+            .map(
+                product =>
+                    renderProductRow(product)
+            )
+            .join("");
 
-    products.forEach(
-        function(product) {
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-            row.dataset.id =
-                product.id;
-
-
-            const stock =
-                Number(
-                    product.stock
-                ) || 0;
-
-
-            const status =
-                product.status === "active"
-                    ? "active"
-                    : "inactive";
-
-
-            const image =
-                product.image_url ||
-                product.image ||
-                "";
-
-
-            row.innerHTML = `
-
-                <td>
-
-                    <input
-                        class="check inventory-check"
-                        type="checkbox"
-                        data-id="${escapeHtml(product.id)}"
-                        onchange="updateSelectedCount()"
-                    >
-
-                </td>
-
-
-                <td>
-
-                    ${
-                        image
-                            ? `<img
-                                class="product-thumb"
-                                src="${escapeHtml(image)}"
-                                onerror="this.style.display='none'"
-                              >`
-                            : `<div
-                                class="product-thumb"
-                              ></div>`
-                    }
-
-                </td>
-
-
-                <td>
-
-                    <div class="product-name">
-
-                        ${escapeHtml(product.name)}
-
-                    </div>
-
-                    <div class="product-sub">
-
-                        ${escapeHtml(
-                            product.category || ""
-                        )}
-
-                    </div>
-
-                </td>
-
-
-                <td>
-
-                    <strong>
-
-                        ${escapeHtml(
-                            product.sku || "â€”"
-                        )}
-
-                    </strong>
-
-                </td>
-
-
-                <td>
-
-                    <input
-                        class="inventory-input mrp-input"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${escapeHtml(
-                            product.price ?? 0
-                        )}"
-                    >
-
-                </td>
-
-
-                <td>
-
-                    <input
-                        class="inventory-input sale-input"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value="${escapeHtml(
-                            product.sale_price ?? ""
-                        )}"
-                        placeholder="No sale"
-                    >
-
-                </td>
-
-
-                <td>
-
-                    <input
-                        class="inventory-input stock-input"
-                        type="number"
-                        min="0"
-                        step="1"
-                        value="${stock}"
-                    >
-
-                </td>
-
-
-                <td>
-
-                    <select
-                        class="inventory-status status-input"
-                    >
-
-                        <option
-                            value="active"
-                            ${status === "active" ? "selected" : ""}
-                        >
-                            Active
-                        </option>
-
-                        <option
-                            value="inactive"
-                            ${status === "inactive" ? "selected" : ""}
-                        >
-                            Inactive
-                        </option>
-
-                    </select>
-
-                </td>
-
-            `;
-
-
-            body.appendChild(row);
-
-        }
-    );
-
+    attachRowEvents();
 
     updateSelectedCount();
+
+    updateSelectAllState();
 
 }
 
 
-/* =====================================================
-   SELECT ALL INVENTORY
-===================================================== */
+/* =========================================================
+   PRODUCT ROW
+========================================================= */
 
-function toggleInventoryAll(
-    checked
-) {
+function renderProductRow(product) {
+
+    const id =
+        String(product.id);
+
+    const checked =
+        selectedProductIds.has(id)
+            ? "checked"
+            : "";
+
+    const active =
+        getProductStatus(product);
+
+    const stock =
+        numberValue(
+            product.stock
+        );
+
+    const image =
+        product.image_url ||
+        product.image ||
+        "";
+
+    const name =
+        product.name ||
+        "Product";
+
+    const sku =
+        product.sku ||
+        "";
+
+    const price =
+        product.price ?? "";
+
+    const salePrice =
+        product.sale_price ?? "";
+
+    return `
+
+        <tr
+            data-product-id="${escapeHtml(id)}"
+            class="${checked ? "selected-row" : ""}"
+        >
+
+            <td>
+
+                <input
+                    class="check product-check"
+                    type="checkbox"
+                    data-id="${escapeHtml(id)}"
+                    ${checked}
+                >
+
+            </td>
+
+
+            <td>
+
+                ${
+                    image
+                    ?
+                    `
+                    <img
+                        class="product-thumb"
+                        src="${escapeHtml(image)}"
+                        alt="${escapeHtml(name)}"
+                        loading="lazy"
+                        onerror="this.style.display='none'"
+                    >
+                    `
+                    :
+                    `
+                    <div
+                        class="product-thumb"
+                        style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            color:#aaa;
+                            font-size:22px;
+                        "
+                    >
+                        🛍️
+                    </div>
+                    `
+                }
+
+            </td>
+
+
+            <td>
+
+                <div class="product-name">
+                    ${escapeHtml(name)}
+                </div>
+
+                <div class="product-sub">
+
+                    ${
+                        sku
+                        ? `SKU: ${escapeHtml(sku)}`
+                        : `ID: ${escapeHtml(id)}`
+                    }
+
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <input
+                    class="inventory-input price-input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="${escapeHtml(price)}"
+                    data-field="price"
+                    data-id="${escapeHtml(id)}"
+                >
+
+            </td>
+
+
+            <td>
+
+                <input
+                    class="inventory-input sale-input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="${escapeHtml(salePrice)}"
+                    data-field="sale_price"
+                    data-id="${escapeHtml(id)}"
+                >
+
+            </td>
+
+
+            <td>
+
+                <input
+                    class="inventory-input stock-input"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value="${escapeHtml(stock)}"
+                    data-field="stock"
+                    data-id="${escapeHtml(id)}"
+                >
+
+                <div
+                    class="${
+                        stock <= 0
+                            ? "stock-zero"
+                            : "stock-good"
+                    }"
+                    style="margin-top:5px;"
+                >
+
+                    ${
+                        stock <= 0
+                            ? "Out of stock"
+                            : stock + " available"
+                    }
+
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <select
+                    class="inventory-status status-input"
+                    data-id="${escapeHtml(id)}"
+                >
+
+                    <option
+                        value="active"
+                        ${active ? "selected" : ""}
+                    >
+                        Active
+                    </option>
+
+                    <option
+                        value="inactive"
+                        ${!active ? "selected" : ""}
+                    >
+                        Inactive
+                    </option>
+
+                </select>
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SELECT PRODUCT
+========================================================= */
+
+function markProductSelected(checkbox) {
+
+    const id =
+        String(
+            checkbox.dataset.id
+        );
+
+    if (checkbox.checked) {
+        selectedProductIds.add(id);
+    } else {
+        selectedProductIds.delete(id);
+    }
+
+    const row =
+        checkbox.closest("tr");
+
+    if (row) {
+
+        row.classList.toggle(
+            "selected-row",
+            checkbox.checked
+        );
+
+    }
+
+    updateSelectedCount();
+
+    updateSelectAllState();
+
+}
+
+
+/* =========================================================
+   ATTACH ROW EVENTS
+========================================================= */
+
+function attachRowEvents() {
 
     document
-        .querySelectorAll(
-            ".inventory-check"
-        )
+        .querySelectorAll(".product-check")
         .forEach(
-            function(box) {
+            checkbox => {
 
-                box.checked =
-                    checked;
+                checkbox.addEventListener(
+                    "change",
+                    function() {
+
+                        markProductSelected(
+                            this
+                        );
+
+                    }
+                );
 
             }
         );
 
 
-    updateSelectedCount();
+    document
+        .querySelectorAll(".inventory-input")
+        .forEach(
+            input => {
+
+                input.addEventListener(
+                    "change",
+                    function() {
+
+                        const id =
+                            String(
+                                this.dataset.id
+                            );
+
+                        selectedProductIds.add(id);
+
+                        const row =
+                            this.closest("tr");
+
+                        if (row) {
+
+                            row.classList.add(
+                                "selected-row"
+                            );
+
+                            const checkbox =
+                                row.querySelector(
+                                    ".product-check"
+                                );
+
+                            if (checkbox) {
+                                checkbox.checked =
+                                    true;
+                            }
+
+                        }
+
+                        updateSelectedCount();
+
+                        updateSelectAllState();
+
+                    }
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(".inventory-status")
+        .forEach(
+            select => {
+
+                select.addEventListener(
+                    "change",
+                    function() {
+
+                        const id =
+                            String(
+                                this.dataset.id
+                            );
+
+                        selectedProductIds.add(id);
+
+                        const row =
+                            this.closest("tr");
+
+                        if (row) {
+
+                            row.classList.add(
+                                "selected-row"
+                            );
+
+                            const checkbox =
+                                row.querySelector(
+                                    ".product-check"
+                                );
+
+                            if (checkbox) {
+                                checkbox.checked =
+                                    true;
+                            }
+
+                        }
+
+                        updateSelectedCount();
+
+                        updateSelectAllState();
+
+                    }
+                );
+
+            }
+        );
+
 }
 
 
-/* =====================================================
+/* =========================================================
+   SELECT ALL
+========================================================= */
+
+function toggleSelectAll(checkbox) {
+
+    const products =
+        getFilteredProducts();
+
+    products.forEach(
+        product => {
+
+            const id =
+                String(product.id);
+
+            if (checkbox.checked) {
+                selectedProductIds.add(id);
+            } else {
+                selectedProductIds.delete(id);
+            }
+
+        }
+    );
+
+    renderProducts();
+
+}
+
+
+/* =========================================================
+   SELECT ALL STATE
+========================================================= */
+
+function updateSelectAllState() {
+
+    const checkbox =
+        document.getElementById(
+            "selectAll"
+        );
+
+    if (!checkbox) {
+        return;
+    }
+
+    const visible =
+        getFilteredProducts();
+
+    if (!visible.length) {
+
+        checkbox.checked = false;
+
+        checkbox.indeterminate = false;
+
+        return;
+
+    }
+
+    const selected =
+        visible.filter(
+            product =>
+                selectedProductIds.has(
+                    String(product.id)
+                )
+        ).length;
+
+    checkbox.checked =
+        selected === visible.length;
+
+    checkbox.indeterminate =
+        selected > 0 &&
+        selected < visible.length;
+
+}
+
+
+/* =========================================================
    SELECTED COUNT
-===================================================== */
+========================================================= */
 
 function updateSelectedCount() {
 
-    const count =
-        document
-            .querySelectorAll(
-                ".inventory-check:checked"
-            )
-            .length;
-
-
-    document.getElementById(
-        "selectedInventoryCount"
-    ).textContent =
-        count +
-        (
-            count === 1
-                ? " product selected"
-                : " products selected"
+    const element =
+        document.getElementById(
+            "selectedCount"
         );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        selectedProductIds.size;
+
 }
 
 
-/* =====================================================
-   GET SELECTED ROWS
-===================================================== */
+/* =========================================================
+   GET SELECTED PRODUCTS
+========================================================= */
 
-function getSelectedInventoryRows() {
+function getSelectedProducts() {
 
-    return [
-        ...document.querySelectorAll(
-            "#inventoryBody tr"
-        )
-    ].filter(
-        function(row) {
+    if (!selectedProductIds.size) {
 
-            const checkbox =
-                row.querySelector(
-                    ".inventory-check"
-                );
+        showStatus(
+            "Please select at least one product first.",
+            "warning"
+        );
 
-            return checkbox &&
-                   checkbox.checked;
+        return [];
 
-        }
+    }
+
+    return allProducts.filter(
+        product =>
+            selectedProductIds.has(
+                String(product.id)
+            )
     );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    BULK STOCK
-===================================================== */
+========================================================= */
 
 function applyBulkStock() {
 
-    const value =
+    const input =
         document.getElementById(
             "bulkStock"
-        ).value;
+        );
 
+    const value =
+        input?.value.trim();
 
     if (value === "") {
 
-        showInventoryStatus(
-            "Enter a stock quantity first.",
+        showStatus(
+            "Please enter a stock quantity.",
             "warning"
         );
 
         return;
+
     }
 
+    const stock =
+        Number(value);
 
-    const rows =
-        getSelectedInventoryRows();
+    if (
+        !Number.isFinite(stock) ||
+        stock < 0
+    ) {
 
-
-    if (!rows.length) {
-
-        showInventoryStatus(
-            "Select products first.",
+        showStatus(
+            "Stock must be a valid number greater than or equal to 0.",
             "warning"
         );
 
         return;
+
     }
 
+    const selected =
+        getSelectedProducts();
 
-    rows.forEach(
-        function(row) {
+    if (!selected.length) {
+        return;
+    }
 
-            row.querySelector(
-                ".stock-input"
-            ).value =
-                value;
+    selected.forEach(
+        product => {
+
+            product.stock =
+                Math.floor(stock);
 
         }
     );
 
+    renderProducts();
 
-    showInventoryStatus(
-        "Stock applied to " +
-        rows.length +
-        " selected product(s). Click Save Inventory Changes to save.",
+    updateDashboardCounts();
+
+    showStatus(
+        `Stock updated to ${Math.floor(stock)} for ${selected.length} selected product(s). Click "Save Inventory Changes" to save it.`,
         "success"
     );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    BULK MRP
-===================================================== */
+========================================================= */
 
 function applyBulkMrp() {
 
-    const value =
+    const input =
         document.getElementById(
             "bulkMrp"
-        ).value;
+        );
 
+    const value =
+        input?.value.trim();
 
     if (value === "") {
 
-        showInventoryStatus(
-            "Enter an MRP first.",
+        showStatus(
+            "Please enter an MRP.",
             "warning"
         );
 
         return;
+
     }
 
+    const mrp =
+        Number(value);
 
-    const rows =
-        getSelectedInventoryRows();
+    if (
+        !Number.isFinite(mrp) ||
+        mrp < 0
+    ) {
 
-
-    if (!rows.length) {
-
-        showInventoryStatus(
-            "Select products first.",
+        showStatus(
+            "MRP must be a valid number greater than or equal to 0.",
             "warning"
         );
 
         return;
+
     }
 
+    const selected =
+        getSelectedProducts();
 
-    rows.forEach(
-        function(row) {
+    if (!selected.length) {
+        return;
+    }
 
-            row.querySelector(
-                ".mrp-input"
-            ).value =
-                value;
+    selected.forEach(
+        product => {
+
+            product.price =
+                mrp;
 
         }
     );
 
+    renderProducts();
 
-    showInventoryStatus(
-        "MRP applied to " +
-        rows.length +
-        " selected product(s). Click Save Inventory Changes to save.",
+    showStatus(
+        `MRP updated to ₹${mrp} for ${selected.length} selected product(s). Click "Save Inventory Changes" to save it.`,
         "success"
     );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    BULK SALE PRICE
-===================================================== */
+========================================================= */
 
 function applyBulkSale() {
 
-    const value =
+    const input =
         document.getElementById(
             "bulkSale"
-        ).value;
+        );
 
+    const value =
+        input?.value.trim();
 
     if (value === "") {
 
-        showInventoryStatus(
-            "Enter a Sale Price first.",
+        showStatus(
+            "Please enter a Sale Price.",
             "warning"
         );
 
         return;
+
     }
 
+    const sale =
+        Number(value);
 
-    const rows =
-        getSelectedInventoryRows();
+    if (
+        !Number.isFinite(sale) ||
+        sale < 0
+    ) {
 
-
-    if (!rows.length) {
-
-        showInventoryStatus(
-            "Select products first.",
+        showStatus(
+            "Sale Price must be a valid number greater than or equal to 0.",
             "warning"
         );
 
         return;
+
     }
 
+    const selected =
+        getSelectedProducts();
 
-    rows.forEach(
-        function(row) {
+    if (!selected.length) {
+        return;
+    }
 
-            row.querySelector(
-                ".sale-input"
-            ).value =
-                value;
+    selected.forEach(
+        product => {
+
+            product.sale_price =
+                sale;
 
         }
     );
 
+    renderProducts();
 
-    showInventoryStatus(
-        "Sale Price applied to " +
-        rows.length +
-        " selected product(s). Click Save Inventory Changes to save.",
+    showStatus(
+        `Sale Price updated to ₹${sale} for ${selected.length} selected product(s). Click "Save Inventory Changes" to save it.`,
         "success"
     );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    BULK STATUS
-===================================================== */
+========================================================= */
 
 function applyBulkStatus() {
 
-    const value =
+    const select =
         document.getElementById(
             "bulkStatus"
-        ).value;
+        );
 
+    const value =
+        select?.value;
 
     if (!value) {
 
-        showInventoryStatus(
-            "Select Active or Inactive first.",
+        showStatus(
+            "Please select Active or Inactive.",
             "warning"
         );
 
         return;
+
     }
 
+    const selected =
+        getSelectedProducts();
 
-    const rows =
-        getSelectedInventoryRows();
+    if (!selected.length) {
+        return;
+    }
 
+    const active =
+        value === "active";
 
-    if (!rows.length) {
+    if (!statusColumn) {
 
-        showInventoryStatus(
-            "Select products first.",
+        showStatus(
+            "Your products table does not contain is_active, active, or status. Status cannot be saved until the correct column exists.",
             "warning"
         );
 
         return;
+
     }
 
+    selected.forEach(
+        product => {
 
-    rows.forEach(
-        function(row) {
+            if (
+                statusColumn ===
+                "is_active"
+            ) {
 
-            row.querySelector(
-                ".status-input"
-            ).value =
-                value;
+                product.is_active =
+                    active;
+
+            } else if (
+                statusColumn ===
+                "active"
+            ) {
+
+                product.active =
+                    active;
+
+            } else if (
+                statusColumn ===
+                "status"
+            ) {
+
+                product.status =
+                    active
+                        ? "active"
+                        : "inactive";
+
+            }
 
         }
     );
 
+    renderProducts();
 
-    showInventoryStatus(
-        "Status applied to " +
-        rows.length +
-        " selected product(s). Click Save Inventory Changes to save.",
+    updateDashboardCounts();
+
+    showStatus(
+        `Status changed to ${active ? "Active" : "Inactive"} for ${selected.length} selected product(s). Click "Save Inventory Changes" to save it.`,
         "success"
     );
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   READ VISIBLE INPUT VALUES
+========================================================= */
+
+function readVisibleInputValues() {
+
+    document
+        .querySelectorAll(".inventory-input")
+        .forEach(
+            input => {
+
+                const id =
+                    String(
+                        input.dataset.id
+                    );
+
+                const product =
+                    allProducts.find(
+                        item =>
+                            String(
+                                item.id
+                            ) === id
+                    );
+
+                if (!product) {
+                    return;
+                }
+
+                const field =
+                    input.dataset.field;
+
+                if (
+                    field === "stock"
+                ) {
+
+                    const value =
+                        Number(
+                            input.value
+                        );
+
+                    if (
+                        Number.isFinite(value) &&
+                        value >= 0
+                    ) {
+
+                        product.stock =
+                            Math.floor(value);
+
+                    }
+
+                }
+
+
+                else if (
+                    field === "price"
+                ) {
+
+                    if (
+                        input.value === ""
+                    ) {
+
+                        product.price = null;
+
+                    } else {
+
+                        const value =
+                            Number(
+                                input.value
+                            );
+
+                        if (
+                            Number.isFinite(value) &&
+                            value >= 0
+                        ) {
+
+                            product.price =
+                                value;
+
+                        }
+
+                    }
+
+                }
+
+
+                else if (
+                    field === "sale_price"
+                ) {
+
+                    if (
+                        input.value === ""
+                    ) {
+
+                        product.sale_price =
+                            null;
+
+                    } else {
+
+                        const value =
+                            Number(
+                                input.value
+                            );
+
+                        if (
+                            Number.isFinite(value) &&
+                            value >= 0
+                        ) {
+
+                            product.sale_price =
+                                value;
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(".inventory-status")
+        .forEach(
+            select => {
+
+                const id =
+                    String(
+                        select.dataset.id
+                    );
+
+                const product =
+                    allProducts.find(
+                        item =>
+                            String(
+                                item.id
+                            ) === id
+                    );
+
+                if (!product) {
+                    return;
+                }
+
+                const active =
+                    select.value === "active";
+
+                if (
+                    statusColumn ===
+                    "is_active"
+                ) {
+
+                    product.is_active =
+                        active;
+
+                }
+
+                else if (
+                    statusColumn ===
+                    "active"
+                ) {
+
+                    product.active =
+                        active;
+
+                }
+
+                else if (
+                    statusColumn ===
+                    "status"
+                ) {
+
+                    product.status =
+                        active
+                            ? "active"
+                            : "inactive";
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
    SAVE INVENTORY CHANGES
-===================================================== */
+========================================================= */
 
 async function saveInventoryChanges() {
 
-    const rows =
-        getSelectedInventoryRows();
+    const selected =
+        getSelectedProducts();
 
-
-    if (!rows.length) {
-
-        showInventoryStatus(
-            "Select at least one product.",
-            "warning"
-        );
-
+    if (!selected.length) {
         return;
     }
 
-
-    const updates = [];
-
-
-    for (
-        const row of rows
-    ) {
-
-        const id =
-            row.dataset.id;
-
-
-        const mrp =
-            Number(
-                row.querySelector(
-                    ".mrp-input"
-                ).value
-            );
-
-
-        const saleInput =
-            row.querySelector(
-                ".sale-input"
-            ).value;
-
-
-        const salePrice =
-            saleInput === ""
-                ? null
-                : Number(
-                    saleInput
-                );
-
-
-        const stock =
-            Number(
-                row.querySelector(
-                    ".stock-input"
-                ).value
-            );
-
-
-        const status =
-            row.querySelector(
-                ".status-input"
-            ).value;
-
-
-        if (
-            !Number.isFinite(mrp) ||
-            mrp < 0
-        ) {
-
-            showInventoryStatus(
-                "MRP must be a valid number.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            salePrice !== null &&
-            (
-                !Number.isFinite(
-                    salePrice
-                ) ||
-                salePrice < 0
-            )
-        ) {
-
-            showInventoryStatus(
-                "Sale Price must be a valid number.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            salePrice !== null &&
-            salePrice > mrp
-        ) {
-
-            showInventoryStatus(
-                "Sale Price cannot be higher than MRP.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            !Number.isFinite(stock) ||
-            stock < 0
-        ) {
-
-            showInventoryStatus(
-                "Stock must be 0 or greater.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        updates.push({
-            id: id,
-            price: mrp,
-            sale_price: salePrice,
-            stock: Math.floor(stock),
-            status: status
-        });
-
-    }
-
+    readVisibleInputValues();
 
     const button =
         document.getElementById(
             "saveInventoryBtn"
         );
 
+    if (button) {
 
-    button.disabled = true;
+        button.disabled = true;
 
-    button.textContent =
-        "Saving...";
+        button.textContent =
+            "Saving...";
+
+    }
+
+    hideStatus();
+
+    let successCount = 0;
+
+    let failedCount = 0;
+
+    let lastError = null;
 
 
     try {
 
-        /*
-         * Update each product individually.
-         * This avoids needing a special RPC function
-         * and works with the existing products table.
-         */
-
         for (
-            const product of updates
+            const product of selected
         ) {
+
+            const payload = {
+
+                price:
+                    product.price === ""
+                        ? null
+                        : product.price,
+
+                sale_price:
+                    product.sale_price === ""
+                        ? null
+                        : product.sale_price,
+
+                stock:
+                    Math.max(
+                        0,
+                        Math.floor(
+                            numberValue(
+                                product.stock
+                            )
+                        )
+                    )
+
+            };
+
+
+            if (
+                statusColumn ===
+                "is_active"
+            ) {
+
+                payload.is_active =
+                    Boolean(
+                        product.is_active
+                    );
+
+            }
+
+            else if (
+                statusColumn ===
+                "active"
+            ) {
+
+                payload.active =
+                    Boolean(
+                        product.active
+                    );
+
+            }
+
+            else if (
+                statusColumn ===
+                "status"
+            ) {
+
+                payload.status =
+                    getProductStatus(
+                        product
+                    )
+                        ? "active"
+                        : "inactive";
+
+            }
+
 
             const {
                 error
-            } =
-                await supabaseClient
-                    .from("products")
-                    .update({
-                        price:
-                            product.price,
-
-                        sale_price:
-                            product.sale_price,
-
-                        stock:
-                            product.stock,
-
-                        status:
-                            product.status
-                    })
-                    .eq(
-                        "id",
-                        product.id
-                    );
+            } = await supabaseClient
+                .from("products")
+                .update(payload)
+                .eq(
+                    "id",
+                    product.id
+                );
 
 
             if (error) {
 
-                throw error;
+                console.error(
+                    "Failed to update product:",
+                    product.id,
+                    error
+                );
+
+                failedCount++;
+
+                lastError =
+                    error;
+
+            } else {
+
+                successCount++;
 
             }
 
         }
 
 
-        /*
-         * Update local copy.
-         */
-
-        updates.forEach(
-            function(update) {
-
-                const product =
-                    inventoryProducts.find(
-                        function(item) {
-                            return String(item.id) ===
-                                String(update.id);
-                        }
-                    );
+        updateDashboardCounts();
 
 
-                if (product) {
+        if (
+            successCount &&
+            !failedCount
+        ) {
 
-                    product.price =
-                        update.price;
+            showStatus(
+                `Successfully saved ${successCount} product(s).`,
+                "success"
+            );
 
-                    product.sale_price =
-                        update.sale_price;
+            selectedProductIds.clear();
 
-                    product.stock =
-                        update.stock;
+            renderProducts();
 
-                    product.status =
-                        update.status;
-
-                }
-
-            }
-        );
+        }
 
 
-        showInventoryStatus(
-            updates.length +
-            " product(s) updated successfully.",
-            "success"
-        );
+        else if (
+            successCount &&
+            failedCount
+        ) {
+
+            showStatus(
+                `${successCount} product(s) saved, but ${failedCount} product(s) failed. ${lastError?.message || ""}`,
+                "warning"
+            );
+
+            renderProducts();
+
+        }
 
 
-        updateInventoryCards();
+        else {
 
+            showStatus(
+                "No products were saved. " +
+                (
+                    lastError?.message ||
+                    "Please check your Supabase permissions."
+                ),
+                "error"
+            );
 
-        /*
-         * Keep current filters/search.
-         */
-
-        renderInventory();
+        }
 
     }
+
+
     catch (error) {
 
         console.error(
@@ -2207,850 +3056,130 @@ async function saveInventoryChanges() {
             error
         );
 
-
-        showInventoryStatus(
+        showStatus(
             error.message ||
-            "Could not save inventory changes.",
+            "An unexpected error occurred while saving.",
             "error"
         );
 
     }
+
+
     finally {
 
-        button.disabled = false;
+        if (button) {
 
-        button.textContent =
-            "ðŸ’¾ Save Inventory Changes";
+            button.disabled = false;
+
+            button.textContent =
+                "💾 Save Inventory Changes";
+
+        }
 
     }
 
 }
 
 
-/* =====================================================
-   UPDATE DASHBOARD INVENTORY CARDS
-===================================================== */
+/* =========================================================
+   SEARCH / FILTER
+========================================================= */
 
-function updateInventoryCards() {
+function setupSearch() {
 
-    const total =
-        inventoryProducts.length;
-
-
-    const active =
-        inventoryProducts.filter(
-            function(product) {
-                return product.status === "active";
-            }
-        ).length;
-
-
-    const out =
-        inventoryProducts.filter(
-            function(product) {
-                return Number(product.stock) <= 0;
-            }
-        ).length;
-
-
-    document.getElementById(
-        "productCount"
-    ).textContent =
-        total;
-
-
-    document.getElementById(
-        "activeCount"
-    ).textContent =
-        active;
-
-
-    document.getElementById(
-        "outOfStockCount"
-    ).textContent =
-        out;
-
-}
-
-
-/* =====================================================
-   SCRAPER STATUS
-===================================================== */
-
-function showStatus(
-    text,
-    type
-) {
-
-    const element =
+    const search =
         document.getElementById(
-            "bulkStatus"
+            "productSearch"
         );
 
-
-    element.textContent =
-        text;
-
-
-    element.className =
-        "status show " + type;
-
-}
-
-
-/* =====================================================
-   CLEAR SCRAPER
-===================================================== */
-
-function clearBulk() {
-
-    document.getElementById(
-        "bulkUrls"
-    ).value = "";
-
-
-    document.getElementById(
-        "bulkBody"
-    ).innerHTML = "";
-
-
-    document.getElementById(
-        "bulkResults"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "bulkStatus"
-    ).className =
-        "status";
-
-
-    scrapedProducts = [];
-
-}
-
-
-/* =====================================================
-   SCRAPE PRODUCTS
-===================================================== */
-
-async function scrapeBulk() {
-
-    const rawUrls =
+    const filter =
         document.getElementById(
-            "bulkUrls"
-        ).value
-        .split(/\r?\n/)
-        .map(
-            function(url) {
-                return url.trim();
-            }
-        )
-        .filter(Boolean);
+            "productFilter"
+        );
+
+    if (search) {
+
+        search.addEventListener(
+            "input",
+            renderProducts
+        );
+
+    }
+
+    if (filter) {
+
+        filter.addEventListener(
+            "change",
+            renderProducts
+        );
+
+    }
+
+}
 
 
-    const urls =
-        [...new Set(rawUrls)];
+/* =========================================================
+   BULK TEXT HELPERS
+========================================================= */
+
+function clearBulkText() {
+
+    const textarea =
+        document.getElementById(
+            "bulkText"
+        );
+
+    if (textarea) {
+        textarea.value = "";
+    }
+
+}
 
 
-    if (!urls.length) {
+async function copyBulkText() {
+
+    const textarea =
+        document.getElementById(
+            "bulkText"
+        );
+
+    if (!textarea) {
+        return;
+    }
+
+    if (!textarea.value) {
 
         showStatus(
-            "Add at least one product URL.",
+            "There is no text to copy.",
             "warning"
         );
 
         return;
+
     }
-
-
-    if (urls.length > 25) {
-
-        showStatus(
-            "Maximum 25 URLs per scrape.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    const invalidUrl =
-        urls.some(
-            function(url) {
-
-                return !/^https?:\/\//i.test(
-                    url
-                );
-
-            }
-        );
-
-
-    if (invalidUrl) {
-
-        showStatus(
-            "Every line must be a valid http/https URL.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    const button =
-        document.getElementById(
-            "scrapeBtn"
-        );
-
-
-    button.disabled = true;
-
-    button.textContent =
-        "Scraping...";
-
-
-    showStatus(
-        "Scraping " +
-        urls.length +
-        " product page(s)...",
-        "warning"
-    );
-
 
     try {
 
-        const {
-            data: {
-                session
-            }
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
-
-
-        if (!session) {
-
-            throw new Error(
-                "Please log in again."
-            );
-
-        }
-
-
-        const response =
-            await fetch(
-                SUPABASE_URL +
-                "/functions/v1/bulk-import-products",
-                {
-
-                    method: "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json",
-
-                        "Authorization":
-                            "Bearer " +
-                            session.access_token,
-
-                        "apikey":
-                            SUPABASE_KEY
-
-                    },
-
-                    body:
-                        JSON.stringify({
-                            urls: urls
-                        })
-
-                }
-            );
-
-
-        const payload =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                payload.error ||
-                "Bulk scraper failed."
-            );
-
-        }
-
-
-        scrapedProducts =
-            (payload.results || [])
-            .filter(
-                function(product) {
-                    return product.ok;
-                }
-            );
-
-
-        renderBulk(
-            payload.results || []
+        await navigator.clipboard.writeText(
+            textarea.value
         );
-
-
-        if (scrapedProducts.length) {
-
-            showStatus(
-                scrapedProducts.length +
-                " product(s) scraped successfully. Review them before saving.",
-                "success"
-            );
-
-        }
-        else {
-
-            showStatus(
-                "No products were successfully scraped.",
-                "error"
-            );
-
-        }
-
-    }
-    catch (error) {
-
-        console.error(
-            error
-        );
-
 
         showStatus(
-            error.message ||
-            "Could not scrape products.",
-            "error"
-        );
-
-    }
-    finally {
-
-        button.disabled = false;
-
-        button.textContent =
-            "ðŸ” Scrape Products";
-
-    }
-
-}
-
-
-/* =====================================================
-   RENDER SCRAPED PRODUCTS
-===================================================== */
-
-function renderBulk(results) {
-
-    const body =
-        document.getElementById(
-            "bulkBody"
-        );
-
-
-    body.innerHTML = "";
-
-
-    results.forEach(
-        function(product, index) {
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-            if (!product.ok) {
-
-                row.innerHTML =
-
-                    "<td></td>" +
-
-                    "<td></td>" +
-
-                    "<td colspan='9'>" +
-
-                    "<b>Failed:</b> " +
-
-                    escapeHtml(
-                        product.error
-                    ) +
-
-                    "<div class='small'>" +
-
-                    escapeHtml(
-                        product.source_url
-                    ) +
-
-                    "</div>" +
-
-                    "</td>";
-
-
-                body.appendChild(
-                    row
-                );
-
-                return;
-
-            }
-
-
-            row.dataset.index =
-                index;
-
-
-            row.innerHTML =
-
-                "<td>" +
-
-                "<input class='check row-check' type='checkbox' checked>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<img class='thumb' src='" +
-
-                escapeHtml(
-                    product.image_url
-                ) +
-
-                "' onerror=\"this.style.display='none'\">" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<input class='cell-input name' value='" +
-
-                escapeHtml(
-                    product.name
-                ) +
-
-                "'>" +
-
-                "<div class='small'>" +
-
-                escapeHtml(
-                    product.brand || ""
-                ) +
-
-                "</div>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<input class='cell-input sku' value='" +
-
-                escapeHtml(
-                    product.sku || ""
-                ) +
-
-                "'>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<input class='cell-input price' type='number' min='0' step='0.01' value='" +
-
-                escapeHtml(
-                    product.price ?? ""
-                ) +
-
-                "'>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<input class='cell-input sale' type='number' min='0' step='0.01' placeholder='Optional'>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<input class='cell-input category' placeholder='Category'>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<input class='cell-input collection' placeholder='Collection'>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<input class='cell-input stock' type='number' min='0' value='0'>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<select class='cell-select status'>" +
-
-                "<option value='active'>Active</option>" +
-
-                "<option value='inactive'>Inactive</option>" +
-
-                "</select>" +
-
-                "</td>" +
-
-                "<td>" +
-
-                "<a target='_blank' rel='noopener' href='" +
-
-                escapeHtml(
-                    product.source_url
-                ) +
-
-                "'>Open</a>" +
-
-                "<div class='small'>" +
-
-                escapeHtml(
-                    product.availability || ""
-                ) +
-
-                "</div>" +
-
-                "</td>";
-
-
-            body.appendChild(
-                row
-            );
-
-        }
-    );
-
-
-    document.getElementById(
-        "bulkResults"
-    ).style.display =
-        results.length
-            ? "block"
-            : "none";
-
-
-    document.getElementById(
-        "selectAll"
-    ).checked = true;
-
-}
-
-
-/* =====================================================
-   SCRAPER SELECT ALL
-===================================================== */
-
-function toggleAll(
-    checked
-) {
-
-    document
-        .querySelectorAll(
-            ".row-check"
-        )
-        .forEach(
-            function(checkbox) {
-
-                checkbox.checked =
-                    checked;
-
-            }
-        );
-
-}
-
-
-/* =====================================================
-   SCRAPER ROW DATA
-===================================================== */
-
-function getRowData(row) {
-
-    const source =
-        scrapedProducts[
-            Number(
-                row.dataset.index
-            )
-        ] || {};
-
-
-    return {
-
-        name:
-            row.querySelector(
-                ".name"
-            ).value.trim(),
-
-        sku:
-            row.querySelector(
-                ".sku"
-            ).value.trim() || null,
-
-        price:
-            Number(
-                row.querySelector(
-                    ".price"
-                ).value
-            ),
-
-        sale_price:
-            row.querySelector(
-                ".sale"
-            ).value === ""
-                ? null
-                : Number(
-                    row.querySelector(
-                        ".sale"
-                    ).value
-                ),
-
-        category:
-            row.querySelector(
-                ".category"
-            ).value.trim() || null,
-
-        collection:
-            row.querySelector(
-                ".collection"
-            ).value.trim() || null,
-
-        stock:
-            Number(
-                row.querySelector(
-                    ".stock"
-                ).value
-            ) || 0,
-
-        status:
-            row.querySelector(
-                ".status"
-            ).value,
-
-        image_url:
-            source.image_url ||
-            null,
-
-        description:
-            source.description ||
-            null
-
-    };
-
-}
-
-
-/* =====================================================
-   SAVE SCRAPED PRODUCTS
-===================================================== */
-
-async function saveBulkProducts() {
-
-    const rows =
-        [
-            ...document.querySelectorAll(
-                "#bulkBody tr"
-            )
-        ]
-        .filter(
-            function(row) {
-
-                const checkbox =
-                    row.querySelector(
-                        ".row-check"
-                    );
-
-                return checkbox &&
-                       checkbox.checked;
-
-            }
-        );
-
-
-    if (!rows.length) {
-
-        showStatus(
-            "Select at least one product.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    const products = [];
-
-
-    for (
-        const row of rows
-    ) {
-
-        const product =
-            getRowData(row);
-
-
-        if (
-            !product.name ||
-            !Number.isFinite(
-                product.price
-            ) ||
-            product.price < 0
-        ) {
-
-            showStatus(
-                "Every selected product needs a name and valid price.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            product.sale_price !== null &&
-            (
-                !Number.isFinite(
-                    product.sale_price
-                ) ||
-                product.sale_price < 0 ||
-                product.sale_price >
-                    product.price
-            )
-        ) {
-
-            showStatus(
-                "Sale price must be valid and not higher than the price.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        products.push(
-            product
-        );
-
-    }
-
-
-    const button =
-        document.getElementById(
-            "saveBulkBtn"
-        );
-
-
-    button.disabled = true;
-
-    button.textContent =
-        "Saving...";
-
-
-    try {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("products")
-                .insert(
-                    products
-                );
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        showStatus(
-            products.length +
-            " product(s) saved successfully.",
+            "Text copied to clipboard.",
             "success"
         );
 
-
-        await loadInventory();
-
     }
+
     catch (error) {
 
-        console.error(
-            error
-        );
+        textarea.select();
 
+        document.execCommand("copy");
 
         showStatus(
-            error.message ||
-            "Could not save products.",
-            "error"
-        );
-
-    }
-    finally {
-
-        button.disabled = false;
-
-        button.textContent =
-            "ðŸ’¾ Save Selected Products";
-
-    }
-
-}
-
-
-/* =====================================================
-   DASHBOARD ORDER COUNT
-===================================================== */
-
-async function loadOrderCount() {
-
-    try {
-
-        const {
-            count,
-            error
-        } =
-            await supabaseClient
-                .from("orders")
-                .select(
-                    "*",
-                    {
-                        count: "exact",
-                        head: true
-                    }
-                );
-
-
-        if (!error) {
-
-            document.getElementById(
-                "orderCount"
-            ).textContent =
-                count || 0;
-
-        }
-
-    }
-    catch (error) {
-
-        console.error(
-            error
+            "Text copied.",
+            "success"
         );
 
     }
@@ -3058,73 +3187,59 @@ async function loadOrderCount() {
 }
 
 
+/* =========================================================
+   LOGOUT
+========================================================= */
 
-/* =====================================================
-   PENDING REVIEWS COUNT
-===================================================== */
+function logoutAdmin() {
 
-async function loadPendingReviewCount() {
+    const keysToRemove = [
 
-    try {
+        "adminLoggedIn",
+        "admin_logged_in",
+        "adminSession",
+        "admin_session",
+        "trendsbyakAdmin",
+        "trendsbyak_admin"
 
-        const { count, error } =
-            await supabaseClient
-                .from("reviews")
-                .select("*", {
-                    count: "exact",
-                    head: true
-                })
-                .eq("is_approved", false);
+    ];
 
-        if (error) {
-            console.error("Pending reviews error:", error);
-            return;
+    keysToRemove.forEach(
+        key => {
+
+            try {
+                localStorage.removeItem(key);
+            } catch {}
+
+            try {
+                sessionStorage.removeItem(key);
+            } catch {}
+
         }
+    );
 
-        const element =
-            document.getElementById("pendingReviewCount");
-
-        if (element) {
-            element.textContent = count || 0;
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Pending review count error:",
-            error
-        );
-
-    }
-
-}
-/* =====================================================
-   START ADMIN
-===================================================== */
-
-async function startAdmin() {
-
-    const allowed =
-        await protectAdmin();
-
-
-    if (!allowed) {
-        return;
-    }
-
-
-    await Promise.all([
-        loadInventory(),
-        loadOrderCount()
-    ]);
+    window.location.href =
+        "login.html";
 
 }
 
 
-startAdmin();
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        setupSearch();
+
+        loadProducts();
+
+    }
+);
 
 </script>
 
 </body>
 </html>
-
