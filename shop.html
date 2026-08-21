@@ -2584,115 +2584,125 @@ document
 ===================================================== */
 
 function applyCollectionFromUrl() {
+    const params = new URLSearchParams(
+        window.location.search
+    );
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+    const collection = params.get("collection");
 
-
-    const collection =
-        params.get(
-            "collection"
-        );
-
-
-    if (!collection)
+    if (!collection) {
         return;
+    }
 
+    const requested = normalizeCategory(collection);
 
-    const requestedCollection =
-        normalizeCategory(
-            collection
+    /*
+     * Match the homepage collection against:
+     * 1. product.collection
+     * 2. product.category
+     * 3. product.collection_name
+     *
+     * This makes the collection links work even
+     * if Supabase uses a different field.
+     */
+
+    const matching = allProducts.filter(product => {
+
+        const collectionValue =
+            normalizeCategory(product.collection);
+
+        const categoryValue =
+            normalizeCategory(product.category);
+
+        const collectionNameValue =
+            normalizeCategory(product.collection_name);
+
+        return (
+            collectionValue === requested ||
+            categoryValue === requested ||
+            collectionNameValue === requested
         );
+    });
 
+    /*
+     * Update active category button if the
+     * collection also exists as a category.
+     */
+    selectedCategory = "all";
 
-    const matching =
-        allProducts.filter(
-            product =>
-                normalizeCategory(
-                    product.collection
-                ) ===
-                requestedCollection
-        );
+    if (matching.length) {
 
+        const categoryMatch = allProducts.find(product => {
 
-    if (!matching.length) {
-
-        const categoryMatch =
-            allProducts.some(
-                product =>
-                    normalizeCategory(
-                        product.category
-                    ) ===
-                    requestedCollection
+            return (
+                normalizeCategory(product.category) ===
+                requested
             );
-
+        });
 
         if (categoryMatch) {
-
-            selectedCategory =
-                requestedCollection;
-
-
+            selectedCategory = requested;
             updateCategoryButtons();
-
-            renderProducts();
-
-            return;
-
         }
 
-    }
-
-
-    if (!matching.length) {
-
-        renderProducts();
+        renderSpecificCollection(matching);
 
         return;
-
     }
 
-
+    /*
+     * Nothing matched
+     */
     const grid =
-        document.getElementById(
-            "shopProductGrid"
-        );
-
+        document.getElementById("shopProductGrid");
 
     const count =
-        document.getElementById(
-            "shopCount"
-        );
-
+        document.getElementById("shopCount");
 
     if (count) {
+        count.textContent = "0 products";
+    }
 
+    if (grid) {
+        grid.innerHTML = `
+            <div class="shop-message">
+                <h3>Collection coming soon.</h3>
+                <p>
+                    We couldn't find products in
+                    "${escapeHtml(collection)}" yet.
+                </p>
+            </div>
+        `;
+    }
+}
+function renderSpecificCollection(products) {
+
+    const grid =
+        document.getElementById("shopProductGrid");
+
+    const count =
+        document.getElementById("shopCount");
+
+    if (!grid) {
+        return;
+    }
+
+    if (count) {
         count.textContent =
-            `${matching.length} ${
-                matching.length === 1
+            `${products.length} ${
+                products.length === 1
                     ? "product"
                     : "products"
             }`;
-
     }
 
-
     grid.innerHTML =
-        matching
-            .map(
-                product =>
-                    productCard(product)
-            )
+        products
+            .map(product => productCard(product))
             .join("");
 
-
     attachCartButtons();
-
 }
-
-
 /* =====================================================
    MOBILE MENU
 ===================================================== */
