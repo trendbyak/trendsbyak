@@ -213,6 +213,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            margin-bottom: 13px;
         }
 
         .new-launch-price strong {
@@ -238,6 +239,50 @@
             font-weight: 700;
             letter-spacing: 1px;
         }
+
+
+        /* =================================================
+           NEW LAUNCH ADD TO CART
+        ================================================= */
+
+        .new-launch-add-cart {
+            width: 100%;
+            min-height: 42px;
+            border: 1px solid #1d1b19;
+            border-radius: 999px;
+            background: #1d1b19;
+            color: #fff;
+            font-family: "DM Sans", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .3px;
+            cursor: pointer;
+            transition:
+                background .2s ease,
+                color .2s ease,
+                transform .2s ease;
+        }
+
+        .new-launch-add-cart:hover {
+            background: #b28a4b;
+            border-color: #b28a4b;
+            transform: translateY(-1px);
+        }
+
+        .new-launch-add-cart:active {
+            transform: translateY(0);
+        }
+
+        .new-launch-add-cart.added {
+            background: #b28a4b;
+            border-color: #b28a4b;
+        }
+
+        .new-launch-add-cart:disabled {
+            opacity: .75;
+            cursor: default;
+        }
+
 
         .new-launch-empty {
             grid-column: 1 / -1;
@@ -486,6 +531,11 @@
 
             .new-launch-info h3 {
                 font-size: 16px;
+            }
+
+            .new-launch-add-cart {
+                min-height: 40px;
+                font-size: 11px;
             }
 
             .instagram-heading {
@@ -814,62 +864,8 @@
 
 
 <!-- =====================================================
-     COLLECTIONS
-====================================================== -->
-
-<section
-    class="section"
-    id="collections"
->
-
-    <div class="section-heading">
-
-        <div>
-
-            <p class="eyebrow">
-                COLLECTIONS
-            </p>
-
-            <h2>
-                Explore what you love.
-            </h2>
-
-        </div>
-
-        <p class="section-intro">
-
-            Discover thoughtfully curated
-            collections made for everyday
-            luxury, gifting and everything
-            in between.
-
-        </p>
-
-    </div>
-
-
-    <div
-        class="collection-grid"
-        id="homepageCollections"
-    >
-
-        <div class="loading-card">
-
-            <div class="loader"></div>
-
-            <p>
-                Loading collections...
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
      NEW LAUNCHES
+     MOVED BEFORE COLLECTIONS
 ====================================================== -->
 
 <section
@@ -927,6 +923,61 @@
         >
             View All Products →
         </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COLLECTIONS
+====================================================== -->
+
+<section
+    class="section"
+    id="collections"
+>
+
+    <div class="section-heading">
+
+        <div>
+
+            <p class="eyebrow">
+                COLLECTIONS
+            </p>
+
+            <h2>
+                Explore what you love.
+            </h2>
+
+        </div>
+
+        <p class="section-intro">
+
+            Discover thoughtfully curated
+            collections made for everyday
+            luxury, gifting and everything
+            in between.
+
+        </p>
+
+    </div>
+
+
+    <div
+        class="collection-grid"
+        id="homepageCollections"
+    >
+
+        <div class="loading-card">
+
+            <div class="loader"></div>
+
+            <p>
+                Loading collections...
+            </p>
+
+        </div>
 
     </div>
 
@@ -1648,15 +1699,50 @@ function getCart() {
 
     try {
 
-        return JSON.parse(
+        const stored =
             localStorage.getItem(
                 "trendsbyak_cart"
-            ) || "[]"
-        );
+            );
+
+        const cart =
+            JSON.parse(
+                stored || "[]"
+            );
+
+        return Array.isArray(cart)
+            ? cart
+            : [];
 
     } catch {
 
         return [];
+
+    }
+
+}
+
+
+function saveCart(cart) {
+
+    try {
+
+        localStorage.setItem(
+            "trendsbyak_cart",
+            JSON.stringify(cart)
+        );
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "trendsbyak:cart-updated"
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Unable to save cart:",
+            error
+        );
 
     }
 
@@ -1693,6 +1779,222 @@ function updateCartCount() {
 
         element.textContent =
             count;
+
+    }
+
+}
+
+
+/* =====================================================
+   ADD TO CART
+===================================================== */
+
+function addProductToCart(
+    product,
+    button
+) {
+
+    if (!product) {
+        return;
+    }
+
+
+    const productId =
+        String(product.id);
+
+
+    const price =
+        Number(
+            product.sale_price ??
+            product.price ??
+            0
+        );
+
+
+    const cart =
+        getCart();
+
+
+    const existingIndex =
+        cart.findIndex(
+            item =>
+                String(
+                    item.id
+                ) === productId
+        );
+
+
+    if (existingIndex >= 0) {
+
+        cart[existingIndex].quantity =
+            Number(
+                cart[existingIndex].quantity || 0
+            ) + 1;
+
+    } else {
+
+        /*
+         * This structure is intentionally
+         * compatible with the site's existing
+         * localStorage cart.
+         */
+
+        cart.push({
+
+            id:
+                product.id,
+
+            product_id:
+                product.id,
+
+            name:
+                product.name || "Product",
+
+            price:
+                price,
+
+            sale_price:
+                product.sale_price,
+
+            image:
+                product.image_url || "",
+
+            image_url:
+                product.image_url || "",
+
+            category:
+                product.category || "",
+
+            quantity:
+                1
+
+        });
+
+    }
+
+
+    saveCart(cart);
+
+    updateCartCount();
+
+
+    /* GA4 */
+
+    trackEvent(
+        "add_to_cart",
+        {
+
+            currency:
+                "INR",
+
+            value:
+                price,
+
+            items: [
+
+                {
+                    item_id:
+                        productId,
+
+                    item_name:
+                        product.name || "Product",
+
+                    price:
+                        price,
+
+                    quantity:
+                        1
+
+                }
+
+            ]
+
+        }
+    );
+
+
+    /* Supabase analytics */
+
+    supabaseClient
+        .from("analytics_events")
+        .insert({
+
+            event_name:
+                "add_to_cart",
+
+            session_id:
+                getSessionId(),
+
+            visitor_id:
+                getVisitorId(),
+
+            page_url:
+                window.location.href,
+
+            page_path:
+                window.location.pathname,
+
+            referrer:
+                document.referrer || null,
+
+            device_type:
+                getDeviceType(),
+
+            user_agent:
+                navigator.userAgent,
+
+            product_id:
+                Number(product.id),
+
+            metadata: {
+
+                product_name:
+                    product.name || "",
+
+                price:
+                    price
+
+            }
+
+        })
+        .then(() => {})
+        .catch(() => {});
+
+
+    /* Button feedback */
+
+    if (button) {
+
+        const originalText =
+            button.textContent;
+
+        button.textContent =
+            "✓ Added to Cart";
+
+        button.classList.add(
+            "added"
+        );
+
+        button.disabled =
+            true;
+
+
+        setTimeout(
+            function () {
+
+                button.textContent =
+                    originalText;
+
+                button.classList.remove(
+                    "added"
+                );
+
+                button.disabled =
+                    false;
+
+            },
+            1500
+        );
 
     }
 
@@ -1770,8 +2072,6 @@ async function trackWebsiteVisit() {
 
     }
 
-
-    /* Also store in analytics_events */
 
     try {
 
@@ -2273,6 +2573,16 @@ function newLaunchCard(product) {
                     }
 
                 </div>
+
+
+                <button
+                    type="button"
+                    class="new-launch-add-cart"
+                    data-add-to-cart
+                    data-product-id="${escapeHtml(product.id)}"
+                >
+                    Add to Cart
+                </button>
 
             </div>
 
@@ -3068,6 +3378,125 @@ function setupMenu() {
 
 
 /* =====================================================
+   ADD TO CART CLICK HANDLER
+===================================================== */
+
+document.addEventListener(
+    "click",
+    async function (event) {
+
+        const button =
+            event.target.closest(
+                "[data-add-to-cart]"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        const productId =
+            button.dataset.productId;
+
+
+        if (!productId) {
+            return;
+        }
+
+
+        button.disabled =
+            true;
+
+
+        try {
+
+            /*
+             * Fetch the latest product from Supabase
+             * so the cart always receives current
+             * product information and price.
+             */
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("products")
+                    .select(`
+                        id,
+                        name,
+                        price,
+                        sale_price,
+                        category,
+                        image_url,
+                        status
+                    `)
+                    .eq(
+                        "id",
+                        productId
+                    )
+                    .maybeSingle();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            if (!data) {
+
+                throw new Error(
+                    "Product not found."
+                );
+
+            }
+
+
+            if (
+                data.status &&
+                data.status !== "active"
+            ) {
+
+                throw new Error(
+                    "This product is no longer available."
+                );
+
+            }
+
+
+            addProductToCart(
+                data,
+                button
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Add to cart error:",
+                error
+            );
+
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Try Again";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
    WHATSAPP CLICK TRACKING
 ===================================================== */
 
@@ -3121,8 +3550,6 @@ document.addEventListener(
             }
         );
 
-
-        /* Also save to Supabase analytics */
 
         supabaseClient
             .from("analytics_events")
@@ -3376,6 +3803,16 @@ window.addEventListener(
 );
 
 
+window.addEventListener(
+    "trendsbyak:cart-updated",
+    function () {
+
+        updateCartCount();
+
+    }
+);
+
+
 /* =====================================================
    PAGE START
 ===================================================== */
@@ -3421,9 +3858,9 @@ document.addEventListener(
 
         await Promise.allSettled([
 
-            loadCollections(),
-
             loadNewLaunches(),
+
+            loadCollections(),
 
             loadReviews(),
 
