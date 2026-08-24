@@ -17,7 +17,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product | Trends by AK</title>
-<meta name="description" content="Shop Trends by AK">
+<meta name="description" content="Shop products from Trends by AK — thoughtfully curated accessories, scrunchies, jewellery and gifts.">
+
+<link
+  id="canonicalUrl"
+  rel="canonical"
+  href="https://www.trendsbyak.in/product.html"
+>
+
+<meta property="og:type" content="product">
+<meta
+  id="ogTitle"
+  property="og:title"
+  content="Product | Trends by AK"
+>
+<meta
+  id="ogDescription"
+  property="og:description"
+  content="Shop products from Trends by AK."
+>
+<meta
+  id="ogUrl"
+  property="og:url"
+  content="https://www.trendsbyak.in/product.html"
+>
+<meta
+  id="ogImage"
+  property="og:image"
+  content="https://www.trendsbyak.in/assets/logo.png"
+>
+<meta
+  property="og:site_name"
+  content="Trends by AK"
+>
+
+<meta name="twitter:card" content="summary_large_image">
+<meta
+  id="twitterTitle"
+  name="twitter:title"
+  content="Product | Trends by AK"
+>
+<meta
+  id="twitterDescription"
+  name="twitter:description"
+  content="Shop products from Trends by AK."
+>
+<meta
+  id="twitterImage"
+  name="twitter:image"
+  content="https://www.trendsbyak.in/assets/logo.png"
+>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -766,7 +815,141 @@ quantity = 1;
 
   document.title=
     (data.name||"Product")+" | Trends by AK";
+const productName =
+  data.name || "Product";
 
+const productDescription =
+  data.description ||
+  `Shop ${productName} from Trends by AK. Thoughtfully curated accessories, jewellery, scrunchies and gifts.`;
+
+const productUrl =
+  `${window.location.origin}/product.html?id=${encodeURIComponent(id)}`;
+
+const productImage =
+  data.image_url ||
+  `${window.location.origin}/assets/logo.png`;
+const existingSchema =
+  document.getElementById("productSchema");
+
+if (existingSchema) {
+  existingSchema.remove();
+}
+
+const productSchema =
+  document.createElement("script");
+
+productSchema.type =
+  "application/ld+json";
+
+productSchema.id =
+  "productSchema";
+
+const availability =
+  stock > 0
+    ? "https://schema.org/InStock"
+    : "https://schema.org/OutOfStock";
+
+productSchema.textContent =
+  JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Product",
+
+    "name": productName,
+
+    "description":
+      productDescription,
+
+    "image": [
+      productImage
+    ],
+
+    "url":
+      productUrl,
+
+    "brand": {
+      "@type": "Brand",
+      "name": "Trends by AK"
+    },
+
+    "offers": {
+      "@type": "Offer",
+
+      "url":
+        productUrl,
+
+      "priceCurrency":
+        "INR",
+
+      "price":
+        displayPrice.toFixed(2),
+
+      "availability":
+        availability,
+
+      "itemCondition":
+        "https://schema.org/NewCondition"
+    }
+  });
+
+document.head.appendChild(
+  productSchema
+);
+document.title =
+  `${productName} | Trends by AK`;
+
+document.querySelector('meta[name="description"]')
+  ?.setAttribute(
+    "content",
+    productDescription.substring(0, 160)
+  );
+
+document.getElementById("canonicalUrl")
+  ?.setAttribute(
+    "href",
+    productUrl
+  );
+
+document.getElementById("ogTitle")
+  ?.setAttribute(
+    "content",
+    `${productName} | Trends by AK`
+  );
+
+document.getElementById("ogDescription")
+  ?.setAttribute(
+    "content",
+    productDescription
+  );
+
+document.getElementById("ogUrl")
+  ?.setAttribute(
+    "content",
+    productUrl
+  );
+
+document.getElementById("ogImage")
+  ?.setAttribute(
+    "content",
+    productImage
+  );
+
+document.getElementById("twitterTitle")
+  ?.setAttribute(
+    "content",
+    `${productName} | Trends by AK`
+  );
+
+document.getElementById("twitterDescription")
+  ?.setAttribute(
+    "content",
+    productDescription
+  );
+
+document.getElementById("twitterImage")
+  ?.setAttribute(
+    "content",
+    productImage
+  );
   container.innerHTML=`
 
     <div class="breadcrumb">
