@@ -475,7 +475,83 @@
                 width: 100%;
             }
         }
+.share-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
 
+.share-modal.active {
+    display: flex;
+}
+
+.share-box {
+    width: min(430px, 100%);
+    background: #fff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.share-box h3 {
+    margin: 0 0 6px;
+    font-size: 24px;
+}
+
+.share-product-name {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.share-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.share-option {
+    min-height: 48px;
+    border: 1px solid var(--border);
+    background: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.share-option:hover {
+    transform: translateY(-1px);
+    border-color: var(--gold);
+}
+
+.share-option.primary {
+    background: var(--black);
+    color: #fff;
+    border-color: var(--black);
+}
+
+.share-option.whatsapp {
+    background: #25D366;
+    color: #fff;
+    border-color: #25D366;
+}
+
+.share-option.instagram {
+    background: #1d1b19;
+    color: #fff;
+    border-color: #1d1b19;
+}
+
+.share-close {
+    width: 100%;
+    margin-top: 14px;
+}
     </style>
 </head>
 
@@ -984,7 +1060,87 @@
     </section>
 
 </main>
+<!-- PRODUCT SHARE MODAL -->
 
+<div
+    id="shareModal"
+    class="share-modal"
+>
+
+    <div class="share-box">
+
+        <h3>
+            Share Product
+        </h3>
+
+        <div
+            id="shareProductName"
+            class="share-product-name"
+        >
+            Product
+        </div>
+
+
+        <div class="share-options">
+
+            <button
+                class="share-option primary"
+                type="button"
+                onclick="nativeShareProduct()"
+            >
+                📱 Share to Phone
+            </button>
+
+
+            <button
+                class="share-option whatsapp"
+                type="button"
+                onclick="shareToWhatsApp()"
+            >
+                💬 WhatsApp
+            </button>
+
+
+            <button
+                class="share-option instagram"
+                type="button"
+                onclick="shareToInstagram()"
+            >
+                📸 Instagram
+            </button>
+
+
+            <button
+                class="share-option"
+                type="button"
+                onclick="copyProductLink()"
+            >
+                📋 Copy Link
+            </button>
+
+
+            <button
+                class="share-option"
+                type="button"
+                onclick="shareToContact()"
+            >
+                👤 Contact
+            </button>
+
+        </div>
+
+
+        <button
+            class="btn share-close"
+            type="button"
+            onclick="closeShareModal()"
+        >
+            Close
+        </button>
+
+    </div>
+
+</div>
 
 <script>
 
@@ -1489,21 +1645,29 @@ function productRow(product) {
 
             <td>
 
-                <button
-                    class="small-btn"
-                    type="button"
-                    onclick="editProduct(${JSON.stringify(String(product.id))})"
-                >
-                    Edit
-                </button>
+<button
+    class="small-btn"
+    type="button"
+    onclick='editProduct(${JSON.stringify(String(product.id))})'
+>
+    Edit
+</button>
 
-                <button
-                    class="small-btn delete"
-                    type="button"
-                    onclick="deleteProduct(${JSON.stringify(String(product.id))})"
-                >
-                    Delete
-                </button>
+<button
+    class="small-btn"
+    type="button"
+    onclick='shareProduct(${JSON.stringify(String(product.id))})'
+>
+    Share
+</button>
+
+<button
+    class="small-btn delete"
+    type="button"
+    onclick='deleteProduct(${JSON.stringify(String(product.id))})'
+>
+    Delete
+</button>
 
             </td>
 
@@ -1856,7 +2020,924 @@ async function deleteProduct(id) {
 
 }
 
+/* =========================================================
+   PRODUCT SHARING
+========================================================= */
 
+/* =========================================================
+   PRODUCT SHARING
+========================================================= */
+
+let sharingProduct = null;
+
+function shareProduct(id) {
+
+    const product = products.find(function (item) {
+        return String(item.id) === String(id);
+    });
+
+    if (!product) {
+        message("Product not found.", "error");
+        return;
+    }
+
+    sharingProduct = product;
+
+    const modal = document.getElementById("shareModal");
+    const name = document.getElementById("shareProductName");
+
+    if (!modal || !name) {
+        message("Share window is missing. Please refresh the page.", "error");
+        console.error("Share modal elements not found.");
+        return;
+    }
+
+    name.textContent = product.name || "Product";
+
+    modal.classList.add("active");
+}
+
+
+function closeShareModal() {
+
+    const modal = document.getElementById("shareModal");
+
+    if (modal) {
+        modal.classList.remove("active");
+    }
+
+    sharingProduct = null;
+}
+
+
+function getProductUrl(product) {
+
+    /*
+       For now this creates the product URL using
+       your website domain and product ID.
+
+       We can adjust the exact product-page path
+       once we confirm your customer product page.
+    */
+
+    return (
+        "https://www.trendsbyak.in/product.html?id=" +
+        encodeURIComponent(String(product.id))
+    );
+}
+
+
+function getShareText(product) {
+
+    const price =
+        product.sale_price ??
+        product.price ??
+        0;
+
+    const url =
+        getProductUrl(product);
+
+    return (
+        "✨ " +
+        (product.name || "Trends by AK Product") +
+        "\n\n" +
+        "Price: " +
+        formatPrice(price) +
+        "\n\n" +
+        "Shop here:\n" +
+        url
+    );
+}
+
+
+async function nativeShareProduct() {
+
+    if (!sharingProduct) {
+        return;
+    }
+
+    const product =
+        sharingProduct;
+
+    const url =
+        getProductUrl(product);
+
+    const text =
+        getShareText(product);
+
+    if (navigator.share) {
+
+        try {
+
+            await navigator.share({
+                title: product.name || "Trends by AK",
+                text: text,
+                url: url
+            });
+
+            closeShareModal();
+
+        } catch (error) {
+
+            if (error.name !== "AbortError") {
+
+                console.error(
+                    "NATIVE SHARE ERROR:",
+                    error
+                );
+
+                message(
+                    "Could not open the share menu.",
+                    "error"
+                );
+            }
+        }
+
+        return;
+    }
+
+    await copyProductLink();
+
+}
+
+
+function shareToWhatsApp() {
+
+    if (!sharingProduct) {
+        return;
+    }
+
+    const text =
+        getShareText(sharingProduct);
+
+    const whatsappUrl =
+        "https://wa.me/?text=" +
+        encodeURIComponent(text);
+
+    window.open(
+        whatsappUrl,
+        "_blank"
+    );
+
+    closeShareModal();
+}
+
+
+async function copyProductLink() {
+
+    if (!sharingProduct) {
+        return;
+    }
+
+    const url =
+        getProductUrl(sharingProduct);
+
+    try {
+
+        await navigator.clipboard.writeText(url);
+
+        message(
+            "Product link copied successfully."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "COPY ERROR:",
+            error
+        );
+
+        window.prompt(
+            "Copy this product link:",
+            url
+        );
+    }
+
+    closeShareModal();
+}
+
+
+async function shareToInstagram() {
+
+    if (!sharingProduct) {
+        return;
+    }
+
+    const product = sharingProduct;
+
+    try {
+
+        if (!product.image_url) {
+
+            message(
+                "This product does not have an image. Please add an image first.",
+                "error"
+            );
+
+            return;
+        }
+
+        message(
+            "Creating your Instagram Story..."
+        );
+
+        /*
+         * Generate branded 9:16 Story image
+         */
+        await generateInstagramStory(product);
+
+
+        /*
+         * Copy product link
+         */
+        const productUrl =
+            getProductUrl(product);
+
+        try {
+
+            await navigator.clipboard.writeText(
+                productUrl
+            );
+
+        } catch (copyError) {
+
+            console.warn(
+                "Could not copy product link:",
+                copyError
+            );
+
+        }
+
+
+        /*
+         * Open Instagram in a new tab
+         */
+        window.open(
+            "https://www.instagram.com/",
+            "_blank"
+        );
+
+
+        message(
+            "Instagram Story created and downloaded. Product link copied."
+        );
+
+
+        closeShareModal();
+
+
+    } catch (error) {
+
+        console.error(
+            "INSTAGRAM STORY ERROR:",
+            error
+        );
+
+        message(
+            error.message ||
+            "Could not create Instagram Story.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GENERATE INSTAGRAM STORY
+========================================================= */
+
+async function generateInstagramStory(product) {
+
+    return new Promise(function (resolve, reject) {
+
+        const imageUrl =
+            product.image_url;
+
+
+        if (!imageUrl) {
+
+            reject(
+                new Error(
+                    "Product image is missing."
+                )
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * 1080 × 1920 Instagram Story
+         */
+
+        const canvas =
+            document.createElement("canvas");
+
+        canvas.width =
+            1080;
+
+        canvas.height =
+            1920;
+
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        /*
+         * Premium Trends by AK background
+         */
+
+        ctx.fillStyle =
+            "#f8f4ed";
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        /*
+         * Load product image
+         */
+
+        const image =
+            new Image();
+
+        image.crossOrigin =
+            "anonymous";
+
+
+        image.onload =
+            function () {
+
+                try {
+
+                    /*
+                     * -----------------------------------------
+                     * TOP BRANDING
+                     * -----------------------------------------
+                     */
+
+                    ctx.fillStyle =
+                        "#1d1b19";
+
+                    ctx.textAlign =
+                        "center";
+
+                    ctx.font =
+                        "600 42px Georgia";
+
+                    ctx.fillText(
+                        "TRENDS BY AK",
+                        540,
+                        105
+                    );
+
+
+                    ctx.fillStyle =
+                        "#b28a4b";
+
+                    ctx.font =
+                        "700 18px Arial";
+
+                    ctx.fillText(
+                        "SUSTAINABLE LUXURY • AFFORDABLE",
+                        540,
+                        140
+                    );
+
+
+                    /*
+                     * -----------------------------------------
+                     * PRODUCT IMAGE AREA
+                     * -----------------------------------------
+                     */
+
+                    const imageBox = {
+
+                        x: 80,
+
+                        y: 230,
+
+                        width: 920,
+
+                        height: 1120
+
+                    };
+
+
+                    /*
+                     * White image card
+                     */
+
+                    ctx.fillStyle =
+                        "#ffffff";
+
+                    roundRect(
+                        ctx,
+                        imageBox.x,
+                        imageBox.y,
+                        imageBox.width,
+                        imageBox.height,
+                        30
+                    );
+
+                    ctx.fill();
+
+
+                    /*
+                     * Fit product image inside card
+                     */
+
+                    const imageRatio =
+                        image.width /
+                        image.height;
+
+                    const boxRatio =
+                        imageBox.width /
+                        imageBox.height;
+
+
+                    let drawWidth;
+                    let drawHeight;
+
+
+                    if (
+                        imageRatio >
+                        boxRatio
+                    ) {
+
+                        drawWidth =
+                            imageBox.width -
+                            80;
+
+                        drawHeight =
+                            drawWidth /
+                            imageRatio;
+
+                    } else {
+
+                        drawHeight =
+                            imageBox.height -
+                            80;
+
+                        drawWidth =
+                            drawHeight *
+                            imageRatio;
+
+                    }
+
+
+                    const drawX =
+                        imageBox.x +
+                        (
+                            imageBox.width -
+                            drawWidth
+                        ) / 2;
+
+
+                    const drawY =
+                        imageBox.y +
+                        (
+                            imageBox.height -
+                            drawHeight
+                        ) / 2;
+
+
+                    ctx.drawImage(
+                        image,
+                        drawX,
+                        drawY,
+                        drawWidth,
+                        drawHeight
+                    );
+
+
+                    /*
+                     * -----------------------------------------
+                     * PRODUCT NAME
+                     * -----------------------------------------
+                     */
+
+                    const productName =
+                        product.name ||
+                        "Beautifully Curated";
+
+
+                    ctx.fillStyle =
+                        "#1d1b19";
+
+                    ctx.textAlign =
+                        "center";
+
+                    ctx.font =
+                        "600 44px Georgia";
+
+
+                    drawWrappedText(
+                        ctx,
+                        productName,
+                        540,
+                        1450,
+                        880,
+                        55
+                    );
+
+
+                    /*
+                     * -----------------------------------------
+                     * PRICE
+                     * -----------------------------------------
+                     */
+
+                    const price =
+                        product.sale_price ??
+                        product.price ??
+                        0;
+
+
+                    ctx.fillStyle =
+                        "#b28a4b";
+
+                    ctx.font =
+                        "700 42px Arial";
+
+                    ctx.fillText(
+                        formatPrice(price),
+                        540,
+                        1570
+                    );
+
+
+                    /*
+                     * -----------------------------------------
+                     * CTA
+                     * -----------------------------------------
+                     */
+
+                    const buttonX =
+                        220;
+
+                    const buttonY =
+                        1640;
+
+                    const buttonWidth =
+                        640;
+
+                    const buttonHeight =
+                        105;
+
+
+                    ctx.fillStyle =
+                        "#1d1b19";
+
+
+                    roundRect(
+                        ctx,
+                        buttonX,
+                        buttonY,
+                        buttonWidth,
+                        buttonHeight,
+                        22
+                    );
+
+                    ctx.fill();
+
+
+                    ctx.fillStyle =
+                        "#ffffff";
+
+                    ctx.font =
+                        "700 28px Arial";
+
+                    ctx.fillText(
+                        "SHOP THIS LOOK",
+                        540,
+                        1705
+                    );
+
+
+                    /*
+                     * -----------------------------------------
+                     * FOOTER
+                     * -----------------------------------------
+                     */
+
+                    ctx.fillStyle =
+                        "#777777";
+
+                    ctx.font =
+                        "500 20px Arial";
+
+                    ctx.fillText(
+                        "trendsbyak.in",
+                        540,
+                        1815
+                    );
+
+
+                    /*
+                     * -----------------------------------------
+                     * DOWNLOAD
+                     * -----------------------------------------
+                     */
+
+                    canvas.toBlob(
+                        function (blob) {
+
+                            if (!blob) {
+
+                                reject(
+                                    new Error(
+                                        "Could not create Story image."
+                                    )
+                                );
+
+                                return;
+
+                            }
+
+
+                            const blobUrl =
+                                URL.createObjectURL(
+                                    blob
+                                );
+
+
+                            const link =
+                                document.createElement(
+                                    "a"
+                                );
+
+
+                            link.href =
+                                blobUrl;
+
+
+                            const safeName =
+                                String(
+                                    product.name ||
+                                    "product"
+                                )
+                                .replace(
+                                    /[^a-z0-9]/gi,
+                                    "-"
+                                )
+                                .replace(
+                                    /-+/g,
+                                    "-"
+                                )
+                                .toLowerCase();
+
+
+                            link.download =
+                                `trendsbyak-${safeName}-instagram-story.jpg`;
+
+
+                            document.body.appendChild(
+                                link
+                            );
+
+
+                            link.click();
+
+
+                            link.remove();
+
+
+                            setTimeout(
+                                function () {
+
+                                    URL.revokeObjectURL(
+                                        blobUrl
+                                    );
+
+                                },
+                                1000
+                            );
+
+
+                            resolve();
+
+                        },
+                        "image/jpeg",
+                        0.95
+                    );
+
+
+                } catch (error) {
+
+                    reject(error);
+
+                }
+
+            };
+
+
+        image.onerror =
+            function () {
+
+                reject(
+                    new Error(
+                        "Could not load the product image. Please check that the image URL is accessible."
+                    )
+                );
+
+            };
+
+
+        image.src =
+            imageUrl;
+
+    });
+
+}
+
+
+/* =========================================================
+   ROUNDED RECTANGLE
+========================================================= */
+
+function roundRect(
+    ctx,
+    x,
+    y,
+    width,
+    height,
+    radius
+) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x + radius,
+        y
+    );
+
+    ctx.lineTo(
+        x + width - radius,
+        y
+    );
+
+    ctx.quadraticCurveTo(
+        x + width,
+        y,
+        x + width,
+        y + radius
+    );
+
+    ctx.lineTo(
+        x + width,
+        y + height - radius
+    );
+
+    ctx.quadraticCurveTo(
+        x + width,
+        y + height,
+        x + width - radius,
+        y + height
+    );
+
+    ctx.lineTo(
+        x + radius,
+        y + height
+    );
+
+    ctx.quadraticCurveTo(
+        x,
+        y + height,
+        x,
+        y + height - radius
+    );
+
+    ctx.lineTo(
+        x,
+        y + radius
+    );
+
+    ctx.quadraticCurveTo(
+        x,
+        y,
+        x + radius,
+        y
+    );
+
+    ctx.closePath();
+
+}
+
+
+/* =========================================================
+   WRAPPED PRODUCT NAME
+========================================================= */
+
+function drawWrappedText(
+    ctx,
+    text,
+    centerX,
+    startY,
+    maxWidth,
+    lineHeight
+) {
+
+    const words =
+        String(text).split(" ");
+
+    let line =
+        "";
+
+    let y =
+        startY;
+
+
+    for (
+        let i = 0;
+        i < words.length;
+        i++
+    ) {
+
+        const testLine =
+            line +
+            (line ? " " : "") +
+            words[i];
+
+
+        const metrics =
+            ctx.measureText(
+                testLine
+            );
+
+
+        if (
+            metrics.width >
+            maxWidth &&
+            line
+        ) {
+
+            ctx.fillText(
+                line,
+                centerX,
+                y
+            );
+
+            line =
+                words[i];
+
+            y +=
+                lineHeight;
+
+        } else {
+
+            line =
+                testLine;
+
+        }
+
+    }
+
+
+    if (line) {
+
+        ctx.fillText(
+            line,
+            centerX,
+            y
+        );
+
+    }
+
+}
+
+
+async function shareToContact() {
+
+    await nativeShareProduct();
+
+}
+
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const modal =
+            document.getElementById("shareModal");
+
+        if (
+            modal &&
+            event.target === modal
+        ) {
+            closeShareModal();
+        }
+
+    }
+);
 /* =========================================================
    CSV HEADERS
 ========================================================= */
