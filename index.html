@@ -31,51 +31,54 @@
 
 <link rel="stylesheet" href="style.css">
 
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-L22XEV7688"></script>
-
 <script>
-window.dataLayer=window.dataLayer||[];
-function gtag(){dataLayer.push(arguments)}
-gtag('js',new Date());
-gtag('config','G-L22XEV7688');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-L22XEV7688');
 </script>
 
+<!-- SEO structured data -->
 <script type="application/ld+json">
 {
     "@context":"https://schema.org",
     "@graph":[
         {
             "@type":"Organization",
-            "@id":"https://www.trendsbyak.in/#organization",
+            "@id":"https://trendsbyak.in/#organization",
             "name":"Trends by AK",
-            "url":"https://www.trendsbyak.in/",
-            "logo":"https://www.trendsbyak.in/assets/logo.png",
+            "url":"https://trendsbyak.in/",
+            "logo":"https://trendsbyak.in/assets/logo.png",
             "sameAs":[
                 "https://www.instagram.com/trendsbyak/"
             ]
         },
         {
             "@type":"WebSite",
-            "@id":"https://www.trendsbyak.in/#website",
-            "url":"https://www.trendsbyak.in/",
+            "@id":"https://trendsbyak.in/#website",
+            "url":"https://trendsbyak.in/",
             "name":"Trends by AK",
             "publisher":{
-                "@id":"https://www.trendsbyak.in/#organization"
+                "@id":"https://trendsbyak.in/#organization"
             }
         }
     ]
 }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@Supabase/supabase-js@2"></script>
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 .site-logo-image{
     width:58px;
     height:58px;
     object-fit:contain;
     border-radius:50%;
-    flex-shrink:0
+    flex-shrink:0;
 }
 
 .loader{
@@ -85,11 +88,13 @@ gtag('config','G-L22XEV7688');
     border:3px solid #e8e3db;
     border-top-color:#b28a4b;
     border-radius:50%;
-    animation:spin .8s linear infinite
+    animation:spin .8s linear infinite;
 }
 
 @keyframes spin{
-    to{transform:rotate(360deg)}
+    to{
+        transform:rotate(360deg);
+    }
 }
 
 .loading-card,
@@ -100,21 +105,28 @@ gtag('config','G-L22XEV7688');
     text-align:center;
     border:1px solid #e8e3db;
     border-radius:16px;
-    background:#faf8f4
+    background:#faf8f4;
+}
+
+.loading-card p,
+.new-launch-empty p,
+.review-empty p{
+    color:#777;
+    margin:8px 0 0;
 }
 
 .new-launches-section{
-    background:#fff
+    background:#fff;
 }
 
 .new-launches-grid{
     display:grid;
     grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:28px 20px
+    gap:28px 20px;
 }
 
 .new-launch-card{
-    min-width:0
+    min-width:0;
 }
 
 .new-launch-card .product-image{
@@ -123,7 +135,7 @@ gtag('config','G-L22XEV7688');
     aspect-ratio:1;
     overflow:hidden;
     border-radius:15px;
-    background:#f5f0e8
+    background:#f5f0e8;
 }
 
 .new-launch-card .product-image img{
@@ -131,15 +143,15 @@ gtag('config','G-L22XEV7688');
     height:100%;
     object-fit:cover;
     display:block;
-    transition:transform .35s ease
+    transition:transform .35s ease;
 }
 
 .new-launch-card:hover .product-image img{
-    transform:scale(1.04)
+    transform:scale(1.04);
 }
 
 .new-launch-info{
-    padding-top:13px
+    padding-top:13px;
 }
 
 .new-launch-category{
@@ -147,36 +159,36 @@ gtag('config','G-L22XEV7688');
     text-transform:uppercase;
     letter-spacing:1.5px;
     color:#8b6b42;
-    margin-bottom:5px
+    margin-bottom:5px;
 }
 
 .new-launch-info h3{
     margin:0 0 7px;
     font-family:"Playfair Display",serif;
     font-size:18px;
-    line-height:1.3
+    line-height:1.3;
 }
 
 .new-launch-info h3 a{
     color:#1d1b19;
-    text-decoration:none
+    text-decoration:none;
 }
 
 .new-launch-price{
     display:flex;
     align-items:center;
     gap:8px;
-    margin-bottom:13px
+    margin-bottom:13px;
 }
 
 .new-launch-price strong{
-    font-size:14px
+    font-size:14px;
 }
 
 .new-launch-price .old-price{
     text-decoration:line-through;
     color:#999;
-    font-size:12px
+    font-size:12px;
 }
 
 .new-launch-badge{
@@ -190,7 +202,7 @@ gtag('config','G-L22XEV7688');
     color:#fff;
     font-size:9px;
     font-weight:700;
-    letter-spacing:1px
+    letter-spacing:1px;
 }
 
 .new-launch-add-cart{
@@ -204,28 +216,28 @@ gtag('config','G-L22XEV7688');
     font-size:12px;
     font-weight:700;
     cursor:pointer;
-    transition:.2s
+    transition:.2s;
 }
 
 .new-launch-add-cart:hover,
 .new-launch-add-cart.added{
     background:#b28a4b;
-    border-color:#b28a4b
+    border-color:#b28a4b;
 }
 
 .new-launch-add-cart:disabled{
     opacity:.75;
-    cursor:default
+    cursor:default;
 }
 
 .new-launch-actions{
     display:flex;
     justify-content:center;
-    margin-top:35px
+    margin-top:35px;
 }
 
 .instagram-section{
-    overflow:hidden
+    overflow:hidden;
 }
 
 .instagram-heading{
@@ -233,27 +245,27 @@ gtag('config','G-L22XEV7688');
     align-items:flex-end;
     justify-content:space-between;
     gap:25px;
-    margin-bottom:28px
+    margin-bottom:28px;
 }
 
 .instagram-heading-copy{
-    max-width:700px
+    max-width:700px;
 }
 
 .instagram-heading-copy h2{
-    margin:0 0 7px
+    margin:0 0 7px;
 }
 
 .instagram-heading-copy p{
     margin:0;
     color:#777;
-    font-size:13px
+    font-size:13px;
 }
 
 .instagram-grid{
     display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:16px
+    gap:16px;
 }
 
 .instagram-link-card{
@@ -265,7 +277,7 @@ gtag('config','G-L22XEV7688');
     border-radius:15px;
     overflow:hidden;
     border:1px solid #e8e3db;
-    background:#fff
+    background:#fff;
 }
 
 .instagram-placeholder{
@@ -279,7 +291,7 @@ gtag('config','G-L22XEV7688');
     padding:25px;
     box-sizing:border-box;
     background:linear-gradient(145deg,#1d1b19,#8b6b42);
-    color:#fff
+    color:#fff;
 }
 
 .instagram-icon{
@@ -291,18 +303,18 @@ gtag('config','G-L22XEV7688');
     align-items:center;
     justify-content:center;
     font-size:24px;
-    margin-bottom:18px
+    margin-bottom:18px;
 }
 
 .instagram-placeholder strong{
     font-family:"Playfair Display",serif;
     font-size:18px;
-    margin-bottom:7px
+    margin-bottom:7px;
 }
 
 .instagram-placeholder span{
     font-size:11px;
-    opacity:.8
+    opacity:.8;
 }
 
 .instagram-reel-label{
@@ -312,7 +324,7 @@ gtag('config','G-L22XEV7688');
     border:1px solid rgba(255,255,255,.6);
     padding:6px 10px;
     border-radius:999px;
-    margin-bottom:17px
+    margin-bottom:17px;
 }
 
 .instagram-follow-bar{
@@ -322,86 +334,86 @@ gtag('config','G-L22XEV7688');
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:20px
+    gap:20px;
 }
 
 .instagram-follow-info{
     display:flex;
     align-items:center;
     gap:9px;
-    flex-wrap:wrap
+    flex-wrap:wrap;
 }
 
 .instagram-follow-info small{
     width:100%;
     margin-left:18px;
     color:#777;
-    font-size:11px
+    font-size:11px;
 }
 
 .instagram-dot{
     width:8px;
     height:8px;
     border-radius:50%;
-    background:#b28a4b
+    background:#b28a4b;
 }
 
 .reviews-grid{
     display:grid;
     grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:18px
+    gap:18px;
 }
 
 .review-card{
     background:#fff;
     border:1px solid #e8e3db;
     border-radius:16px;
-    padding:25px
+    padding:25px;
 }
 
 .review-stars{
     color:#b28a4b;
     font-size:15px;
     letter-spacing:2px;
-    margin-bottom:14px
+    margin-bottom:14px;
 }
 
 .review-text{
     color:#555;
     font-size:14px;
     line-height:1.7;
-    margin:0 0 18px
+    margin:0 0 18px;
 }
 
 .review-name{
     display:block;
     font-size:13px;
-    font-weight:700
+    font-weight:700;
 }
 
 .review-product{
     display:block;
     margin-top:4px;
     color:#888;
-    font-size:11px
+    font-size:11px;
 }
 
 .nav-account{
-    white-space:nowrap
+    white-space:nowrap;
 }
 
 @media(max-width:900px){
 
     .new-launches-grid{
-        grid-template-columns:repeat(2,minmax(0,1fr))
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
     .instagram-grid{
-        grid-template-columns:repeat(2,minmax(0,1fr))
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
     .reviews-grid{
-        grid-template-columns:repeat(2,minmax(0,1fr))
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 }
 
@@ -409,77 +421,90 @@ gtag('config','G-L22XEV7688');
 
     .site-logo-image{
         width:48px;
-        height:48px
+        height:48px;
     }
 
     .new-launches-grid{
         grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:22px 12px
+        gap:22px 12px;
     }
 
     .new-launch-info h3{
-        font-size:16px
+        font-size:16px;
     }
 
     .new-launch-add-cart{
         min-height:40px;
-        font-size:11px
+        font-size:11px;
     }
 
     .instagram-heading{
-        display:block
+        display:block;
     }
 
     .instagram-heading .text-link{
         display:inline-block;
-        margin-top:12px
+        margin-top:12px;
     }
 
     .instagram-grid{
         display:flex;
         overflow-x:auto;
         gap:12px;
-        padding-bottom:8px
+        padding-bottom:8px;
     }
 
     .instagram-link-card{
-        flex:0 0 78%
+        flex:0 0 78%;
     }
 
     .instagram-placeholder{
-        min-height:260px
+        min-height:260px;
     }
 
     .reviews-grid{
-        grid-template-columns:1fr
+        grid-template-columns:1fr;
     }
 
     .instagram-follow-bar{
         flex-direction:column;
-        align-items:flex-start
+        align-items:flex-start;
     }
 
     .instagram-follow-bar .btn{
-        width:100%
+        width:100%;
     }
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="announcement">
-    <p>Thoughtfully curated accessories &nbsp;•&nbsp; Bulk orders available &nbsp;•&nbsp; Order directly on WhatsApp</p>
+    <p>
+        Thoughtfully curated accessories
+        &nbsp;•&nbsp;
+        Bulk orders available
+        &nbsp;•&nbsp;
+        Order directly on WhatsApp
+    </p>
 </div>
 
 <header class="site-header">
 
 <a class="brand" href="index.html" aria-label="Trends by AK home">
-    <img src="assets/logo.png" alt="Trends by AK" class="site-logo-image">
+
+    <img
+        src="assets/logo.png"
+        alt="Trends by AK"
+        class="site-logo-image">
+
     <span class="brand-copy">
         <strong>Trends by AK</strong>
         <small>Sustainable Luxury · Affordable</small>
     </span>
+
 </a>
 
 <button
@@ -488,26 +513,55 @@ gtag('config','G-L22XEV7688');
     aria-label="Open menu"
     aria-expanded="false"
     type="button">
+
     <span></span>
     <span></span>
     <span></span>
+
 </button>
 
 <nav class="main-nav" id="mainNav">
+
     <a href="#collections">Collections</a>
+
     <a href="shop.html">Shop</a>
+
     <a href="#instagram">Instagram</a>
+
     <a href="#reviews">Reviews</a>
+
     <a href="bulk-order.html">Bulk Orders</a>
+
     <a href="#about">Our Story</a>
-    <a class="nav-account" href="account.html" id="accountLink">Login / Account</a>
-    <a class="nav-cart" href="cart.html">Cart <span id="cartCount">0</span></a>
-    <a class="nav-whatsapp" href="https://wa.me/918433998962" target="_blank" rel="noopener">WhatsApp</a>
+
+    <a
+        class="nav-account"
+        href="account.html"
+        id="accountLink">
+        Login / Account
+    </a>
+
+    <a
+        class="nav-cart"
+        href="cart.html">
+        Cart <span id="cartCount">0</span>
+    </a>
+
+    <a
+        class="nav-whatsapp"
+        href="https://wa.me/918433998962"
+        target="_blank"
+        rel="noopener">
+        WhatsApp
+    </a>
+
 </nav>
 
 </header>
 
 <main>
+
+<!-- HERO -->
 
 <section class="hero" id="hero">
 
@@ -515,7 +569,9 @@ gtag('config','G-L22XEV7688');
 
     <div class="hero-content">
 
-        <p class="eyebrow">TRENDS BY AK · CURATED WITH LOVE</p>
+        <p class="eyebrow">
+            TRENDS BY AK · CURATED WITH LOVE
+        </p>
 
         <h1>
             Little luxuries.<br>
@@ -527,19 +583,38 @@ gtag('config','G-L22XEV7688');
         </p>
 
         <div class="hero-actions">
-            <a href="shop.html" class="btn btn-dark">Shop the collection</a>
-            <a href="https://wa.me/918433998962" target="_blank" rel="noopener" class="btn btn-light">Chat on WhatsApp</a>
+
+            <a
+                href="shop.html"
+                class="btn btn-dark">
+                Shop the collection
+            </a>
+
+            <a
+                href="https://wa.me/918433998962"
+                target="_blank"
+                rel="noopener"
+                class="btn btn-light">
+                Chat on WhatsApp
+            </a>
+
         </div>
 
         <div class="hero-note">
+
             <span>Premium quality</span>
+
             <span>Gift-ready options</span>
+
             <span>Bulk orders from 25 pcs</span>
+
         </div>
 
     </div>
 
 </section>
+
+<!-- TRUST -->
 
 <section class="trust-strip">
 
@@ -569,7 +644,11 @@ gtag('config','G-L22XEV7688');
 
 </section>
 
-<section class="section new-launches-section" id="new-launches">
+<!-- NEW LAUNCHES -->
+
+<section
+    class="section new-launches-section"
+    id="new-launches">
 
     <div class="section-heading">
 
@@ -584,7 +663,9 @@ gtag('config','G-L22XEV7688');
 
     </div>
 
-    <div class="new-launches-grid" id="newLaunchesGrid">
+    <div
+        class="new-launches-grid"
+        id="newLaunchesGrid">
 
         <div class="loading-card">
             <div class="loader"></div>
@@ -594,12 +675,22 @@ gtag('config','G-L22XEV7688');
     </div>
 
     <div class="new-launch-actions">
-        <a href="shop.html" class="btn btn-dark">View All Products</a>
+
+        <a
+            href="shop.html"
+            class="btn btn-dark">
+            View All Products
+        </a>
+
     </div>
 
 </section>
 
-<section class="section" id="collections">
+<!-- COLLECTIONS -->
+
+<section
+    class="section"
+    id="collections">
 
     <div class="section-heading">
 
@@ -614,28 +705,43 @@ gtag('config','G-L22XEV7688');
 
     </div>
 
-    <div class="collection-grid" id="homepageCollections">
+    <div
+        class="collection-grid"
+        id="homepageCollections">
 
         <div class="loading-card">
+
             <div class="loader"></div>
+
             <p>Loading collections...</p>
+
         </div>
 
     </div>
 
 </section>
 
-<section class="section instagram-section" id="instagram">
+<!-- INSTAGRAM -->
+
+<section
+    class="section instagram-section"
+    id="instagram">
 
     <div class="instagram-heading">
 
         <div class="instagram-heading-copy">
 
-            <p class="eyebrow">FROM @TRENDSBYAK</p>
+            <p class="eyebrow">
+                FROM @TRENDSBYAK
+            </p>
 
-            <h2>A little Trends by AK on your feed.</h2>
+            <h2>
+                A little Trends by AK on your feed.
+            </h2>
 
-            <p>New launches, styling ideas & little luxuries.</p>
+            <p>
+                New launches, styling ideas & little luxuries.
+            </p>
 
         </div>
 
@@ -649,7 +755,9 @@ gtag('config','G-L22XEV7688');
 
     </div>
 
-    <div class="instagram-grid" id="instagramGrid">
+    <div
+        class="instagram-grid"
+        id="instagramGrid">
 
         <div class="instagram-link-card">
 
@@ -657,7 +765,9 @@ gtag('config','G-L22XEV7688');
 
                 <div class="loader"></div>
 
-                <strong>Loading Instagram...</strong>
+                <strong>
+                    Loading Instagram...
+                </strong>
 
             </div>
 
@@ -671,7 +781,9 @@ gtag('config','G-L22XEV7688');
 
             <span class="instagram-dot"></span>
 
-            <strong>Follow @trendsbyak</strong>
+            <strong>
+                Follow @trendsbyak
+            </strong>
 
             <small>
                 New products, styling ideas & behind the scenes.
@@ -691,13 +803,24 @@ gtag('config','G-L22XEV7688');
 
 </section>
 
-<section class="section reviews-section" id="reviews">
+<!-- REVIEWS -->
+
+<section
+    class="section reviews-section"
+    id="reviews">
 
     <div class="section-heading">
 
         <div>
-            <p class="eyebrow">CUSTOMER LOVE</p>
-            <h2>Pretty things. Happy customers.</h2>
+
+            <p class="eyebrow">
+                CUSTOMER LOVE
+            </p>
+
+            <h2>
+                Pretty things. Happy customers.
+            </h2>
+
         </div>
 
         <p class="section-intro">
@@ -706,22 +829,35 @@ gtag('config','G-L22XEV7688');
 
     </div>
 
-    <div class="reviews-grid" id="reviewsGrid">
+    <div
+        class="reviews-grid"
+        id="reviewsGrid">
 
         <div class="loading-card">
+
             <div class="loader"></div>
-            <p>Loading customer reviews...</p>
+
+            <p>
+                Loading customer reviews...
+            </p>
+
         </div>
 
     </div>
 
 </section>
 
-<section class="bulk-section" id="bulk-orders">
+<!-- BULK ORDER CTA -->
+
+<section
+    class="bulk-section"
+    id="bulk-orders">
 
     <div class="bulk-copy">
 
-        <p class="eyebrow">FOR BUSINESSES · EVENTS · GIFTING</p>
+        <p class="eyebrow">
+            FOR BUSINESSES · EVENTS · GIFTING
+        </p>
 
         <h2>
             Need more than one?<br>
@@ -733,9 +869,19 @@ gtag('config','G-L22XEV7688');
         </p>
 
         <div class="bulk-points">
-            <span>Bulk orders from 25 pcs</span>
-            <span>Custom colour & gifting options</span>
-            <span>Best pricing for quantity orders</span>
+
+            <span>
+                Bulk orders from 25 pcs
+            </span>
+
+            <span>
+                Custom colour & gifting options
+            </span>
+
+            <span>
+                Best pricing for quantity orders
+            </span>
+
         </div>
 
         <a
@@ -752,24 +898,48 @@ gtag('config','G-L22XEV7688');
     <div class="bulk-visual">
 
         <div class="bulk-card">
-            <span class="bulk-number">25+</span>
-            <span class="bulk-label">pieces</span>
-            <small>starting quantity</small>
+
+            <span class="bulk-number">
+                25+
+            </span>
+
+            <span class="bulk-label">
+                pieces
+            </span>
+
+            <small>
+                starting quantity
+            </small>
+
         </div>
 
-        <div class="floating-pill pill-one">Corporate gifts</div>
-        <div class="floating-pill pill-two">Return favours</div>
-        <div class="floating-pill pill-three">Boutique stock</div>
+        <div class="floating-pill pill-one">
+            Corporate gifts
+        </div>
+
+        <div class="floating-pill pill-two">
+            Return favours
+        </div>
+
+        <div class="floating-pill pill-three">
+            Boutique stock
+        </div>
 
     </div>
 
 </section>
 
-<section class="about-section section" id="about">
+<!-- ABOUT -->
+
+<section
+    class="about-section section"
+    id="about">
 
     <div class="about-image">
 
-        <div class="about-monogram">AK</div>
+        <div class="about-monogram">
+            AK
+        </div>
 
         <span>
             Thoughtfully curated<br>
@@ -780,9 +950,13 @@ gtag('config','G-L22XEV7688');
 
     <div class="about-copy">
 
-        <p class="eyebrow">OUR STORY</p>
+        <p class="eyebrow">
+            OUR STORY
+        </p>
 
-        <h2>Luxury doesn't have to be loud.</h2>
+        <h2>
+            Luxury doesn't have to be loud.
+        </h2>
 
         <p>
             At Trends by AK, we believe the prettiest things are the ones that fit effortlessly into your everyday life.
@@ -792,7 +966,9 @@ gtag('config','G-L22XEV7688');
             From satin scrunchies and hair accessories to anti-tarnish jewellery and gifting options, every collection is selected with quality, affordability and a little extra joy in mind.
         </p>
 
-        <a href="about.html" class="text-link">
+        <a
+            href="about.html"
+            class="text-link">
             More about Trends by AK
         </a>
 
@@ -800,11 +976,15 @@ gtag('config','G-L22XEV7688');
 
 </section>
 
+<!-- WHATSAPP -->
+
 <section class="whatsapp-cta">
 
     <div>
 
-        <p class="eyebrow">HAVE A QUESTION?</p>
+        <p class="eyebrow">
+            HAVE A QUESTION?
+        </p>
 
         <h2>
             Let's find something<br>
@@ -825,13 +1005,17 @@ gtag('config','G-L22XEV7688');
 
 </main>
 
+<!-- FOOTER -->
+
 <footer class="site-footer">
 
     <div class="footer-top">
 
         <div>
 
-            <a class="brand footer-brand" href="index.html">
+            <a
+                class="brand footer-brand"
+                href="index.html">
 
                 <img
                     src="assets/logo.png"
@@ -840,7 +1024,9 @@ gtag('config','G-L22XEV7688');
 
                 <span class="brand-copy">
 
-                    <strong>Trends by AK</strong>
+                    <strong>
+                        Trends by AK
+                    </strong>
 
                     <small>
                         Sustainable Luxury · Affordable
@@ -860,9 +1046,17 @@ gtag('config','G-L22XEV7688');
 
             <strong>Shop</strong>
 
-            <a href="shop.html">All Products</a>
-            <a href="#collections">Collections</a>
-            <a href="bulk-order.html">Bulk Orders</a>
+            <a href="shop.html">
+                All Products
+            </a>
+
+            <a href="#collections">
+                Collections
+            </a>
+
+            <a href="bulk-order.html">
+                Bulk Orders
+            </a>
 
         </div>
 
@@ -870,9 +1064,17 @@ gtag('config','G-L22XEV7688');
 
             <strong>Help</strong>
 
-            <a href="shipping.html">Shipping</a>
-            <a href="return.html">Returns</a>
-            <a href="contact.html">Contact</a>
+            <a href="shipping.html">
+                Shipping
+            </a>
+
+            <a href="return.html">
+                Returns
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
 
         </div>
 
@@ -915,17 +1117,60 @@ gtag('config','G-L22XEV7688');
 <script>
 'use strict';
 
-const SUPABASE_URL='https://ltxrycmreumoqfpcbwnb.supabase.co';
+/* =========================================================
+   SUPABASE INITIALIZATION
+   ========================================================= */
 
-const SUPABASE_KEY='sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh';
+const SUPABASE_URL =
+    'https://ltxrycmreumoqfpcbwnb.supabase.co';
 
-const supabaseClient=window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const SUPABASE_KEY =
+    'sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh';
+
+let supabaseClient = null;
+
+function initSupabase(){
+
+    try{
+
+        if(
+            !window.supabase ||
+            typeof window.supabase.createClient !== 'function'
+        ){
+
+            console.error(
+                'Supabase library did not load.'
+            );
+
+            return null;
+        }
+
+        return window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    }catch(error){
+
+        console.error(
+            'Supabase initialization failed:',
+            error
+        );
+
+        return null;
+    }
+}
+
+supabaseClient = initSupabase();
+
+
+/* =========================================================
+   GENERAL HELPERS
+   ========================================================= */
 
 function escapeHtml(value){
-    return String(value??'')
+
+    return String(value ?? '')
         .replace(/&/g,'&amp;')
         .replace(/</g,'&lt;')
         .replace(/>/g,'&gt;')
@@ -933,100 +1178,208 @@ function escapeHtml(value){
         .replace(/'/g,'&#039;');
 }
 
+
 function formatPrice(value){
-    const number=Number(value||0);
+
+    const number = Number(value || 0);
 
     return Number.isFinite(number)
         ? `₹${number.toLocaleString('en-IN')}`
         : '₹0';
 }
 
-function getDeviceType(){
-    const w=window.innerWidth;
 
-    return w<=600
-        ? 'mobile'
-        : w<=1024
-            ? 'tablet'
-            : 'desktop';
+function getDeviceType(){
+
+    const w = window.innerWidth;
+
+    if(w <= 600){
+        return 'mobile';
+    }
+
+    if(w <= 1024){
+        return 'tablet';
+    }
+
+    return 'desktop';
 }
+
 
 function trackEvent(name,parameters={}){
+
     try{
-        if(typeof gtag==='function'){
-            gtag('event',name,parameters);
+
+        if(typeof gtag === 'function'){
+
+            gtag(
+                'event',
+                name,
+                parameters
+            );
         }
-    }catch(e){}
+
+    }catch(e){
+
+        console.warn(
+            'GA event failed:',
+            e
+        );
+    }
 }
+
 
 function getVisitorId(){
 
-    let id=localStorage.getItem(
-        'trendsbyak_visitor_id'
-    );
+    try{
 
-    if(!id){
+        let id =
+            localStorage.getItem(
+                'trendsbyak_visitor_id'
+            );
 
-        id='v_'+Date.now()+'_'+
-            Math.random().toString(36).slice(2,12);
+        if(!id){
 
-        localStorage.setItem(
-            'trendsbyak_visitor_id',
-            id
-        );
+            id =
+                'v_' +
+                Date.now() +
+                '_' +
+                Math.random()
+                    .toString(36)
+                    .slice(2,12);
+
+            localStorage.setItem(
+                'trendsbyak_visitor_id',
+                id
+            );
+        }
+
+        return id;
+
+    }catch(e){
+
+        return 'visitor_' + Date.now();
     }
-
-    return id;
 }
+
 
 function getSessionId(){
 
-    let id=sessionStorage.getItem(
-        'trendsbyak_session_id'
-    );
+    try{
 
-    if(!id){
+        let id =
+            sessionStorage.getItem(
+                'trendsbyak_session_id'
+            );
 
-        id='s_'+Date.now()+'_'+
-            Math.random().toString(36).slice(2,10);
+        if(!id){
 
-        sessionStorage.setItem(
-            'trendsbyak_session_id',
-            id
-        );
+            id =
+                's_' +
+                Date.now() +
+                '_' +
+                Math.random()
+                    .toString(36)
+                    .slice(2,10);
+
+            sessionStorage.setItem(
+                'trendsbyak_session_id',
+                id
+            );
+        }
+
+        return id;
+
+    }catch(e){
+
+        return 'session_' + Date.now();
     }
-
-    return id;
 }
+
 
 function getUtmData(){
 
-    const p=new URLSearchParams(location.search);
+    const p =
+        new URLSearchParams(
+            location.search
+        );
 
     return {
-        source:p.get('utm_source'),
-        medium:p.get('utm_medium'),
-        campaign:p.get('utm_campaign')
+
+        source:
+            p.get('utm_source'),
+
+        medium:
+            p.get('utm_medium'),
+
+        campaign:
+            p.get('utm_campaign')
     };
 }
+
+
+/* =========================================================
+   SAFE SUPABASE REQUEST
+   Prevents infinite loading.
+========================================================= */
+
+async function safeSupabaseQuery(queryPromise,timeout=9000){
+
+    if(!supabaseClient){
+
+        throw new Error(
+            'Supabase is unavailable.'
+        );
+    }
+
+    const timeoutPromise =
+        new Promise(
+            (_,reject)=>{
+
+                setTimeout(
+                    ()=>{
+                        reject(
+                            new Error(
+                                'Request timed out.'
+                            )
+                        );
+                    },
+                    timeout
+                );
+            }
+        );
+
+    return await Promise.race([
+        queryPromise,
+        timeoutPromise
+    ]);
+}
+
+
+/* =========================================================
+   CART
+   ========================================================= */
 
 function getCart(){
 
     try{
 
-        const c=JSON.parse(
-            localStorage.getItem(
-                'trendsbyak_cart'
-            )||'[]'
-        );
+        const c =
+            JSON.parse(
+                localStorage.getItem(
+                    'trendsbyak_cart'
+                ) || '[]'
+            );
 
-        return Array.isArray(c)?c:[];
+        return Array.isArray(c)
+            ? c
+            : [];
 
     }catch(e){
 
         return [];
     }
 }
+
 
 function saveCart(cart){
 
@@ -1045,59 +1398,95 @@ function saveCart(cart){
 
     }catch(e){
 
-        console.error(e);
+        console.error(
+            'Cart save failed:',
+            e
+        );
     }
 }
+
 
 function updateCartCount(){
 
-    const count=getCart().reduce(
-        (n,i)=>n+Number(i.quantity||0),
-        0
-    );
+    const count =
+        getCart().reduce(
+            (n,i)=>
+                n + Number(i.quantity || 0),
+            0
+        );
 
-    const el=document.getElementById(
-        'cartCount'
-    );
+    const el =
+        document.getElementById(
+            'cartCount'
+        );
 
     if(el){
-        el.textContent=count;
+
+        el.textContent =
+            count;
     }
 }
 
+
 function addProductToCart(product,button){
 
-    const id=String(product.id);
+    const id =
+        String(product.id);
 
-    const price=Number(
-        product.sale_price??
-        product.price??
-        0
-    );
+    const price =
+        Number(
+            product.sale_price ??
+            product.price ??
+            0
+        );
 
-    const cart=getCart();
+    const cart =
+        getCart();
 
-    const i=cart.findIndex(
-        x=>String(x.id)===id
-    );
+    const existing =
+        cart.findIndex(
+            x =>
+                String(x.id) === id
+        );
 
-    if(i>=0){
+    if(existing >= 0){
 
-        cart[i].quantity=
-            Number(cart[i].quantity||0)+1;
+        cart[existing].quantity =
+            Number(
+                cart[existing].quantity || 0
+            ) + 1;
 
     }else{
 
         cart.push({
-            id:product.id,
-            product_id:product.id,
-            name:product.name||'Product',
-            price,
-            sale_price:product.sale_price,
-            image:product.image_url||'',
-            image_url:product.image_url||'',
-            category:product.category||'',
-            quantity:1
+
+            id:
+                product.id,
+
+            product_id:
+                product.id,
+
+            name:
+                product.name || 'Product',
+
+            price:
+
+                price,
+
+            sale_price:
+                product.sale_price,
+
+            image:
+                product.image_url || '',
+
+            image_url:
+                product.image_url || '',
+
+            category:
+                product.category || '',
+
+            quantity:
+                1
         });
     }
 
@@ -1113,7 +1502,9 @@ function addProductToCart(product,button){
             items:[
                 {
                     item_id:id,
-                    item_name:product.name||'Product',
+                    item_name:
+                        product.name ||
+                        'Product',
                     price,
                     quantity:1
                 }
@@ -1121,267 +1512,528 @@ function addProductToCart(product,button){
         }
     );
 
-    supabaseClient
-        .from('analytics_events')
-        .insert({
-            event_name:'add_to_cart',
-            session_id:getSessionId(),
-            visitor_id:getVisitorId(),
-            page_url:location.href,
-            page_path:location.pathname,
-            referrer:document.referrer||null,
-            device_type:getDeviceType(),
-            user_agent:navigator.userAgent,
-            product_id:Number(product.id),
-            metadata:{
-                product_name:product.name||'',
-                price
-            }
-        })
-        .then(()=>{})
-        .catch(()=>{});
+    if(
+        supabaseClient
+    ){
+
+        supabaseClient
+            .from('analytics_events')
+            .insert({
+
+                event_name:
+                    'add_to_cart',
+
+                session_id:
+                    getSessionId(),
+
+                visitor_id:
+                    getVisitorId(),
+
+                page_url:
+                    location.href,
+
+                page_path:
+                    location.pathname,
+
+                referrer:
+                    document.referrer ||
+                    null,
+
+                device_type:
+                    getDeviceType(),
+
+                user_agent:
+                    navigator.userAgent,
+
+                product_id:
+                    Number(product.id),
+
+                metadata:{
+                    product_name:
+                        product.name || '',
+                    price
+                }
+
+            })
+            .then(()=>{})
+            .catch(()=>{});
+    }
 
     if(button){
 
-        const old=button.textContent;
+        const old =
+            button.textContent;
 
-        button.textContent='Added to Cart';
+        button.textContent =
+            'Added to Cart';
 
-        button.classList.add('added');
+        button.classList.add(
+            'added'
+        );
 
-        button.disabled=true;
+        button.disabled =
+            true;
 
-        setTimeout(()=>{
+        setTimeout(
+            ()=>{
 
-            button.textContent=old;
+                button.textContent =
+                    old;
 
-            button.classList.remove('added');
+                button.classList.remove(
+                    'added'
+                );
 
-            button.disabled=false;
+                button.disabled =
+                    false;
 
-        },1500);
+            },
+            1500
+        );
     }
 }
 
+
+/* =========================================================
+   ANALYTICS
+   ========================================================= */
+
 async function trackWebsiteVisit(){
 
-    const visitorId=getVisitorId();
+    if(!supabaseClient){
+        return;
+    }
 
-    const sessionId=getSessionId();
+    const visitorId =
+        getVisitorId();
 
-    const utm=getUtmData();
+    const sessionId =
+        getSessionId();
 
-    try{
-
-        await supabaseClient
-            .from('website_visitors')
-            .insert({
-                visitor_id:visitorId,
-                page:location.pathname,
-                page_url:location.href,
-                referrer:document.referrer||null,
-                user_agent:navigator.userAgent,
-                visited_at:new Date().toISOString()
-            });
-
-    }catch(e){}
+    const utm =
+        getUtmData();
 
     try{
 
-        await supabaseClient
-            .from('analytics_events')
-            .insert({
-                event_name:'page_view',
-                session_id:sessionId,
-                visitor_id:visitorId,
-                page_url:location.href,
-                page_path:location.pathname,
-                referrer:document.referrer||null,
-                source:utm.source,
-                medium:utm.medium,
-                campaign:utm.campaign,
-                device_type:getDeviceType(),
-                user_agent:navigator.userAgent,
-                metadata:{}
-            });
+        await safeSupabaseQuery(
+            supabaseClient
+                .from('website_visitors')
+                .insert({
 
-    }catch(e){}
+                    visitor_id:
+                        visitorId,
+
+                    page:
+                        location.pathname,
+
+                    page_url:
+                        location.href,
+
+                    referrer:
+                        document.referrer ||
+                        null,
+
+                    user_agent:
+                        navigator.userAgent,
+
+                    visited_at:
+                        new Date()
+                            .toISOString()
+
+                }),
+            5000
+        );
+
+    }catch(e){
+
+        console.warn(
+            'Visitor tracking unavailable:',
+            e
+        );
+    }
+
+    try{
+
+        await safeSupabaseQuery(
+            supabaseClient
+                .from('analytics_events')
+                .insert({
+
+                    event_name:
+                        'page_view',
+
+                    session_id:
+                        sessionId,
+
+                    visitor_id:
+                        visitorId,
+
+                    page_url:
+                        location.href,
+
+                    page_path:
+                        location.pathname,
+
+                    referrer:
+                        document.referrer ||
+                        null,
+
+                    source:
+                        utm.source,
+
+                    medium:
+                        utm.medium,
+
+                    campaign:
+                        utm.campaign,
+
+                    device_type:
+                        getDeviceType(),
+
+                    user_agent:
+                        navigator.userAgent,
+
+                    metadata:{}
+
+                }),
+            5000
+        );
+
+    }catch(e){
+
+        console.warn(
+            'Analytics tracking unavailable:',
+            e
+        );
+    }
 }
+
 
 async function updateLiveVisitor(){
 
+    if(!supabaseClient){
+        return;
+    }
+
     try{
 
-        await supabaseClient
-            .from('live_visitors')
-            .upsert(
-                {
-                    visitor_id:getVisitorId(),
-                    page:location.pathname,
-                    page_url:location.href,
-                    last_seen:new Date().toISOString(),
-                    user_agent:navigator.userAgent
-                },
-                {
-                    onConflict:'visitor_id'
-                }
-            );
+        await safeSupabaseQuery(
 
-    }catch(e){}
+            supabaseClient
+                .from('live_visitors')
+                .upsert(
+
+                    {
+
+                        visitor_id:
+                            getVisitorId(),
+
+                        page:
+                            location.pathname,
+
+                        page_url:
+                            location.href,
+
+                        last_seen:
+                            new Date()
+                                .toISOString(),
+
+                        user_agent:
+                            navigator.userAgent
+
+                    },
+
+                    {
+                        onConflict:
+                            'visitor_id'
+                    }
+                ),
+
+            5000
+        );
+
+    }catch(e){
+
+        console.warn(
+            'Live visitor update unavailable.'
+        );
+    }
 }
+
+
+/* =========================================================
+   ACCOUNT
+   ========================================================= */
 
 async function updateAccountLink(){
 
-    const el=document.getElementById(
-        'accountLink'
-    );
+    const el =
+        document.getElementById(
+            'accountLink'
+        );
 
-    if(!el)return;
+    if(!el){
+        return;
+    }
+
+    if(!supabaseClient){
+
+        el.textContent =
+            'Login / Account';
+
+        return;
+    }
 
     try{
 
-        const {data}=await supabaseClient
-            .auth
-            .getUser();
+        const result =
+            await safeSupabaseQuery(
+                supabaseClient
+                    .auth
+                    .getUser(),
+                5000
+            );
 
-        if(data?.user){
+        const user =
+            result?.data?.user;
 
-            const name=
-                data.user.user_metadata?.name;
+        if(user){
 
-            el.textContent=
-                name||'My Account';
+            const name =
+                user.user_metadata?.name;
+
+            el.textContent =
+                name ||
+                'My Account';
 
         }else{
 
-            el.textContent='Login / Account';
+            el.textContent =
+                'Login / Account';
         }
 
     }catch(e){
 
-        el.textContent='Login / Account';
+        el.textContent =
+            'Login / Account';
     }
 }
 
-supabaseClient.auth.onAuthStateChange(
-    (event,session)=>{
 
-        updateAccountLink();
-
-        if(
-            event==='SIGNED_IN' &&
-            session?.user
-        ){
-
-            trackEvent(
-                'login',
-                {
-                    method:'supabase'
-                }
-            );
-        }
-    }
-);
-
-async function loadNewLaunches(){
-
-    const c=document.getElementById(
-        'newLaunchesGrid'
-    );
-
-    if(!c)return;
+if(supabaseClient){
 
     try{
 
-        const {data,error}=
-            await supabaseClient
-                .from('products')
-                .select(
-                    'id,name,price,sale_price,category,image_url,status,created_at'
-                )
-                .eq('status','active')
-                .order(
-                    'created_at',
-                    {ascending:false}
-                )
-                .limit(6);
+        supabaseClient.auth.onAuthStateChange(
+            (event,session)=>{
 
-        if(error)throw error;
+                updateAccountLink();
 
-        const products=(data||[])
-            .filter(
-                p=>Number(
-                    p.sale_price??
-                    p.price??
-                    0
-                )>0
-            )
-            .slice(0,6);
+                if(
+                    event === 'SIGNED_IN' &&
+                    session?.user
+                ){
+
+                    trackEvent(
+                        'login',
+                        {
+                            method:
+                                'supabase'
+                        }
+                    );
+                }
+            }
+        );
+
+    }catch(e){
+
+        console.warn(
+            'Auth listener unavailable.'
+        );
+    }
+}
+
+
+/* =========================================================
+   NEW LAUNCHES
+   ========================================================= */
+
+async function loadNewLaunches(){
+
+    const c =
+        document.getElementById(
+            'newLaunchesGrid'
+        );
+
+    if(!c){
+        return;
+    }
+
+    try{
+
+        if(!supabaseClient){
+
+            throw new Error(
+                'Supabase unavailable'
+            );
+        }
+
+        const result =
+            await safeSupabaseQuery(
+
+                supabaseClient
+                    .from('products')
+                    .select(
+                        'id,name,price,sale_price,category,image_url,status,created_at'
+                    )
+                    .eq(
+                        'status',
+                        'active'
+                    )
+                    .order(
+                        'created_at',
+                        {
+                            ascending:false
+                        }
+                    )
+                    .limit(6),
+
+                9000
+            );
+
+        const data =
+            result?.data || [];
+
+        const error =
+            result?.error;
+
+        if(error){
+            throw error;
+        }
+
+        const products =
+            data
+                .filter(
+                    p =>
+                        Number(
+                            p.sale_price ??
+                            p.price ??
+                            0
+                        ) > 0
+                )
+                .slice(0,6);
 
         if(!products.length){
 
-            c.innerHTML=
-                '<div class="new-launch-empty">'+
-                '<h3>New pieces are coming soon.</h3>'+
-                '<p>Follow @trendsbyak for updates.</p>'+
-                '</div>';
+            c.innerHTML = `
+                <div class="new-launch-empty">
+
+                    <h3>
+                        New pieces are coming soon.
+                    </h3>
+
+                    <p>
+                        Follow @trendsbyak for updates.
+                    </p>
+
+                </div>
+            `;
 
             return;
         }
 
-        c.innerHTML=
+        c.innerHTML =
             products
-                .map(newLaunchCard)
+                .map(
+                    newLaunchCard
+                )
                 .join('');
 
     }catch(e){
 
-        console.error(e);
+        console.error(
+            'New launches error:',
+            e
+        );
 
-        c.innerHTML=
-            '<div class="new-launch-empty">'+
-            '<h3>New pieces are coming soon.</h3>'+
-            '<p>Please check back shortly.</p>'+
-            '</div>';
+        c.innerHTML = `
+            <div class="new-launch-empty">
+
+                <h3>
+                    Explore our collection.
+                </h3>
+
+                <p>
+                    Our latest products are available in the shop.
+                </p>
+
+                <br>
+
+                <a
+                    href="shop.html"
+                    class="btn btn-dark">
+                    Shop Products
+                </a>
+
+            </div>
+        `;
     }
 }
 
+
 function newLaunchCard(p){
 
-    const id=encodeURIComponent(
-        String(p.id)
-    );
+    const id =
+        encodeURIComponent(
+            String(p.id)
+        );
 
-    const name=escapeHtml(
-        p.name||'Beautiful find'
-    );
+    const name =
+        escapeHtml(
+            p.name ||
+            'Beautiful find'
+        );
 
-    const category=escapeHtml(
-        p.category||'Trends by AK'
-    );
+    const category =
+        escapeHtml(
+            p.category ||
+            'Trends by AK'
+        );
 
-    const image=p.image_url||'';
+    const image =
+        p.image_url || '';
 
-    const mrp=Number(p.price||0);
+    const mrp =
+        Number(
+            p.price || 0
+        );
 
-    const sale=
-        p.sale_price!==null &&
-        p.sale_price!==''
-            ?Number(p.sale_price)
-            :null;
+    const sale =
+        p.sale_price !== null &&
+        p.sale_price !== ''
+            ? Number(
+                p.sale_price
+            )
+            : null;
 
-    const hasSale=
-        sale>0 &&
-        mrp>0 &&
-        sale<mrp;
+    const hasSale =
+        sale > 0 &&
+        mrp > 0 &&
+        sale < mrp;
 
-    const display=
+    const display =
         hasSale
-            ?sale
-            :(sale>0?sale:mrp);
+            ? sale
+            : (
+                sale > 0
+                    ? sale
+                    : mrp
+            );
 
     return `
-        <article class="new-launch-card">
+
+        <article
+            class="new-launch-card">
 
             <a
                 class="product-image"
@@ -1394,13 +2046,14 @@ function newLaunchCard(p){
 
                 ${
                     image
-                    ?`
+                    ? `
                         <img
                             src="${escapeHtml(image)}"
                             alt="${name}"
-                            loading="lazy">
+                            loading="lazy"
+                            onerror="this.style.display='none';this.parentElement.classList.add('image-error');">
                     `
-                    :`
+                    : `
                         <div
                             style="
                                 width:100%;
@@ -1426,18 +2079,22 @@ function newLaunchCard(p){
                 </div>
 
                 <h3>
+
                     <a
                         href="product.html?id=${id}"
                         data-product-id="${escapeHtml(p.id)}">
+
                         ${name}
+
                     </a>
+
                 </h3>
 
                 <div class="new-launch-price">
 
                     ${
                         hasSale
-                        ?`
+                        ? `
                             <span class="old-price">
                                 ${formatPrice(mrp)}
                             </span>
@@ -1446,7 +2103,7 @@ function newLaunchCard(p){
                                 ${formatPrice(sale)}
                             </strong>
                         `
-                        :`
+                        : `
                             <strong>
                                 ${formatPrice(display)}
                             </strong>
@@ -1460,58 +2117,98 @@ function newLaunchCard(p){
                     class="new-launch-add-cart"
                     data-add-to-cart
                     data-product-id="${escapeHtml(p.id)}">
+
                     Add to Cart
+
                 </button>
 
             </div>
 
         </article>
+
     `;
 }
 
 
 /* =========================================================
    COLLECTIONS
-   FIXED: NO LIMIT(6)
-   Loads ALL active/current collections from Supabase.
-========================================================= */
+   ========================================================= */
 
 async function loadCollections(){
 
-    const c=document.getElementById(
-        'homepageCollections'
-    );
+    const c =
+        document.getElementById(
+            'homepageCollections'
+        );
 
-    if(!c)return;
+    if(!c){
+        return;
+    }
 
     try{
 
-        const {data,error}=
-            await supabaseClient
-                .from('collections')
-                .select(
-                    'id,name,description,image_url'
-                )
-                .order(
-                    'id',
-                    {ascending:true}
-                );
+        if(!supabaseClient){
 
-        if(error)throw error;
+            throw new Error(
+                'Supabase unavailable'
+            );
+        }
 
-        if(!data || !data.length){
+        const result =
+            await safeSupabaseQuery(
 
-            c.innerHTML=
-                '<div class="loading-card">'+
-                '<p>Collections coming soon.</p>'+
-                '</div>';
+                supabaseClient
+                    .from('collections')
+                    .select(
+                        'id,name,description,image_url'
+                    )
+                    .order(
+                        'id',
+                        {
+                            ascending:true
+                        }
+                    ),
+
+                9000
+            );
+
+        const data =
+            result?.data || [];
+
+        const error =
+            result?.error;
+
+        if(error){
+            throw error;
+        }
+
+        if(
+            !data ||
+            !data.length
+        ){
+
+            c.innerHTML = `
+                <div class="loading-card">
+
+                    <p>
+                        Collections coming soon.
+                    </p>
+
+                </div>
+            `;
 
             return;
         }
 
-        c.innerHTML=
+        c.innerHTML =
             data
-                .map((x,i)=>collectionCard(x,i))
+                .map(
+                    (x,i)=>
+                        collectionCard(
+                            x,
+                            i
+                        )
+                )
                 .join('');
 
     }catch(e){
@@ -1521,32 +2218,65 @@ async function loadCollections(){
             e
         );
 
-        c.innerHTML=
-            '<div class="loading-card">'+
-            '<p>Collections are temporarily unavailable.</p>'+
-            '</div>';
+        c.innerHTML = `
+
+            <div class="loading-card">
+
+                <h3>
+                    Explore our collections.
+                </h3>
+
+                <p>
+                    Browse all available products in our shop.
+                </p>
+
+                <br>
+
+                <a
+                    href="shop.html"
+                    class="btn btn-dark">
+                    Shop Now
+                </a>
+
+            </div>
+
+        `;
     }
 }
 
+
 function collectionCard(c,index){
 
-    const raw=String(
-        c.name||'Collection'
-    ).trim();
+    const raw =
+        String(
+            c.name ||
+            'Collection'
+        ).trim();
 
-    const name=escapeHtml(raw);
+    const name =
+        escapeHtml(
+            raw
+        );
 
-    const desc=escapeHtml(
-        c.description||''
-    );
+    const desc =
+        escapeHtml(
+            c.description ||
+            ''
+        );
 
-    const image=c.image_url||'';
+    const image =
+        c.image_url ||
+        '';
 
-    const id=encodeURIComponent(
-        String(c.id??'')
-    );
+    const id =
+        encodeURIComponent(
+            String(
+                c.id ?? ''
+            )
+        );
 
     return `
+
         <a
             href="shop.html?collection=${encodeURIComponent(raw)}"
             class="collection-card"
@@ -1555,13 +2285,14 @@ function collectionCard(c,index){
 
             ${
                 image
-                ?`
+                ? `
                     <img
                         src="${escapeHtml(image)}"
                         alt="${name}"
-                        loading="lazy">
+                        loading="lazy"
+                        onerror="this.style.display='none';">
                 `
-                :`
+                : `
                     <div
                         style="
                             position:absolute;
@@ -1592,311 +2323,493 @@ function collectionCard(c,index){
                 </h3>
 
                 <span class="collection-link">
+
                     ${
                         desc ||
                         'Explore the collection →'
                     }
+
                 </span>
 
             </div>
 
         </a>
+
     `;
 }
 
+
+/* =========================================================
+   REVIEWS
+   ========================================================= */
+
 async function loadReviews(){
 
-    const g=document.getElementById(
-        'reviewsGrid'
-    );
+    const g =
+        document.getElementById(
+            'reviewsGrid'
+        );
 
-    if(!g)return;
+    if(!g){
+        return;
+    }
 
     try{
 
-        const {data,error}=
-            await supabaseClient
-                .from('reviews')
-                .select(
-                    'id,customer_name,rating,review_text,product_name,customer_image,created_at'
-                )
-                .eq(
-                    'is_approved',
-                    true
-                )
-                .order(
-                    'created_at',
-                    {ascending:false}
-                )
-                .limit(6);
+        if(!supabaseClient){
 
-        if(error)throw error;
+            throw new Error(
+                'Supabase unavailable'
+            );
+        }
 
-        if(!data?.length){
+        const result =
+            await safeSupabaseQuery(
 
-            g.innerHTML=
-                '<div class="review-empty">'+
-                '<div class="review-stars">★★★★★</div>'+
-                '<h3>Your experience could be here.</h3>'+
-                '<p>Be the first to share your Trends by AK experience.</p>'+
-                '</div>';
+                supabaseClient
+                    .from('reviews')
+                    .select(
+                        'id,customer_name,rating,review_text,product_name,customer_image,created_at'
+                    )
+                    .eq(
+                        'is_approved',
+                        true
+                    )
+                    .order(
+                        'created_at',
+                        {
+                            ascending:false
+                        }
+                    )
+                    .limit(6),
+
+                9000
+            );
+
+        const data =
+            result?.data || [];
+
+        const error =
+            result?.error;
+
+        if(error){
+            throw error;
+        }
+
+        if(!data.length){
+
+            g.innerHTML = `
+
+                <div class="review-empty">
+
+                    <div class="review-stars">
+                        ★★★★★
+                    </div>
+
+                    <h3>
+                        Your experience could be here.
+                    </h3>
+
+                    <p>
+                        Be the first to share your Trends by AK experience.
+                    </p>
+
+                </div>
+
+            `;
 
             return;
         }
 
-        g.innerHTML=data.map(r=>{
+        g.innerHTML =
+            data
+                .map(
+                    r => {
 
-            const rating=Math.max(
-                1,
-                Math.min(
-                    5,
-                    Number(r.rating)||5
+                        const rating =
+                            Math.max(
+                                1,
+                                Math.min(
+                                    5,
+                                    Number(
+                                        r.rating
+                                    ) || 5
+                                )
+                            );
+
+                        const stars =
+                            '★'.repeat(
+                                rating
+                            ) +
+                            '☆'.repeat(
+                                5-rating
+                            );
+
+                        return `
+
+                            <article
+                                class="review-card">
+
+                                <div
+                                    class="review-stars">
+
+                                    ${stars}
+
+                                </div>
+
+                                <p
+                                    class="review-text">
+
+                                    “${escapeHtml(
+                                        r.review_text ||
+                                        ''
+                                    )}”
+
+                                </p>
+
+                                <span
+                                    class="review-name">
+
+                                    ${escapeHtml(
+                                        r.customer_name ||
+                                        'Happy Customer'
+                                    )}
+
+                                </span>
+
+                                <span
+                                    class="review-product">
+
+                                    ${escapeHtml(
+                                        r.product_name ||
+                                        'Trends by AK'
+                                    )}
+
+                                </span>
+
+                            </article>
+
+                        `;
+                    }
                 )
-            );
-
-            const stars=
-                '★'.repeat(rating)+
-                '☆'.repeat(5-rating);
-
-            return `
-                <article class="review-card">
-
-                    <div class="review-stars">
-                        ${stars}
-                    </div>
-
-                    <p class="review-text">
-                        “${escapeHtml(
-                            r.review_text||''
-                        )}”
-                    </p>
-
-                    <span class="review-name">
-                        ${escapeHtml(
-                            r.customer_name||
-                            'Happy Customer'
-                        )}
-                    </span>
-
-                    <span class="review-product">
-                        ${escapeHtml(
-                            r.product_name||
-                            'Trends by AK'
-                        )}
-                    </span>
-
-                </article>
-            `;
-
-        }).join('');
+                .join('');
 
     }catch(e){
 
-        console.error(e);
+        console.error(
+            'Reviews error:',
+            e
+        );
 
-        g.innerHTML='';
+        /*
+         * Important:
+         * Never leave reviews stuck on Loading.
+         */
+
+        g.innerHTML = `
+
+            <div class="review-empty">
+
+                <div class="review-stars">
+                    ★★★★★
+                </div>
+
+                <h3>
+                    Loved by our customers.
+                </h3>
+
+                <p>
+                    Customer reviews will appear here soon.
+                </p>
+
+            </div>
+
+        `;
     }
 }
 
+
+/* =========================================================
+   INSTAGRAM
+   ========================================================= */
+
 async function loadInstagramReels(){
 
-    const g=document.getElementById(
-        'instagramGrid'
-    );
+    const g =
+        document.getElementById(
+            'instagramGrid'
+        );
 
-    if(!g)return;
+    if(!g){
+        return;
+    }
 
     try{
 
-        const {data,error}=
-            await supabaseClient
-                .from('instagram_reels')
-                .select(
-                    'id,reel_url,title,caption,thumbnail_url,is_active,display_order'
-                )
-                .eq(
-                    'is_active',
-                    true
-                )
-                .order(
-                    'display_order',
-                    {ascending:true}
-                )
-                .limit(4);
+        if(!supabaseClient){
 
-        if(error)throw error;
+            throw new Error(
+                'Supabase unavailable'
+            );
+        }
 
-        if(!data?.length){
+        const result =
+            await safeSupabaseQuery(
+
+                supabaseClient
+                    .from('instagram_reels')
+                    .select(
+                        'id,reel_url,title,caption,thumbnail_url,is_active,display_order'
+                    )
+                    .eq(
+                        'is_active',
+                        true
+                    )
+                    .order(
+                        'display_order',
+                        {
+                            ascending:true
+                        }
+                    )
+                    .limit(4),
+
+                9000
+            );
+
+        const data =
+            result?.data || [];
+
+        const error =
+            result?.error;
+
+        if(error){
+            throw error;
+        }
+
+        if(!data.length){
 
             renderFallbackInstagram();
 
             return;
         }
 
-        g.innerHTML=data.map(r=>{
+        g.innerHTML =
+            data
+                .map(
+                    r => {
 
-            const url=escapeHtml(
-                r.reel_url||
-                'https://www.instagram.com/trendsbyak/'
-            );
+                        const url =
+                            escapeHtml(
+                                r.reel_url ||
+                                'https://www.instagram.com/trendsbyak/'
+                            );
 
-            const title=escapeHtml(
-                r.title||
-                'View on Instagram'
-            );
+                        const title =
+                            escapeHtml(
+                                r.title ||
+                                'View on Instagram'
+                            );
 
-            const caption=escapeHtml(
-                r.caption||
-                '@trendsbyak'
-            );
+                        const caption =
+                            escapeHtml(
+                                r.caption ||
+                                '@trendsbyak'
+                            );
 
-            const thumb=
-                r.thumbnail_url
-                    ?escapeHtml(
-                        r.thumbnail_url
-                    )
-                    :'';
+                        const thumb =
+                            r.thumbnail_url
+                                ? escapeHtml(
+                                    r.thumbnail_url
+                                )
+                                : '';
 
-            return `
-                <a
-                    href="${url}"
-                    target="_blank"
-                    rel="noopener"
-                    class="instagram-link-card">
+                        return `
 
-                    ${
-                        thumb
-                        ?`
-                            <div
-                                class="instagram-placeholder"
-                                style="
-                                    padding:0;
-                                    background:#f5f0e8;
-                                ">
+                            <a
+                                href="${url}"
+                                target="_blank"
+                                rel="noopener"
+                                class="instagram-link-card">
 
-                                <img
-                                    src="${thumb}"
-                                    alt="${title}"
-                                    loading="lazy"
-                                    style="
-                                        width:100%;
-                                        height:100%;
-                                        object-fit:cover;
-                                        display:block;
-                                    ">
+                                ${
+                                    thumb
+                                    ? `
+                                        <div
+                                            class="instagram-placeholder"
+                                            style="
+                                                padding:0;
+                                                background:#f5f0e8;
+                                            ">
 
-                            </div>
-                        `
-                        :`
-                            <div class="instagram-placeholder">
+                                            <img
+                                                src="${thumb}"
+                                                alt="${title}"
+                                                loading="lazy"
+                                                style="
+                                                    width:100%;
+                                                    height:100%;
+                                                    object-fit:cover;
+                                                    display:block;
+                                                "
+                                                onerror="this.style.display='none';">
 
-                                <div class="instagram-reel-label">
-                                    INSTAGRAM REEL
-                                </div>
+                                        </div>
+                                    `
+                                    : `
+                                        <div
+                                            class="instagram-placeholder">
 
-                                <div class="instagram-icon">
-                                    ▶
-                                </div>
+                                            <div
+                                                class="instagram-reel-label">
 
-                                <strong>
-                                    ${title}
-                                </strong>
+                                                INSTAGRAM REEL
 
-                                <span>
-                                    ${caption}
-                                </span>
+                                            </div>
 
-                            </div>
-                        `
+                                            <div
+                                                class="instagram-icon">
+
+                                                ▶
+
+                                            </div>
+
+                                            <strong>
+                                                ${title}
+                                            </strong>
+
+                                            <span>
+                                                ${caption}
+                                            </span>
+
+                                        </div>
+                                    `
+                                }
+
+                            </a>
+
+                        `;
                     }
-
-                </a>
-            `;
-
-        }).join('');
+                )
+                .join('');
 
     }catch(e){
 
-        console.warn(e);
+        console.warn(
+            'Instagram database unavailable:',
+            e
+        );
 
         renderFallbackInstagram();
     }
 }
 
+
 function renderFallbackInstagram(){
 
-    const g=document.getElementById(
-        'instagramGrid'
-    );
+    const g =
+        document.getElementById(
+            'instagramGrid'
+        );
 
-    if(!g)return;
+    if(!g){
+        return;
+    }
 
-    const posts=[
+    const posts = [
+
         'https://www.instagram.com/p/Db8PMxlDZIC/',
+
         'https://www.instagram.com/p/DcGTuQujdB3/',
+
         'https://www.instagram.com/p/DcI7egfNnWW/',
+
         'https://www.instagram.com/reel/DXj7eOwDenX/'
+
     ];
 
-    g.innerHTML=posts.map(
-        (url,i)=>`
+    g.innerHTML =
+        posts
+            .map(
+                (url,i)=>`
 
-            <a
-                href="${url}"
-                target="_blank"
-                rel="noopener"
-                class="instagram-link-card">
+                    <a
+                        href="${url}"
+                        target="_blank"
+                        rel="noopener"
+                        class="instagram-link-card">
 
-                <div class="instagram-placeholder">
+                        <div
+                            class="instagram-placeholder">
 
-                    ${
-                        i===3
-                        ?`
-                            <div class="instagram-reel-label">
-                                INSTAGRAM REEL
+                            ${
+                                i === 3
+                                ? `
+                                    <div
+                                        class="instagram-reel-label">
+                                        INSTAGRAM REEL
+                                    </div>
+                                `
+                                : ''
+                            }
+
+                            <div
+                                class="instagram-icon">
+
+                                ${i === 3
+                                    ? '▶'
+                                    : '◎'}
+
                             </div>
-                        `
-                        :''
-                    }
 
-                    <div class="instagram-icon">
-                        ${i===3?'▶':'◎'}
-                    </div>
+                            <strong>
 
-                    <strong>
-                        ${i===3
-                            ?'Watch the Reel'
-                            :'View on Instagram'}
-                    </strong>
+                                ${
+                                    i === 3
+                                    ? 'Watch the Reel'
+                                    : 'View on Instagram'
+                                }
 
-                    <span>
-                        @trendsbyak
-                    </span>
+                            </strong>
 
-                </div>
+                            <span>
+                                @trendsbyak
+                            </span>
 
-            </a>
+                        </div>
 
-        `
-    ).join('');
+                    </a>
+
+                `
+            )
+            .join('');
 }
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
 
 function setupMenu(){
 
-    const t=document.getElementById(
-        'menuToggle'
-    );
+    const t =
+        document.getElementById(
+            'menuToggle'
+        );
 
-    const n=document.getElementById(
-        'mainNav'
-    );
+    const n =
+        document.getElementById(
+            'mainNav'
+        );
 
-    if(!t||!n)return;
+    if(!t || !n){
+        return;
+    }
 
     t.addEventListener(
         'click',
         ()=>{
-            const open=
+
+            const open =
                 n.classList.toggle(
                     'is-open'
                 );
@@ -1909,61 +2822,98 @@ function setupMenu(){
     );
 
     n.querySelectorAll('a')
-        .forEach(a=>{
+        .forEach(
+            a => {
 
-            a.addEventListener(
-                'click',
-                ()=>{
-                    n.classList.remove(
-                        'is-open'
-                    );
+                a.addEventListener(
+                    'click',
+                    ()=>{
 
-                    t.setAttribute(
-                        'aria-expanded',
-                        'false'
-                    );
-                }
-            );
+                        n.classList.remove(
+                            'is-open'
+                        );
 
-        });
+                        t.setAttribute(
+                            'aria-expanded',
+                            'false'
+                        );
+
+                    }
+                );
+
+            }
+        );
 }
+
+
+/* =========================================================
+   ADD TO CART
+   ========================================================= */
 
 document.addEventListener(
     'click',
-    async e=>{
+    async e => {
 
-        const b=e.target.closest(
-            '[data-add-to-cart]'
-        );
+        const b =
+            e.target.closest(
+                '[data-add-to-cart]'
+            );
 
-        if(!b)return;
+        if(!b){
+            return;
+        }
 
         e.preventDefault();
         e.stopPropagation();
 
-        const id=b.dataset.productId;
+        const id =
+            b.dataset.productId;
 
-        if(!id)return;
+        if(!id){
+            return;
+        }
 
-        b.disabled=true;
+        b.disabled =
+            true;
 
         try{
 
-            const {data,error}=
-                await supabaseClient
-                    .from('products')
-                    .select(
-                        'id,name,price,sale_price,category,image_url,status'
-                    )
-                    .eq(
-                        'id',
-                        id
-                    )
-                    .maybeSingle();
+            if(!supabaseClient){
 
-            if(error)throw error;
+                throw new Error(
+                    'Product service unavailable.'
+                );
+            }
+
+            const result =
+                await safeSupabaseQuery(
+
+                    supabaseClient
+                        .from('products')
+                        .select(
+                            'id,name,price,sale_price,category,image_url,status'
+                        )
+                        .eq(
+                            'id',
+                            id
+                        )
+                        .maybeSingle(),
+
+                    7000
+                );
+
+            const data =
+                result?.data;
+
+            const error =
+                result?.error;
+
+            if(error){
+                throw error;
+            }
 
             if(!data){
+
                 throw new Error(
                     'Product not found.'
                 );
@@ -1971,7 +2921,7 @@ document.addEventListener(
 
             if(
                 data.status &&
-                data.status!=='active'
+                data.status !== 'active'
             ){
 
                 throw new Error(
@@ -1986,146 +2936,269 @@ document.addEventListener(
 
         }catch(err){
 
-            console.error(err);
+            console.error(
+                'Add to cart error:',
+                err
+            );
 
-            b.disabled=false;
+            b.disabled =
+                false;
 
-            b.textContent='Try Again';
+            b.textContent =
+                'Try Again';
+
         }
+
     }
 );
 
+
+/* =========================================================
+   WHATSAPP TRACKING
+   ========================================================= */
+
 document.addEventListener(
     'click',
-    e=>{
+    e => {
 
-        const link=e.target.closest(
-            'a[href*="wa.me/"]'
-        );
+        const link =
+            e.target.closest(
+                'a[href*="wa.me/"]'
+            );
 
-        if(!link)return;
+        if(!link){
+            return;
+        }
 
         trackEvent(
             'whatsapp_click',
             {
-                button_type:'whatsapp',
-                page_location:location.href
+                button_type:
+                    'whatsapp',
+
+                page_location:
+                    location.href
             }
         );
 
-        supabaseClient
-            .from('analytics_events')
-            .insert({
-                event_name:'whatsapp_click',
-                session_id:getSessionId(),
-                visitor_id:getVisitorId(),
-                page_url:location.href,
-                page_path:location.pathname,
-                referrer:document.referrer||null,
-                device_type:getDeviceType(),
-                user_agent:navigator.userAgent,
-                metadata:{
-                    button_type:'whatsapp'
-                }
-            })
-            .then(()=>{})
-            .catch(()=>{});
+        if(
+            supabaseClient
+        ){
+
+            supabaseClient
+                .from('analytics_events')
+                .insert({
+
+                    event_name:
+                        'whatsapp_click',
+
+                    session_id:
+                        getSessionId(),
+
+                    visitor_id:
+                        getVisitorId(),
+
+                    page_url:
+                        location.href,
+
+                    page_path:
+                        location.pathname,
+
+                    referrer:
+                        document.referrer ||
+                        null,
+
+                    device_type:
+                        getDeviceType(),
+
+                    user_agent:
+                        navigator.userAgent,
+
+                    metadata:{
+                        button_type:
+                            'whatsapp'
+                    }
+
+                })
+                .then(()=>{})
+                .catch(()=>{});
+        }
     }
 );
 
+
+/* =========================================================
+   PRODUCT CLICK TRACKING
+   ========================================================= */
+
 document.addEventListener(
     'click',
-    e=>{
+    e => {
 
-        const link=e.target.closest(
-            'a[data-product-id]'
-        );
+        const link =
+            e.target.closest(
+                'a[data-product-id]'
+            );
 
-        if(!link)return;
+        if(!link){
+            return;
+        }
 
-        const id=
+        const id =
             link.dataset.productId;
 
         trackEvent(
             'product_click',
             {
-                product_id:id,
-                page_location:location.href
+                product_id:
+                    id,
+
+                page_location:
+                    location.href
             }
         );
 
-        supabaseClient
-            .from('analytics_events')
-            .insert({
-                event_name:'product_click',
-                session_id:getSessionId(),
-                visitor_id:getVisitorId(),
-                page_url:location.href,
-                page_path:location.pathname,
-                referrer:document.referrer||null,
-                device_type:getDeviceType(),
-                user_agent:navigator.userAgent,
-                product_id:Number(id),
-                metadata:{}
-            })
-            .then(()=>{})
-            .catch(()=>{});
+        if(
+            supabaseClient
+        ){
+
+            supabaseClient
+                .from('analytics_events')
+                .insert({
+
+                    event_name:
+                        'product_click',
+
+                    session_id:
+                        getSessionId(),
+
+                    visitor_id:
+                        getVisitorId(),
+
+                    page_url:
+                        location.href,
+
+                    page_path:
+                        location.pathname,
+
+                    referrer:
+                        document.referrer ||
+                        null,
+
+                    device_type:
+                        getDeviceType(),
+
+                    user_agent:
+                        navigator.userAgent,
+
+                    product_id:
+                        Number(id),
+
+                    metadata:{}
+
+                })
+                .then(()=>{})
+                .catch(()=>{});
+        }
     }
 );
 
+
+/* =========================================================
+   GA EVENT TRACKING
+   ========================================================= */
+
 document.addEventListener(
     'click',
-    e=>{
+    e => {
 
-        const link=e.target.closest(
-            'a[data-ga-event]'
-        );
+        const link =
+            e.target.closest(
+                'a[data-ga-event]'
+            );
 
-        if(!link)return;
+        if(!link){
+            return;
+        }
 
-        const name=
+        const name =
             link.dataset.gaEvent;
 
         trackEvent(
             name,
             {
-                page_location:location.href
+                page_location:
+                    location.href
             }
         );
 
-        supabaseClient
-            .from('analytics_events')
-            .insert({
-                event_name:name,
-                session_id:getSessionId(),
-                visitor_id:getVisitorId(),
-                page_url:location.href,
-                page_path:location.pathname,
-                referrer:document.referrer||null,
-                device_type:getDeviceType(),
-                user_agent:navigator.userAgent,
-                metadata:{}
-            })
-            .then(()=>{})
-            .catch(()=>{});
+        if(
+            supabaseClient
+        ){
+
+            supabaseClient
+                .from('analytics_events')
+                .insert({
+
+                    event_name:
+                        name,
+
+                    session_id:
+                        getSessionId(),
+
+                    visitor_id:
+                        getVisitorId(),
+
+                    page_url:
+                        location.href,
+
+                    page_path:
+                        location.pathname,
+
+                    referrer:
+                        document.referrer ||
+                        null,
+
+                    device_type:
+                        getDeviceType(),
+
+                    user_agent:
+                        navigator.userAgent,
+
+                    metadata:{}
+
+                })
+                .then(()=>{})
+                .catch(()=>{});
+        }
     }
 );
 
+
+/* =========================================================
+   COLLECTION CLICK TRACKING
+   ========================================================= */
+
 document.addEventListener(
     'click',
-    e=>{
+    e => {
 
-        const link=e.target.closest(
-            'a[data-collection-id]'
-        );
+        const link =
+            e.target.closest(
+                'a[data-collection-id]'
+            );
 
-        if(!link)return;
+        if(!link){
+            return;
+        }
 
         trackEvent(
             'collection_click',
             {
+
                 collection_id:
                     link.dataset.collectionId,
+
                 page_location:
                     location.href
             }
@@ -2133,32 +3206,50 @@ document.addEventListener(
     }
 );
 
+
+/* =========================================================
+   CART EVENTS
+   ========================================================= */
+
 window.addEventListener(
     'storage',
-    e=>{
+    e => {
+
         if(
-            e.key===
+            e.key ===
             'trendsbyak_cart'
         ){
+
             updateCartCount();
         }
     }
 );
+
 
 window.addEventListener(
     'trendsbyak:cart-updated',
     updateCartCount
 );
 
+
+/* =========================================================
+   PAGE INITIALIZATION
+   ========================================================= */
+
 document.addEventListener(
     'DOMContentLoaded',
-    async()=>{
+    async ()=>{
 
         updateCartCount();
 
         setupMenu();
 
         updateAccountLink();
+
+        /*
+         * Do analytics in background.
+         * They must NEVER block the homepage.
+         */
 
         trackWebsiteVisit();
 
@@ -2169,14 +3260,18 @@ document.addEventListener(
             30000
         );
 
-        await Promise.allSettled(
-            [
-                loadNewLaunches(),
-                loadCollections(),
-                loadReviews(),
-                loadInstagramReels()
-            ]
-        );
+        /*
+         * Load homepage content independently.
+         * One failed section cannot stop the others.
+         */
+
+        loadNewLaunches();
+
+        loadCollections();
+
+        loadReviews();
+
+        loadInstagramReels();
 
         trackEvent(
             'homepage_view',
@@ -2188,11 +3283,19 @@ document.addEventListener(
     }
 );
 
+
+/* =========================================================
+   PAGE SHOW
+   ========================================================= */
+
 window.addEventListener(
     'pageshow',
     ()=>{
+
         updateCartCount();
+
         updateAccountLink();
+
     }
 );
 
