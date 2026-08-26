@@ -347,10 +347,10 @@ th{
 <body>
 
 <header>
-  <h1>Trends by AK â€” Product Manager</h1>
+  <h1>Trends by AK Product Manager</h1>
 
   <a href="index.html">
-    â† Admin Dashboard
+    Admin Dashboard
   </a>
 </header>
 
@@ -402,7 +402,7 @@ th{
         id="importBtn"
         onclick="importProduct()"
       >
-        ðŸ” Fetch Product
+        🔍 Fetch Product
       </button>
 
     </div>
@@ -479,11 +479,11 @@ th{
 <section class="card importer-card">
 
   <h3 class="importer-title">
-    ðŸ“¦ Bulk Product Scraper
+   Bulk Product Scraper
   </h3>
 
   <div class="help">
-    Paste multiple product URLs below â€” one URL per line.
+    Paste multiple product URLs below one URL per line.
     We'll fetch the product details and let you review everything
     before adding the products to your store.
   </div>
@@ -504,7 +504,7 @@ https://example.com/product-3"
       id="bulkScrapeBtn"
       onclick="bulkScrapeProducts()"
     >
-      ðŸ” Scrape Products
+      🔍 Scrape Products
     </button>
 
     <button
@@ -546,7 +546,7 @@ https://example.com/product-3"
         id="bulkSaveBtn"
         onclick="saveBulkProducts()"
       >
-        ðŸ’¾ Save Selected Products
+        💾 Save Selected Products
       </button>
 
     </div>
@@ -586,7 +586,7 @@ https://example.com/product-3"
 <section class="card importer-card">
 
   <h3 class="importer-title">
-    ðŸ“Š Bulk Product List
+    Bulk Product List
   </h3>
 
   <div class="help">
@@ -973,11 +973,11 @@ th{
 <header>
 
   <h1>
-    Trends by AK â€” Product Manager
+    Trends by AK Product Manager
   </h1>
 
   <a href="index.html">
-    â† Admin Dashboard
+    Admin Dashboard
   </a>
 
 </header>
@@ -1042,7 +1042,7 @@ th{
         id="importBtn"
         onclick="importProduct()"
       >
-        ðŸ” Fetch Product
+        🔍 Fetch Product
       </button>
 
     </div>
@@ -1126,11 +1126,11 @@ th{
   <section class="card importer-card">
 
     <h3 class="importer-title">
-      ðŸ“¦ Bulk Product Scraper
+      📦 Bulk Product Scraper
     </h3>
 
     <div class="help">
-      Paste multiple product URLs below â€” one URL per line.
+      Paste multiple product URLs below one URL per line.
       We'll fetch the product details and let you review everything
       before adding the products to your store.
     </div>
@@ -1151,7 +1151,7 @@ https://example.com/product-3"
         id="bulkScrapeBtn"
         onclick="bulkScrapeProducts()"
       >
-        ðŸ” Scrape Products
+        🔍 Scrape Products
       </button>
 
       <button
@@ -1193,7 +1193,7 @@ https://example.com/product-3"
           id="bulkSaveBtn"
           onclick="saveBulkProducts()"
         >
-          ðŸ’¾ Save Selected Products
+          💾 Save Selected Products
         </button>
 
       </div>
@@ -1260,7 +1260,7 @@ https://example.com/product-3"
   <section class="card importer-card">
 
     <h3 class="importer-title">
-      ðŸ“Š Bulk Product List
+      📊 Bulk Product List
     </h3>
 
     <div class="help">
@@ -1276,7 +1276,7 @@ https://example.com/product-3"
         class="btn primary"
         onclick="downloadProductsCSV()"
       >
-        â¬‡ï¸ Download Product CSV
+        ⬇️ Download Product CSV
       </button>
 
       <label
@@ -1288,7 +1288,7 @@ https://example.com/product-3"
         "
       >
 
-        â¬†ï¸ Upload Edited CSV
+        Upload Edited CSV
 
         <input
           type="file"
@@ -1305,7 +1305,7 @@ https://example.com/product-3"
         class="btn secondary"
         onclick="downloadProductTemplate()"
       >
-        ðŸ“„ Download Blank Template
+        📄 Download Blank Template
       </button>
 
     </div>
@@ -1317,7 +1317,7 @@ https://example.com/product-3"
 
       <b>How it works:</b>
 
-      Download â†’ edit â†’ save as CSV â†’ upload.
+      Download → edit → save as CSV → upload.
 
       Existing products are updated using their ID.
 
@@ -1369,7 +1369,7 @@ https://example.com/product-3"
             id="csvSaveBtn"
             onclick="saveCSVProducts()"
           >
-            ðŸ’¾ Update Store
+            💾 Update Store
           </button>
 
           <button
@@ -1570,7 +1570,7 @@ https://example.com/product-3"
               id="tabUpload"
               onclick="showImageMode('upload')"
             >
-              ðŸ“¤ Upload from Computer
+              📤 Upload from Computer
             </button>
 
             <button
@@ -1579,7 +1579,7 @@ https://example.com/product-3"
               id="tabUrl"
               onclick="showImageMode('url')"
             >
-              ðŸ”— Image URL
+              🔗 Image URL
             </button>
 
             <button
@@ -1588,7 +1588,7 @@ https://example.com/product-3"
               id="tabDrive"
               onclick="showImageMode('drive')"
             >
-              â˜ï¸ Google Drive
+              ☁️ Google Drive
             </button>
 
           </div>
@@ -1999,7 +1999,7 @@ function showImageMode(mode) {
 
 
 /* =========================================================
-   IMAGE PREVIEW â€” FILE
+   IMAGE PREVIEW FILE
 ========================================================= */
 
 $("imageFile").addEventListener(
@@ -2030,7 +2030,7 @@ $("imageFile").addEventListener(
 
 
 /* =========================================================
-   IMAGE PREVIEW â€” URL
+   IMAGE PREVIEW URL
 ========================================================= */
 
 $("imageUrl").addEventListener(
@@ -2229,7 +2229,7 @@ async function importProduct() {
     if (data.price != null) {
 
       meta +=
-        "â‚¹" +
+        "₹" +
         Number(data.price)
           .toLocaleString("en-IN");
 
@@ -2243,7 +2243,7 @@ async function importProduct() {
     if (data.brand) {
 
       meta +=
-        " â€¢ " +
+        " • " +
         data.brand;
 
     }
@@ -2251,7 +2251,7 @@ async function importProduct() {
     if (data.sku) {
 
       meta +=
-        " â€¢ SKU: " +
+        " • SKU: " +
         data.sku;
 
     }
@@ -2307,7 +2307,7 @@ async function importProduct() {
     btn.disabled = false;
 
     btn.textContent =
-      "ðŸ” Fetch Product";
+      "🔍 Fetch Product";
 
   }
 
@@ -2662,7 +2662,7 @@ function renderProducts() {
           </td>
 
           <td>
-            â‚¹${price.toLocaleString("en-IN")}
+            ₹${price.toLocaleString("en-IN")}
           </td>
 
           <td>
@@ -3277,7 +3277,7 @@ async function bulkScrapeProducts() {
     btn.disabled = false;
 
     btn.textContent =
-      "ðŸ” Scrape Products";
+      "🔍 Scrape Products";
 
   }
 
@@ -3366,7 +3366,7 @@ function renderBulkProducts() {
             <tr>
 
               <td>
-                âŒ
+                ❌
               </td>
 
               <td colspan="6">
@@ -3771,7 +3771,7 @@ async function saveBulkProducts() {
     btn.disabled = false;
 
     btn.textContent =
-      "ðŸ’¾ Save Selected Products";
+      "💾 Save Selected Products";
 
   }
 
