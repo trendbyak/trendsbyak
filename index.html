@@ -74,7 +74,43 @@ async function updateAccountLink(){const el=document.getElementById('accountLink
 supabaseClient.auth.onAuthStateChange((event,session)=>{updateAccountLink();if(event==='SIGNED_IN'&&session?.user)trackEvent('login',{method:'supabase'})});
 async function loadNewLaunches(){const c=document.getElementById('newLaunchesGrid');if(!c)return;try{const {data,error}=await supabaseClient.from('products').select('id,name,price,sale_price,category,image_url,status,created_at').eq('status','active').order('created_at',{ascending:false}).limit(6);if(error)throw error;const products=(data||[]).filter(p=>Number(p.sale_price??p.price??0)>0).slice(0,6);if(!products.length){c.innerHTML='<div class="new-launch-empty"><h3>New pieces are coming soon.</h3><p>Follow @trendsbyak for updates.</p></div>';return}c.innerHTML=products.map(newLaunchCard).join('')}catch(e){console.error(e);c.innerHTML='<div class="new-launch-empty"><h3>New pieces are coming soon.</h3><p>Please check back shortly.</p></div>'}}
 function newLaunchCard(p){const id=encodeURIComponent(String(p.id)),name=escapeHtml(p.name||'Beautiful find'),category=escapeHtml(p.category||'Trends by AK'),image=p.image_url||'',mrp=Number(p.price||0),sale=p.sale_price!==null&&p.sale_price!==''?Number(p.sale_price):null,hasSale=sale>0&&mrp>0&&sale<mrp,display=hasSale?sale:(sale>0?sale:mrp);return `<article class="new-launch-card"><a class="product-image" href="product.html?id=${id}" data-product-id="${escapeHtml(p.id)}"><span class="new-launch-badge">NEW</span>${image?`<img src="${escapeHtml(image)}" alt="${name}" loading="lazy">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:34px;color:#a8895e">AK</div>`}</a><div class="new-launch-info"><div class="new-launch-category">${category}</div><h3><a href="product.html?id=${id}" data-product-id="${escapeHtml(p.id)}">${name}</a></h3><div class="new-launch-price">${hasSale?`<span class="old-price">${formatPrice(mrp)}</span><strong>${formatPrice(sale)}</strong>`:`<strong>${formatPrice(display)}</strong>`}</div><button type="button" class="new-launch-add-cart" data-add-to-cart data-product-id="${escapeHtml(p.id)}">Add to Cart</button></div></article>`}
-async function loadCollections(){const c=document.getElementById('homepageCollections');if(!c)return;try{const {data,error}=await supabaseClient.from('collections').select('*').order('id',{ascending:true}).limit(6);if(error)throw error;if(!data?.length){c.innerHTML='<div class="loading-card"><p>Collections coming soon.</p></div>';return}c.innerHTML=data.map((x,i)=>collectionCard(x,i)).join('')}catch(e){console.error(e);c.innerHTML='<div class="loading-card"><p>Collections are temporarily unavailable.</p></div>'}}
+<script>
+async function loadCollections(){
+    const c = document.getElementById('homepageCollections');
+    if(!c) return;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('collections')
+            .select('id,name,description,image_url')
+            .order('id', { ascending: true });
+
+        if(error) throw error;
+
+        if(!data || !data.length){
+            c.innerHTML = `
+                <div class="loading-card">
+                    <p>Collections coming soon.</p>
+                </div>
+            `;
+            return;
+        }
+
+        c.innerHTML = data.map((collection, index) => {
+            return collectionCard(collection, index);
+        }).join('');
+
+    } catch(error) {
+        console.error('Collections loading error:', error);
+
+        c.innerHTML = `
+            <div class="loading-card">
+                <p>Collections are temporarily unavailable.</p>
+            </div>
+        `;
+    }
+}
+</script>
 function collectionCard(c,index){const raw=String(c.name||'Collection').trim(),name=escapeHtml(raw),desc=escapeHtml(c.description||''),image=c.image_url||'',id=encodeURIComponent(String(c.id??''));return `<a href="shop.html?collection=${encodeURIComponent(raw)}" class="collection-card" data-collection-id="${id}" data-collection-name="${escapeHtml(raw)}">${image?`<img src="${escapeHtml(image)}" alt="${name}" loading="lazy">`:`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#e9e1d5;font-family:'Playfair Display',serif;font-size:42px;color:#8b6b42">AK</div>`}<div class="collection-overlay"></div><div class="collection-content"><span class="collection-number">${String(index+1).padStart(2,'0')}</span><h3>${name}</h3><span class="collection-link">${desc||'Explore the collection →'}</span></div></a>`}
 async function loadReviews(){const g=document.getElementById('reviewsGrid');if(!g)return;try{const {data,error}=await supabaseClient.from('reviews').select('id,customer_name,rating,review_text,product_name,customer_image,created_at').eq('is_approved',true).order('created_at',{ascending:false}).limit(6);if(error)throw error;if(!data?.length){g.innerHTML='<div class="review-empty"><div class="review-stars">★★★★★</div><h3>Your experience could be here.</h3><p>Be the first to share your Trends by AK experience.</p></div>';return}g.innerHTML=data.map(r=>{const rating=Math.max(1,Math.min(5,Number(r.rating)||5)),stars='★'.repeat(rating)+'☆'.repeat(5-rating);return `<article class="review-card"><div class="review-stars">${stars}</div><p class="review-text">“${escapeHtml(r.review_text||'')}”</p><span class="review-name">${escapeHtml(r.customer_name||'Happy Customer')}</span><span class="review-product">${escapeHtml(r.product_name||'Trends by AK')}</span></article>`}).join('')}catch(e){console.error(e);g.innerHTML=''}}
 async function loadInstagramReels(){const g=document.getElementById('instagramGrid');if(!g)return;try{const {data,error}=await supabaseClient.from('instagram_reels').select('id,reel_url,title,caption,thumbnail_url,is_active,display_order').eq('is_active',true).order('display_order',{ascending:true}).limit(4);if(error)throw error;if(!data?.length){renderFallbackInstagram();return}g.innerHTML=data.map(r=>{const url=escapeHtml(r.reel_url||'https://www.instagram.com/trendsbyak/'),title=escapeHtml(r.title||'View on Instagram'),caption=escapeHtml(r.caption||'@trendsbyak'),thumb=r.thumbnail_url?escapeHtml(r.thumbnail_url):'';return `<a href="${url}" target="_blank" rel="noopener" class="instagram-link-card">${thumb?`<div class="instagram-placeholder" style="padding:0;background:#f5f0e8"><img src="${thumb}" alt="${title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div>`:`<div class="instagram-placeholder"><div class="instagram-reel-label">INSTAGRAM REEL</div><div class="instagram-icon">▶</div><strong>${title}</strong><span>${caption}</span></div>`}</a>`}).join('')}catch(e){console.warn(e);renderFallbackInstagram()}}
