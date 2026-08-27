@@ -744,7 +744,168 @@ gtag('config', 'G-L22XEV7688');
         width:100%;
     }
 }
+/* =========================================================
+   HOMEPAGE COLLECTIONS — CLEAN UNIFORM GRID
+   ========================================================= */
 
+#homepageCollections.collection-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Every collection block = EXACT SAME SIZE */
+#homepageCollections .collection-card {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    aspect-ratio: 1 / 1.08 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+    background: #eee6da !important;
+    text-decoration: none !important;
+}
+
+/* Every image fills the exact same area */
+#homepageCollections .collection-card img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+}
+
+/* Overlay */
+#homepageCollections .collection-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1 !important;
+    background: linear-gradient(
+        to top,
+        rgba(29,27,25,.72) 0%,
+        rgba(29,27,25,.08) 55%,
+        rgba(29,27,25,0) 100%
+    ) !important;
+}
+
+/* Content stays at bottom */
+#homepageCollections .collection-content {
+    position: absolute !important;
+    left: 14px !important;
+    right: 14px !important;
+    bottom: 14px !important;
+    z-index: 2 !important;
+}
+
+/* Number */
+#homepageCollections .collection-number {
+    display: block !important;
+    font-size: 9px !important;
+    letter-spacing: 1.5px !important;
+    color: rgba(255,255,255,.75) !important;
+    margin-bottom: 5px !important;
+}
+
+/* Collection name */
+#homepageCollections .collection-content h3 {
+    margin: 0 !important;
+    color: #fff !important;
+    font-family: "Playfair Display", serif !important;
+    font-size: 17px !important;
+    line-height: 1.15 !important;
+    font-weight: 600 !important;
+}
+
+/* Description/link */
+#homepageCollections .collection-link {
+    display: block !important;
+    margin-top: 5px !important;
+    color: rgba(255,255,255,.82) !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 8px !important;
+    line-height: 1.3 !important;
+    letter-spacing: .3px !important;
+}
+
+/* Hover */
+#homepageCollections .collection-card {
+    transition: transform .25s ease, box-shadow .25s ease !important;
+}
+
+#homepageCollections .collection-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 25px rgba(29,27,25,.12) !important;
+}
+
+#homepageCollections .collection-card img {
+    transition: transform .35s ease !important;
+}
+
+#homepageCollections .collection-card:hover img {
+    transform: scale(1.04) !important;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    #homepageCollections.collection-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 14px !important;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    #homepageCollections.collection-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        max-width: 100% !important;
+    }
+
+    #homepageCollections .collection-card {
+        aspect-ratio: 1 / 1.08 !important;
+        border-radius: 9px !important;
+    }
+
+    #homepageCollections .collection-content {
+        left: 10px !important;
+        right: 10px !important;
+        bottom: 10px !important;
+    }
+
+    #homepageCollections .collection-number {
+        font-size: 7px !important;
+        margin-bottom: 3px !important;
+    }
+
+    #homepageCollections .collection-content h3 {
+        font-size: 13px !important;
+    }
+
+    #homepageCollections .collection-link {
+        font-size: 7px !important;
+        margin-top: 3px !important;
+    }
+
+}
 </style>
 </head>
 
