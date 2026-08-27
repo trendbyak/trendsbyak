@@ -524,7 +524,148 @@
 
     Change the numbers below and click
     <strong>Save Display Order</strong>.
+saveOrderButton.addEventListener("click", async function () {
 
+    const inputs = [
+        ...document.querySelectorAll(".collection-order-input")
+    ];
+
+    if (!inputs.length) {
+        alert("No collections found.");
+        return;
+    }
+
+    const updates = inputs.map(input => ({
+        id: Number(input.dataset.id),
+        display_order: Number(input.value)
+    }));
+
+    // Validate
+    for (const item of updates) {
+
+        if (
+            !Number.isInteger(item.display_order) ||
+            item.display_order < 1
+        ) {
+            alert("Display Order must be a whole number starting from 1.");
+            return;
+        }
+
+    }
+
+    // Check duplicate numbers
+    const orderNumbers =
+        updates.map(item => item.display_order);
+
+    if (
+        new Set(orderNumbers).size !==
+        orderNumbers.length
+    ) {
+        alert(
+            "Each collection must have a different Display Order number."
+        );
+        return;
+    }
+
+    saveOrderButton.disabled = true;
+    saveOrderButton.textContent = "Saving...";
+
+    setStatus(
+        "Saving collection order...",
+        "loading"
+    );
+
+    try {
+
+        /*
+         * IMPORTANT:
+         * Use temporary negative values first.
+         *
+         * This prevents conflicts if, for example,
+         * collection 1 becomes 2 and collection 2
+         * becomes 1.
+         */
+
+        for (const item of updates) {
+
+            const { error } =
+                await supabaseClient
+                    .from("collections")
+                    .update({
+                        display_order:
+                            -item.id
+                    })
+                    .eq(
+                        "id",
+                        item.id
+                    );
+
+            if (error)
+                throw error;
+
+        }
+
+        /*
+         * Now write the real display orders.
+         */
+
+        for (const item of updates) {
+
+            const { error } =
+                await supabaseClient
+                    .from("collections")
+                    .update({
+                        display_order:
+                            item.display_order
+                    })
+                    .eq(
+                        "id",
+                        item.id
+                    );
+
+            if (error)
+                throw error;
+
+        }
+
+        await loadCollections();
+
+        setStatus(
+            "Display order saved",
+            "success"
+        );
+
+        alert(
+            "Collection display order saved successfully!"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "SAVE ORDER ERROR:",
+            error
+        );
+
+        alert(
+            "Could not save collection order.\n\n" +
+            error.message
+        );
+
+        setStatus(
+            "Save failed",
+            "error"
+        );
+
+    } finally {
+
+        saveOrderButton.disabled = false;
+
+        saveOrderButton.textContent =
+            "Save Display Order";
+
+    }
+
+});
 </div>
 
 <div class="order-actions">
