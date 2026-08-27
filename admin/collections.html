@@ -439,7 +439,25 @@
 
                     </div>
 
+<div class="field">
 
+    <label for="collectionDisplayOrder">
+        Display Order
+    </label>
+
+    <input
+        type="number"
+        id="collectionDisplayOrder"
+        min="1"
+        step="1"
+        placeholder="Example: 1"
+    >
+
+    <small style="color:#777;">
+        1 = first, 2 = second, 3 = third...
+    </small>
+
+</div>
                     <div class="field full">
 
                         <label for="collectionDescription">
@@ -496,7 +514,34 @@
                 and will appear on your main website.
             </p>
 
+<div class="order-help">
 
+    <strong>Display Order:</strong>
+
+    Use 1 for the first collection,
+    2 for the second,
+    3 for the third, and so on.
+
+    Change the numbers below and click
+    <strong>Save Display Order</strong>.
+
+</div>
+
+<div class="order-actions">
+
+    <div style="color:#777;font-size:14px;">
+        Arrange your collections using the numbers.
+    </div>
+
+    <button
+        type="button"
+        id="saveOrderButton"
+        class="save-order-btn"
+    >
+        Save Display Order
+    </button>
+
+</div>
             <div
                 id="collectionList"
                 class="collection-list"
@@ -584,7 +629,10 @@ const descriptionInput =
     document.getElementById(
         "collectionDescription"
     );
-
+const displayOrderInput =
+    document.getElementById(
+        "collectionDisplayOrder"
+    );
 
 const imageInput =
     document.getElementById(
@@ -615,7 +663,10 @@ const cancelButton =
         "cancelButton"
     );
 
-
+const saveOrderButton =
+    document.getElementById(
+        "saveOrderButton"
+    );
 const formTitle =
     document.getElementById(
         "formTitle"
@@ -924,7 +975,32 @@ async function uploadCollectionImage(
 /* =====================================================
    SAVE COLLECTION
 ===================================================== */
+async function getNextDisplayOrder() {
 
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("collections")
+            .select("display_order")
+            .order(
+                "display_order",
+                {
+                    ascending: false
+                }
+            )
+            .limit(1);
+
+    if (error)
+        throw error;
+
+    return (
+        Number(
+            data?.[0]?.display_order || 0
+        ) + 1
+    );
+}
 form.addEventListener(
     "submit",
     async function(event) {
@@ -938,7 +1014,36 @@ form.addEventListener(
 
         const description =
             descriptionInput.value.trim();
+let displayOrder =
+    Number(
+        displayOrderInput.value
+    );
 
+if (
+    !Number.isInteger(displayOrder) ||
+    displayOrder < 1
+) {
+
+    try {
+
+        displayOrder =
+            await getNextDisplayOrder();
+
+        displayOrderInput.value =
+            displayOrder;
+
+    } catch (error) {
+
+        alert(
+            "Could not determine display order.\n\n" +
+            error.message
+        );
+
+        return;
+
+    }
+
+}
 
         if (!name) {
 
@@ -1014,15 +1119,19 @@ form.addEventListener(
                         )
                         .update({
 
-                            name:
-                                name,
+    name:
+        name,
 
-                            description:
-                                description,
+    description:
+        description,
 
-                            image_url: imageUrl
+    image_url:
+        imageUrl,
 
-                        })
+    display_order:
+        displayOrder
+
+})
                         .eq(
                             "id",
                             editingCollectionId
@@ -1057,16 +1166,19 @@ form.addEventListener(
                         )
                         .insert({
 
-                            name:
-                                name,
+    name:
+        name,
 
-                            description:
-                                description,
+    description:
+        description,
 
-                            image_url:
-                                imageUrl
+    image_url:
+        imageUrl,
 
-                        });
+    display_order:
+        displayOrder
+
+})
 
 
                 if (error)
@@ -1165,13 +1277,19 @@ async function loadCollections() {
                 )
                 .select("*")
                 .order(
-                    "id",
-                    {
-                        ascending:
-                            true
-                    }
-                );
-
+    "display_order",
+    {
+        ascending:
+            true
+    }
+)
+.order(
+    "id",
+    {
+        ascending:
+            true
+    }
+);
 
         if (error)
             throw error;
@@ -1263,13 +1381,11 @@ function renderCollection(
         collection.image_url ||
         "";
 
-
     const name =
         escapeHtml(
             collection.name ||
             "Collection"
         );
-
 
     const description =
         escapeHtml(
@@ -1277,11 +1393,22 @@ function renderCollection(
             ""
         );
 
+    const displayOrder =
+        Number(
+            collection.display_order
+        ) || 1;
+
+    const id =
+        Number(
+            collection.id
+        );
 
     return `
 
-        <div class="collection-card">
-
+        <div
+            class="collection-card"
+            data-id="${id}"
+        >
 
             ${
                 image
@@ -1308,61 +1435,69 @@ function renderCollection(
                             justify-content:center;
                             background:#f5f0eb;
                             color:#b28a4b;
-                            font-family:'Playfair Display',serif;
+                            font-family:Georgia,serif;
                             font-size:40px;
                         "
                     >
                         AK
                     </div>
                 `
-
             }
-
 
             <div class="collection-info">
 
-
                 <div class="collection-id">
-                    ID: ${escapeHtml(
-                        collection.id
-                    )}
+                    ID: ${escapeHtml(collection.id)}
                 </div>
-
 
                 <h3>
                     ${name}
                 </h3>
 
-
                 <p>
-                    ${description}
+                    ${
+                        description ||
+                        "No description added."
+                    }
                 </p>
 
+                <div class="order-row">
+
+                    <span class="order-label">
+                        Display Order
+                    </span>
+
+                    <input
+                        class="order-input collection-order-input"
+                        type="number"
+                        min="1"
+                        step="1"
+                        value="${displayOrder}"
+                        data-id="${id}"
+                        aria-label="Display order for ${name}"
+                    >
+
+                </div>
 
                 <div class="buttons">
 
-
                     <button
                         class="edit-btn"
-                        onclick="editCollection(${Number(collection.id)})"
+                        onclick="editCollection(${id})"
                     >
                         Edit
                     </button>
 
-
                     <button
                         class="delete-btn"
-                        onclick="deleteCollection(${Number(collection.id)})"
+                        onclick="deleteCollection(${id})"
                     >
                         Delete
                     </button>
 
-
                 </div>
 
-
             </div>
-
 
         </div>
 
@@ -1422,7 +1557,7 @@ async function editCollection(
         descriptionInput.value =
             data.description ||
             "";
-
+descriptionInput.value 
 
         imageInput.value =
             "";
@@ -1626,7 +1761,8 @@ function resetForm() {
 
     form.reset();
 
-
+displayOrderInput.value =
+    "";
     imagePreview.src =
         "";
 
