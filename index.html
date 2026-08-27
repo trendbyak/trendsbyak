@@ -2131,95 +2131,184 @@ function newLaunchCard(p){
 
 
 /* =========================================================
-   COLLECTIONS
+   COLLECTIONS — HOMEPAGE
    ========================================================= */
 
 async function loadCollections(){
 
-    const c =
-        document.getElementById(
-            'homepageCollections'
-        );
+    const container =
+        document.getElementById('homepageCollections');
 
-    if(!c){
+    if(!container){
         return;
     }
+
+    container.innerHTML = `
+        <div class="loading-card">
+            <div class="loader"></div>
+            <p>Loading collections...</p>
+        </div>
+    `;
 
     try{
 
         if(!supabaseClient){
-
-            throw new Error(
-                'Supabase unavailable'
-            );
+            throw new Error('Supabase unavailable');
         }
 
-        const result =
-            await safeSupabaseQuery(
-
-                supabaseClient
-                    .from('collections')
-                    .select(
-                        'id,name,description,image_url'
-                    )
-                    .order(
-                        'id',
-                        {
-                            ascending:true
-                        }
-                    ),
-
-                9000
-            );
-
-        const data =
-            result?.data || [];
-
-        const error =
-            result?.error;
+        const { data, error } =
+            await supabaseClient
+                .from('collections')
+                .select(`
+                    id,
+                    name,
+                    description,
+                    image_url,
+                    display_order
+                `)
+                .order('display_order', {
+                    ascending: true
+                })
+                .order('id', {
+                    ascending: true
+                });
 
         if(error){
             throw error;
         }
 
-        if(
-            !data ||
-            !data.length
-        ){
+        if(!Array.isArray(data) || data.length === 0){
 
-            c.innerHTML = `
+            container.innerHTML = `
                 <div class="loading-card">
-
-                    <p>
-                        Collections coming soon.
-                    </p>
-
+                    <h3>Collections coming soon.</h3>
+                    <p>Our collections will appear here shortly.</p>
                 </div>
             `;
 
             return;
         }
 
-        c.innerHTML =
-            data
-                .map(
-                    (x,i)=>
-                        collectionCard(
-                            x,
-                            i
-                        )
-                )
-                .join('');
+        container.innerHTML = data
+            .map((collection, index) => {
 
-    }catch(e){
+                const name =
+                    String(
+                        collection.name || 'Collection'
+                    ).trim();
 
-        console.error(
-            'Collections error:',
-            e
+                const description =
+                    String(
+                        collection.description || ''
+                    ).trim();
+
+                const image =
+                    String(
+                        collection.image_url || ''
+                    ).trim();
+
+                const collectionId =
+                    String(
+                        collection.id || ''
+                    );
+
+                const shopUrl =
+                    `shop.html?collection=${encodeURIComponent(name)}`;
+
+                return `
+                    <a
+                        href="${shopUrl}"
+                        class="collection-card"
+                        data-collection-id="${escapeHtml(collectionId)}"
+                        data-collection-name="${escapeHtml(name)}"
+                        aria-label="Shop ${escapeHtml(name)}">
+
+                        ${
+                            image
+                            ? `
+                                <img
+                                    src="${escapeHtml(image)}"
+                                    alt="${escapeHtml(name)}"
+                                    loading="${index < 4 ? 'eager' : 'lazy'}"
+                                    decoding="async"
+                                    onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';"
+                                >
+
+                                <div
+                                    class="collection-image-fallback"
+                                    style="
+                                        display:none;
+                                        position:absolute;
+                                        inset:0;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#e9e1d5;
+                                        font-family:'Playfair Display',serif;
+                                        font-size:42px;
+                                        color:#8b6b42;
+                                    ">
+                                    AK
+                                </div>
+                            `
+                            : `
+                                <div
+                                    class="collection-image-fallback"
+                                    style="
+                                        position:absolute;
+                                        inset:0;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#e9e1d5;
+                                        font-family:'Playfair Display',serif;
+                                        font-size:42px;
+                                        color:#8b6b42;
+                                    ">
+                                    AK
+                                </div>
+                            `
+                        }
+
+                        <div class="collection-overlay"></div>
+
+                        <div class="collection-content">
+
+                            <span class="collection-number">
+                                ${String(index + 1).padStart(2,'0')}
+                            </span>
+
+                            <h3>
+                                ${escapeHtml(name)}
+                            </h3>
+
+                            <span class="collection-link">
+                                ${
+                                    description
+                                    ? escapeHtml(description)
+                                    : 'Explore collection →'
+                                }
+                            </span>
+
+                        </div>
+
+                    </a>
+                `;
+
+            })
+            .join('');
+
+        console.log(
+            `Homepage: ${data.length} collections loaded successfully.`
         );
 
-        c.innerHTML = `
+    }catch(error){
 
+        console.error(
+            'Homepage collections error:',
+            error
+        );
+
+        container.innerHTML = `
             <div class="loading-card">
 
                 <h3>
@@ -2227,7 +2316,7 @@ async function loadCollections(){
                 </h3>
 
                 <p>
-                    Browse all available products in our shop.
+                    Browse all available products.
                 </p>
 
                 <br>
@@ -2239,105 +2328,9 @@ async function loadCollections(){
                 </a>
 
             </div>
-
         `;
     }
 }
-
-
-function collectionCard(c,index){
-
-    const raw =
-        String(
-            c.name ||
-            'Collection'
-        ).trim();
-
-    const name =
-        escapeHtml(
-            raw
-        );
-
-    const desc =
-        escapeHtml(
-            c.description ||
-            ''
-        );
-
-    const image =
-        c.image_url ||
-        '';
-
-    const id =
-        encodeURIComponent(
-            String(
-                c.id ?? ''
-            )
-        );
-
-    return `
-
-        <a
-            href="shop.html?collection=${encodeURIComponent(raw)}"
-            class="collection-card"
-            data-collection-id="${id}"
-            data-collection-name="${escapeHtml(raw)}">
-
-            ${
-                image
-                ? `
-                    <img
-                        src="${escapeHtml(image)}"
-                        alt="${name}"
-                        loading="lazy"
-                        onerror="this.style.display='none';">
-                `
-                : `
-                    <div
-                        style="
-                            position:absolute;
-                            inset:0;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            background:#e9e1d5;
-                            font-family:'Playfair Display',serif;
-                            font-size:42px;
-                            color:#8b6b42;
-                        ">
-                        AK
-                    </div>
-                `
-            }
-
-            <div class="collection-overlay"></div>
-
-            <div class="collection-content">
-
-                <span class="collection-number">
-                    ${String(index+1).padStart(2,'0')}
-                </span>
-
-                <h3>
-                    ${name}
-                </h3>
-
-                <span class="collection-link">
-
-                    ${
-                        desc ||
-                        'Explore the collection →'
-                    }
-
-                </span>
-
-            </div>
-
-        </a>
-
-    `;
-}
-
 
 /* =========================================================
    REVIEWS
