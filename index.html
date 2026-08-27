@@ -34,10 +34,8 @@
 <style>
 
 /* =========================================================
-   HOMEPAGE FIXES
-   ========================================================= */
-
-/* ROUND LOGO */
+   HOMEPAGE OVERRIDES
+========================================================= */
 
 .site-logo-image {
     width: 52px !important;
@@ -50,23 +48,17 @@
     object-position: center !important;
     border-radius: 50% !important;
     display: block !important;
-    overflow: hidden !important;
 }
 
 .footer-brand .site-logo-image {
     width: 48px !important;
     height: 48px !important;
-    min-width: 48px !important;
-    max-width: 48px !important;
-    min-height: 48px !important;
-    max-height: 48px !important;
-    border-radius: 50% !important;
 }
 
 
 /* =========================================================
-   SHOP BY CATEGORY
-   ========================================================= */
+   CATEGORY SECTION
+========================================================= */
 
 .home-category-section {
     padding-top: 58px !important;
@@ -88,14 +80,12 @@
 }
 
 
-/* CATEGORY ROW */
+/* CATEGORY GRID */
 
-#homepageCollections {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: flex-start !important;
-    gap: 28px 34px !important;
+#homepageCategories {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 32px 24px !important;
     width: 100% !important;
     max-width: 1050px !important;
     margin: 0 auto !important;
@@ -103,103 +93,202 @@
 }
 
 
-/* EACH CATEGORY */
+/* CATEGORY CARD */
 
-#homepageCollections .collection-card {
-    position: relative !important;
+#homepageCategories .category-card {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
-
-    width: 125px !important;
-    max-width: 125px !important;
-    height: auto !important;
-    min-height: 0 !important;
-
-    padding: 0 !important;
-    margin: 0 !important;
-
-    border: 0 !important;
-    border-radius: 0 !important;
-
-    background: transparent !important;
-
-    color: #1d1b19 !important;
+    min-width: 0 !important;
     text-decoration: none !important;
-
-    box-shadow: none !important;
-    transform: none !important;
-
-    overflow: visible !important;
+    color: #1d1b19 !important;
+    background: transparent !important;
 }
 
 
-/* ROUND IMAGE */
+/* CATEGORY IMAGE */
 
-#homepageCollections .collection-card > img,
-#homepageCollections .collection-image-fallback {
-    position: relative !important;
-    inset: auto !important;
+#homepageCategories .category-image {
+    width: 112px !important;
+    height: 112px !important;
+    min-width: 112px !important;
+    max-width: 112px !important;
+    min-height: 112px !important;
+    max-height: 112px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: #eee6da !important;
+    border: 1px solid #e4dbcf !important;
+    box-sizing: border-box !important;
+    margin-bottom: 13px !important;
+    transition: transform .25s ease, box-shadow .25s ease !important;
+}
 
-    width: 92px !important;
-    height: 92px !important;
-    min-width: 92px !important;
-    max-width: 92px !important;
-    min-height: 92px !important;
-    max-height: 92px !important;
+#homepageCategories .category-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+}
 
-    margin: 0 auto 12px !important;
 
+/* FALLBACK */
+
+#homepageCategories .category-image-fallback {
+    width: 100% !important;
+    height: 100% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-
-    border-radius: 50% !important;
-    overflow: hidden !important;
-
-    object-fit: cover !important;
-    object-position: center !important;
-
-    background: #eee6da !important;
-
-    border: 1px solid #e4dbcf !important;
-
-    box-sizing: border-box !important;
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease !important;
-}
-
-
-/* IMAGE FALLBACK */
-
-#homepageCollections .collection-image-fallback {
     font-family: "Playfair Display", serif !important;
-    font-size: 24px !important;
+    font-size: 28px !important;
     color: #8b6b42 !important;
 }
 
 
-/* HIDE OLD OVERLAY */
+/* CATEGORY NAME */
 
-#homepageCollections .collection-overlay {
-    display: none !important;
+#homepageCategories .category-name {
+    width: 100% !important;
+    text-align: center !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    color: #1d1b19 !important;
 }
 
 
-/* CATEGORY CONTENT */
+/* CATEGORY COUNT */
+
+#homepageCategories .category-count {
+    margin-top: 4px !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+    color: #8b8175 !important;
+}
+
+
+/* HOVER */
+
+#homepageCategories .category-card:hover .category-image {
+    transform: scale(1.05) !important;
+    box-shadow: 0 8px 22px rgba(29,27,25,.13) !important;
+}
+
+
+/* =========================================================
+   COLLECTIONS SECTION
+========================================================= */
+
+.home-collections-section {
+    background: #faf8f4 !important;
+    overflow: hidden !important;
+}
+
+.home-collections-heading {
+    text-align: center !important;
+    margin-bottom: 34px !important;
+}
+
+.home-collections-heading .eyebrow {
+    margin-bottom: 8px !important;
+}
+
+.home-collections-heading h2 {
+    margin: 0 !important;
+}
+
+.home-collections-intro {
+    max-width: 620px !important;
+    margin: 12px auto 0 !important;
+    color: #70685e !important;
+}
+
+
+/* COLLECTION GRID */
+
+#homepageCollections {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+    width: 100% !important;
+    max-width: 1050px !important;
+    margin: 0 auto !important;
+}
+
+
+/* COLLECTION CARD */
+
+#homepageCollections .collection-card {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    aspect-ratio: 1.45 / 1 !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+    background: #eee6da !important;
+    text-decoration: none !important;
+    color: #fff !important;
+    box-sizing: border-box !important;
+}
+
+
+/* COLLECTION IMAGE */
+
+#homepageCollections .collection-card > img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    transition: transform .45s ease !important;
+}
+
+#homepageCollections .collection-image-fallback {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-family: "Playfair Display", serif !important;
+    font-size: 42px !important;
+    color: #8b6b42 !important;
+    background: #eee6da !important;
+}
+
+
+/* OVERLAY */
+
+#homepageCollections .collection-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(
+        to top,
+        rgba(20,18,16,.78) 0%,
+        rgba(20,18,16,.20) 55%,
+        rgba(20,18,16,0) 100%
+    ) !important;
+    z-index: 1 !important;
+}
+
+
+/* COLLECTION CONTENT */
 
 #homepageCollections .collection-content {
-    position: relative !important;
-    inset: auto !important;
-
-    width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-
-    text-align: center !important;
+    position: absolute !important;
+    left: 20px !important;
+    right: 20px !important;
+    bottom: 18px !important;
+    z-index: 2 !important;
 }
 
 
@@ -210,64 +299,41 @@
 }
 
 
-/* CATEGORY NAME */
+/* COLLECTION NAME */
 
 #homepageCollections .collection-content h3 {
-    display: block !important;
-
-    width: 100% !important;
-
     margin: 0 !important;
     padding: 0 !important;
-
-    font-family: "DM Sans", sans-serif !important;
-    font-size: 12px !important;
+    font-family: "Playfair Display", serif !important;
+    font-size: 22px !important;
     font-weight: 600 !important;
-    line-height: 1.3 !important;
-
-    color: #1d1b19 !important;
-
-    white-space: normal !important;
+    line-height: 1.2 !important;
+    color: #fff !important;
 }
 
 
-/* SMALL EXPLORE TEXT */
+/* COLLECTION LINK */
 
 #homepageCollections .collection-link {
     display: block !important;
-
-    margin: 4px 0 0 !important;
-    padding: 0 !important;
-
+    margin-top: 5px !important;
     font-family: "DM Sans", sans-serif !important;
-    font-size: 9px !important;
-    line-height: 1.3 !important;
-
-    color: #8b8175 !important;
-
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+    color: rgba(255,255,255,.82) !important;
 }
 
 
 /* HOVER */
 
-#homepageCollections .collection-card:hover {
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-#homepageCollections .collection-card:hover > img,
-#homepageCollections .collection-card:hover .collection-image-fallback {
-    transform: scale(1.06) !important;
-    box-shadow: 0 8px 22px rgba(29,27,25,.13) !important;
+#homepageCollections .collection-card:hover > img {
+    transform: scale(1.05) !important;
 }
 
 
 /* =========================================================
    NEW LAUNCHES
-   ========================================================= */
+========================================================= */
 
 .new-launches-section {
     overflow: hidden !important;
@@ -304,10 +370,82 @@
     display: block !important;
 }
 
+.new-launch-badge {
+    position: absolute !important;
+    top: 12px !important;
+    left: 12px !important;
+    z-index: 2 !important;
+    padding: 5px 9px !important;
+    background: #1d1b19 !important;
+    color: #fff !important;
+    border-radius: 3px !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: .08em !important;
+}
+
+.new-launch-info {
+    padding-top: 13px !important;
+}
+
+.new-launch-category {
+    font-size: 10px !important;
+    color: #8b8175 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .06em !important;
+}
+
+.new-launch-info h3 {
+    margin: 5px 0 !important;
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+}
+
+.new-launch-info h3 a {
+    color: #1d1b19 !important;
+    text-decoration: none !important;
+}
+
+.new-launch-price {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 7px !important;
+}
+
+.new-launch-price strong {
+    font-size: 14px !important;
+}
+
+.old-price {
+    color: #999 !important;
+    text-decoration: line-through !important;
+    font-size: 12px !important;
+}
+
+.new-launch-add-cart {
+    margin-top: 11px !important;
+    width: 100% !important;
+    padding: 10px 12px !important;
+    border: 1px solid #1d1b19 !important;
+    background: transparent !important;
+    color: #1d1b19 !important;
+    cursor: pointer !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 4px !important;
+}
+
+.new-launch-add-cart:hover {
+    background: #1d1b19 !important;
+    color: #fff !important;
+}
+
 
 /* =========================================================
    INSTAGRAM
-   ========================================================= */
+========================================================= */
 
 .instagram-section {
     overflow: hidden !important;
@@ -354,7 +492,7 @@
 
 /* =========================================================
    REVIEWS
-   ========================================================= */
+========================================================= */
 
 .reviews-section {
     background: #faf8f4 !important;
@@ -376,30 +514,44 @@
     box-sizing: border-box !important;
 }
 
+.review-stars {
+    color: #a8895e !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 12px !important;
+}
+
+
+/* =========================================================
+   REMOVE OLD ABOUT MONOGRAM
+========================================================= */
+
+.about-monogram {
+    display: none !important;
+}
+
 
 /* =========================================================
    TABLET
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 900px) {
 
+    #homepageCategories {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 28px 16px !important;
+    }
+
+    #homepageCategories .category-image {
+        width: 92px !important;
+        height: 92px !important;
+        min-width: 92px !important;
+        max-width: 92px !important;
+        min-height: 92px !important;
+        max-height: 92px !important;
+    }
+
     #homepageCollections {
-        gap: 24px 25px !important;
-    }
-
-    #homepageCollections .collection-card {
-        width: 110px !important;
-        max-width: 110px !important;
-    }
-
-    #homepageCollections .collection-card > img,
-    #homepageCollections .collection-image-fallback {
-        width: 82px !important;
-        height: 82px !important;
-        min-width: 82px !important;
-        max-width: 82px !important;
-        min-height: 82px !important;
-        max-height: 82px !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
 
     .new-launches-grid {
@@ -418,7 +570,7 @@
 
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 600px) {
 
@@ -429,7 +581,6 @@
         max-width: 44px !important;
         min-height: 44px !important;
         max-height: 44px !important;
-        border-radius: 50% !important;
     }
 
 
@@ -441,41 +592,57 @@
     }
 
     .home-category-heading {
-        margin-bottom: 25px !important;
+        margin-bottom: 26px !important;
     }
 
-    #homepageCollections {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 25px 8px !important;
-        width: 100% !important;
-        max-width: 100% !important;
+    #homepageCategories {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 25px 7px !important;
     }
 
-    #homepageCollections .collection-card {
-        width: 100% !important;
-        max-width: none !important;
-    }
-
-    #homepageCollections .collection-card > img,
-    #homepageCollections .collection-image-fallback {
-        width: 62px !important;
-        height: 62px !important;
-        min-width: 62px !important;
-        max-width: 62px !important;
-        min-height: 62px !important;
-        max-height: 62px !important;
+    #homepageCategories .category-image {
+        width: 66px !important;
+        height: 66px !important;
+        min-width: 66px !important;
+        max-width: 66px !important;
+        min-height: 66px !important;
+        max-height: 66px !important;
         margin-bottom: 8px !important;
     }
 
-    #homepageCollections .collection-content h3 {
+    #homepageCategories .category-name {
         font-size: 10px !important;
-        line-height: 1.25 !important;
+    }
+
+    #homepageCategories .category-count {
+        font-size: 7px !important;
+    }
+
+
+    /* COLLECTIONS */
+
+    #homepageCollections {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+
+    #homepageCollections .collection-card {
+        aspect-ratio: 1.15 / 1 !important;
+        border-radius: 8px !important;
+    }
+
+    #homepageCollections .collection-content {
+        left: 12px !important;
+        right: 12px !important;
+        bottom: 12px !important;
+    }
+
+    #homepageCollections .collection-content h3 {
+        font-size: 16px !important;
     }
 
     #homepageCollections .collection-link {
-        font-size: 7px !important;
-        margin-top: 3px !important;
+        font-size: 8px !important;
     }
 
 
@@ -488,6 +655,10 @@
 
     .new-launch-card .product-image {
         border-radius: 8px !important;
+    }
+
+    .new-launch-info h3 {
+        font-size: 13px !important;
     }
 
 
@@ -523,6 +694,10 @@
 
 <body>
 
+<!-- =====================================================
+     ANNOUNCEMENT
+===================================================== -->
+
 <div class="announcement">
     <p>
         Thoughtfully curated accessories
@@ -534,75 +709,81 @@
 </div>
 
 
-<!-- HEADER -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="site-header">
 
-<a class="brand" href="index.html" aria-label="Trends by AK home">
+    <a class="brand" href="index.html" aria-label="Trends by AK home">
 
-    <img
-        src="assets/logo.png"
-        alt="Trends by AK"
-        class="site-logo-image">
+        <img
+            src="assets/logo.png"
+            alt="Trends by AK"
+            class="site-logo-image">
 
-    <span class="brand-copy">
-        <strong>Trends by AK</strong>
-        <small>Sustainable Luxury · Affordable</small>
-    </span>
+        <span class="brand-copy">
+            <strong>Trends by AK</strong>
+            <small>Sustainable Luxury · Affordable</small>
+        </span>
 
-</a>
-
-
-<button
-    class="menu-toggle"
-    id="menuToggle"
-    aria-label="Open menu"
-    aria-expanded="false"
-    type="button">
-
-    <span></span>
-    <span></span>
-    <span></span>
-
-</button>
-
-
-<nav class="main-nav" id="mainNav">
-
-    <a href="#collections">Collections</a>
-
-    <a href="shop.html">Shop</a>
-
-    <a href="#instagram">Instagram</a>
-
-    <a href="#reviews">Reviews</a>
-
-    <a href="bulk-order.html">Bulk Orders</a>
-
-    <a href="#about">Our Story</a>
-
-    <a
-        class="nav-account"
-        href="account.html"
-        id="accountLink">
-        Login / Account
     </a>
 
-    <a
-        class="nav-cart"
-        href="cart.html">
-        Cart <span id="cartCount">0</span>
-    </a>
 
-    <a
-        class="nav-whatsapp"
-        href="https://wa.me/918433998962"
-        target="_blank"
-        rel="noopener">
-        WhatsApp
-    </a>
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        type="button">
 
-</nav>
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+
+    <nav class="main-nav" id="mainNav">
+
+        <a href="#categories">Categories</a>
+
+        <a href="#new-launches">New Launches</a>
+
+        <a href="#collections">Collections</a>
+
+        <a href="shop.html">Shop</a>
+
+        <a href="#instagram">Instagram</a>
+
+        <a href="#reviews">Reviews</a>
+
+        <a href="bulk-order.html">Bulk Orders</a>
+
+        <a href="#about">Our Story</a>
+
+        <a
+            class="nav-account"
+            href="account.html"
+            id="accountLink">
+            Login / Account
+        </a>
+
+        <a
+            class="nav-cart"
+            href="cart.html">
+            Cart <span id="cartCount">0</span>
+        </a>
+
+        <a
+            class="nav-whatsapp"
+            href="https://wa.me/918433998962"
+            target="_blank"
+            rel="noopener">
+            WhatsApp
+        </a>
+
+    </nav>
 
 </header>
 
@@ -665,7 +846,7 @@
 
 
 <!-- =====================================================
-     TRUST
+     TRUST STRIP
 ===================================================== -->
 
 <section class="trust-strip">
@@ -703,7 +884,7 @@
 
 <section
     class="section home-category-section"
-    id="collections">
+    id="categories">
 
     <div class="home-category-heading">
 
@@ -719,8 +900,8 @@
 
 
     <div
-        class="collection-grid"
-        id="homepageCollections">
+        class="category-grid"
+        id="homepageCategories">
 
         <div class="loading-card">
 
@@ -790,6 +971,51 @@
             class="btn btn-dark">
             View All Products
         </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COLLECTIONS
+===================================================== -->
+
+<section
+    class="section home-collections-section"
+    id="collections">
+
+    <div class="home-collections-heading">
+
+        <p class="eyebrow">
+            OUR COLLECTIONS
+        </p>
+
+        <h2>
+            Curated for every kind of you.
+        </h2>
+
+        <p class="home-collections-intro">
+            Explore thoughtfully curated collections across jewellery,
+            gifting, accessories, fashion and more.
+        </p>
+
+    </div>
+
+
+    <div
+        class="collection-grid"
+        id="homepageCollections">
+
+        <div class="loading-card">
+
+            <div class="loader"></div>
+
+            <p>
+                Loading collections...
+            </p>
+
+        </div>
 
     </div>
 
@@ -951,7 +1177,9 @@
         </h2>
 
         <p>
-            Planning return gifts, wedding favours, corporate gifts, boutique stock or a large event? Get premium accessories and curated gifts at the best price for bulk quantities.
+            Planning return gifts, wedding favours, corporate gifts,
+            boutique stock or a large event? Get premium accessories
+            and curated gifts at the best price for bulk quantities.
         </p>
 
         <div class="bulk-points">
@@ -1018,7 +1246,7 @@
 
 
 <!-- =====================================================
-     ABOUT
+     OUR STORY
 ===================================================== -->
 
 <section
@@ -1026,10 +1254,6 @@
     id="about">
 
     <div class="about-image">
-
-        <div class="about-monogram">
-            AK
-        </div>
 
         <span>
             Thoughtfully curated<br>
@@ -1050,11 +1274,14 @@
         </h2>
 
         <p>
-            At Trends by AK, we believe the prettiest things are the ones that fit effortlessly into your everyday life.
+            At Trends by AK, we believe the prettiest things are the ones
+            that fit effortlessly into your everyday life.
         </p>
 
         <p>
-            From satin scrunchies and hair accessories to anti-tarnish jewellery and gifting options, every collection is selected with quality, affordability and a little extra joy in mind.
+            From satin scrunchies and hair accessories to anti-tarnish
+            jewellery and gifting options, every collection is selected
+            with quality, affordability and a little extra joy in mind.
         </p>
 
         <a
@@ -1148,6 +1375,10 @@
                 All Products
             </a>
 
+            <a href="#categories">
+                Categories
+            </a>
+
             <a href="#collections">
                 Collections
             </a>
@@ -1216,7 +1447,11 @@
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@Supabase/supabase-js@2"></script>
 
 <script>
 
@@ -1292,20 +1527,6 @@ function formatPrice(value){
 }
 
 
-function getDeviceType(){
-
-    if(window.innerWidth <= 600){
-        return 'mobile';
-    }
-
-    if(window.innerWidth <= 1024){
-        return 'tablet';
-    }
-
-    return 'desktop';
-}
-
-
 function trackEvent(name,parameters={}){
 
     try{
@@ -1320,74 +1541,6 @@ function trackEvent(name,parameters={}){
         }
 
     }catch(e){}
-}
-
-
-function getVisitorId(){
-
-    try{
-
-        let id =
-            localStorage.getItem(
-                'trendsbyak_visitor_id'
-            );
-
-        if(!id){
-
-            id =
-                'v_' +
-                Date.now() +
-                '_' +
-                Math.random()
-                    .toString(36)
-                    .slice(2,12);
-
-            localStorage.setItem(
-                'trendsbyak_visitor_id',
-                id
-            );
-        }
-
-        return id;
-
-    }catch(e){
-
-        return 'visitor_' + Date.now();
-    }
-}
-
-
-function getSessionId(){
-
-    try{
-
-        let id =
-            sessionStorage.getItem(
-                'trendsbyak_session_id'
-            );
-
-        if(!id){
-
-            id =
-                's_' +
-                Date.now() +
-                '_' +
-                Math.random()
-                    .toString(36)
-                    .slice(2,10);
-
-            sessionStorage.setItem(
-                'trendsbyak_session_id',
-                id
-            );
-        }
-
-        return id;
-
-    }catch(e){
-
-        return 'session_' + Date.now();
-    }
 }
 
 
@@ -1549,11 +1702,13 @@ function addProductToCart(product,button){
 
         setTimeout(
             ()=>{
+
                 button.textContent =
                     oldText;
 
                 button.disabled =
                     false;
+
             },
             1500
         );
@@ -1581,11 +1736,7 @@ async function updateAccountLink(){
             'accountLink'
         );
 
-    if(!link){
-        return;
-    }
-
-    if(!supabaseClient){
+    if(!link || !supabaseClient){
         return;
     }
 
@@ -1614,6 +1765,241 @@ async function updateAccountLink(){
 
         link.textContent =
             'Login / Account';
+    }
+}
+
+
+/* =========================================================
+   SHOP BY CATEGORY
+   Uses products.category
+========================================================= */
+
+async function loadCategories(){
+
+    const container =
+        document.getElementById(
+            'homepageCategories'
+        );
+
+    if(!container){
+        return;
+    }
+
+    try{
+
+        const result =
+            await safeQuery(
+
+                supabaseClient
+                    .from('products')
+                    .select(
+                        'id,name,category,image_url,status,created_at'
+                    )
+                    .eq(
+                        'status',
+                        'active'
+                    )
+                    .order(
+                        'created_at',
+                        {
+                            ascending:false
+                        }
+                    ),
+
+                9000
+            );
+
+        if(result.error){
+            throw result.error;
+        }
+
+        const products =
+            Array.isArray(result.data)
+                ? result.data
+                : [];
+
+
+        const categoryMap = new Map();
+
+
+        products.forEach(product => {
+
+            const category =
+                String(
+                    product.category || ''
+                ).trim();
+
+            if(!category){
+                return;
+            }
+
+
+            if(!categoryMap.has(category)){
+
+                categoryMap.set(
+                    category,
+                    {
+                        name: category,
+                        image: product.image_url || '',
+                        count: 0
+                    }
+                );
+            }
+
+
+            const item =
+                categoryMap.get(category);
+
+            item.count++;
+
+            if(
+                !item.image &&
+                product.image_url
+            ){
+                item.image =
+                    product.image_url;
+            }
+
+        });
+
+
+        const categories =
+            Array.from(
+                categoryMap.values()
+            )
+            .sort(
+                (a,b)=>
+                    b.count - a.count
+            );
+
+
+        if(!categories.length){
+
+            container.innerHTML = `
+                <div class="loading-card">
+                    <h3>Categories coming soon.</h3>
+                    <p>Our products will appear here shortly.</p>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML =
+            categories
+                .map(
+                    (category,index)=>{
+
+                        const name =
+                            escapeHtml(
+                                category.name
+                            );
+
+                        const image =
+                            String(
+                                category.image || ''
+                            ).trim();
+
+                        const count =
+                            Number(
+                                category.count || 0
+                            );
+
+
+                        return `
+                            <a
+                                class="category-card"
+                                href="shop.html?category=${encodeURIComponent(category.name)}"
+                                data-category-name="${name}">
+
+                                <div class="category-image">
+
+                                    ${
+                                        image
+                                        ? `
+                                            <img
+                                                src="${escapeHtml(image)}"
+                                                alt="${name}"
+                                                loading="${
+                                                    index < 6
+                                                        ? 'eager'
+                                                        : 'lazy'
+                                                }"
+                                                decoding="async"
+                                                onerror="
+                                                    this.style.display='none';
+                                                    this.nextElementSibling.style.display='flex';
+                                                ">
+                                        `
+                                        : ''
+                                    }
+
+                                    <div
+                                        class="category-image-fallback"
+                                        style="${
+                                            image
+                                                ? 'display:none;'
+                                                : ''
+                                        }">
+                                        AK
+                                    </div>
+
+                                </div>
+
+
+                                <span class="category-name">
+                                    ${name}
+                                </span>
+
+
+                                <span class="category-count">
+                                    ${count} ${
+                                        count === 1
+                                            ? 'product'
+                                            : 'products'
+                                    }
+                                </span>
+
+                            </a>
+                        `;
+                    }
+                )
+                .join('');
+
+
+        console.log(
+            `Homepage: ${categories.length} product categories loaded.`
+        );
+
+    }catch(error){
+
+        console.error(
+            'Categories error:',
+            error
+        );
+
+        container.innerHTML = `
+            <div class="loading-card">
+
+                <h3>
+                    Explore our products.
+                </h3>
+
+                <p>
+                    Browse all available products.
+                </p>
+
+                <br>
+
+                <a
+                    href="shop.html"
+                    class="btn btn-dark">
+                    Shop Now
+                </a>
+
+            </div>
+        `;
     }
 }
 
@@ -1673,6 +2059,7 @@ async function loadNewLaunches(){
                         ) > 0
                 );
 
+
         if(!products.length){
 
             container.innerHTML = `
@@ -1684,6 +2071,7 @@ async function loadNewLaunches(){
 
             return;
         }
+
 
         container.innerHTML =
             products
@@ -1759,6 +2147,7 @@ function newLaunchCard(product){
                     ? sale
                     : mrp
             );
+
 
     return `
         <article class="new-launch-card">
@@ -1857,7 +2246,8 @@ function newLaunchCard(product){
 
 
 /* =========================================================
-   COLLECTIONS / CATEGORIES
+   COLLECTIONS
+   Uses the collections table
 ========================================================= */
 
 async function loadCollections(){
@@ -1910,12 +2300,20 @@ async function loadCollections(){
                 ? result.data
                 : [];
 
+
         if(!data.length){
 
             container.innerHTML = `
                 <div class="loading-card">
-                    <h3>Collections coming soon.</h3>
-                    <p>Our collections will appear here shortly.</p>
+
+                    <h3>
+                        Collections coming soon.
+                    </h3>
+
+                    <p>
+                        Our collections will appear here shortly.
+                    </p>
+
                 </div>
             `;
 
@@ -1953,13 +2351,6 @@ async function loadCollections(){
                             );
 
 
-                        /*
-                         * IMPORTANT:
-                         * The collection name is passed to shop.html.
-                         * This means clicking one category opens
-                         * products belonging to that category only.
-                         */
-
                         const shopUrl =
                             `shop.html?collection=${encodeURIComponent(name)}`;
 
@@ -1979,7 +2370,7 @@ async function loadCollections(){
                                             src="${escapeHtml(image)}"
                                             alt="${escapeHtml(name)}"
                                             loading="${
-                                                index < 4
+                                                index < 3
                                                     ? 'eager'
                                                     : 'lazy'
                                             }"
@@ -1988,30 +2379,26 @@ async function loadCollections(){
                                                 this.style.display='none';
                                                 this.nextElementSibling.style.display='flex';
                                             ">
-
-                                        <div
-                                            class="collection-image-fallback"
-                                            style="display:none;">
-                                            AK
-                                        </div>
                                     `
-                                    : `
-                                        <div
-                                            class="collection-image-fallback">
-                                            AK
-                                        </div>
-                                    `
+                                    : ''
                                 }
+
+
+                                <div
+                                    class="collection-image-fallback"
+                                    style="${
+                                        image
+                                            ? 'display:none;'
+                                            : ''
+                                    }">
+                                    AK
+                                </div>
 
 
                                 <div class="collection-overlay"></div>
 
 
                                 <div class="collection-content">
-
-                                    <span class="collection-number">
-                                        ${String(index + 1).padStart(2,'0')}
-                                    </span>
 
                                     <h3>
                                         ${escapeHtml(name)}
@@ -2035,7 +2422,7 @@ async function loadCollections(){
 
 
         console.log(
-            `Homepage: ${data.length} categories loaded.`
+            `Homepage: ${data.length} collections loaded.`
         );
 
     }catch(error){
@@ -2117,6 +2504,7 @@ async function loadReviews(){
         const data =
             result.data || [];
 
+
         if(!data.length){
 
             grid.innerHTML = `
@@ -2156,6 +2544,7 @@ async function loadReviews(){
                                     ) || 5
                                 )
                             );
+
 
                         return `
                             <article class="review-card">
@@ -2269,6 +2658,7 @@ async function loadInstagramReels(){
         const data =
             result.data || [];
 
+
         if(!data.length){
 
             renderFallbackInstagram();
@@ -2380,6 +2770,7 @@ function renderFallbackInstagram(){
         return;
     }
 
+
     const posts = [
 
         'https://www.instagram.com/p/Db8PMxlDZIC/',
@@ -2455,6 +2846,7 @@ function setupMenu(){
         return;
     }
 
+
     toggle.addEventListener(
         'click',
         ()=>{
@@ -2515,6 +2907,7 @@ document.addEventListener(
         event.preventDefault();
         event.stopPropagation();
 
+
         const id =
             button.dataset.productId;
 
@@ -2522,7 +2915,9 @@ document.addEventListener(
             return;
         }
 
+
         button.disabled = true;
+
 
         try{
 
@@ -2543,15 +2938,18 @@ document.addEventListener(
                     7000
                 );
 
+
             if(result.error){
                 throw result.error;
             }
+
 
             if(!result.data){
                 throw new Error(
                     'Product not found'
                 );
             }
+
 
             if(
                 result.data.status &&
@@ -2561,6 +2959,7 @@ document.addEventListener(
                     'Product unavailable'
                 );
             }
+
 
             addProductToCart(
                 result.data,
@@ -2581,12 +2980,46 @@ document.addEventListener(
 
             setTimeout(
                 ()=>{
+
                     button.textContent =
                         'Add to Cart';
+
                 },
                 1800
             );
         }
+    }
+);
+
+
+/* =========================================================
+   CATEGORY CLICK TRACKING
+========================================================= */
+
+document.addEventListener(
+    'click',
+    event=>{
+
+        const link =
+            event.target.closest(
+                'a[data-category-name]'
+            );
+
+        if(!link){
+            return;
+        }
+
+
+        trackEvent(
+            'category_click',
+            {
+                category_name:
+                    link.dataset.categoryName,
+
+                page_location:
+                    location.href
+            }
+        );
     }
 );
 
@@ -2607,6 +3040,7 @@ document.addEventListener(
         if(!link){
             return;
         }
+
 
         trackEvent(
             'collection_click',
@@ -2641,6 +3075,7 @@ document.addEventListener(
         if(!link){
             return;
         }
+
 
         trackEvent(
             'product_click',
@@ -2694,9 +3129,11 @@ document.addEventListener(
 
         updateAccountLink();
 
-        loadCollections();
+        loadCategories();
 
         loadNewLaunches();
+
+        loadCollections();
 
         loadReviews();
 
@@ -2716,8 +3153,11 @@ document.addEventListener(
 window.addEventListener(
     'pageshow',
     ()=>{
+
         updateCartCount();
+
         updateAccountLink();
+
     }
 );
 
