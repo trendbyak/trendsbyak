@@ -509,7 +509,136 @@ gtag('config', 'G-L22XEV7688');
     font-size:11px;
     line-height:1.5;
 }
+/* =========================================================
+   HOMEPAGE COLLECTIONS — COMPACT UNIFORM CARDS
+   ========================================================= */
 
+#homepageCollections.collection-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
+    align-items:stretch;
+}
+
+#homepageCollections .collection-card{
+    position:relative;
+    display:block;
+    width:100%;
+    aspect-ratio:1 / 1.05;
+    min-height:0;
+    height:auto;
+    overflow:hidden;
+    border-radius:10px;
+    background:#eee7dc;
+    text-decoration:none;
+    color:#fff;
+}
+
+#homepageCollections .collection-card img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    margin:0;
+}
+
+#homepageCollections .collection-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to top,
+        rgba(29,27,25,.82) 0%,
+        rgba(29,27,25,.25) 42%,
+        rgba(29,27,25,0) 70%
+    );
+    z-index:1;
+}
+
+#homepageCollections .collection-content{
+    position:absolute;
+    left:13px;
+    right:13px;
+    bottom:13px;
+    z-index:2;
+}
+
+#homepageCollections .collection-number{
+    display:block;
+    font-size:8px;
+    letter-spacing:1.5px;
+    opacity:.8;
+    margin-bottom:4px;
+}
+
+#homepageCollections .collection-content h3{
+    margin:0 0 4px;
+    font-family:"Playfair Display",serif;
+    font-size:15px;
+    line-height:1.15;
+    color:#fff;
+}
+
+#homepageCollections .collection-link{
+    display:block;
+    font-family:"DM Sans",sans-serif;
+    font-size:8px;
+    line-height:1.3;
+    color:rgba(255,255,255,.85);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+#homepageCollections .collection-card:hover img{
+    transform:scale(1.04);
+}
+
+#homepageCollections .collection-card img{
+    transition:transform .3s ease;
+}
+
+/* TABLET */
+@media(max-width:900px){
+
+    #homepageCollections.collection-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:12px;
+    }
+
+    #homepageCollections .collection-card{
+        aspect-ratio:1 / 1.05;
+    }
+}
+
+/* MOBILE */
+@media(max-width:600px){
+
+    #homepageCollections.collection-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+    }
+
+    #homepageCollections .collection-card{
+        aspect-ratio:1 / 1.05;
+        border-radius:9px;
+    }
+
+    #homepageCollections .collection-content{
+        left:10px;
+        right:10px;
+        bottom:10px;
+    }
+
+    #homepageCollections .collection-content h3{
+        font-size:13px;
+    }
+
+    #homepageCollections .collection-link{
+        font-size:7px;
+    }
+}
 /* =========================================================
    TABLET
    ========================================================= */
