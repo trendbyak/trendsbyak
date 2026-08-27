@@ -73,7 +73,43 @@ gtag('config', 'G-L22XEV7688');
 
 <style>
 <style>
+/* =========================================================
+   ROUND BRAND LOGO
+   ========================================================= */
 
+.site-logo-image {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+}
+
+.footer-brand .site-logo-image {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+}
+
+@media (max-width: 600px) {
+
+    .site-logo-image {
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+    }
+
+    .footer-brand .site-logo-image {
+        width: 46px !important;
+        height: 46px !important;
+        min-width: 46px !important;
+    }
+
+}
 /* =========================================================
    HOMEPAGE COLLECTIONS
    ========================================================= */
@@ -700,7 +736,157 @@ gtag('config', 'G-L22XEV7688');
         margin-top: 3px !important;
     }
 
+/* =========================================================
+   SHOP BY CATEGORY — ROUND THUMBNAILS
+   ========================================================= */
 
+.shop-by-category-section {
+    overflow: hidden !important;
+}
+
+.category-scroll {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 30px !important;
+    width: 100% !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
+}
+
+.home-category {
+    flex: 0 0 108px !important;
+    width: 108px !important;
+    text-decoration: none !important;
+    color: #1d1b19 !important;
+    text-align: center !important;
+}
+
+.home-category-image {
+    width: 108px !important;
+    height: 108px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: #eee7dd !important;
+    border: 1px solid #e4dbcf !important;
+    box-sizing: border-box !important;
+    margin: 0 auto 12px !important;
+    position: relative !important;
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease !important;
+}
+
+.home-category-image img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    transition: transform .35s ease !important;
+}
+
+.home-category-fallback {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-family: "Playfair Display", serif !important;
+    font-size: 24px !important;
+    color: #8b6b42 !important;
+}
+
+.home-category-name {
+    display: block !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    color: #1d1b19 !important;
+}
+
+.home-category-count {
+    display: block !important;
+    margin-top: 4px !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 8px !important;
+    color: #948a80 !important;
+}
+
+.home-category:hover .home-category-image {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 20px rgba(29,27,25,.12) !important;
+}
+
+.home-category:hover .home-category-image img {
+    transform: scale(1.06) !important;
+}
+
+.category-loading {
+    width: 100% !important;
+    padding: 35px 20px !important;
+    text-align: center !important;
+    background: #f5f0e8 !important;
+    border-radius: 10px !important;
+}
+
+@media (max-width: 900px) {
+
+    .category-scroll {
+        gap: 22px !important;
+        justify-content: flex-start !important;
+        overflow-x: auto !important;
+        padding: 3px 4px 12px !important;
+        scrollbar-width: none !important;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .home-category {
+        flex: 0 0 92px !important;
+        width: 92px !important;
+    }
+
+    .home-category-image {
+        width: 92px !important;
+        height: 92px !important;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .category-scroll {
+        gap: 18px !important;
+        justify-content: flex-start !important;
+        padding-left: 2px !important;
+        padding-right: 18px !important;
+    }
+
+    .home-category {
+        flex: 0 0 76px !important;
+        width: 76px !important;
+    }
+
+    .home-category-image {
+        width: 76px !important;
+        height: 76px !important;
+        margin-bottom: 9px !important;
+    }
+
+    .home-category-name {
+        font-size: 9px !important;
+    }
+
+    .home-category-count {
+        font-size: 7px !important;
+        margin-top: 3px !important;
+    }
+
+}
     /* New launches */
 
     .new-launches-grid {
@@ -987,7 +1173,41 @@ gtag('config', 'G-L22XEV7688');
     </div>
 
 </section>
+<!-- SHOP BY CATEGORY -->
 
+<section
+    class="section shop-by-category-section"
+    id="shop-by-category">
+
+    <div class="section-heading">
+
+        <div>
+            <p class="eyebrow">SHOP BY CATEGORY</p>
+
+            <h2>Find your favourites.</h2>
+        </div>
+
+        <p class="section-intro">
+            Explore each collection and discover exactly what you're looking for.
+        </p>
+
+    </div>
+
+    <div
+        class="category-scroll"
+        id="homepageCategories">
+
+        <div class="category-loading">
+
+            <div class="loader"></div>
+
+            <p>Loading categories...</p>
+
+        </div>
+
+    </div>
+
+</section>
 <!-- NEW LAUNCHES -->
 
 <section
@@ -1020,13 +1240,15 @@ gtag('config', 'G-L22XEV7688');
 
     <div class="new-launch-actions">
 
-        <a
-            href="shop.html"
-            class="btn btn-dark">
-            View All Products
-        </a>
+    <a
+        href="shop.html"
+        class="btn btn-dark">
+        View All Products
+    </a>
 
-    </div>
+</div>
+
+</section>
 
 <!-- COLLECTIONS -->
 
@@ -2195,7 +2417,337 @@ if(supabaseClient){
     }
 }
 
+/* =========================================================
+   SHOP BY CATEGORY — HOMEPAGE
+   ========================================================= */
 
+async function loadHomepageCategories(){
+
+    const container =
+        document.getElementById(
+            'homepageCategories'
+        );
+
+    if(!container){
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="category-loading">
+            <div class="loader"></div>
+            <p>Loading categories...</p>
+        </div>
+    `;
+
+    try{
+
+        if(!supabaseClient){
+            throw new Error(
+                'Supabase unavailable'
+            );
+        }
+
+        /*
+         * Get active products and build categories
+         * from the actual product database.
+         */
+
+        const result =
+            await safeSupabaseQuery(
+
+                supabaseClient
+                    .from('products')
+                    .select(
+                        'id,category,image_url,status'
+                    )
+                    .eq(
+                        'status',
+                        'active'
+                    )
+                    .not(
+                        'category',
+                        'is',
+                        null
+                    ),
+
+                9000
+            );
+
+        const data =
+            result?.data || [];
+
+        const error =
+            result?.error;
+
+        if(error){
+            throw error;
+        }
+
+        /*
+         * Group products by category.
+         * Also combines singular/plural variants
+         * where appropriate.
+         */
+
+        const categoryMap = {};
+
+        data.forEach(product => {
+
+            let category =
+                String(
+                    product.category || ''
+                ).trim();
+
+            if(!category){
+                return;
+            }
+
+            /*
+             * Keep the customer's category names clean.
+             */
+
+            const lower =
+                category.toLowerCase();
+
+            if(
+                lower === 'bracelet' ||
+                lower === 'bracelets'
+            ){
+
+                category = 'Bracelets';
+
+            }else if(
+                lower === 'hair accessory' ||
+                lower === 'hair accessories'
+            ){
+
+                category = 'Hair Accessories';
+            }
+
+            if(!categoryMap[category]){
+
+                categoryMap[category] = {
+
+                    name: category,
+
+                    count: 0,
+
+                    image:
+                        product.image_url || ''
+
+                };
+
+            }
+
+            categoryMap[category].count++;
+
+            /*
+             * Use the first valid product image
+             * as the category thumbnail.
+             */
+
+            if(
+                !categoryMap[category].image &&
+                product.image_url
+            ){
+
+                categoryMap[category].image =
+                    product.image_url;
+            }
+
+        });
+
+        /*
+         * Preferred storefront order.
+         */
+
+        const preferredOrder = [
+
+            'Earrings',
+            'Necklace',
+            'Bracelets',
+            'Rings',
+            'Hair Accessories',
+            'Anklet',
+            'Watch',
+            'Waist Chain'
+
+        ];
+
+        const categories =
+            Object.values(
+                categoryMap
+            ).sort(
+                (a,b) => {
+
+                    const ai =
+                        preferredOrder.indexOf(
+                            a.name
+                        );
+
+                    const bi =
+                        preferredOrder.indexOf(
+                            b.name
+                        );
+
+                    if(ai === -1 && bi === -1){
+                        return a.name.localeCompare(
+                            b.name
+                        );
+                    }
+
+                    if(ai === -1){
+                        return 1;
+                    }
+
+                    if(bi === -1){
+                        return -1;
+                    }
+
+                    return ai - bi;
+                }
+            );
+
+        if(!categories.length){
+
+            container.innerHTML = `
+                <div class="category-loading">
+                    <h3>Categories coming soon.</h3>
+                    <p>Our products will appear here shortly.</p>
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML =
+            categories
+                .map(
+                    category => {
+
+                        const name =
+                            escapeHtml(
+                                category.name
+                            );
+
+                        /*
+                         * shop.html receives ONLY this category.
+                         */
+
+                        const url =
+                            `shop.html?category=${encodeURIComponent(
+                                category.name
+                            )}`;
+
+                        const image =
+                            category.image
+                                ? escapeHtml(
+                                    category.image
+                                )
+                                : '';
+
+                        const count =
+                            category.count;
+
+                        return `
+
+                            <a
+                                href="${url}"
+                                class="home-category"
+                                data-category="${name}"
+                                aria-label="Shop ${name}">
+
+                                <div
+                                    class="home-category-image">
+
+                                    ${
+                                        image
+                                        ? `
+                                            <img
+                                                src="${image}"
+                                                alt="${name}"
+                                                loading="lazy"
+                                                decoding="async"
+                                                onerror="
+                                                    this.onerror=null;
+                                                    this.style.display='none';
+                                                    this.nextElementSibling.style.display='flex';
+                                                "
+                                            >
+
+                                            <div
+                                                class="home-category-fallback"
+                                                style="display:none;">
+                                                AK
+                                            </div>
+                                        `
+                                        : `
+                                            <div
+                                                class="home-category-fallback">
+                                                AK
+                                            </div>
+                                        `
+                                    }
+
+                                </div>
+
+                                <span
+                                    class="home-category-name">
+                                    ${name}
+                                </span>
+
+                                <span
+                                    class="home-category-count">
+                                    ${count}
+                                    ${
+                                        count === 1
+                                            ? 'piece'
+                                            : 'pieces'
+                                    }
+                                </span>
+
+                            </a>
+
+                        `;
+
+                    }
+                )
+                .join('');
+
+        console.log(
+            `Homepage: ${categories.length} categories loaded.`
+        );
+
+    }catch(error){
+
+        console.error(
+            'Homepage categories error:',
+            error
+        );
+
+        container.innerHTML = `
+            <div class="category-loading">
+
+                <h3>
+                    Explore our products.
+                </h3>
+
+                <p>
+                    Browse all categories in our shop.
+                </p>
+
+                <br>
+
+                <a
+                    href="shop.html"
+                    class="btn btn-dark">
+                    Shop Now
+                </a>
+
+            </div>
+        `;
+    }
+}
 /* =========================================================
    NEW LAUNCHES
    ========================================================= */
@@ -3599,6 +4151,7 @@ document.addEventListener(
          * Load homepage content independently.
          * One failed section cannot stop the others.
          */
+loadHomepageCategories();
 
         loadNewLaunches();
 
