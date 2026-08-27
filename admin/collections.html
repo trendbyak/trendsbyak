@@ -3,327 +3,376 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collections | Trends by AK</title>
 
-    <title>Collections | Trends by AK</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
 
-    <style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+body{
+    font-family:Arial,sans-serif;
+    background:#f8f5f0;
+    color:#292929;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f8f5f0;
-            color: #292929;
-        }
+.header{
+    background:#292929;
+    color:#fff;
+    padding:18px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-        .header {
-            background: #292929;
-            color: white;
-            padding: 18px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.header h1{
+    color:#d1ad72;
+    font-size:22px;
+}
 
-        .header h1 {
-            color: #d1ad72;
-            font-size: 22px;
-        }
+.back{
+    color:#fff;
+    text-decoration:none;
+    font-size:14px;
+}
 
-        .back {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-        }
+.container{
+    max-width:1100px;
+    margin:40px auto;
+    padding:0 20px;
+}
 
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+.title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
 
-        .title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
+.title h2{
+    font-size:30px;
+}
 
-        .title h2 {
-            font-size: 30px;
-        }
+.status{
+    padding:10px 15px;
+    border-radius:8px;
+    font-size:13px;
+    background:#eee;
+}
 
-        .status {
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 13px;
-            background: #eee;
-        }
+.status.success{
+    background:#e7f6e7;
+    color:#287a28;
+}
 
-        .status.success {
-            background: #e7f6e7;
-            color: #287a28;
-        }
+.status.error{
+    background:#fde8e8;
+    color:#a33;
+}
 
-        .status.error {
-            background: #fde8e8;
-            color: #a33;
-        }
+.status.loading{
+    background:#fff3d9;
+    color:#8b6b42;
+}
 
-        .status.loading {
-            background: #fff3d9;
-            color: #8b6b42;
-        }
+.form-box,
+.manager{
+    background:#fff;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+    margin-bottom:35px;
+}
 
-        .form-box,
-        .manager {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,.06);
-            margin-bottom: 35px;
-        }
+.form-box h2,
+.manager h2{
+    margin-bottom:10px;
+}
 
-        .form-box h2 {
-            margin-bottom: 22px;
-        }
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
 
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+.full{
+    grid-column:1/-1;
+}
 
-        .full {
-            grid-column: 1 / -1;
-        }
+label{
+    font-weight:bold;
+    font-size:14px;
+}
 
-        label {
-            font-weight: bold;
-            font-size: 14px;
-        }
+input,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-family:inherit;
+    font-size:14px;
+}
 
-        input,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 14px;
-        }
+input:focus,
+textarea:focus{
+    outline:none;
+    border-color:#d1ad72;
+}
 
-        input:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #d1ad72;
-        }
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
 
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
+.image-preview{
+    width:180px;
+    height:180px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-top:10px;
+    display:none;
+    border:1px solid #eee;
+}
 
-        .image-preview {
-            width: 180px;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-top: 10px;
-            display: none;
-            border: 1px solid #eee;
-        }
+.button-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:25px;
+}
 
-        .button-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 25px;
-        }
+.save-btn,
+.cancel-btn,
+.order-btn{
+    border:none;
+    padding:14px 25px;
+    border-radius:25px;
+    cursor:pointer;
+    font-size:15px;
+}
 
-        .save-btn,
-        .cancel-btn {
-            border: none;
-            padding: 14px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 15px;
-        }
+.save-btn,
+.order-btn{
+    background:#292929;
+    color:#fff;
+}
 
-        .save-btn {
-            background: #292929;
-            color: white;
-        }
+.save-btn:hover,
+.order-btn:hover{
+    background:#d1ad72;
+}
 
-        .save-btn:hover {
-            background: #d1ad72;
-        }
+.save-btn:disabled,
+.order-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
 
-        .save-btn:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-        }
+.cancel-btn{
+    background:#eee;
+    color:#333;
+    display:none;
+}
 
-        .cancel-btn {
-            background: #eee;
-            color: #333;
-            display: none;
-        }
+.manager-subtitle{
+    color:#777;
+    margin-bottom:20px;
+}
 
-        .manager h2 {
-            margin-bottom: 8px;
-        }
+.order-help{
+    background:#faf8f5;
+    border:1px solid #eee;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+    color:#666;
+    font-size:14px;
+    line-height:1.5;
+}
 
-        .manager-subtitle {
-            color: #777;
-            margin-bottom: 25px;
-        }
+.order-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+}
 
-        .collection-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
+.collection-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:20px;
+}
 
-        .collection-card {
-            border: 1px solid #eee;
-            border-radius: 12px;
-            overflow: hidden;
-            background: white;
-        }
+.collection-card{
+    border:1px solid #eee;
+    border-radius:12px;
+    overflow:hidden;
+    background:#fff;
+}
 
-        .collection-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: #f5f0eb;
-            display: block;
-        }
+.collection-card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    background:#f5f0eb;
+    display:block;
+}
 
-        .collection-info {
-            padding: 18px;
-        }
+.collection-info{
+    padding:18px;
+}
 
-        .collection-info h3 {
-            margin-bottom: 8px;
-        }
+.collection-info h3{
+    margin-bottom:8px;
+}
 
-        .collection-info p {
-            color: #777;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
+.collection-info p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:15px;
+}
 
-        .collection-id {
-            font-size: 11px;
-            color: #aaa;
-            margin-bottom: 12px;
-        }
+.collection-id{
+    font-size:11px;
+    color:#aaa;
+    margin-bottom:12px;
+}
 
-        .buttons {
-            display: flex;
-            gap: 8px;
-        }
+.order-box{
+    background:#faf8f5;
+    border:1px solid #eee;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:15px;
+}
 
-        .edit-btn,
-        .delete-btn {
-            border: none;
-            padding: 9px 15px;
-            border-radius: 7px;
-            cursor: pointer;
-            color: white;
-        }
+.order-box label{
+    display:block;
+    margin-bottom:7px;
+    font-size:12px;
+    color:#666;
+}
 
-        .edit-btn {
-            background: #d1ad72;
-        }
+.order-input{
+    width:90px;
+    padding:9px;
+    text-align:center;
+    font-weight:bold;
+    border-color:#d1ad72;
+}
 
-        .delete-btn {
-            background: #b85c5c;
-        }
+.buttons{
+    display:flex;
+    gap:8px;
+}
 
-        .empty {
-            grid-column: 1 / -1;
-            padding: 40px;
-            text-align: center;
-            background: #faf8f5;
-            border-radius: 10px;
-            color: #777;
-        }
+.edit-btn,
+.delete-btn{
+    border:none;
+    padding:9px 15px;
+    border-radius:7px;
+    cursor:pointer;
+    color:#fff;
+}
 
-        .loading {
-            grid-column: 1 / -1;
-            padding: 40px;
-            text-align: center;
-            color: #777;
-        }
+.edit-btn{
+    background:#d1ad72;
+}
 
-        .login-box {
-            max-width: 500px;
-            margin: 100px auto;
-            background: white;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,.06);
-            text-align: center;
-        }
+.delete-btn{
+    background:#b85c5c;
+}
 
-        .login-box h2 {
-            margin-bottom: 12px;
-        }
+.empty,
+.loading{
+    grid-column:1/-1;
+    padding:40px;
+    text-align:center;
+    border-radius:10px;
+}
 
-        .login-box p {
-            color: #777;
-            line-height: 1.6;
-        }
+.empty{
+    background:#faf8f5;
+    color:#777;
+}
 
-        .hidden {
-            display: none !important;
-        }
+.loading{
+    color:#777;
+}
 
-        @media(max-width:700px) {
+.login-box{
+    max-width:500px;
+    margin:100px auto;
+    background:#fff;
+    padding:35px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+    text-align:center;
+}
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
+.login-box h2{
+    margin-bottom:12px;
+}
 
-            .full {
-                grid-column: auto;
-            }
+.login-box p{
+    color:#777;
+    line-height:1.6;
+}
 
-            .title {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
+.hidden{
+    display:none !important;
+}
 
-            .header {
-                padding: 16px 18px;
-            }
+@media(max-width:700px){
 
-            .container {
-                margin: 25px auto;
-            }
+    .form-grid{
+        grid-template-columns:1fr;
+    }
 
-        }
+    .full{
+        grid-column:auto;
+    }
 
-    </style>
+    .title{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .header{
+        padding:16px 18px;
+    }
+
+    .container{
+        margin:25px auto;
+    }
+
+    .form-box,
+    .manager{
+        padding:20px;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -333,11 +382,11 @@
 
 <header class="header">
 
-    <h1>Trends by AK</h1>
+<h1>Trends by AK</h1>
 
-    <a href="index.html" class="back">
-        ← Back to Dashboard
-    </a>
+<a href="index.html" class="back">
+← Back to Dashboard
+</a>
 
 </header>
 
@@ -345,359 +394,237 @@
 <div class="container">
 
 
-    <div class="title">
+<div class="title">
 
-        <h2>Collections</h2>
+<h2>Collections</h2>
 
-        <div
-            id="status"
-            class="status loading"
-        >
-            Connecting...
-        </div>
+<div
+id="status"
+class="status loading"
+>
+Connecting...
+</div>
 
-    </div>
-
-
-    <!-- LOGIN MESSAGE -->
-
-    <div
-        id="loginMessage"
-        class="login-box hidden"
-    >
-
-        <h2>
-            Admin login required
-        </h2>
-
-        <p>
-            Please log in to your Trends by AK admin account
-            before creating or editing collections.
-        </p>
-
-    </div>
+</div>
 
 
-    <!-- COLLECTION FORM -->
+<div
+id="loginMessage"
+class="login-box hidden"
+>
 
-    <div
-        id="adminContent"
-        class="hidden"
-    >
+<h2>Admin login required</h2>
 
+<p>
+Please log in to your Trends by AK admin account
+before creating or editing collections.
+</p>
 
-        <div class="form-box">
-
-            <h2 id="formTitle">
-                Add Collection
-            </h2>
-
-
-            <form id="collectionForm">
+</div>
 
 
-                <div class="form-grid">
+<div
+id="adminContent"
+class="hidden"
+>
 
 
-                    <div class="field full">
-
-                        <label for="collectionName">
-                            Collection Name
-                        </label>
-
-                        <input
-                            type="text"
-                            id="collectionName"
-                            placeholder="Example: Scrunchies"
-                            required
-                        >
-
-                    </div>
+<!-- =====================================================
+     ADD / EDIT COLLECTION
+===================================================== -->
 
 
-                    <div class="field full">
+<div class="form-box">
 
-                        <label for="collectionImage">
-                            Collection Image
-                        </label>
+<h2 id="formTitle">
+Add Collection
+</h2>
 
-                        <input
-                            type="file"
-                            id="collectionImage"
-                            accept="image/*"
-                        >
 
-                        <small style="color:#777;">
-                            JPG, PNG or WEBP recommended.
-                        </small>
+<form id="collectionForm">
 
-                        <img
-                            id="imagePreview"
-                            class="image-preview"
-                            alt="Collection preview"
-                        >
 
-                    </div>
+<div class="form-grid">
+
+
+<div class="field full">
+
+<label for="collectionName">
+Collection Name
+</label>
+
+<input
+type="text"
+id="collectionName"
+placeholder="Example: Scrunchies"
+required
+>
+
+</div>
+
 
 <div class="field">
 
-    <label for="collectionDisplayOrder">
-        Display Order
-    </label>
+<label for="displayOrder">
+Display Order
+</label>
 
-    <input
-        type="number"
-        id="collectionDisplayOrder"
-        min="1"
-        step="1"
-        placeholder="Example: 1"
-    >
+<input
+type="number"
+id="displayOrder"
+min="1"
+step="1"
+placeholder="1"
+>
 
-    <small style="color:#777;">
-        1 = first, 2 = second, 3 = third...
-    </small>
+<small style="color:#777;">
+1 = first, 2 = second, 3 = third...
+</small>
 
 </div>
-                    <div class="field full">
-
-                        <label for="collectionDescription">
-                            Collection Description
-                        </label>
-
-                        <textarea
-                            id="collectionDescription"
-                            placeholder="Describe this collection..."
-                        ></textarea>
-
-                    </div>
 
 
-                </div>
+<div class="field">
+
+<label for="collectionImage">
+Collection Image
+</label>
+
+<input
+type="file"
+id="collectionImage"
+accept="image/*"
+>
+
+<small style="color:#777;">
+JPG, PNG or WEBP recommended.
+</small>
+
+</div>
 
 
-                <div class="button-row">
+<div class="field full">
 
-                    <button
-                        type="submit"
-                        id="saveButton"
-                        class="save-btn"
-                    >
-                        Save Collection
-                    </button>
+<img
+id="imagePreview"
+class="image-preview"
+alt="Collection preview"
+>
 
-                    <button
-                        type="button"
-                        id="cancelButton"
-                        class="cancel-btn"
-                    >
-                        Cancel Edit
-                    </button>
-
-                </div>
+</div>
 
 
-            </form>
+<div class="field full">
 
-        </div>
+<label for="collectionDescription">
+Collection Description
+</label>
+
+<textarea
+id="collectionDescription"
+placeholder="Describe this collection..."
+></textarea>
+
+</div>
 
 
-        <!-- COLLECTION MANAGER -->
+</div>
 
-        <div class="manager">
 
-            <h2>
-                Collection Manager
-            </h2>
+<div class="button-row">
 
-            <p class="manager-subtitle">
-                These collections are stored in Supabase
-                and will appear on your main website.
-            </p>
+
+<button
+type="submit"
+id="saveButton"
+class="save-btn"
+>
+Save Collection
+</button>
+
+
+<button
+type="button"
+id="cancelButton"
+class="cancel-btn"
+>
+Cancel Edit
+</button>
+
+
+</div>
+
+
+</form>
+
+</div>
+
+
+<!-- =====================================================
+     COLLECTION MANAGER
+===================================================== -->
+
+
+<div class="manager">
+
+<h2>
+Collection Manager
+</h2>
+
+<p class="manager-subtitle">
+Manage your collections and their display order.
+</p>
+
 
 <div class="order-help">
 
-    <strong>Display Order:</strong>
+<strong>How Display Order works:</strong><br>
 
-    Use 1 for the first collection,
-    2 for the second,
-    3 for the third, and so on.
+Set <strong>1</strong> for the collection you want first,
+<strong>2</strong> for second,
+<strong>3</strong> for third, and so on.
 
-    Change the numbers below and click
-    <strong>Save Display Order</strong>.
-saveOrderButton.addEventListener("click", async function () {
-
-    const inputs = [
-        ...document.querySelectorAll(".collection-order-input")
-    ];
-
-    if (!inputs.length) {
-        alert("No collections found.");
-        return;
-    }
-
-    const updates = inputs.map(input => ({
-        id: Number(input.dataset.id),
-        display_order: Number(input.value)
-    }));
-
-    // Validate
-    for (const item of updates) {
-
-        if (
-            !Number.isInteger(item.display_order) ||
-            item.display_order < 1
-        ) {
-            alert("Display Order must be a whole number starting from 1.");
-            return;
-        }
-
-    }
-
-    // Check duplicate numbers
-    const orderNumbers =
-        updates.map(item => item.display_order);
-
-    if (
-        new Set(orderNumbers).size !==
-        orderNumbers.length
-    ) {
-        alert(
-            "Each collection must have a different Display Order number."
-        );
-        return;
-    }
-
-    saveOrderButton.disabled = true;
-    saveOrderButton.textContent = "Saving...";
-
-    setStatus(
-        "Saving collection order...",
-        "loading"
-    );
-
-    try {
-
-        /*
-         * IMPORTANT:
-         * Use temporary negative values first.
-         *
-         * This prevents conflicts if, for example,
-         * collection 1 becomes 2 and collection 2
-         * becomes 1.
-         */
-
-        for (const item of updates) {
-
-            const { error } =
-                await supabaseClient
-                    .from("collections")
-                    .update({
-                        display_order:
-                            -item.id
-                    })
-                    .eq(
-                        "id",
-                        item.id
-                    );
-
-            if (error)
-                throw error;
-
-        }
-
-        /*
-         * Now write the real display orders.
-         */
-
-        for (const item of updates) {
-
-            const { error } =
-                await supabaseClient
-                    .from("collections")
-                    .update({
-                        display_order:
-                            item.display_order
-                    })
-                    .eq(
-                        "id",
-                        item.id
-                    );
-
-            if (error)
-                throw error;
-
-        }
-
-        await loadCollections();
-
-        setStatus(
-            "Display order saved",
-            "success"
-        );
-
-        alert(
-            "Collection display order saved successfully!"
-        );
-
-    } catch (error) {
-
-        console.error(
-            "SAVE ORDER ERROR:",
-            error
-        );
-
-        alert(
-            "Could not save collection order.\n\n" +
-            error.message
-        );
-
-        setStatus(
-            "Save failed",
-            "error"
-        );
-
-    } finally {
-
-        saveOrderButton.disabled = false;
-
-        saveOrderButton.textContent =
-            "Save Display Order";
-
-    }
-
-});
-</div>
-
-<div class="order-actions">
-
-    <div style="color:#777;font-size:14px;">
-        Arrange your collections using the numbers.
-    </div>
-
-    <button
-        type="button"
-        id="saveOrderButton"
-        class="save-order-btn"
-    >
-        Save Display Order
-    </button>
+Change the numbers and click
+<strong>Save Display Order</strong>.
 
 </div>
-            <div
-                id="collectionList"
-                class="collection-list"
-            >
-
-                <div class="loading">
-                    Loading collections...
-                </div>
-
-            </div>
-
-        </div>
 
 
-    </div>
+<div class="order-top">
+
+<span style="color:#777;font-size:14px;">
+Arrange collections using the numbers below.
+</span>
+
+
+<button
+type="button"
+id="saveOrderButton"
+class="order-btn"
+>
+Save Display Order
+</button>
+
+
+</div>
+
+
+<div
+id="collectionList"
+class="collection-list"
+>
+
+<div class="loading">
+Loading collections...
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
 
 
 </div>
@@ -709,39 +636,33 @@ saveOrderButton.addEventListener("click", async function () {
 
 
 /* =====================================================
-   SUPABASE CONFIG
+   SUPABASE
 ===================================================== */
 
+
 const SUPABASE_URL =
-    "https://ltxrycmreumoqfpcbwnb.supabase.co";
+"https://ltxrycmreumoqfpcbwnb.supabase.co";
 
 
 const SUPABASE_KEY =
-    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+"sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+
+
+const STORAGE_BUCKET =
+"collections";
 
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/*
-   Supabase Storage bucket.
-
-   We will first try "collections".
-   If your bucket has a different name, the
-   error will tell us exactly what needs changing.
-*/
-
-const STORAGE_BUCKET =
-    "collections";
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
 /* =====================================================
    STATE
 ===================================================== */
+
 
 let editingCollectionId = null;
 
@@ -754,98 +675,106 @@ let selectedImageFile = null;
    ELEMENTS
 ===================================================== */
 
+
 const form =
-    document.getElementById(
-        "collectionForm"
-    );
+document.getElementById(
+"collectionForm"
+);
 
 
 const nameInput =
-    document.getElementById(
-        "collectionName"
-    );
+document.getElementById(
+"collectionName"
+);
+
+
+const displayOrderInput =
+document.getElementById(
+"displayOrder"
+);
 
 
 const descriptionInput =
-    document.getElementById(
-        "collectionDescription"
-    );
-const displayOrderInput =
-    document.getElementById(
-        "collectionDisplayOrder"
-    );
+document.getElementById(
+"collectionDescription"
+);
+
 
 const imageInput =
-    document.getElementById(
-        "collectionImage"
-    );
+document.getElementById(
+"collectionImage"
+);
 
 
 const imagePreview =
-    document.getElementById(
-        "imagePreview"
-    );
+document.getElementById(
+"imagePreview"
+);
 
 
 const collectionList =
-    document.getElementById(
-        "collectionList"
-    );
+document.getElementById(
+"collectionList"
+);
 
 
 const saveButton =
-    document.getElementById(
-        "saveButton"
-    );
+document.getElementById(
+"saveButton"
+);
+
+
+const saveOrderButton =
+document.getElementById(
+"saveOrderButton"
+);
 
 
 const cancelButton =
-    document.getElementById(
-        "cancelButton"
-    );
+document.getElementById(
+"cancelButton"
+);
 
-const saveOrderButton =
-    document.getElementById(
-        "saveOrderButton"
-    );
+
 const formTitle =
-    document.getElementById(
-        "formTitle"
-    );
+document.getElementById(
+"formTitle"
+);
 
 
 const statusElement =
-    document.getElementById(
-        "status"
-    );
+document.getElementById(
+"status"
+);
 
 
 const adminContent =
-    document.getElementById(
-        "adminContent"
-    );
+document.getElementById(
+"adminContent"
+);
 
 
 const loginMessage =
-    document.getElementById(
-        "loginMessage"
-    );
+document.getElementById(
+"loginMessage"
+);
 
 
 /* =====================================================
    STATUS
 ===================================================== */
 
+
 function setStatus(
-    message,
-    type = "loading"
-) {
+message,
+type = "loading"
+){
 
-    statusElement.textContent =
-        message;
+statusElement.textContent =
+message;
 
-    statusElement.className =
-        "status " + type;
+statusElement.className =
+"status " + type;
 
 }
 
@@ -854,98 +783,96 @@ function setStatus(
    ESCAPE HTML
 ===================================================== */
 
-function escapeHtml(value) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+function escapeHtml(value){
+
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
 /* =====================================================
-   AUTH CHECK
+   AUTH
 ===================================================== */
 
-async function checkAuth() {
 
-    try {
+async function checkAuth(){
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
+try{
 
-
-        if (error)
-            throw error;
+const {
+data,
+error
+} =
+await supabaseClient
+.auth
+.getSession();
 
 
-        const session =
-            data?.session;
+if(error)
+throw error;
 
 
-        if (!session) {
-
-            adminContent.classList.add(
-                "hidden"
-            );
-
-            loginMessage.classList.remove(
-                "hidden"
-            );
-
-            setStatus(
-                "Not logged in",
-                "error"
-            );
-
-            return false;
-
-        }
+const session =
+data?.session;
 
 
-        adminContent.classList.remove(
-            "hidden"
-        );
+if(!session){
 
-        loginMessage.classList.add(
-            "hidden"
-        );
+adminContent.classList.add(
+"hidden"
+);
 
+loginMessage.classList.remove(
+"hidden"
+);
 
-        setStatus(
-            "Connected to Supabase",
-            "success"
-        );
+setStatus(
+"Not logged in",
+"error"
+);
 
+return false;
 
-        return true;
-
-
-    } catch (error) {
-
-        console.error(
-            "Auth error:",
-            error
-        );
+}
 
 
-        setStatus(
-            "Authentication error",
-            "error"
-        );
+adminContent.classList.remove(
+"hidden"
+);
+
+loginMessage.classList.add(
+"hidden"
+);
+
+setStatus(
+"Connected to Supabase",
+"success"
+);
+
+return true;
 
 
-        return false;
+}catch(error){
 
-    }
+console.error(
+"Auth error:",
+error
+);
+
+setStatus(
+"Authentication error",
+"error"
+);
+
+return false;
+
+}
 
 }
 
@@ -954,79 +881,84 @@ async function checkAuth() {
    IMAGE PREVIEW
 ===================================================== */
 
+
 imageInput.addEventListener(
-    "change",
-    function() {
+"change",
+function(){
 
-        const file =
-            this.files?.[0];
-
-
-        if (!file) {
-
-            selectedImageFile = null;
-
-            return;
-
-        }
+const file =
+this.files?.[0];
 
 
-        selectedImageFile =
-            file;
+if(!file){
+
+selectedImageFile =
+null;
+
+return;
+
+}
 
 
-        const reader =
-            new FileReader();
+selectedImageFile =
+file;
 
 
-        reader.onload =
-            function(event) {
-
-                imagePreview.src =
-                    event.target.result;
-
-                imagePreview.style.display =
-                    "block";
-
-            };
+const reader =
+new FileReader();
 
 
-        reader.readAsDataURL(
-            file
-        );
+reader.onload =
+function(event){
 
-    }
+imagePreview.src =
+event.target.result;
+
+imagePreview.style.display =
+"block";
+
+};
+
+
+reader.readAsDataURL(
+file
+);
+
+}
 );
 
 
 /* =====================================================
-   CREATE SAFE FILE NAME
+   FILE NAME
 ===================================================== */
 
-function createFileName(
-    file
-) {
 
-    const extension =
-        file.name
-            .split(".")
-            .pop()
-            .toLowerCase();
+function createFileName(file){
 
-
-    const random =
-        Math.random()
-            .toString(36)
-            .substring(2);
+const extension =
+file.name
+.split(".")
+.pop()
+.toLowerCase()
+.replace(
+/[^a-z0-9]/g,
+""
+);
 
 
-    return (
-        Date.now() +
-        "-" +
-        random +
-        "." +
-        extension
-    );
+const random =
+Math.random()
+.toString(36)
+.substring(2);
+
+
+return (
+Date.now() +
+"-" +
+random +
+"." +
+extension
+);
 
 }
 
@@ -1035,80 +967,99 @@ function createFileName(
    UPLOAD IMAGE
 ===================================================== */
 
-async function uploadCollectionImage(
-    file
-) {
 
-    if (!file) {
+async function uploadCollectionImage(file){
 
-        return existingImageUrl || "";
+if(!file){
 
-    }
+return existingImageUrl || "";
 
-
-    const fileName =
-        createFileName(
-            file
-        );
+}
 
 
-    const filePath =
-        "collections/" +
-        fileName;
+const filePath =
+"collections/" +
+createFileName(file);
 
 
-    const {
-        error:
-            uploadError
-    } =
-        await supabaseClient
-            .storage
-            .from(STORAGE_BUCKET)
-            .upload(
-                filePath,
-                file,
-                {
-                    cacheControl:
-                        "3600",
-                    upsert:
-                        false
-                }
-            );
+const {
+error
+} =
+await supabaseClient
+.storage
+.from(
+STORAGE_BUCKET
+)
+.upload(
+filePath,
+file,
+{
+cacheControl:"3600",
+upsert:false
+}
+);
 
 
-    if (uploadError) {
+if(error){
 
-        console.error(
-            "Image upload error:",
-            uploadError
-        );
+throw new Error(
+"Image upload failed: " +
+error.message
+);
 
-
-        throw new Error(
-            "Image upload failed: " +
-            uploadError.message
-        );
-
-    }
+}
 
 
-    const {
-        data
-    } =
-        supabaseClient
-            .storage
-            .from(
-                STORAGE_BUCKET
-            )
-            .getPublicUrl(
-                filePath
-            );
+const {
+data
+} =
+supabaseClient
+.storage
+.from(
+STORAGE_BUCKET
+)
+.getPublicUrl(
+filePath
+);
 
 
-    return (
-        data?.publicUrl ||
-        ""
-    );
+return data?.publicUrl || "";
+
+}
+
+
+/* =====================================================
+   GET NEXT ORDER
+===================================================== */
+
+
+async function getNextDisplayOrder(){
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("collections")
+.select("display_order")
+.order(
+"display_order",
+{
+ascending:false
+}
+)
+.limit(1);
+
+
+if(error)
+throw error;
+
+
+return (
+Number(
+data?.[0]?.display_order
+) || 0
+) + 1;
 
 }
 
@@ -1116,278 +1067,206 @@ async function uploadCollectionImage(
 /* =====================================================
    SAVE COLLECTION
 ===================================================== */
-async function getNextDisplayOrder() {
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("collections")
-            .select("display_order")
-            .order(
-                "display_order",
-                {
-                    ascending: false
-                }
-            )
-            .limit(1);
 
-    if (error)
-        throw error;
-
-    return (
-        Number(
-            data?.[0]?.display_order || 0
-        ) + 1
-    );
-}
 form.addEventListener(
-    "submit",
-    async function(event) {
+"submit",
+async function(event){
 
-        event.preventDefault();
-
-
-        const name =
-            nameInput.value.trim();
+event.preventDefault();
 
 
-        const description =
-            descriptionInput.value.trim();
+const name =
+nameInput.value.trim();
+
+
+const description =
+descriptionInput.value.trim();
+
+
 let displayOrder =
-    Number(
-        displayOrderInput.value
-    );
+Number(
+displayOrderInput.value
+);
 
-if (
-    !Number.isInteger(displayOrder) ||
-    displayOrder < 1
-) {
 
-    try {
+if(!name){
 
-        displayOrder =
-            await getNextDisplayOrder();
+alert(
+"Please enter a collection name."
+);
 
-        displayOrderInput.value =
-            displayOrder;
-
-    } catch (error) {
-
-        alert(
-            "Could not determine display order.\n\n" +
-            error.message
-        );
-
-        return;
-
-    }
+return;
 
 }
 
-        if (!name) {
 
-            alert(
-                "Please enter a collection name."
-            );
+try{
 
-            return;
-
-        }
+saveButton.disabled =
+true;
 
 
-        saveButton.disabled =
-            true;
+saveButton.textContent =
+editingCollectionId
+? "Updating..."
+: "Saving...";
 
 
-        saveButton.textContent =
-            editingCollectionId
-                ? "Updating..."
-                : "Saving...";
+if(
+!Number.isInteger(displayOrder) ||
+displayOrder < 1
+){
+
+displayOrder =
+await getNextDisplayOrder();
+
+}
 
 
-        try {
+let imageUrl =
+existingImageUrl;
 
 
-            /*
-               Upload new image if selected.
-               During edit, if no new image is
-               selected, keep the existing image.
-            */
+if(selectedImageFile){
 
-            let imageUrl =
-                existingImageUrl;
+setStatus(
+"Uploading image...",
+"loading"
+);
 
 
-            if (selectedImageFile) {
+imageUrl =
+await uploadCollectionImage(
+selectedImageFile
+);
 
-                setStatus(
-                    "Uploading image...",
-                    "loading"
-                );
-
-
-                imageUrl =
-                    await uploadCollectionImage(
-                        selectedImageFile
-                    );
-
-            }
+}
 
 
-            setStatus(
-                "Saving collection...",
-                "loading"
-            );
+setStatus(
+"Saving collection...",
+"loading"
+);
 
 
-            /*
-               EDIT
-            */
-
-            if (
-                editingCollectionId
-            ) {
+/* =====================================================
+   EDIT
+===================================================== */
 
 
-                const {
-                    error
-                } =
-                    await supabaseClient
-                        .from(
-                            "collections"
-                        )
-                        .update({
+if(editingCollectionId){
 
-    name:
-        name,
+const {
+error
+} =
+await supabaseClient
+.from("collections")
+.update({
 
-    description:
-        description,
+name:name,
 
-    image_url:
-        imageUrl,
+description:description,
 
-    display_order:
-        displayOrder
+image_url:imageUrl,
+
+display_order:displayOrder
 
 })
-                        .eq(
-                            "id",
-                            editingCollectionId
-                        );
+.eq(
+"id",
+editingCollectionId
+);
 
 
-                if (error)
-                    throw error;
+if(error)
+throw error;
 
 
-                alert(
-                    "Collection updated successfully!"
-                );
+alert(
+"Collection updated successfully!"
+);
+
+}
 
 
-            }
+/* =====================================================
+   CREATE
+===================================================== */
 
 
-            /*
-               CREATE
-            */
+else{
 
-            else {
+const {
+error
+} =
+await supabaseClient
+.from("collections")
+.insert({
 
+name:name,
 
-                const {
-                    error
-                } =
-                    await supabaseClient
-                        .from(
-                            "collections"
-                        )
-                        .insert({
+description:description,
 
-    name:
-        name,
+image_url:imageUrl,
 
-    description:
-        description,
+display_order:displayOrder
 
-    image_url:
-        imageUrl,
-
-    display_order:
-        displayOrder
-
-})
+});
 
 
-                if (error)
-                    throw error;
+if(error)
+throw error;
 
 
-                alert(
-                    "Collection saved successfully!"
-                );
+alert(
+"Collection saved successfully!"
+);
 
-            }
-
-
-            resetForm();
+}
 
 
-            await loadCollections();
+resetForm();
+
+await loadCollections();
+
+setStatus(
+"Saved successfully",
+"success"
+);
 
 
-            setStatus(
-                "Saved successfully",
-                "success"
-            );
+}catch(error){
+
+console.error(
+"Save collection error:",
+error
+);
+
+alert(
+"Could not save collection.\n\n" +
+error.message
+);
+
+setStatus(
+"Save failed",
+"error"
+);
 
 
-        } catch (error) {
+}finally{
 
-            console.error(
-                "Save collection error:",
-                error
-            );
+saveButton.disabled =
+false;
 
+saveButton.textContent =
+editingCollectionId
+? "Update Collection"
+: "Save Collection";
 
-            console.error(
-                "Full error:",
-                JSON.stringify(
-                    error,
-                    null,
-                    2
-                )
-            );
+}
 
-
-            alert(
-                "Could not save collection.\n\n" +
-                error.message
-            );
-
-
-            setStatus(
-                "Save failed",
-                "error"
-            );
-
-
-        } finally {
-
-            saveButton.disabled =
-                false;
-
-            saveButton.textContent =
-                editingCollectionId
-                    ? "Update Collection"
-                    : "Save Collection";
-
-        }
-
-    }
+}
 );
 
 
@@ -1395,117 +1274,115 @@ if (
    LOAD COLLECTIONS
 ===================================================== */
 
-async function loadCollections() {
 
-    collectionList.innerHTML = `
+async function loadCollections(){
 
-        <div class="loading">
-            Loading collections...
-        </div>
+collectionList.innerHTML = `
 
-    `;
+<div class="loading">
+Loading collections...
+</div>
+
+`;
 
 
-    try {
+try{
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "collections"
-                )
-                .select("*")
-                .order(
-    "display_order",
-    {
-        ascending:
-            true
-    }
+const {
+data,
+error
+} =
+await supabaseClient
+.from("collections")
+.select("*")
+.order(
+"display_order",
+{
+ascending:true
+}
 )
 .order(
-    "id",
-    {
-        ascending:
-            true
-    }
+"id",
+{
+ascending:true
+}
 );
 
-        if (error)
-            throw error;
+
+if(error)
+throw error;
 
 
-        if (
-            !data ||
-            data.length === 0
-        ) {
+if(
+!data ||
+data.length === 0
+){
 
-            collectionList.innerHTML = `
+collectionList.innerHTML = `
 
-                <div class="empty">
+<div class="empty">
 
-                    <h3>
-                        No collections yet
-                    </h3>
+<h3>
+No collections yet
+</h3>
 
-                    <p style="margin-top:8px;">
-                        Add your first collection above.
-                    </p>
+<p style="margin-top:8px;">
+Add your first collection above.
+</p>
 
-                </div>
+</div>
 
-            `;
+`;
 
-            return;
+return;
 
-        }
-
-
-        collectionList.innerHTML =
-            data
-                .map(
-                    collection =>
-                        renderCollection(
-                            collection
-                        )
-                )
-                .join("");
+}
 
 
-    } catch (error) {
-
-        console.error(
-            "Load collections error:",
-            error
-        );
-
-
-        collectionList.innerHTML = `
-
-            <div class="empty">
-
-                <h3>
-                    Unable to load collections
-                </h3>
-
-                <p style="margin-top:8px;">
-                    ${escapeHtml(
-                        error.message
-                    )}
-                </p>
-
-            </div>
-
-        `;
+collectionList.innerHTML =
+data
+.map(
+collection =>
+renderCollection(
+collection
+)
+)
+.join("");
 
 
-        setStatus(
-            "Could not load collections",
-            "error"
-        );
+}catch(error){
 
-    }
+console.error(
+"Load collections error:",
+error
+);
+
+
+collectionList.innerHTML = `
+
+<div class="empty">
+
+<h3>
+Unable to load collections
+</h3>
+
+<p style="margin-top:8px;">
+${escapeHtml(
+error.message
+)}
+</p>
+
+</div>
+
+`;
+
+
+setStatus(
+"Could not load collections",
+"error"
+);
+
+}
 
 }
 
@@ -1514,504 +1391,732 @@ async function loadCollections() {
    RENDER COLLECTION
 ===================================================== */
 
+
 function renderCollection(
-    collection
-) {
+collection
+){
 
-    const image =
-        collection.image_url ||
-        "";
+const image =
+collection.image_url ||
+"";
 
-    const name =
-        escapeHtml(
-            collection.name ||
-            "Collection"
-        );
 
-    const description =
-        escapeHtml(
-            collection.description ||
-            ""
-        );
+const name =
+escapeHtml(
+collection.name ||
+"Collection"
+);
 
-    const displayOrder =
-        Number(
-            collection.display_order
-        ) || 1;
 
-    const id =
-        Number(
-            collection.id
-        );
+const description =
+escapeHtml(
+collection.description ||
+""
+);
 
-    return `
 
-        <div
-            class="collection-card"
-            data-id="${id}"
-        >
+const order =
+Number(
+collection.display_order
+) || 1;
 
-            ${
-                image
 
-                ?
+const id =
+Number(
+collection.id
+);
 
-                `
-                    <img
-                        src="${escapeHtml(image)}"
-                        alt="${name}"
-                        loading="lazy"
-                    >
-                `
 
-                :
+return `
 
-                `
-                    <div
-                        style="
-                            width:100%;
-                            height:180px;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            background:#f5f0eb;
-                            color:#b28a4b;
-                            font-family:Georgia,serif;
-                            font-size:40px;
-                        "
-                    >
-                        AK
-                    </div>
-                `
-            }
+<div class="collection-card">
 
-            <div class="collection-info">
 
-                <div class="collection-id">
-                    ID: ${escapeHtml(collection.id)}
-                </div>
+${
+image
 
-                <h3>
-                    ${name}
-                </h3>
+?
 
-                <p>
-                    ${
-                        description ||
-                        "No description added."
-                    }
-                </p>
+`
 
-                <div class="order-row">
+<img
+src="${escapeHtml(image)}"
+alt="${name}"
+loading="lazy"
+>
 
-                    <span class="order-label">
-                        Display Order
-                    </span>
+`
 
-                    <input
-                        class="order-input collection-order-input"
-                        type="number"
-                        min="1"
-                        step="1"
-                        value="${displayOrder}"
-                        data-id="${id}"
-                        aria-label="Display order for ${name}"
-                    >
+:
 
-                </div>
+`
 
-                <div class="buttons">
+<div
+style="
+width:100%;
+height:180px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#f5f0eb;
+color:#b28a4b;
+font-family:Georgia,serif;
+font-size:40px;
+"
+>
+AK
+</div>
 
-                    <button
-                        class="edit-btn"
-                        onclick="editCollection(${id})"
-                    >
-                        Edit
-                    </button>
+`
+}
 
-                    <button
-                        class="delete-btn"
-                        onclick="deleteCollection(${id})"
-                    >
-                        Delete
-                    </button>
 
-                </div>
+<div class="collection-info">
 
-            </div>
 
-        </div>
+<div class="collection-id">
 
-    `;
+ID:
+${escapeHtml(
+collection.id
+)}
+
+</div>
+
+
+<h3>
+${name}
+</h3>
+
+
+<p>
+${
+description ||
+"No description added."
+}
+</p>
+
+
+<div class="order-box">
+
+<label>
+Display Order
+</label>
+
+<input
+type="number"
+min="1"
+step="1"
+class="order-input"
+data-id="${id}"
+value="${order}"
+>
+
+</div>
+
+
+<div class="buttons">
+
+
+<button
+class="edit-btn"
+onclick="editCollection(${id})"
+>
+Edit
+</button>
+
+
+<button
+class="delete-btn"
+onclick="deleteCollection(${id})"
+>
+Delete
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+`;
 
 }
 
 
 /* =====================================================
-   EDIT COLLECTION
+   EDIT
 ===================================================== */
 
-async function editCollection(
-    id
-) {
 
-    try {
+window.editCollection =
+async function(id){
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "collections"
-                )
-                .select("*")
-                .eq(
-                    "id",
-                    id
-                )
-                .single();
+try{
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("collections")
+.select("*")
+.eq(
+"id",
+id
+)
+.single();
 
 
-        if (error)
-            throw error;
+if(error)
+throw error;
 
 
-        editingCollectionId =
-            data.id;
+editingCollectionId =
+data.id;
 
 
-        existingImageUrl =
-            data.image_url ||
-            "";
+existingImageUrl =
+data.image_url ||
+"";
 
 
-        selectedImageFile =
-            null;
+selectedImageFile =
+null;
 
 
-        nameInput.value =
-            data.name ||
-            "";
+nameInput.value =
+data.name ||
+"";
 
 
-        descriptionInput.value =
-            data.description ||
-            "";
-descriptionInput.value 
-
-        imageInput.value =
-            "";
+descriptionInput.value =
+data.description ||
+"";
 
 
-        if (
-            data.image_url
-        ) {
-
-            imagePreview.src =
-                data.image_url;
-
-            imagePreview.style.display =
-                "block";
-
-        } else {
-
-            imagePreview.src =
-                "";
-
-            imagePreview.style.display =
-                "none";
-
-        }
+displayOrderInput.value =
+Number(
+data.display_order
+) || 1;
 
 
-        formTitle.textContent =
-            "Edit Collection";
+imageInput.value =
+"";
 
 
-        saveButton.textContent =
-            "Update Collection";
+if(data.image_url){
 
+imagePreview.src =
+data.image_url;
 
-        cancelButton.style.display =
-            "block";
+imagePreview.style.display =
+"block";
 
+}else{
 
-        window.scrollTo({
+imagePreview.src =
+"";
 
-            top: 0,
-
-            behavior:
-                "smooth"
-
-        });
-
-
-    } catch (error) {
-
-        console.error(
-            "Edit collection error:",
-            error
-        );
-
-
-        alert(
-            "Could not load collection.\n\n" +
-            error.message
-        );
-
-    }
+imagePreview.style.display =
+"none";
 
 }
+
+
+formTitle.textContent =
+"Edit Collection";
+
+
+saveButton.textContent =
+"Update Collection";
+
+
+cancelButton.style.display =
+"block";
+
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+
+}catch(error){
+
+console.error(
+"Edit error:",
+error
+);
+
+alert(
+"Could not load collection.\n\n" +
+error.message
+);
+
+}
+
+};
 
 
 /* =====================================================
-   DELETE COLLECTION
+   DELETE
 ===================================================== */
 
-async function deleteCollection(
-    id
-) {
 
-    const confirmed =
-        confirm(
-            "Are you sure you want to delete this collection?"
-        );
+window.deleteCollection =
+async function(id){
 
-
-    if (!confirmed)
-        return;
+const confirmed =
+confirm(
+"Are you sure you want to delete this collection?"
+);
 
 
-    try {
-
-        setStatus(
-            "Deleting...",
-            "loading"
-        );
+if(!confirmed)
+return;
 
 
-        /*
-           Get image first so we can
-           optionally remove it from storage.
-        */
+try{
 
-        const {
-            data:
-                collection
-        } =
-            await supabaseClient
-                .from(
-                    "collections"
-                )
-                .select(
-                    "image_url"
-                )
-                .eq(
-                    "id",
-                    id
-                )
-                .single();
+setStatus(
+"Deleting...",
+"loading"
+);
 
 
-        /*
-           Delete database record.
-        */
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "collections"
-                )
-                .delete()
-                .eq(
-                    "id",
-                    id
-                );
+const {
+error
+} =
+await supabaseClient
+.from("collections")
+.delete()
+.eq(
+"id",
+id
+);
 
 
-        if (error)
-            throw error;
+if(error)
+throw error;
 
 
-        /*
-           We intentionally don't delete the
-           storage file automatically here.
-           This prevents accidentally deleting
-           a file still being used elsewhere.
-        */
+await loadCollections();
 
 
-        alert(
-            "Collection deleted successfully."
-        );
+setStatus(
+"Collection deleted",
+"success"
+);
 
 
-        await loadCollections();
+alert(
+"Collection deleted successfully."
+);
 
 
-        setStatus(
-            "Collection deleted",
-            "success"
-        );
+}catch(error){
+
+console.error(
+"Delete error:",
+error
+);
 
 
-    } catch (error) {
-
-        console.error(
-            "Delete collection error:",
-            error
-        );
+alert(
+"Could not delete collection.\n\n" +
+error.message
+);
 
 
-        alert(
-            "Could not delete collection.\n\n" +
-            error.message
-        );
-
-
-        setStatus(
-            "Delete failed",
-            "error"
-        );
-
-    }
+setStatus(
+"Delete failed",
+"error"
+);
 
 }
+
+};
+
+
+/* =====================================================
+   SAVE DISPLAY ORDER
+===================================================== */
+
+
+saveOrderButton.addEventListener(
+"click",
+async function(){
+
+const inputs =
+[
+...document.querySelectorAll(
+".order-input"
+)
+];
+
+
+if(!inputs.length){
+
+alert(
+"No collections found."
+);
+
+return;
+
+}
+
+
+const updates =
+inputs.map(
+input => ({
+
+id:
+Number(
+input.dataset.id
+),
+
+display_order:
+Number(
+input.value
+)
+
+})
+);
+
+
+if(
+updates.some(
+item =>
+!Number.isInteger(
+item.display_order
+) ||
+item.display_order < 1
+)
+){
+
+alert(
+"Every Display Order must be a whole number starting from 1."
+);
+
+return;
+
+}
+
+
+/*
+   Prevent duplicate order numbers.
+*/
+
+const orderNumbers =
+updates.map(
+item =>
+item.display_order
+);
+
+
+if(
+new Set(orderNumbers).size !==
+orderNumbers.length
+){
+
+alert(
+"Each collection must have a different Display Order number."
+);
+
+return;
+
+}
+
+
+saveOrderButton.disabled =
+true;
+
+
+saveOrderButton.textContent =
+"Saving...";
+
+
+setStatus(
+"Saving display order...",
+"loading"
+);
+
+
+try{
+
+
+/*
+   STEP 1
+
+   Give every record a temporary negative
+   order based on its ID.
+
+   This prevents conflicts if we are
+   swapping positions.
+
+*/
+
+
+for(
+const item of updates
+){
+
+const {
+error
+} =
+await supabaseClient
+.from("collections")
+.update({
+
+display_order:
+- Math.abs(
+item.id
+)
+
+})
+.eq(
+"id",
+item.id
+);
+
+
+if(error)
+throw error;
+
+}
+
+
+/*
+   STEP 2
+
+   Apply the actual order.
+*/
+
+
+for(
+const item of updates
+){
+
+const {
+error
+} =
+await supabaseClient
+.from("collections")
+.update({
+
+display_order:
+item.display_order
+
+})
+.eq(
+"id",
+item.id
+);
+
+
+if(error)
+throw error;
+
+}
+
+
+/*
+   Reload sorted list.
+*/
+
+
+await loadCollections();
+
+
+setStatus(
+"Display order saved",
+"success"
+);
+
+
+alert(
+"Collection display order saved successfully!"
+);
+
+
+}catch(error){
+
+console.error(
+"Display order error:",
+error
+);
+
+
+alert(
+"Could not save display order.\n\n" +
+error.message
+);
+
+
+setStatus(
+"Display order save failed",
+"error"
+);
+
+
+}finally{
+
+saveOrderButton.disabled =
+false;
+
+
+saveOrderButton.textContent =
+"Save Display Order";
+
+}
+
+}
+);
 
 
 /* =====================================================
    RESET FORM
 ===================================================== */
 
-function resetForm() {
 
-    editingCollectionId =
-        null;
+function resetForm(){
 
-
-    existingImageUrl =
-        "";
+editingCollectionId =
+null;
 
 
-    selectedImageFile =
-        null;
+existingImageUrl =
+"";
 
 
-    form.reset();
+selectedImageFile =
+null;
+
+
+form.reset();
+
 
 displayOrderInput.value =
-    "";
-    imagePreview.src =
-        "";
+"";
 
 
-    imagePreview.style.display =
-        "none";
+imagePreview.src =
+"";
 
 
-    formTitle.textContent =
-        "Add Collection";
+imagePreview.style.display =
+"none";
 
 
-    saveButton.textContent =
-        "Save Collection";
+formTitle.textContent =
+"Add Collection";
 
 
-    cancelButton.style.display =
-        "none";
+saveButton.textContent =
+"Save Collection";
+
+
+cancelButton.style.display =
+"none";
 
 }
 
 
 /* =====================================================
-   CANCEL EDIT
+   CANCEL
 ===================================================== */
 
+
 cancelButton.addEventListener(
-    "click",
-    function() {
+"click",
+function(){
 
-        resetForm();
+resetForm();
 
-    }
+}
 );
 
 
 /* =====================================================
-   AUTH STATE LISTENER
+   AUTH LISTENER
 ===================================================== */
 
+
 supabaseClient
-    .auth
-    .onAuthStateChange(
-        async function(
-            event,
-            session
-        ) {
+.auth
+.onAuthStateChange(
+async function(
+event,
+session
+){
 
-            console.log(
-                "Auth event:",
-                event
-            );
-
-
-            if (session) {
-
-                adminContent.classList.remove(
-                    "hidden"
-                );
-
-                loginMessage.classList.add(
-                    "hidden"
-                );
-
-                setStatus(
-                    "Connected to Supabase",
-                    "success"
-                );
+console.log(
+"Auth event:",
+event
+);
 
 
-                await loadCollections();
+if(session){
 
-            } else {
+adminContent.classList.remove(
+"hidden"
+);
 
-                adminContent.classList.add(
-                    "hidden"
-                );
+loginMessage.classList.add(
+"hidden"
+);
 
-                loginMessage.classList.remove(
-                    "hidden"
-                );
+setStatus(
+"Connected to Supabase",
+"success"
+);
 
-                setStatus(
-                    "Not logged in",
-                    "error"
-                );
+await loadCollections();
 
-            }
+}else{
 
-        }
-    );
+adminContent.classList.add(
+"hidden"
+);
+
+loginMessage.classList.remove(
+"hidden"
+);
+
+setStatus(
+"Not logged in",
+"error"
+);
+
+}
+
+}
+);
 
 
 /* =====================================================
    START
 ===================================================== */
 
-async function start() {
 
-    const loggedIn =
-        await checkAuth();
+async function start(){
+
+const loggedIn =
+await checkAuth();
 
 
-    if (loggedIn) {
+if(loggedIn){
 
-        await loadCollections();
+await loadCollections();
 
-    }
+}
 
 }
 
