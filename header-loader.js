@@ -19,4 +19,11 @@
   auth.src = base + 'auth-popup.js';
   auth.defer = true;
   document.head.appendChild(auth);
+
+  if (/\/shop\.html(?:[?#]|$)/i.test(location.pathname)) {
+    var sort = document.createElement('script');
+    sort.src = base + 'shop-sort.js';
+    sort.defer = false;
+    document.body.appendChild(sort);
+  }
 })();
