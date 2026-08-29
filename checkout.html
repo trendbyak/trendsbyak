@@ -8,115 +8,81 @@
 <title>Checkout | Trends by AK</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<<<<<<< HEAD
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#f7f4ef;color:#222;font-family:Arial,sans-serif}
-header{background:#1b1b1b;color:#fff;padding:18px 24px}
-header h1{margin:0;font-size:22px}
-.wrap{max-width:1100px;margin:35px auto;padding:0 18px}
-.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
-.card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 4px 18px rgba(0,0,0,.05)}
-h2{margin-top:0}
-label{display:block;font-size:13px;margin:14px 0 6px;color:#555}
-input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font:inherit}
-input:focus,textarea:focus{outline:none;border-color:#b28a4b;box-shadow:0 0 0 3px rgba(178,138,75,.12)}
-textarea{min-height:80px;resize:vertical}
-.item{display:grid;grid-template-columns:58px 1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid #eee}
-.item:last-child{border-bottom:0}
-.item img{width:58px;height:58px;border-radius:8px;object-fit:cover;background:#f2f0ec}
-.item-name{font-weight:700}
-.item-price{font-size:12px;color:#777;margin-top:4px}
-.qty{display:flex;align-items:center;gap:8px;margin-top:8px}
-.qty button{width:30px;height:30px;border:1px solid #ddd;background:#fff;border-radius:6px;cursor:pointer}
-.line-total{text-align:right;font-weight:700}
-.summary-row{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;color:#666}
-.summary-row.total{border-top:1px solid #eee;margin-top:8px;padding-top:16px;color:#222;font-size:20px;font-weight:700}
-.payment{margin-top:22px}
-.payment-title{font-size:16px;font-weight:700;margin-bottom:10px}
-.payment-option{display:flex;align-items:flex-start;gap:11px;border:1px solid #b28a4b;border-radius:11px;padding:15px;margin:10px 0;background:#faf7f1}
-.payment-option input{width:auto;margin-top:3px}
-.payment-content strong{display:block;font-size:14px}
-.payment-content span{display:block;color:#777;font-size:12px;margin-top:4px;line-height:1.4}
-.btn{width:100%;border:0;border-radius:9px;padding:14px;background:#1d1d1d;color:#fff;font-weight:600;cursor:pointer;margin-top:18px}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.note{background:#faf8f4;padding:12px;border-radius:8px;color:#666;font-size:13px;margin-top:15px;line-height:1.5}
-.error{color:#b3261e;background:#fff0ef;padding:12px;border-radius:8px;margin-bottom:18px}
-.back{display:inline-block;margin-bottom:20px;color:#222;text-decoration:none;font-size:13px}
-@media(max-width:750px){.grid{grid-template-columns:1fr}.item{grid-template-columns:50px 1fr}.item img{width:50px;height:50px}.line-total{grid-column:2;text-align:left}}
-=======
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
   background:#f7f4ef;
   color:#222;
-  font-family:Arial,sans-serif
+  font-family:Arial,sans-serif;
 }
 
 header{
   background:#1b1b1b;
   color:#fff;
-  padding:18px 24px
+  padding:18px 24px;
 }
 
 header h1{
   margin:0;
-  font-size:22px
+  font-size:22px;
 }
 
 .wrap{
   max-width:1100px;
   margin:35px auto;
-  padding:0 18px
+  padding:0 18px;
 }
 
 .grid{
   display:grid;
   grid-template-columns:1.2fr .8fr;
-  gap:24px
+  gap:24px;
 }
 
 .card{
   background:#fff;
   border-radius:14px;
   padding:24px;
-  box-shadow:0 4px 18px rgba(0,0,0,.05)
+  box-shadow:0 4px 18px rgba(0,0,0,.05);
 }
 
 h2{
-  margin-top:0
+  margin-top:0;
 }
 
 label{
   display:block;
   font-size:13px;
   margin:14px 0 6px;
-  color:#555
+  color:#555;
 }
 
-input,textarea{
+input,
+textarea{
   width:100%;
   padding:12px;
   border:1px solid #ddd;
   border-radius:8px;
-  font:inherit
+  font:inherit;
 }
 
-input:focus,textarea:focus{
+input:focus,
+textarea:focus{
   outline:none;
   border-color:#b28a4b;
-  box-shadow:0 0 0 3px rgba(178,138,75,.12)
+  box-shadow:0 0 0 3px rgba(178,138,75,.12);
 }
 
 textarea{
   min-height:80px;
-  resize:vertical
+  resize:vertical;
 }
 
 .item{
@@ -124,11 +90,11 @@ textarea{
   grid-template-columns:58px 1fr auto;
   gap:12px;
   padding:14px 0;
-  border-bottom:1px solid #eee
+  border-bottom:1px solid #eee;
 }
 
 .item:last-child{
-  border-bottom:0
+  border-bottom:0;
 }
 
 .item img{
@@ -136,24 +102,24 @@ textarea{
   height:58px;
   border-radius:8px;
   object-fit:cover;
-  background:#f2f0ec
+  background:#f2f0ec;
 }
 
 .item-name{
-  font-weight:700
+  font-weight:700;
 }
 
 .item-price{
   font-size:12px;
   color:#777;
-  margin-top:4px
+  margin-top:4px;
 }
 
 .qty{
   display:flex;
   align-items:center;
   gap:8px;
-  margin-top:8px
+  margin-top:8px;
 }
 
 .qty button{
@@ -162,12 +128,16 @@ textarea{
   border:1px solid #ddd;
   background:#fff;
   border-radius:6px;
-  cursor:pointer
+  cursor:pointer;
+}
+
+.qty button:hover{
+  background:#f7f4ef;
 }
 
 .line-total{
   text-align:right;
-  font-weight:700
+  font-weight:700;
 }
 
 .summary-row{
@@ -175,7 +145,7 @@ textarea{
   justify-content:space-between;
   font-size:14px;
   padding:8px 0;
-  color:#666
+  color:#666;
 }
 
 .summary-row.total{
@@ -184,17 +154,17 @@ textarea{
   padding-top:16px;
   color:#222;
   font-size:20px;
-  font-weight:700
+  font-weight:700;
 }
 
 .payment{
-  margin-top:22px
+  margin-top:22px;
 }
 
 .payment-title{
   font-size:16px;
   font-weight:700;
-  margin-bottom:10px
+  margin-bottom:10px;
 }
 
 .payment-option{
@@ -205,22 +175,24 @@ textarea{
   border-radius:11px;
   padding:15px;
   margin:10px 0;
-  cursor:pointer
+  background:#fff;
+  cursor:pointer;
+  transition:.2s;
 }
 
 .payment-option.selected{
   border-color:#b28a4b;
-  background:#faf7f1
+  background:#faf7f1;
 }
 
 .payment-option input{
   width:auto;
-  margin-top:3px
+  margin-top:3px;
 }
 
 .payment-content strong{
   display:block;
-  font-size:14px
+  font-size:14px;
 }
 
 .payment-content span{
@@ -228,7 +200,7 @@ textarea{
   color:#777;
   font-size:12px;
   margin-top:4px;
-  line-height:1.4
+  line-height:1.4;
 }
 
 .btn{
@@ -240,12 +212,16 @@ textarea{
   color:#fff;
   font-weight:600;
   cursor:pointer;
-  margin-top:18px
+  margin-top:18px;
+}
+
+.btn:hover{
+  background:#333;
 }
 
 .btn:disabled{
   opacity:.5;
-  cursor:not-allowed
+  cursor:not-allowed;
 }
 
 .note{
@@ -255,7 +231,7 @@ textarea{
   color:#666;
   font-size:13px;
   margin-top:15px;
-  line-height:1.5
+  line-height:1.5;
 }
 
 .error{
@@ -263,21 +239,15 @@ textarea{
   background:#fff0ef;
   padding:12px;
   border-radius:8px;
-  margin-bottom:18px
+  margin-bottom:18px;
 }
 
 .success{
-  text-align:center;
-  padding:35px
-}
-
-.success h2{
-  color:#547653
-}
-
-.small{
-  font-size:12px;
-  color:#777
+  color:#176b35;
+  background:#eefaf1;
+  padding:12px;
+  border-radius:8px;
+  margin-bottom:18px;
 }
 
 .back{
@@ -285,29 +255,33 @@ textarea{
   margin-bottom:20px;
   color:#222;
   text-decoration:none;
-  font-size:13px
+  font-size:13px;
+}
+
+.empty{
+  padding:15px 0;
+  color:#777;
 }
 
 @media(max-width:750px){
   .grid{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .item{
-    grid-template-columns:50px 1fr
+    grid-template-columns:50px 1fr;
   }
 
   .item img{
     width:50px;
-    height:50px
+    height:50px;
   }
 
   .line-total{
     grid-column:2;
-    text-align:left
+    text-align:left;
   }
 }
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
 </style>
 
 </head>
@@ -324,60 +298,90 @@ textarea{
 
   <div id="message"></div>
 
-<<div class="grid" id="checkoutGrid">
+  <div class="grid" id="checkoutGrid">
 
-    <section class="card">
-
-        <h2>Delivery details</h2>
 ```
+<!-- DELIVERY DETAILS -->
 <section class="card">
 
   <h2>Delivery details</h2>
 
-  <label>Full name *</label>
-  <input id="name" autocomplete="name">
+  <label for="name">Full name *</label>
+  <input
+    id="name"
+    autocomplete="name"
+    placeholder="Enter your full name"
+  >
 
-  <label>Phone *</label>
-  <input id="phone" inputmode="tel" autocomplete="tel">
+  <label for="phone">Phone *</label>
+  <input
+    id="phone"
+    inputmode="tel"
+    autocomplete="tel"
+    placeholder="10-digit mobile number"
+  >
 
-  <label>Email</label>
-  <input id="email" type="email" autocomplete="email">
+  <label for="email">Email</label>
+  <input
+    id="email"
+    type="email"
+    autocomplete="email"
+    placeholder="your@email.com"
+  >
 
-  <label>Address *</label>
-  <input id="address1" autocomplete="street-address">
+  <label for="address1">Address *</label>
+  <input
+    id="address1"
+    autocomplete="street-address"
+    placeholder="House / building / street"
+  >
 
-  <label>Apartment / Landmark</label>
-  <input id="address2">
+  <label for="address2">Apartment / Landmark</label>
+  <input
+    id="address2"
+    placeholder="Apartment, floor, landmark etc."
+  >
 
-  <label>City *</label>
-  <input id="city" autocomplete="address-level2">
+  <label for="city">City *</label>
+  <input
+    id="city"
+    autocomplete="address-level2"
+    placeholder="City"
+  >
 
-  <label>State *</label>
-  <input id="state" autocomplete="address-level1">
+  <label for="state">State *</label>
+  <input
+    id="state"
+    autocomplete="address-level1"
+    placeholder="State"
+  >
 
-  <label>PIN code *</label>
-  <input id="postal" inputmode="numeric" autocomplete="postal-code">
+  <label for="postal">PIN code *</label>
+  <input
+    id="postal"
+    inputmode="numeric"
+    autocomplete="postal-code"
+    maxlength="6"
+    placeholder="6-digit PIN code"
+  >
 
-<<<<<<< HEAD
-        <label class="payment-option">
-          <input type="radio" name="paymentMethod" value="razorpay" checked>
-          <div class="payment-content">
-            <strong>Pay Online — Razorpay</strong>
-            <span>Secure checkout using UPI, cards, net banking and other payment methods available through Razorpay.</span>
-          </div>
-        </label>
-=======
-  <label>Order notes</label>
-  <textarea id="notes" placeholder="Any delivery instructions?"></textarea>
+  <label for="notes">Order notes</label>
+  <textarea
+    id="notes"
+    placeholder="Any delivery instructions?"
+  ></textarea>
 
+  <!-- PAYMENT -->
   <div class="payment">
 
     <div class="payment-title">
       Payment method
     </div>
 
-    <label class="payment-option selected" id="razorpayOption">
-
+    <label
+      class="payment-option selected"
+      id="razorpayOption"
+    >
       <input
         type="radio"
         name="paymentMethod"
@@ -387,21 +391,19 @@ textarea{
       >
 
       <div class="payment-content">
-
         <strong>Pay Online — Razorpay</strong>
 
         <span>
-          Secure checkout using UPI, cards, net banking and other
-          payment methods supported by Razorpay.
+          Secure checkout using UPI, cards, net banking
+          and other payment methods supported by Razorpay.
         </span>
-
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
       </div>
-
     </label>
 
-    <label class="payment-option" id="whatsappOption">
-
+    <label
+      class="payment-option"
+      id="whatsappOption"
+    >
       <input
         type="radio"
         name="paymentMethod"
@@ -410,21 +412,13 @@ textarea{
       >
 
       <div class="payment-content">
-
         <strong>Pay via WhatsApp</strong>
 
         <span>
-          Create your order as payment pending and continue to WhatsApp
-          for payment instructions.
+          Create your order as payment pending and continue
+          to WhatsApp for payment instructions.
         </span>
-
-<<<<<<< HEAD
-      <div class="note">
-        Your payment is processed securely by Razorpay. Trends by AK does not collect or store your card or UPI credentials.
-=======
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
       </div>
-
     </label>
 
   </div>
@@ -438,13 +432,15 @@ textarea{
   </button>
 
   <div class="note">
-    Payments are processed securely through Razorpay.
-    Your card/UPI details are handled by Razorpay and are not stored
-    on this website.
+    Online payments are processed securely through Razorpay.
+    Your card and UPI details are handled by Razorpay and
+    are not stored on this website.
   </div>
 
 </section>
 
+
+<!-- ORDER SUMMARY -->
 <aside class="card">
 
   <h2>Your order</h2>
@@ -470,20 +466,13 @@ textarea{
 ```
 
   </div>
-
 </div>
 
 <script>
-<<<<<<< HEAD
-const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
-const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let cart=JSON.parse(localStorage.getItem("trendsbyak_cart")||"[]");
-
-function money(n){
-  return "₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2});
-=======
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
   "https://ltxrycmreumoqfpcbwnb.supabase.co";
@@ -497,21 +486,27 @@ const supabaseClient =
     SUPABASE_KEY
   );
 
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
 const WHATSAPP_NUMBER = "918433998962";
 
-/*
- * IMPORTANT:
- * Only the Razorpay KEY ID is used by the browser.
- * The Razorpay secret remains inside Supabase Edge Functions.
- */
-const RAZORPAY_KEY_ID =
-  "rzp_test_TVY31zENunBAS4";
+
+/* =========================================================
+   CART
+========================================================= */
 
 let cart =
   JSON.parse(
     localStorage.getItem("trendsbyak_cart") || "[]"
   );
 
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function money(n){
 
@@ -522,8 +517,6 @@ function money(n){
         maximumFractionDigits:2
       }
     );
-
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
 }
 
 
@@ -531,150 +524,247 @@ function escapeHtml(v){
 
   return String(v ?? "").replace(
     /[&<>"']/g,
-    c => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[c])
+    function(c){
+
+      return {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[c];
+
+    }
   );
-
 }
 
-<<<<<<< HEAD
-function getTotals(){
-  const subtotal=cart.reduce((sum,item)=>sum+Number(item.price||0)*Number(item.quantity||0),0);
-  return {subtotal,shipping:0,total:subtotal};
-}
 
-function showError(text){
-  document.getElementById("message").innerHTML='<div class="error">'+escapeHtml(text)+'</div>';
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function saveCart(){
-  localStorage.setItem("trendsbyak_cart",JSON.stringify(cart));
-  renderCart();
-}
-
-function changeQty(id,delta){
-  const item=cart.find(x=>String(x.product_id)===String(id));
-  if(!item)return;
-  item.quantity+=delta;
-  if(item.quantity<1)cart=cart.filter(x=>String(x.product_id)!==String(id));
-  saveCart();
-}
-
-function renderCart(){
-  const box=document.getElementById("cart");
-  const btn=document.getElementById("placeOrderBtn");
-
-  if(!cart.length){
-    box.innerHTML="<p>Your cart is empty.</p>";
-    document.getElementById("subtotal").textContent="₹0";
-    document.getElementById("shipping").textContent="₹0";
-    document.getElementById("grandTotal").textContent="₹0";
-    btn.disabled=true;
-    return;
-  }
-
-  const totals=getTotals();
-
-  box.innerHTML=cart.map(item=>{
-    const q=Number(item.quantity||1);
-    const line=Number(item.price||0)*q;
-    return `<div class="item">
-      <img src="${escapeHtml(item.image_url||"")}" alt="${escapeHtml(item.name)}">
-      <div>
-        <div class="item-name">${escapeHtml(item.name)}</div>
-        <div class="item-price">${money(item.price)} each</div>
-        <div class="qty">
-          <button onclick="changeQty(${Number(item.product_id)},-1)">−</button>
-          <span>${q}</span>
-          <button onclick="changeQty(${Number(item.product_id)},1)">+</button>
-        </div>
-      </div>
-      <div class="line-total">${money(line)}</div>
-    </div>`;
-  }).join("");
-
-  document.getElementById("subtotal").textContent=money(totals.subtotal);
-  document.getElementById("shipping").textContent=money(totals.shipping);
-  document.getElementById("grandTotal").textContent=money(totals.total);
-  btn.disabled=false;
-}
-
-async function addUrlProductIfNeeded(){
-  const id=new URLSearchParams(location.search).get("id");
-  if(!id){renderCart();return;}
-  if(cart.find(x=>String(x.product_id)===String(id))){renderCart();return;}
-
-  const {data,error}=await supabaseClient.from("products")
-    .select("id,name,price,sale_price,image_url,stock,status")
-    .eq("id",id).eq("status","active").maybeSingle();
-
-  if(error||!data)return showError("Product could not be loaded.");
-  if(Number(data.stock||0)<1)return showError("This product is out of stock.");
-
-  cart.push({
-    product_id:data.id,
-    name:data.name,
-    price:Number(data.sale_price||data.price||0),
-    image_url:data.image_url||"",
-    quantity:1
-  });
-  saveCart();
-=======
+/* =========================================================
+   PAYMENT SELECTION
+========================================================= */
 
 function selectPayment(method){
 
-  document
-    .getElementById("razorpayOption")
-    .classList
-    .toggle(
-      "selected",
-      method === "razorpay"
-    );
+  const razorpayOption =
+    document.getElementById("razorpayOption");
 
-  document
-    .getElementById("whatsappOption")
-    .classList
-    .toggle(
-      "selected",
-      method === "whatsapp"
-    );
+  const whatsappOption =
+    document.getElementById("whatsappOption");
 
-  document
-    .getElementById("placeOrderBtn")
-    .textContent =
-      method === "whatsapp"
-        ? "Create Order & Continue to WhatsApp"
-        : "Place Order & Pay";
+  const button =
+    document.getElementById("placeOrderBtn");
 
+  razorpayOption.classList.toggle(
+    "selected",
+    method === "razorpay"
+  );
+
+  whatsappOption.classList.toggle(
+    "selected",
+    method === "whatsapp"
+  );
+
+  button.textContent =
+    method === "whatsapp"
+      ? "Create Order & Continue to WhatsApp"
+      : "Place Order & Pay";
 }
 
+
+/* =========================================================
+   TOTALS
+========================================================= */
 
 function getTotals(){
 
   const subtotal =
     cart.reduce(
-      (sum,item) =>
-        sum +
-        Number(item.price || 0) *
-        Number(item.quantity || 0),
+      function(sum,item){
+
+        return sum +
+          Number(item.price || 0) *
+          Number(item.quantity || 0);
+
+      },
       0
     );
 
   return {
-    subtotal,
+    subtotal:subtotal,
     shipping:0,
     total:subtotal
   };
-
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
 }
 
+
+/* =========================================================
+   SAVE CART
+========================================================= */
+
+function saveCart(){
+
+  localStorage.setItem(
+    "trendsbyak_cart",
+    JSON.stringify(cart)
+  );
+
+  renderCart();
+}
+
+
+/* =========================================================
+   CHANGE QUANTITY
+========================================================= */
+
+function changeQty(id,delta){
+
+  const item =
+    cart.find(
+      function(x){
+
+        return String(x.product_id) ===
+          String(id);
+
+      }
+    );
+
+  if(!item)return;
+
+  item.quantity =
+    Number(item.quantity || 1) + delta;
+
+  if(item.quantity < 1){
+
+    cart =
+      cart.filter(
+        function(x){
+
+          return String(x.product_id) !==
+            String(id);
+
+        }
+      );
+  }
+
+  saveCart();
+}
+
+
+/* =========================================================
+   RENDER CART
+========================================================= */
+
+function renderCart(){
+
+  const box =
+    document.getElementById("cart");
+
+  const button =
+    document.getElementById("placeOrderBtn");
+
+  if(!cart.length){
+
+    box.innerHTML =
+      '<p class="empty">Your cart is empty.</p>';
+
+    document.getElementById("subtotal")
+      .textContent = "₹0";
+
+    document.getElementById("shipping")
+      .textContent = "₹0";
+
+    document.getElementById("grandTotal")
+      .textContent = "₹0";
+
+    button.disabled = true;
+
+    return;
+  }
+
+  const totals = getTotals();
+
+  box.innerHTML =
+    cart.map(
+      function(item){
+
+        const quantity =
+          Number(item.quantity || 1);
+
+        const line =
+          Number(item.price || 0) * quantity;
+
+        return `
+          <div class="item">
+
+            <img
+              src="${escapeHtml(item.image_url || "")}"
+              alt="${escapeHtml(item.name)}"
+            >
+
+            <div>
+
+              <div class="item-name">
+                ${escapeHtml(item.name)}
+              </div>
+
+              <div class="item-price">
+                ${money(item.price)} each
+              </div>
+
+              <div class="qty">
+
+                <button
+                  type="button"
+                  onclick="changeQty(${Number(item.product_id)},-1)"
+                >
+                  −
+                </button>
+
+                <span>
+                  ${quantity}
+                </span>
+
+                <button
+                  type="button"
+                  onclick="changeQty(${Number(item.product_id)},1)"
+                >
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+            <div class="line-total">
+              ${money(line)}
+            </div>
+
+          </div>
+        `;
+
+      }
+    ).join("");
+
+  document.getElementById("subtotal")
+    .textContent =
+      money(totals.subtotal);
+
+  document.getElementById("shipping")
+    .textContent =
+      money(totals.shipping);
+
+  document.getElementById("grandTotal")
+    .textContent =
+      money(totals.total);
+
+  button.disabled = false;
+}
+
+
+/* =========================================================
+   OPTIONAL PRODUCT FROM URL
+   checkout.html?id=123
+========================================================= */
 
 async function addUrlProductIfNeeded(){
 
@@ -686,28 +776,28 @@ async function addUrlProductIfNeeded(){
   if(!id){
 
     renderCart();
-    return;
 
+    return;
   }
 
   const exists =
     cart.find(
-      x =>
-        String(x.product_id) ===
-        String(id)
+      function(x){
+
+        return String(x.product_id) ===
+          String(id);
+
+      }
     );
 
   if(exists){
 
     renderCart();
-    return;
 
+    return;
   }
 
-  const {
-    data,
-    error
-  } =
+  const result =
     await supabaseClient
       .from("products")
       .select(
@@ -717,226 +807,72 @@ async function addUrlProductIfNeeded(){
       .eq("status","active")
       .maybeSingle();
 
-  if(error || !data){
+  if(result.error || !result.data){
 
     showError(
       "Product could not be loaded."
     );
 
     return;
-
   }
 
-  if(Number(data.stock || 0) < 1){
+  const product = result.data;
+
+  if(Number(product.stock || 0) < 1){
 
     showError(
       "This product is out of stock."
     );
 
     return;
-
   }
 
   cart.push({
 
-    product_id:data.id,
+    product_id:product.id,
 
-    name:data.name,
+    name:product.name,
 
     price:
       Number(
-        data.sale_price ||
-        data.price ||
+        product.sale_price ??
+        product.price ??
         0
       ),
 
     image_url:
-      data.image_url || "",
+      product.image_url || "",
 
     quantity:1
 
   });
 
   saveCart();
-
 }
 
 
-function saveCart(){
-
-  localStorage.setItem(
-    "trendsbyak_cart",
-    JSON.stringify(cart)
-  );
-
-  renderCart();
-
-}
-
-
-function changeQty(id,delta){
-
-  const item =
-    cart.find(
-      x =>
-        String(x.product_id) ===
-        String(id)
-    );
-
-  if(!item)return;
-
-  item.quantity += delta;
-
-  if(item.quantity < 1){
-
-    cart =
-      cart.filter(
-        x =>
-          String(x.product_id) !==
-          String(id)
-      );
-
-  }
-
-  saveCart();
-
-}
-
-
-function renderCart(){
-
-  const box =
-    document.getElementById("cart");
-
-  const btn =
-    document.getElementById(
-      "placeOrderBtn"
-    );
-
-  if(!cart.length){
-
-    box.innerHTML =
-      "<p>Your cart is empty.</p>";
-
-    document.getElementById(
-      "subtotal"
-    ).textContent = "₹0";
-
-    document.getElementById(
-      "shipping"
-    ).textContent = "₹0";
-
-    document.getElementById(
-      "grandTotal"
-    ).textContent = "₹0";
-
-    btn.disabled = true;
-
-    return;
-
-  }
-
-  const totals =
-    getTotals();
-
-  box.innerHTML =
-    cart.map(item => {
-
-      const quantity =
-        Number(
-          item.quantity || 1
-        );
-
-      const line =
-        Number(
-          item.price || 0
-        ) * quantity;
-
-      return `
-        <div class="item">
-
-          <img
-            src="${escapeHtml(item.image_url || "")}"
-            alt="${escapeHtml(item.name)}"
-          >
-
-          <div>
-
-            <div class="item-name">
-              ${escapeHtml(item.name)}
-            </div>
-
-            <div class="item-price">
-              ${money(item.price)} each
-            </div>
-
-            <div class="qty">
-
-              <button
-                onclick="changeQty(${Number(item.product_id)},-1)"
-              >
-                −
-              </button>
-
-              <span>
-                ${quantity}
-              </span>
-
-              <button
-                onclick="changeQty(${Number(item.product_id)},1)"
-              >
-                +
-              </button>
-
-            </div>
-
-          </div>
-
-          <div class="line-total">
-            ${money(line)}
-          </div>
-
-        </div>
-      `;
-
-    }).join("");
-
-  document.getElementById(
-    "subtotal"
-  ).textContent =
-    money(totals.subtotal);
-
-  document.getElementById(
-    "shipping"
-  ).textContent =
-    money(totals.shipping);
-
-  document.getElementById(
-    "grandTotal"
-  ).textContent =
-    money(totals.total);
-
-  btn.disabled = false;
-
-}
-
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
 
 function showError(text){
 
-  document.getElementById(
-    "message"
-  ).innerHTML =
-    '<div class="error">' +
-    escapeHtml(text) +
-    '</div>';
+  document.getElementById("message")
+    .innerHTML =
+      '<div class="error">' +
+      escapeHtml(text) +
+      '</div>';
 
   window.scrollTo({
     top:0,
     behavior:"smooth"
   });
-
 }
 
+
+/* =========================================================
+   CUSTOMER / ORDER DATA
+========================================================= */
 
 function getOrderData(){
 
@@ -957,8 +893,7 @@ function getOrderData(){
       document
         .getElementById("email")
         .value
-        .trim() ||
-      null,
+        .trim() || null,
 
     customer_phone:
       document
@@ -976,8 +911,7 @@ function getOrderData(){
       document
         .getElementById("address2")
         .value
-        .trim() ||
-      null,
+        .trim() || null,
 
     city:
       document
@@ -1003,10 +937,10 @@ function getOrderData(){
       document
         .getElementById("notes")
         .value
-        .trim() ||
-      null,
+        .trim() || null,
 
-    payment_method:"razorpay",
+    payment_method:
+      "razorpay",
 
     source:
       params.get("utm_source") ||
@@ -1030,42 +964,34 @@ function getOrderData(){
     session_id:
       localStorage.getItem(
         "trendsbyak_session_id"
-      ) ||
-      null,
+      ) || null,
 
     items:
-      cart.map(x => ({
+      cart.map(
+        function(x){
 
-        product_id:
-          Number(x.product_id),
+          return {
+            product_id:Number(x.product_id),
+            quantity:Number(x.quantity)
+          };
 
-        quantity:
-          Number(x.quantity)
-
-      })),
+        }
+      ),
 
     discount:0,
 
     shipping_fee:0,
 
     tax:0
-
   };
-
 }
 
 
-function validateCustomer(){
-<<<<<<< HEAD
-  const name=document.getElementById("name").value.trim();
-  const phone=document.getElementById("phone").value.trim();
-  const postal=document.getElementById("postal").value.trim();
+/* =========================================================
+   VALIDATE CUSTOMER
+========================================================= */
 
-  if(!name||!phone||!document.getElementById("address1").value.trim()||
-     !document.getElementById("city").value.trim()||
-     !document.getElementById("state").value.trim()||!postal){
-    showError("Please fill all required delivery details.");
-=======
+function validateCustomer(){
 
   const data =
     getOrderData();
@@ -1083,15 +1009,9 @@ function validateCustomer(){
       "Please fill all required delivery details."
     );
 
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
     return false;
-
   }
 
-<<<<<<< HEAD
-  if(!/^[0-9+ ()-]{8,18}$/.test(phone)){
-    showError("Please enter a valid phone number.");
-=======
   if(
     !/^[0-9+ ()-]{8,18}$/.test(
       data.customer_phone
@@ -1102,15 +1022,9 @@ function validateCustomer(){
       "Please enter a valid phone number."
     );
 
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
     return false;
-
   }
 
-<<<<<<< HEAD
-  if(!/^[0-9]{6}$/.test(postal)){
-    showError("Please enter a valid 6-digit PIN code.");
-=======
   if(
     !/^[0-9]{6}$/.test(
       data.postal_code
@@ -1121,80 +1035,39 @@ function validateCustomer(){
       "Please enter a valid 6-digit PIN code."
     );
 
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
     return false;
+  }
 
+  if(
+    data.customer_email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      data.customer_email
+    )
+  ){
+
+    showError(
+      "Please enter a valid email address."
+    );
+
+    return false;
   }
 
   return true;
-
 }
 
-<<<<<<< HEAD
-function getOrderData(){
-  const p=new URLSearchParams(location.search);
 
-  return {
-    customer:{
-      name:document.getElementById("name").value.trim(),
-      email:document.getElementById("email").value.trim()||null,
-      phone:document.getElementById("phone").value.trim(),
-      address_line1:document.getElementById("address1").value.trim(),
-      address_line2:document.getElementById("address2").value.trim()||null,
-      city:document.getElementById("city").value.trim(),
-      state:document.getElementById("state").value.trim(),
-      postal_code:document.getElementById("postal").value.trim(),
-      country:"India",
-      notes:document.getElementById("notes").value.trim()||null
-    },
-    items:cart.map(x=>({
-      product_id:Number(x.product_id),
-      quantity:Number(x.quantity)
-    })),
-    attribution:{
-      source:p.get("utm_source")||"website",
-      medium:p.get("utm_medium")||"website",
-      campaign:p.get("utm_campaign")||null,
-      landing_page:location.href,
-      referrer:document.referrer||null,
-      session_id:localStorage.getItem("trendsbyak_session_id")||null
-    }
-  };
-}
+/* =========================================================
+   RAZORPAY PAYMENT
+========================================================= */
 
-async function placeOrder(){
-  document.getElementById("message").innerHTML="";
-
-  if(!cart.length)return showError("Your cart is empty.");
-  if(!validateCustomer())return;
-
-  const btn=document.getElementById("placeOrderBtn");
-  btn.disabled=true;
-  btn.textContent="Creating secure payment...";
-
-  try{
-    const {data,error}=await supabaseClient.functions.invoke("create-razorpay-order",{
-      body:getOrderData()
-    });
-
-    if(error){
-      console.error(error);
-      showError(error.message||"Could not create payment order.");
-      btn.disabled=false;
-      btn.textContent="Place Order & Pay";
-=======
-
-/*
- * RAZORPAY PAYMENT
- */
 async function startRazorpayPayment(){
 
-  const btn =
+  const button =
     document.getElementById(
       "placeOrderBtn"
     );
 
-  btn.textContent =
+  button.textContent =
     "Creating secure payment...";
 
   try{
@@ -1202,15 +1075,13 @@ async function startRazorpayPayment(){
     const orderData =
       getOrderData();
 
-    const {
-      data,
-      error
-    } =
+    const result =
       await supabaseClient.functions.invoke(
         "create-razorpay-order",
         {
           body:{
-            items:orderData.items,
+            items:
+              orderData.items,
 
             customer:{
               name:
@@ -1263,39 +1134,32 @@ async function startRazorpayPayment(){
               session_id:
                 orderData.session_id
             }
-
           }
-
         }
       );
 
-    if(error){
+    if(result.error){
 
       console.error(
         "Razorpay create order error:",
-        error
+        result.error
       );
 
       showError(
-        error.message ||
+        result.error.message ||
         "Could not start Razorpay payment."
       );
 
-      btn.disabled = false;
+      button.disabled = false;
 
       selectPayment("razorpay");
 
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
       return;
-
     }
 
-<<<<<<< HEAD
-    if(!data?.order_id||!data?.key_id){
-      showError(data?.error||"Razorpay did not return a valid order.");
-      btn.disabled=false;
-      btn.textContent="Place Order & Pay";
-=======
+    const data =
+      result.data;
+
     if(!data?.order_id){
 
       console.error(
@@ -1308,103 +1172,22 @@ async function startRazorpayPayment(){
         "Razorpay order could not be created."
       );
 
-      btn.disabled = false;
+      button.disabled = false;
 
       selectPayment("razorpay");
 
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
-      return;
-
-    }
-
-<<<<<<< HEAD
-    const options={
-      key:data.key_id,
-      amount:data.amount,
-      currency:data.currency||"INR",
-      name:"Trends by AK",
-      description:"Trends by AK order",
-      order_id:data.order_id,
-      prefill:{
-        name:document.getElementById("name").value.trim(),
-        email:document.getElementById("email").value.trim(),
-        contact:document.getElementById("phone").value.trim()
-      },
-      notes:{
-        order_number:data.order_number||""
-      },
-      theme:{color:"#1d1d1d"},
-      modal:{
-        ondismiss:function(){
-          btn.disabled=false;
-          btn.textContent="Place Order & Pay";
-        }
-      },
-      handler:async function(response){
-        await verifyPayment(response,btn);
-      }
-    };
-
-    const razorpay=new Razorpay(options);
-
-    razorpay.on("payment.failed",function(response){
-      console.error("Razorpay payment failed",response?.error);
-      showError(response?.error?.description||"Payment failed. Please try again.");
-      btn.disabled=false;
-      btn.textContent="Place Order & Pay";
-    });
-
-    razorpay.open();
-  }catch(error){
-    console.error(error);
-    showError("Could not connect to Razorpay. Please try again.");
-    btn.disabled=false;
-    btn.textContent="Place Order & Pay";
-  }
-}
-
-async function verifyPayment(response,btn){
-  btn.textContent="Verifying payment...";
-
-  try{
-    const {data,error}=await supabaseClient.functions.invoke("verify-razorpay-payment",{
-      body:{
-        razorpay_payment_id:response.razorpay_payment_id,
-        razorpay_order_id:response.razorpay_order_id,
-        razorpay_signature:response.razorpay_signature
-      }
-    });
-
-    if(error){
-      console.error(error);
-      showError(error.message||"Payment verification failed. Please contact Trends by AK before trying again.");
-      btn.disabled=false;
-      btn.textContent="Place Order & Pay";
       return;
     }
 
-    if(!data?.success){
-      showError(data?.error||"Payment could not be verified.");
-      btn.disabled=false;
-      btn.textContent="Place Order & Pay";
-      return;
-    }
 
-    localStorage.removeItem("trendsbyak_cart");
-    cart=[];
+    /* ================================================
+       RAZORPAY CHECKOUT
+    ================================================ */
 
-    const redirect=data.redirect_url||(`/payment-success.html?order=${encodeURIComponent(data.order_number||"")}`);
-    window.location.href=redirect;
-  }catch(error){
-    console.error(error);
-    showError("Payment was received, but verification could not be completed. Please contact Trends by AK before making another payment.");
-    btn.disabled=false;
-    btn.textContent="Place Order & Pay";
-=======
     const options = {
 
       key:
-        RAZORPAY_KEY_ID,
+        data.key_id,
 
       amount:
         data.amount,
@@ -1416,8 +1199,7 @@ async function verifyPayment(response,btn){
         "Trends by AK",
 
       description:
-        "Order " +
-        (data.order_number || ""),
+        "Trends by AK order",
 
       order_id:
         data.order_id,
@@ -1443,17 +1225,14 @@ async function verifyPayment(response,btn){
       },
 
       theme:{
-
-        color:
-          "#1d1d1d"
-
+        color:"#1d1d1d"
       },
 
       modal:{
 
         ondismiss:function(){
 
-          btn.disabled = false;
+          button.disabled = false;
 
           selectPayment("razorpay");
 
@@ -1476,8 +1255,24 @@ async function verifyPayment(response,btn){
 
     };
 
+
+    if(typeof Razorpay === "undefined"){
+
+      showError(
+        "Razorpay could not be loaded. Please refresh the page and try again."
+      );
+
+      button.disabled = false;
+
+      selectPayment("razorpay");
+
+      return;
+    }
+
+
     const razorpay =
       new Razorpay(options);
+
 
     razorpay.on(
       "payment.failed",
@@ -1485,20 +1280,21 @@ async function verifyPayment(response,btn){
 
         console.error(
           "Razorpay payment failed:",
-          response.error
+          response?.error
         );
 
         showError(
-          response.error?.description ||
+          response?.error?.description ||
           "Payment failed. Please try again."
         );
 
-        btn.disabled = false;
+        button.disabled = false;
 
         selectPayment("razorpay");
 
       }
     );
+
 
     razorpay.open();
 
@@ -1513,39 +1309,32 @@ async function verifyPayment(response,btn){
       "Could not connect to Razorpay. Please try again."
     );
 
-    btn.disabled = false;
+    button.disabled = false;
 
     selectPayment("razorpay");
-
->>>>>>> d5fb1c7 (Replace PayU checkout with Razorpay)
   }
-
 }
 
 
-/*
- * VERIFY RAZORPAY PAYMENT
- */
-async function verifyRazorpayPayment(
-  response
-){
+/* =========================================================
+   VERIFY RAZORPAY PAYMENT
+========================================================= */
 
-  const btn =
+async function verifyRazorpayPayment(response){
+
+  const button =
     document.getElementById(
       "placeOrderBtn"
     );
 
-  btn.disabled = true;
+  button.disabled = true;
 
-  btn.textContent =
+  button.textContent =
     "Verifying payment...";
 
   try{
 
-    const {
-      data,
-      error
-    } =
+    const result =
       await supabaseClient.functions.invoke(
         "verify-razorpay-payment",
         {
@@ -1561,29 +1350,33 @@ async function verifyRazorpayPayment(
               response.razorpay_signature
 
           }
-
         }
       );
 
-    if(error){
+
+    if(result.error){
 
       console.error(
         "Payment verification error:",
-        error
+        result.error
       );
 
       showError(
-        error.message ||
+        result.error.message ||
         "Payment verification failed."
       );
 
-      btn.disabled = false;
+      button.disabled = false;
 
       selectPayment("razorpay");
 
       return;
-
     }
+
+
+    const data =
+      result.data;
+
 
     if(!data?.success){
 
@@ -1592,24 +1385,25 @@ async function verifyRazorpayPayment(
         "Payment could not be verified."
       );
 
-      btn.disabled = false;
+      button.disabled = false;
 
       selectPayment("razorpay");
 
       return;
-
     }
 
+
     /*
-     * Payment has been verified by the
-     * Supabase backend.
-     */
+      Payment has been verified by
+      the Supabase backend.
+    */
 
     localStorage.removeItem(
       "trendsbyak_cart"
     );
 
     cart = [];
+
 
     window.location.href =
       data.redirect_url ||
@@ -1631,73 +1425,49 @@ async function verifyRazorpayPayment(
       "Payment verification failed. Please contact Trends by AK if money was deducted."
     );
 
-    btn.disabled = false;
+    button.disabled = false;
 
     selectPayment("razorpay");
-
   }
-
 }
 
 
-/*
- * MAIN ORDER BUTTON
- */
-async function placeOrder(){
+/* =========================================================
+   WHATSAPP ORDER
+========================================================= */
 
-  document.getElementById(
-    "message"
-  ).innerHTML = "";
+async function createWhatsAppOrder(){
 
-  if(!cart.length){
-
-    showError(
-      "Your cart is empty."
-    );
-
-    return;
-
-  }
-
-  if(!validateCustomer())return;
-
-  const method =
-    document.querySelector(
-      'input[name="paymentMethod"]:checked'
-    )?.value ||
-    "razorpay";
-
-  const btn =
+  const button =
     document.getElementById(
       "placeOrderBtn"
     );
 
-  btn.disabled = true;
+  button.textContent =
+    "Creating order...";
 
-  /*
-   * WHATSAPP ORDER
-   */
-  if(method === "whatsapp"){
+  try{
 
-    btn.textContent =
-      "Creating order...";
+    const orderData =
+      getOrderData();
+
 
     const result =
       await supabaseClient.rpc(
         "create_guest_order",
         {
           order_data:{
-            ...getOrderData(),
-
-            payment_method:
-              "whatsapp"
+            ...orderData,
+            payment_method:"whatsapp"
           }
         }
       );
 
+
     if(result.error){
 
       console.error(
+        "WhatsApp order error:",
         result.error
       );
 
@@ -1706,25 +1476,26 @@ async function placeOrder(){
         "Could not create your order."
       );
 
-      btn.disabled = false;
+      button.disabled = false;
 
-      selectPayment(
-        "whatsapp"
-      );
+      selectPayment("whatsapp");
 
       return;
-
     }
+
 
     const order =
       result.data || {};
 
+
     const orderNumber =
       order.order_number || "";
+
 
     const total =
       order.total ??
       getTotals().total;
+
 
     const customerName =
       document
@@ -1732,38 +1503,132 @@ async function placeOrder(){
         .value
         .trim();
 
+
+    /*
+      Clear cart only after
+      order has successfully been created.
+    */
+
     localStorage.removeItem(
       "trendsbyak_cart"
     );
 
     cart = [];
 
+
     const message =
-      `Hi Trends by AK!%0A%0A` +
-      `I have placed an order.%0A` +
-      `Order No: ${encodeURIComponent(orderNumber)}%0A` +
-      `Customer: ${encodeURIComponent(customerName)}%0A` +
-      `Total: ${encodeURIComponent(money(total))}%0A%0A` +
-      `Please share the payment instructions.`;
+      "Hi Trends by AK!%0A%0A" +
+
+      "I have placed an order.%0A" +
+
+      "Order No: " +
+      encodeURIComponent(orderNumber) +
+      "%0A" +
+
+      "Customer: " +
+      encodeURIComponent(customerName) +
+      "%0A" +
+
+      "Total: " +
+      encodeURIComponent(
+        money(total)
+      ) +
+
+      "%0A%0A" +
+
+      "Please share the payment instructions.";
+
 
     window.location.href =
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+      "https://wa.me/" +
+      WHATSAPP_NUMBER +
+      "?text=" +
+      message;
 
-    return;
+  }catch(error){
 
+    console.error(
+      "WhatsApp order exception:",
+      error
+    );
+
+    showError(
+      "Could not create your order. Please try again."
+    );
+
+    button.disabled = false;
+
+    selectPayment("whatsapp");
   }
-
-  /*
-   * RAZORPAY
-   */
-  await startRazorpayPayment();
-
 }
 
+
+/* =========================================================
+   MAIN ORDER BUTTON
+========================================================= */
+
+async function placeOrder(){
+
+  document.getElementById(
+    "message"
+  ).innerHTML = "";
+
+
+  if(!cart.length){
+
+    showError(
+      "Your cart is empty."
+    );
+
+    return;
+  }
+
+
+  if(!validateCustomer()){
+
+    return;
+  }
+
+
+  const method =
+    document.querySelector(
+      'input[name="paymentMethod"]:checked'
+    )?.value ||
+    "razorpay";
+
+
+  const button =
+    document.getElementById(
+      "placeOrderBtn"
+    );
+
+
+  button.disabled = true;
+
+
+  if(method === "whatsapp"){
+
+    await createWhatsAppOrder();
+
+    return;
+  }
+
+
+  await startRazorpayPayment();
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+selectPayment("razorpay");
 
 addUrlProductIfNeeded();
 
 </script>
+
 <script src="header-loader.js"></script>
+
 </body>
 </html>
