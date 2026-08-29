@@ -14,4 +14,9 @@
   script.src = base + 'header.js';
   script.defer = true;
   document.head.appendChild(script);
+
+  var auth = document.createElement('script');
+  auth.src = base + 'auth-popup.js';
+  auth.defer = true;
+  document.head.appendChild(auth);
 })();
