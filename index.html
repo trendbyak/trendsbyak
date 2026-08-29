@@ -631,10 +631,81 @@ h2 {
     background: #eee3d3;
 }
 
+.instagram-section {
+    background: var(--beige);
+}
+
+.instagram-grid {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+.instagram-card {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #eaddca;
+}
+
+.instagram-card img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform .45s ease;
+}
+
+.instagram-card:hover img {
+    transform: scale(1.06);
+}
+
+.instagram-card::after {
+    content: "VIEW ON INSTAGRAM";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(41,37,31,.42);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.instagram-card:hover::after {
+    opacity: 1;
+}
+
+.instagram-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: var(--gold-dark);
+    font-family: "Playfair Display", serif;
+    background: #eee3d3;
+}
+
 .instagram-placeholder strong {
-    margin-top: 8px;
     font-family: "DM Sans", sans-serif;
     font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.instagram-placeholder span {
+    font-family: "DM Sans", sans-serif;
+    font-size: 9px;
+    color: var(--muted);
 }
 
 
@@ -1088,14 +1159,20 @@ h2 {
         font-size: 18px;
     }
 
-    .instagram-grid {
-        display: flex;
-        overflow-x: auto;
-    }
+   .instagram-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    scrollbar-width: none;
+}
 
-    .instagram-card {
-        flex: 0 0 72%;
-    }
+.instagram-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.instagram-card {
+    flex: 0 0 72%;
+}
 
     .reviews-grid {
         grid-template-columns: 1fr;
@@ -2518,7 +2595,7 @@ async function loadReviews() {
    INSTAGRAM
 ========================================================= */
 
-async function loadInstagram() {
+async function loadInstagram(){
 
     const grid =
         document.getElementById(
@@ -2529,7 +2606,11 @@ async function loadInstagram() {
 
     try {
 
-        const { data, error } =
+        /* -------------------------------------------------
+           Get Instagram posts
+        ------------------------------------------------- */
+
+        const { data: posts, error: postsError } =
             await db
                 .from("instagram_reels")
                 .select(
@@ -2545,15 +2626,16 @@ async function loadInstagram() {
                         ascending: true
                     }
                 )
-                .limit(4);
+                .limit(6);
 
-        if (error) throw error;
-
-        const posts =
-            data || [];
+        if (postsError) throw postsError;
 
 
-        if (!posts.length) {
+        const instagramPosts =
+            posts || [];
+
+
+        if (!instagramPosts.length) {
 
             renderInstagramFallback();
 
@@ -2561,9 +2643,53 @@ async function loadInstagram() {
         }
 
 
+        /* -------------------------------------------------
+           Get product images
+
+           These are used as beautiful temporary
+           thumbnails until Meta/Instagram API is connected.
+        ------------------------------------------------- */
+
+        const { data: products } =
+            await db
+                .from("products")
+                .select(
+                    "id,name,image_url,status,created_at"
+                )
+                .eq(
+                    "status",
+                    "active"
+                )
+                .not(
+                    "image_url",
+                    "is",
+                    null
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(12);
+
+
+        const productImages =
+            (products || [])
+                .map(
+                    product =>
+                        product.image_url
+                )
+                .filter(Boolean);
+
+
+        /* -------------------------------------------------
+           Build Instagram grid
+        ------------------------------------------------- */
+
         grid.innerHTML =
-            posts
-                .map(post => {
+            instagramPosts
+                .map((post, index) => {
 
                     const url =
                         escapeHtml(
@@ -2574,13 +2700,32 @@ async function loadInstagram() {
                     const title =
                         escapeHtml(
                             post.title ||
-                            "View on Instagram"
+                            "Trends by AK"
                         );
+
+                    /*
+                       Priority:
+
+                       1. Real Instagram thumbnail
+                       2. Existing product image
+                       3. Elegant fallback
+                    */
+
+                    const thumbnail =
+                        post.thumbnail_url ||
+                        productImages[
+                            index %
+                            Math.max(
+                                productImages.length,
+                                1
+                            )
+                        ] ||
+                        "";
+
 
                     const thumb =
                         escapeHtml(
-                            post.thumbnail_url ||
-                            ""
+                            thumbnail
                         );
 
 
@@ -2590,7 +2735,8 @@ async function loadInstagram() {
                             class="instagram-card"
                             href="${url}"
                             target="_blank"
-                            rel="noopener">
+                            rel="noopener noreferrer"
+                            aria-label="View Trends by AK on Instagram">
 
                             ${
                                 thumb
@@ -2599,18 +2745,37 @@ async function loadInstagram() {
                                 <img
                                     src="${thumb}"
                                     alt="${title}"
-                                    loading="lazy">
+                                    loading="lazy"
+                                    onerror="
+                                        this.style.display='none';
+                                        this.nextElementSibling.style.display='flex';
+                                    "
+                                >
+
+                                <div
+                                    class="instagram-placeholder"
+                                    style="display:none;">
+
+                                    <strong>
+                                        @trendsbyak
+                                    </strong>
+
+                                    <span>
+                                        View Instagram
+                                    </span>
+
+                                </div>
                                 `
                                 :
                                 `
                                 <div class="instagram-placeholder">
 
                                     <strong>
-                                        INSTAGRAM
+                                        @trendsbyak
                                     </strong>
 
                                     <span>
-                                        ${title}
+                                        View Instagram
                                     </span>
 
                                 </div>
@@ -2618,22 +2783,23 @@ async function loadInstagram() {
                             }
 
                         </a>
+
                     `;
 
                 })
                 .join("");
 
+
     } catch (error) {
 
         console.warn(
-            "Instagram:",
+            "Instagram loading:",
             error
         );
 
         renderInstagramFallback();
     }
 }
-
 
 function renderInstagramFallback() {
 
@@ -2644,14 +2810,16 @@ function renderInstagramFallback() {
 
     if (!grid) return;
 
-    grid.innerHTML = [1,2,3,4]
+
+    grid.innerHTML = [1,2,3,4,5,6]
         .map(() => `
 
             <a
                 class="instagram-card"
                 href="https://www.instagram.com/trendsbyak/"
                 target="_blank"
-                rel="noopener">
+                rel="noopener noreferrer"
+                aria-label="View Trends by AK on Instagram">
 
                 <div class="instagram-placeholder">
 
@@ -2660,7 +2828,7 @@ function renderInstagramFallback() {
                     </strong>
 
                     <span>
-                        View on Instagram
+                        View Instagram
                     </span>
 
                 </div>
