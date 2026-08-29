@@ -137,16 +137,149 @@ h2 {
 .site-header {
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 9999;
     min-height: 76px;
     padding: 10px 5%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 25px;
-    background: rgba(255,250,243,.96);
+    background: rgba(255,250,243,.97);
     border-bottom: 1px solid rgba(178,138,80,.18);
     backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.site-header .brand {
+    flex-shrink: 0;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 12px;
+}
+
+.nav-search {
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--brown);
+    padding: 9px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.nav-search:hover {
+    background: var(--brown);
+    color: white;
+}
+
+.search-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(41,37,31,.55);
+    align-items: flex-start;
+    justify-content: center;
+    padding: 90px 20px 20px;
+}
+
+.search-overlay.is-open {
+    display: flex;
+}
+
+.search-box {
+    width: min(650px, 100%);
+    background: #fffaf3;
+    padding: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+}
+
+.search-box-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 15px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--brown);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--gold);
+}
+
+.search-close {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--brown);
+}
+
+.search-results {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+
+.search-result {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.search-result img {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.search-result-info {
+    flex: 1;
+}
+
+.search-result-name {
+    font-family: "Playfair Display", serif;
+    font-size: 15px;
+}
+
+.search-result-category {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.search-result-price {
+    margin-top: 4px;
+    color: var(--gold-dark);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.search-empty {
+    padding: 25px 5px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
 }
 
 .brand {
@@ -1016,6 +1149,19 @@ h2 {
         align-items: stretch;
         background: #fffaf3;
         border-bottom: 1px solid var(--border);
+        .nav-search {
+    width: 100%;
+    text-align: left;
+    padding: 12px 10px;
+}
+
+.search-overlay {
+    padding: 80px 12px 15px;
+}
+
+.search-box {
+    padding: 18px;
+}
     }
 
     .main-nav.is-open {
@@ -1216,6 +1362,7 @@ h2 {
 </style>
 </head>
 
+
 <body>
 
 <div class="announcement">
@@ -1244,21 +1391,33 @@ h2 {
         <span></span>
     </button>
 
-    <nav class="main-nav" id="mainNav">
-        <a href="#categories">Categories</a>
-        <a href="#new-launches">New Launches</a>
-        <a href="#collections">Collections</a>
-        <a href="#instagram">Instagram</a>
-        <a href="#reviews">Reviews</a>
-        <a href="shop.html">Shop</a>
-        <a href="bulk-order.html">Bulk Orders</a>
-        <a href="about.html">Our Story</a>
-        <a href="account.html">Account</a>
-        <a href="cart.html" class="nav-cart">Cart <span id="cartCount">0</span></a>
-        <a class="nav-whatsapp" href="https://wa.me/918433998962" target="_blank" rel="noopener">
-            WhatsApp
-        </a>
-    </nav>
+   <nav class="main-nav" id="mainNav">
+    <a href="#categories">Categories</a>
+    <a href="#new-launches">New Launches</a>
+    <a href="#collections">Collections</a>
+    <a href="#instagram">Instagram</a>
+    <a href="#reviews">Reviews</a>
+    <a href="shop.html">Shop</a>
+    <a href="bulk-order.html">Bulk Orders</a>
+    <a href="about.html">Our Story</a>
+    <a href="account.html">Account</a>
+
+    <button
+        type="button"
+        class="nav-search"
+        id="searchButton"
+        aria-label="Search products">
+        🔍 Search
+    </button>
+
+    <a href="cart.html" class="nav-cart">
+        Cart (<span id="cartCount">0</span>)
+    </a>
+
+    <a href="https://wa.me/919820000000" class="nav-whatsapp">
+        WhatsApp
+    </a>
+</nav>
 
 </header>
 
@@ -2933,7 +3092,296 @@ document.addEventListener(
     }
 );
 
+/* =========================================================
+   PRODUCT SEARCH
+========================================================= */
 
+const searchButton =
+    document.getElementById("searchButton");
+
+const searchOverlay =
+    document.getElementById("searchOverlay");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const searchClose =
+    document.getElementById("searchClose");
+
+const searchResults =
+    document.getElementById("searchResults");
+
+
+function openSearch() {
+
+    if (!searchOverlay) return;
+
+    searchOverlay.classList.add("is-open");
+
+    setTimeout(() => {
+
+        searchInput?.focus();
+
+    }, 100);
+
+}
+
+
+function closeSearch() {
+
+    if (!searchOverlay) return;
+
+    searchOverlay.classList.remove("is-open");
+
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+    if (searchResults) {
+
+        searchResults.innerHTML = `
+            <div class="search-empty">
+                Start typing to search our products.
+            </div>
+        `;
+
+    }
+}
+
+
+searchButton?.addEventListener(
+    "click",
+    openSearch
+);
+
+
+searchClose?.addEventListener(
+    "click",
+    closeSearch
+);
+
+
+searchOverlay?.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === searchOverlay
+        ) {
+            closeSearch();
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            searchOverlay?.classList.contains("is-open")
+        ) {
+            closeSearch();
+        }
+
+    }
+);
+
+
+let searchTimer;
+
+
+searchInput?.addEventListener(
+    "input",
+    () => {
+
+        clearTimeout(searchTimer);
+
+        searchTimer = setTimeout(
+            performProductSearch,
+            250
+        );
+
+    }
+);
+
+
+async function performProductSearch() {
+
+    const query =
+        String(
+            searchInput?.value || ""
+        ).trim();
+
+    if (!query) {
+
+        searchResults.innerHTML = `
+            <div class="search-empty">
+                Start typing to search our products.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    searchResults.innerHTML = `
+        <div class="search-empty">
+            Searching...
+        </div>
+    `;
+
+
+    try {
+
+        const safeQuery =
+            `%${query.replace(/[%_]/g, "")}%`;
+
+
+        const { data, error } =
+            await db
+                .from("products")
+                .select(
+                    "id,name,price,sale_price,category,image_url,status"
+                )
+                .eq(
+                    "status",
+                    "active"
+                )
+                .or(
+                    `name.ilike.${safeQuery},category.ilike.${safeQuery}`
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(12);
+
+
+        if (error) throw error;
+
+
+        const products =
+            data || [];
+
+
+        if (!products.length) {
+
+            searchResults.innerHTML = `
+                <div class="search-empty">
+                    No products found for
+                    "<strong>${escapeHtml(query)}</strong>"
+                </div>
+            `;
+
+            return;
+        }
+
+
+        searchResults.innerHTML =
+            products
+                .map(product => {
+
+                    const price =
+                        Number(
+                            product.sale_price ??
+                            product.price ??
+                            0
+                        );
+
+                    const image =
+                        escapeHtml(
+                            product.image_url || ""
+                        );
+
+                    const name =
+                        escapeHtml(
+                            product.name ||
+                            "Product"
+                        );
+
+                    const category =
+                        escapeHtml(
+                            product.category ||
+                            "Trends by AK"
+                        );
+
+                    return `
+
+                        <a
+                            class="search-result"
+                            href="product.html?id=${encodeURIComponent(product.id)}">
+
+                            ${
+                                image
+                                ?
+                                `
+                                <img
+                                    src="${image}"
+                                    alt="${name}"
+                                    loading="lazy">
+                                `
+                                :
+                                `
+                                <div
+                                    style="
+                                        width:58px;
+                                        height:58px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#eee3d3;
+                                        color:var(--gold-dark);
+                                        font-family:'Playfair Display',serif;
+                                    ">
+                                    AK
+                                </div>
+                                `
+                            }
+
+                            <div class="search-result-info">
+
+                                <div class="search-result-name">
+                                    ${name}
+                                </div>
+
+                                <div class="search-result-category">
+                                    ${category}
+                                </div>
+
+                                <div class="search-result-price">
+                                    ${formatPrice(price)}
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    `;
+
+                })
+                .join("");
+
+    } catch (error) {
+
+        console.error(
+            "Product search error:",
+            error
+        );
+
+        searchResults.innerHTML = `
+            <div class="search-empty">
+                Unable to search right now.
+                Please try again.
+            </div>
+        `;
+
+    }
+}
 /* =========================================================
    MOBILE MENU
 ========================================================= */
@@ -3021,6 +3469,6 @@ document.addEventListener(
 );
 
 </script>
-
+<script src="header-loader.js"></script>
 </body>
 </html>
