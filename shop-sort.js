@@ -4,17 +4,12 @@
   function getPrice(product) {
     return Number(product.sale_price ?? product.sp ?? product.price ?? product.mrp ?? 0) || 0;
   }
-
-  function getName(product) {
-    return String(product.name || "").trim();
-  }
-
+  function getName(product) { return String(product.name || "").trim(); }
   function getDate(product) {
-    const value = product.created_at || product.updated_at || product.createdAt || product.id || 0;
+    const value = product.created_at || product.updated_at || product.createdAt || 0;
     const time = new Date(value).getTime();
     return Number.isFinite(time) ? time : Number(product.id) || 0;
   }
-
   function addStyles() {
     if (document.getElementById("tbkShopSortStyles")) return;
     const style = document.createElement("style");
@@ -28,67 +23,53 @@
     `;
     document.head.appendChild(style);
   }
-
   function setup() {
-    if (!document.getElementById("shopProductGrid") || !document.getElementById("shopToolbar")) return;
-    if (document.getElementById("tbkShopSort")) return;
-
+    const toolbar = document.querySelector(".shop-toolbar");
+    const grid = document.getElementById("shopProductGrid");
+    if (!toolbar || !grid || document.getElementById("tbkShopSort")) return;
     addStyles();
-
-    const toolbar = document.getElementById("shopToolbar");
     const wrap = document.createElement("div");
     wrap.className = "tbk-shop-sort-wrap";
-    wrap.innerHTML = `
-      <label for="tbkShopSort">Sort by</label>
-      <select id="tbkShopSort" class="tbk-shop-sort" aria-label="Sort products">
-        <option value="relevance">Relevance</option>
-        <option value="price-asc">Price: Low to High</option>
-        <option value="price-desc">Price: High to Low</option>
-        <option value="newest">Newest</option>
-        <option value="name-asc">Name: A to Z</option>
-        <option value="name-desc">Name: Z to A</option>
-      </select>`;
+    wrap.innerHTML = `<label for="tbkShopSort">Sort by</label><select id="tbkShopSort" class="tbk-shop-sort" aria-label="Sort products"><option value="relevance">Relevance</option><option value="price-asc">Price: Low to High</option><option value="price-desc">Price: High to Low</option><option value="newest">Newest</option><option value="name-asc">Name: A to Z</option><option value="name-desc">Name: Z to A</option></select>`;
     toolbar.appendChild(wrap);
-
-    const select = document.getElementById("tbkShopSort");
-    select.addEventListener("change", function () {
+    document.getElementById("tbkShopSort").addEventListener("change", function () {
       window.tbkShopSort = this.value;
       if (typeof renderProducts === "function") renderProducts();
     });
-
-    const originalRender = window.renderProducts;
-    if (typeof originalRender !== "function") return;
-
-    window.renderProducts = function () {
-      const sort = window.tbkShopSort || "relevance";
-      if (sort === "relevance") return originalRender();
-
-      const originalProducts = window.allProducts;
-      if (!Array.isArray(originalProducts)) return originalRender();
-
-      const originalAllProducts = window.allProducts;
-      window.allProducts = [...originalAllProducts].sort((a, b) => {
-        if (sort === "price-asc") return getPrice(a) - getPrice(b);
-        if (sort === "price-desc") return getPrice(b) - getPrice(a);
-        if (sort === "name-asc") return getName(a).localeCompare(getName(b));
-        if (sort === "name-desc") return getName(b).localeCompare(getName(a));
-        if (sort === "newest") return getDate(b) - getDate(a);
-        return 0;
-      });
-
-      originalRender();
-      window.allProducts = originalAllProducts;
-    };
   }
-
-  function waitForShop() {
+  function sortRenderedCards() {
+    const grid = document.getElementById("shopProductGrid");
+    const select = document.getElementById("tbkShopSort");
+    if (!grid || !select) return;
+    const cards = [...grid.querySelectorAll(".shop-product-card")];
+    if (!cards.length || select.value === "relevance") return;
+    cards.sort((a,b) => {
+      const priceA = Number((a.querySelector(".shop-price-row strong")?.textContent || "").replace(/[^0-9.]/g,"")) || 0;
+      const priceB = Number((b.querySelector(".shop-price-row strong")?.textContent || "").replace(/[^0-9.]/g,"")) || 0;
+      const nameA = a.querySelector(".shop-product-info h3 a")?.textContent.trim() || "";
+      const nameB = b.querySelector(".shop-product-info h3 a")?.textContent.trim() || "";
+      if (select.value === "price-asc") return priceA - priceB;
+      if (select.value === "price-desc") return priceB - priceA;
+      if (select.value === "name-asc") return nameA.localeCompare(nameB);
+      if (select.value === "name-desc") return nameB.localeCompare(nameA);
+      if (select.value === "newest") return Number(b.querySelector("a.shop-product-image")?.href.match(/id=([^&]+)/)?.[1] || 0) - Number(a.querySelector("a.shop-product-image")?.href.match(/id=([^&]+)/)?.[1] || 0);
+      return 0;
+    });
+    cards.forEach(card => grid.appendChild(card));
+  }
+  function start() {
     setup();
-    if (!document.getElementById("tbkShopSort")) setTimeout(waitForShop, 100);
+    const select = document.getElementById("tbkShopSort");
+    if (select && typeof window.renderProducts === "function" && !window.tbkSortObserver) {
+      window.tbkSortObserver = new MutationObserver(() => {
+        clearTimeout(window.tbkSortTimer);
+        window.tbkSortTimer = setTimeout(sortRenderedCards, 0);
+      });
+      window.tbkSortObserver.observe(document.getElementById("shopProductGrid"), {childList:true});
+      select.addEventListener("change", () => setTimeout(sortRenderedCards, 0));
+    }
   }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", waitForShop);
-  } else {
-    waitForShop();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  setTimeout(start, 250);
+  setTimeout(start, 750);
 })();
