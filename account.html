@@ -1,1074 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta
-        name="description"
-        content="Your Trends by AK account."
-    >
-
-    <title>My Account | Trends by AK</title>
-
-    <link rel="icon" href="assets/logo.png">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            background: #faf8f4;
-            color: #1d1b19;
-            font-family: "DM Sans", sans-serif;
-        }
-
-        .account-page {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 18px;
-        }
-
-        .account-card {
-            width: 100%;
-            max-width: 480px;
-            background: #fff;
-            border: 1px solid #e8e3db;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 15px 50px rgba(0,0,0,.06);
-        }
-
-        .account-logo {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .account-logo img {
-            width: 65px;
-            height: 65px;
-            object-fit: contain;
-            border-radius: 50%;
-        }
-
-        .account-logo strong {
-            display: block;
-            margin-top: 10px;
-            font-family: "Playfair Display", serif;
-            font-size: 23px;
-        }
-
-        .eyebrow {
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 10px;
-            color: #8b6b42;
-            font-weight: 700;
-        }
-
-        h1 {
-            font-family: "Playfair Display", serif;
-            font-size: 32px;
-            margin: 8px 0 10px;
-        }
-
-        .intro {
-            color: #777;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .offer {
-            background: #f8f4ed;
-            border: 1px solid #e5dccd;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 22px;
-        }
-
-        .offer strong {
-            display: block;
-            font-size: 15px;
-            margin-bottom: 5px;
-        }
-
-        .offer span {
-            font-size: 12px;
-            color: #777;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 7px;
-        }
-
-        input {
-            width: 100%;
-            border: 1px solid #ddd6cb;
-            border-radius: 10px;
-            padding: 13px 14px;
-            font: inherit;
-            outline: none;
-            margin-bottom: 16px;
-            background: #fff;
-        }
-
-        input:focus {
-            border-color: #8b6b42;
-        }
-
-        button {
-            width: 100%;
-            border: 0;
-            border-radius: 10px;
-            padding: 14px;
-            background: #1d1b19;
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-            font: inherit;
-        }
-
-        button:hover {
-            opacity: .92;
-        }
-
-        .secondary {
-            background: transparent;
-            color: #1d1b19;
-            border: 1px solid #ddd6cb;
-            margin-top: 10px;
-        }
-
-        .switch {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 13px;
-            color: #777;
-        }
-
-        .switch a {
-            color: #8b6b42;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .message {
-            margin: 15px 0;
-            padding: 12px;
-            border-radius: 9px;
-            font-size: 13px;
-            display: none;
-        }
-
-        .message.show {
-            display: block;
-        }
-
-        .message.error {
-            background: #fff0f0;
-            color: #a33;
-        }
-
-        .message.success {
-            background: #eef8ee;
-            color: #357335;
-        }
-
-        .account-dashboard {
-            display: none;
-        }
-
-        .account-dashboard.show {
-            display: block;
-        }
-
-        .account-detail {
-            background: #faf8f4;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-
-        .account-detail small {
-            display: block;
-            color: #888;
-            margin-bottom: 4px;
-        }
-
-        .account-detail strong {
-            font-size: 14px;
-        }
-
-        .welcome-offer {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 14px;
-            background: #1d1b19;
-            color: #fff;
-        }
-
-        .welcome-offer strong {
-            font-family: "Playfair Display", serif;
-            font-size: 20px;
-        }
-
-        .welcome-offer p {
-            font-size: 12px;
-            opacity: .8;
-            margin-bottom: 15px;
-        }
-
-        .coupon {
-            display: inline-block;
-            background: #fff;
-            color: #1d1b19;
-            padding: 8px 12px;
-            border-radius: 7px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        @media(max-width:600px) {
-
-            .account-card {
-                padding: 25px 20px;
-            }
-
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Manage your Trends by AK account, track orders, view order details and download invoices.">
+<title>My Account | Trends by AK</title>
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#faf8f4;color:#1d1b19;font-family:"DM Sans",sans-serif}.page{min-height:100vh;padding:34px 18px 70px}.wrap{max-width:1050px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#1d1b19}.brand img{width:46px;height:46px;object-fit:contain;border-radius:50%}.brand strong{font-family:"Playfair Display",serif;font-size:20px}.back{color:#6d6257;text-decoration:none;font-size:13px}.card{background:#fff;border:1px solid #e8e3db;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.05)}.auth-card{max-width:480px;margin:30px auto;padding:32px}.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:10px;color:#8b6b42;font-weight:700}h1,h2{font-family:"Playfair Display",serif}h1{font-size:34px;margin:8px 0 10px}.intro{color:#777;font-size:14px;line-height:1.6}.offer{background:#f8f4ed;border:1px solid #e5dccd;padding:15px;border-radius:12px;margin:20px 0}.offer strong{display:block;font-size:14px;margin-bottom:5px}.offer span{font-size:12px;color:#777}label{display:block;font-size:12px;font-weight:700;margin:14px 0 7px}input{width:100%;border:1px solid #ddd6cb;border-radius:10px;padding:13px 14px;font:inherit;outline:none;background:#fff}input:focus{border-color:#8b6b42;box-shadow:0 0 0 3px rgba(139,107,66,.08)}button,.btn{border:0;border-radius:10px;padding:13px 16px;background:#1d1b19;color:#fff;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}.full{width:100%;margin-top:18px}.btn:disabled,button:disabled{opacity:.55;cursor:not-allowed}.outline{background:#fff;color:#1d1b19;border:1px solid #ddd6cb}.switch{text-align:center;margin-top:18px;color:#777;font-size:13px}.switch a{color:#8b6b42;font-weight:700;cursor:pointer}.message{display:none;margin:15px 0;padding:12px;border-radius:9px;font-size:13px}.message.show{display:block}.message.error{background:#fff0f0;color:#a33}.message.success{background:#eef8ee;color:#357335}.hidden{display:none!important}.dashboard{display:none}.dashboard.show{display:block}.hero{padding:25px;margin-bottom:18px;display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.hero h1{margin-bottom:4px}.hero p{margin:0;color:#777;font-size:13px}.hero-actions{display:flex;gap:8px;flex-wrap:wrap}.section-title{display:flex;align-items:end;justify-content:space-between;margin:25px 0 12px}.section-title h2{margin:0;font-size:25px}.section-title span{font-size:12px;color:#888}.order-list{display:grid;gap:14px}.order-card{padding:20px}.order-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.order-no{font-weight:700;font-size:15px}.date{font-size:12px;color:#888;margin-top:4px}.status{padding:6px 10px;border-radius:999px;background:#f3eee6;color:#6f5434;font-size:11px;font-weight:700;text-transform:capitalize}.order-summary{display:grid;grid-template-columns:1fr auto;gap:14px;margin-top:16px;padding-top:15px;border-top:1px solid #eee}.order-items{font-size:13px;color:#555;line-height:1.6}.order-total{font-size:18px;font-weight:700;text-align:right}.order-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.order-buttons .btn{font-size:12px;padding:10px 12px}.tracking{margin-top:14px;padding:13px;background:#faf8f4;border-radius:11px;font-size:12px;color:#666}.tracking strong{color:#1d1b19}.details{margin-top:13px;border-top:1px solid #eee;padding-top:12px}.details summary{cursor:pointer;font-size:13px;font-weight:700}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.detail-box{background:#faf8f4;border-radius:10px;padding:12px}.detail-box small{display:block;color:#888;font-size:10px;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}.detail-box p{margin:0;font-size:12px;line-height:1.5}.items-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}.items-table th,.items-table td{padding:9px 5px;border-bottom:1px solid #eee;text-align:left}.items-table th:last-child,.items-table td:last-child{text-align:right}.empty{padding:35px;text-align:center;color:#777}.empty h3{font-family:"Playfair Display",serif;color:#1d1b19;font-size:22px;margin:0 0 7px}.profile{padding:20px;margin-top:18px}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-box{padding:12px;background:#faf8f4;border-radius:10px}.profile-box small{display:block;color:#888;font-size:10px;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}.profile-box strong{font-size:13px;word-break:break-word}.help{position:fixed;right:20px;bottom:20px;z-index:20;background:#1d1b19;color:#fff;border-radius:999px;padding:13px 18px;text-decoration:none;font-size:13px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.2)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.48);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal.show{display:flex}.modal-card{background:#fff;width:100%;max-width:480px;border-radius:18px;padding:24px;max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{margin:0}.close{width:38px;height:38px;padding:0;background:#f4f1ec;color:#1d1b19}.small{font-size:12px;color:#777}.login-note{font-size:11px;color:#888;margin-top:10px;line-height:1.5}@media(max-width:700px){.hero{display:block}.hero-actions{margin-top:15px}.detail-grid,.profile-grid{grid-template-columns:1fr}.order-head{display:block}.status{display:inline-block;margin-top:9px}.help{right:12px;bottom:12px}.page{padding-top:20px}.auth-card{padding:25px 20px}}
+</style>
 </head>
-
 <body>
-
-<div class="account-page">
-
-    <div class="account-card">
-
-        <div class="account-logo">
-
-            <img
-                src="assets/logo.png"
-                alt="Trends by AK"
-            >
-
-            <strong>
-                Trends by AK
-            </strong>
-
-        </div>
-
-
-        <!-- LOGIN -->
-
-        <div id="loginView">
-
-            <p class="eyebrow">
-                WELCOME BACK
-            </p>
-
-            <h1>
-                Sign in.
-            </h1>
-
-            <p class="intro">
-                Sign in to manage your account,
-                view your orders and access your
-                first-order offer.
-            </p>
-
-
-            <div class="offer">
-
-                <strong>
-                    🎁 New here?
-                </strong>
-
-                <span>
-                    Create an account and get
-                    10% OFF your first order.
-                </span>
-
-            </div>
-
-
-            <form id="loginForm">
-
-                <label>
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    id="loginEmail"
-                    required
-                >
-
-
-                <label>
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    id="loginPassword"
-                    required
-                >
-
-
-                <button type="submit">
-                    Sign In
-                </button>
-
-            </form>
-
-
-            <div
-                id="loginMessage"
-                class="message"
-            ></div>
-
-
-            <div class="switch">
-
-                Don't have an account?
-
-                <a id="showSignup">
-                    Create one
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <!-- SIGNUP -->
-
-        <div id="signupView" style="display:none">
-
-            <p class="eyebrow">
-                JOIN TRENDS BY AK
-            </p>
-
-            <h1>
-                Create your account.
-            </h1>
-
-            <p class="intro">
-                Join us and get 10% OFF your
-                first order.
-            </p>
-
-
-            <div class="offer">
-
-                <strong>
-                    🎁 Your welcome gift
-                </strong>
-
-                <span>
-                    Get 10% OFF your first order
-                    with code WELCOME10.
-                </span>
-
-            </div>
-
-
-            <form id="signupForm">
-
-                <label>
-                    Full Name
-                </label>
-
-                <input
-                    type="text"
-                    id="signupName"
-                    required
-                >
-
-
-                <label>
-                    Mobile Number
-                </label>
-
-                <input
-                    type="tel"
-                    id="signupPhone"
-                    placeholder="+91XXXXXXXXXX"
-                    required
-                >
-
-
-                <label>
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    id="signupEmail"
-                    required
-                >
-
-
-                <label>
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    id="signupPassword"
-                    minlength="6"
-                    required
-                >
-
-
-                <button type="submit">
-                    Create Account
-                </button>
-
-            </form>
-
-
-            <div
-                id="signupMessage"
-                class="message"
-            ></div>
-
-
-            <div class="switch">
-
-                Already have an account?
-
-                <a id="showLogin">
-                    Sign in
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <!-- DASHBOARD -->
-
-        <div
-            id="dashboardView"
-            class="account-dashboard"
-        >
-
-            <p class="eyebrow">
-                MY ACCOUNT
-            </p>
-
-            <h1>
-                Hello, <span id="customerName">
-                </span>.
-            </h1>
-
-            <p class="intro">
-                Welcome back to Trends by AK.
-            </p>
-
-
-            <div class="account-detail">
-
-                <small>
-                    Email
-                </small>
-
-                <strong id="customerEmail">
-                </strong>
-
-            </div>
-
-
-            <div class="account-detail">
-
-                <small>
-                    Mobile
-                </small>
-
-                <strong id="customerPhone">
-                </strong>
-
-            </div>
-
-
-            <div
-                id="welcomeOffer"
-                class="welcome-offer"
-            >
-
-                <strong>
-                    Your 10% OFF is waiting ✨
-                </strong>
-
-                <p>
-                    Use this code on your first order.
-                </p>
-
-                <span class="coupon">
-                    WELCOME10
-                </span>
-
-            </div>
-
-
-            <button
-                class="secondary"
-                id="logoutButton"
-            >
-                Logout
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
+<div class="page">
+<div class="wrap">
+<div class="top"><a class="brand" href="index.html"><img src="assets/logo.png" alt="Trends by AK"><strong>Trends by AK</strong></a><a class="back" href="index.html">← Continue shopping</a></div>
+
+<section id="authView" class="card auth-card">
+  <div id="loginView">
+    <div class="eyebrow">WELCOME BACK</div><h1>Sign in.</h1>
+    <p class="intro">Sign in to track your orders, view order details and download your invoices.</p>
+    <div class="offer"><strong>🎁 New here?</strong><span>Create an account and get 10% OFF your first order with WELCOME10.</span></div>
+    <form id="loginForm">
+      <label for="loginEmail">Email</label><input id="loginEmail" type="email" autocomplete="email" required>
+      <label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required>
+      <button class="full" type="submit">Sign In</button>
+    </form>
+    <div id="loginMessage" class="message"></div>
+    <div class="switch">Don't have an account? <a id="showSignup">Create one</a></div>
+  </div>
+
+  <div id="signupView" class="hidden">
+    <div class="eyebrow">JOIN TRENDS BY AK</div><h1>Create your account.</h1>
+    <p class="intro">Keep all your Trends by AK orders in one place.</p>
+    <div class="offer"><strong>🎁 Your welcome gift</strong><span>Get 10% OFF your first order with code WELCOME10.</span></div>
+    <form id="signupForm">
+      <label for="signupName">Full Name</label><input id="signupName" type="text" autocomplete="name" required>
+      <label for="signupPhone">Mobile Number</label><input id="signupPhone" type="tel" autocomplete="tel" placeholder="+91XXXXXXXXXX" required>
+      <label for="signupEmail">Email</label><input id="signupEmail" type="email" autocomplete="email" required>
+      <label for="signupPassword">Password</label><input id="signupPassword" type="password" minlength="6" autocomplete="new-password" required>
+      <button class="full" type="submit">Create Account</button>
+    </form>
+    <div id="signupMessage" class="message"></div>
+    <div class="switch">Already have an account? <a id="showLogin">Sign in</a></div>
+  </div>
+</section>
+
+<section id="dashboardView" class="dashboard">
+  <div class="card hero">
+    <div><div class="eyebrow">MY ACCOUNT</div><h1>Hello, <span id="customerName">Customer</span>.</h1><p>Manage your orders and invoices from one place.</p></div>
+    <div class="hero-actions"><button class="btn outline" id="logoutButton">Logout</button></div>
+  </div>
+
+  <div class="section-title"><h2>My Orders</h2><span id="orderCount">0 orders</span></div>
+  <div id="ordersList" class="order-list"></div>
+
+  <div class="card profile">
+    <div class="section-title" style="margin:0 0 12px"><h2 style="font-size:20px">Account details</h2></div>
+    <div class="profile-grid"><div class="profile-box"><small>Email</small><strong id="customerEmail">—</strong></div><div class="profile-box"><small>Mobile</small><strong id="customerPhone">—</strong></div></div>
+  </div>
+</section>
+</div></div>
+
+<a class="help" href="https://wa.me/918433998962?text=Hi%20Trends%20by%20AK%2C%20I%20need%20help%20with%20my%20order." target="_blank" rel="noopener">💬 Contact Us / Help</a>
+
+<div id="orderModal" class="modal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Order details</h2><button class="close" id="closeModal">×</button></div><div id="modalBody"></div></div></div>
 
 <script>
-
 "use strict";
+const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
+const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+const WHATSAPP_NUMBER="918433998962";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const authView=document.getElementById("authView"),loginView=document.getElementById("loginView"),signupView=document.getElementById("signupView"),dashboardView=document.getElementById("dashboardView");
+let customerOrders=[];
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));}
+function money(v){return "₹"+Number(v||0).toLocaleString("en-IN",{maximumFractionDigits:2});}
+function date(v){return v?new Date(v).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"—";}
+function status(v){return String(v||"pending").replaceAll("_"," ").toLowerCase();}
+function msg(el,text,type="error"){el.textContent=text;el.className="message show "+type;}
+function showLogin(){loginView.classList.remove("hidden");signupView.classList.add("hidden");}
+function showSignup(){loginView.classList.add("hidden");signupView.classList.remove("hidden");}
+document.getElementById("showSignup").onclick=showSignup;document.getElementById("showLogin").onclick=showLogin;
 
-/* =========================================================
-   SUPABASE
-========================================================= */
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();const btn=e.target.querySelector("button"),m=document.getElementById("loginMessage");btn.disabled=true;btn.textContent="Signing in...";m.className="message";
+ const {data,error}=await supabaseClient.auth.signInWithPassword({email:document.getElementById("loginEmail").value.trim(),password:document.getElementById("loginPassword").value});
+ if(error||!data.session){msg(m,error?.message||"Unable to sign in. Please try again.");btn.disabled=false;btn.textContent="Sign In";return;}await loadAccount();
+});
 
-const SUPABASE_URL =
-    "https://ltxrycmreumoqfpcbwnb.supabase.co";
+document.getElementById("signupForm").addEventListener("submit",async e=>{
+ e.preventDefault();const btn=e.target.querySelector("button"),m=document.getElementById("signupMessage");btn.disabled=true;btn.textContent="Creating account...";m.className="message";
+ const name=document.getElementById("signupName").value.trim(),phone=document.getElementById("signupPhone").value.trim(),email=document.getElementById("signupEmail").value.trim(),password=document.getElementById("signupPassword").value;
+ const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name,phone}}});
+ if(error){msg(m,error.message);btn.disabled=false;btn.textContent="Create Account";return;}
+ if(data.session){await loadAccount();}else{msg(m,"Account created. Please check your email to confirm your account, then sign in.","success");btn.disabled=false;btn.textContent="Create Account";}
+});
 
-const SUPABASE_KEY =
-    "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+document.getElementById("logoutButton").onclick=async()=>{await supabaseClient.auth.signOut();customerOrders=[];dashboardView.classList.remove("show");authView.classList.remove("hidden");showLogin();};
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        }
-    );
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const loginView =
-    document.getElementById("loginView");
-
-const signupView =
-    document.getElementById("signupView");
-
-const dashboardView =
-    document.getElementById("dashboardView");
-
-
-/* =========================================================
-   HOMEPAGE REDIRECT
-========================================================= */
-
-function goToHomepage() {
-
-    window.location.replace("index.html");
-
+async function loadAccount(){
+ const {data:{session}}=await supabaseClient.auth.getSession();
+ if(!session){authView.classList.remove("hidden");dashboardView.classList.remove("show");return;}
+ authView.classList.add("hidden");dashboardView.classList.add("show");
+ const user=session.user,meta=user.user_metadata||{};
+ document.getElementById("customerName").textContent=meta.full_name||meta.name||"Customer";
+ document.getElementById("customerEmail").textContent=user.email||"—";
+ document.getElementById("customerPhone").textContent=meta.phone||"—";
+ await loadOrders();
 }
 
-
-/* =========================================================
-   MESSAGES
-========================================================= */
-
-function showMessage(
-    element,
-    text,
-    type = "error"
-) {
-
-    element.textContent = text;
-
-    element.className =
-        `message show ${type}`;
-
+async function loadOrders(){
+ const box=document.getElementById("ordersList");box.innerHTML='<div class="card empty">Loading your orders...</div>';
+ const {data,error}=await supabaseClient.functions.invoke("customer-orders",{method:"GET"});
+ if(error||!data){box.innerHTML='<div class="card empty"><h3>We could not load your orders</h3><p>Please refresh the page and try again.</p></div>';return;}
+ customerOrders=data.orders||[];document.getElementById("orderCount").textContent=`${customerOrders.length} ${customerOrders.length===1?"order":"orders"}`;renderOrders();
 }
 
-
-/* =========================================================
-   LOGIN / SIGNUP SWITCH
-========================================================= */
-
-function showLogin() {
-
-    loginView.style.display = "block";
-
-    signupView.style.display = "none";
-
-    dashboardView.classList.remove("show");
-
+function renderOrders(){
+ const box=document.getElementById("ordersList");
+ if(!customerOrders.length){box.innerHTML='<div class="card empty"><h3>No orders yet</h3><p>Your completed and current orders will appear here.</p><a class="btn" href="index.html">Start Shopping</a></div>';return;}
+ box.innerHTML=customerOrders.map((o,i)=>{
+   const items=o.items||[],itemText=items.length?items.map(x=>`${esc(x.product_name)} × ${Number(x.quantity||1)}`).join("<br>"):"Order items";
+   const track=o.tracking_url?`<a href="${esc(o.tracking_url)}" target="_blank" rel="noopener"><strong>Track shipment →</strong></a>`:o.tracking_number?`Tracking number: <strong>${esc(o.tracking_number)}</strong>`:`Tracking will appear here once your order is shipped.`;
+   const payment=status(o.payment_status);
+   const help=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi Trends by AK, I need help with order ${o.order_number}.`)}`;
+   return `<article class="card order-card"><div class="order-head"><div><div class="order-no">${esc(o.order_number)}</div><div class="date">Placed on ${date(o.created_at)}</div></div><span class="status">${esc(status(o.order_status||payment))}</span></div><div class="order-summary"><div class="order-items">${itemText}</div><div class="order-total">${money(o.total)}</div></div><div class="tracking">📦 ${track}</div><div class="order-buttons"><button class="btn" onclick="openOrder(${i})">Order Details</button><button class="btn outline" onclick="downloadInvoice(${i})">Download Invoice</button><a class="btn outline" href="${help}" target="_blank" rel="noopener">Need Help?</a></div></article>`;
+ }).join("");
 }
 
+function openOrder(i){
+ const o=customerOrders[i];if(!o)return;document.getElementById("modalTitle").textContent=`Order ${o.order_number}`;
+ const items=(o.items||[]).map(x=>`<tr><td>${esc(x.product_name)}</td><td>${Number(x.quantity||0)}</td><td>${money(x.line_total)}</td></tr>`).join("")||'<tr><td colspan="3">No item details available.</td></tr>';
+ document.getElementById("modalBody").innerHTML=`<p class="small">Placed ${date(o.created_at)} · ${esc(status(o.order_status))}</p><div class="detail-grid"><div class="detail-box"><small>Payment</small><p>${esc(status(o.payment_status))}${o.payment_method?` · ${esc(o.payment_method)}`:""}</p></div><div class="detail-box"><small>Invoice</small><p>${esc(o.invoice_number||o.order_number)}</p></div><div class="detail-box"><small>Shipping address</small><p>${esc(o.address_line1||"")} ${esc(o.address_line2||"")}<br>${esc(o.city||"")}, ${esc(o.state||"")} ${esc(o.postal_code||"")}<br>${esc(o.country||"India")}</p></div><div class="detail-box"><small>Tracking</small><p>${esc(o.tracking_number||"Not shipped yet")}</p></div></div><table class="items-table"><thead><tr><th>Item</th><th>Qty</th><th>Total</th></tr></thead><tbody>${items}</tbody></table><div class="detail-box" style="margin-top:12px"><p>Subtotal: ${money(o.subtotal)}<br>Discount: ${money(o.discount)}<br>Shipping: ${money(o.shipping_fee)}<br>Tax: ${money(o.tax)}<br><strong>Total: ${money(o.total)}</strong></p></div>`;
+ document.getElementById("orderModal").classList.add("show");
+}
+document.getElementById("closeModal").onclick=()=>document.getElementById("orderModal").classList.remove("show");document.getElementById("orderModal").onclick=e=>{if(e.target.id==="orderModal")e.currentTarget.classList.remove("show")};
 
-function showSignup() {
-
-    loginView.style.display = "none";
-
-    signupView.style.display = "block";
-
-    dashboardView.classList.remove("show");
-
+function downloadInvoice(i){
+ const o=customerOrders[i],jspdf=window.jspdf;if(!o||!jspdf){alert("Invoice download is unavailable right now. Please try again.");return;}const {jsPDF}=jspdf,doc=new jsPDF();let y=20;
+ doc.setFontSize(22);doc.text("TRENDS BY AK",20,y);y+=9;doc.setFontSize(10);doc.text("Sustainable Luxury but affordable",20,y);doc.text("Invoice",155,20);doc.setFontSize(12);doc.text(o.invoice_number||o.order_number,155,28);y+=18;doc.setFontSize(10);doc.text(`Order: ${o.order_number}`,20,y);doc.text(`Date: ${date(o.created_at)}`,120,y);y+=10;doc.text(`Bill To: ${o.customer_name||"Customer"}`,20,y);y+=6;doc.text(o.customer_email||"",20,y);y+=6;doc.text(o.customer_phone||"",20,y);y+=6;doc.text(`${o.address_line1||""} ${o.address_line2||""}`,20,y);y+=6;doc.text(`${o.city||""}, ${o.state||""} ${o.postal_code||""}`,20,y);y+=12;
+ doc.setFontSize(11);doc.text("Item",20,y);doc.text("Qty",125,y);doc.text("Amount",160,y);y+=7;doc.line(20,y,190,y);y+=7;doc.setFontSize(10);
+ (o.items||[]).forEach(item=>{if(y>270){doc.addPage();y=20;}const name=String(item.product_name||"Item").slice(0,55);doc.text(name,20,y);doc.text(String(item.quantity||1),125,y);doc.text(money(item.line_total),160,y);y+=7;});
+ y+=5;doc.line(120,y,190,y);y+=8;doc.text(`Subtotal: ${money(o.subtotal)}`,125,y);y+=6;doc.text(`Discount: ${money(o.discount)}`,125,y);y+=6;doc.text(`Shipping: ${money(o.shipping_fee)}`,125,y);y+=6;doc.text(`Tax: ${money(o.tax)}`,125,y);y+=8;doc.setFontSize(12);doc.text(`TOTAL: ${money(o.total)}`,125,y);y+=15;doc.setFontSize(9);doc.text("Thank you for shopping with Trends by AK.",20,y);doc.save(`invoice-${o.invoice_number||o.order_number}.pdf`);
 }
 
-
-document
-    .getElementById("showSignup")
-    .addEventListener(
-        "click",
-        showSignup
-    );
-
-
-document
-    .getElementById("showLogin")
-    .addEventListener(
-        "click",
-        showLogin
-    );
-
-
-/* =========================================================
-   CUSTOMER LOGIN
-========================================================= */
-
-document
-    .getElementById("loginForm")
-    .addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-            const email =
-                document
-                    .getElementById("loginEmail")
-                    .value
-                    .trim();
-
-            const password =
-                document
-                    .getElementById("loginPassword")
-                    .value;
-
-            const button =
-                event.target.querySelector("button");
-
-            const message =
-                document.getElementById(
-                    "loginMessage"
-                );
-
-
-            button.disabled = true;
-
-            button.textContent =
-                "Signing in...";
-
-            message.className =
-                "message";
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                await supabaseClient.auth
-                    .signInWithPassword({
-
-                        email: email,
-
-                        password: password
-
-                    });
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                /* Make absolutely sure
-                   a session exists */
-
-                if (!data.session) {
-
-                    throw new Error(
-                        "Login succeeded but no session was created."
-                    );
-
-                }
-
-
-                /*
-                 * CUSTOMER LOGIN SUCCESS
-                 *
-                 * Go directly to homepage.
-                 */
-
-                goToHomepage();
-
-
-            } catch (error) {
-
-                console.error(
-                    "Customer login error:",
-                    error
-                );
-
-
-                showMessage(
-                    message,
-                    error.message ||
-                    "Unable to sign in. Please try again."
-                );
-
-
-                button.disabled = false;
-
-                button.textContent =
-                    "Sign In";
-
-            }
-
-        }
-    );
-
-
-/* =========================================================
-   CUSTOMER SIGNUP
-========================================================= */
-
-document
-    .getElementById("signupForm")
-    .addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-
-            const name =
-                document
-                    .getElementById("signupName")
-                    .value
-                    .trim();
-
-
-            const phone =
-                document
-                    .getElementById("signupPhone")
-                    .value
-                    .trim();
-
-
-            const email =
-                document
-                    .getElementById("signupEmail")
-                    .value
-                    .trim();
-
-
-            const password =
-                document
-                    .getElementById("signupPassword")
-                    .value;
-
-
-            const button =
-                event.target.querySelector("button");
-
-
-            const message =
-                document.getElementById(
-                    "signupMessage"
-                );
-
-
-            button.disabled = true;
-
-            button.textContent =
-                "Creating account...";
-
-            message.className =
-                "message";
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                await supabaseClient.auth
-                    .signUp({
-
-                        email: email,
-
-                        password: password,
-
-                        options: {
-
-                            data: {
-
-                                full_name: name,
-
-                                phone: phone
-
-                            }
-
-                        }
-
-                    });
-
-
-                if (error) {
-
-                    throw error;
-
-                }
-
-
-                /*
-                 * Create / update customer profile
-                 */
-
-                if (data.user) {
-
-                    const {
-                        error: profileError
-                    } =
-                    await supabaseClient
-                        .from(
-                            "customer_profiles"
-                        )
-                        .upsert({
-
-                            id: data.user.id,
-
-                            full_name: name,
-
-                            phone: phone,
-
-                            email: email
-
-                        });
-
-
-                    if (profileError) {
-
-                        console.error(
-                            "Profile error:",
-                            profileError
-                        );
-
-                    }
-
-                }
-
-
-                /*
-                 * If Supabase immediately
-                 * created a session, go home.
-                 *
-                 * If email confirmation is enabled,
-                 * show the verification message.
-                 */
-
-                if (data.session) {
-
-                    goToHomepage();
-
-                    return;
-
-                }
-
-
-                showMessage(
-                    message,
-                    "Account created successfully. Please check your email to verify your account.",
-                    "success"
-                );
-
-
-                button.disabled = false;
-
-                button.textContent =
-                    "Create Account";
-
-
-            } catch (error) {
-
-                console.error(
-                    "Signup error:",
-                    error
-                );
-
-
-                showMessage(
-                    message,
-                    error.message ||
-                    "Unable to create your account."
-                );
-
-
-                button.disabled = false;
-
-                button.textContent =
-                    "Create Account";
-
-            }
-
-        }
-    );
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-document
-    .getElementById("logoutButton")
-    .addEventListener(
-        "click",
-        async function() {
-
-            await supabaseClient.auth.signOut();
-
-            showLogin();
-
-        }
-    );
-
-
-/* =========================================================
-   CHECK EXISTING CUSTOMER SESSION
-========================================================= */
-
-async function checkCustomerSession() {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-        await supabaseClient.auth
-            .getSession();
-
-
-        if (error) {
-
-            console.error(
-                "Session check error:",
-                error
-            );
-
-            return;
-
-        }
-
-
-        /*
-         * Customer is already logged in.
-         *
-         * Do NOT show the account dashboard.
-         * Send them straight to the homepage.
-         */
-
-        if (data.session) {
-
-            goToHomepage();
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Session check failed:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   AUTH STATE LISTENER
-========================================================= */
-
-supabaseClient.auth.onAuthStateChange(
-    function(event, session) {
-
-        console.log(
-            "Customer auth event:",
-            event
-        );
-
-
-        /*
-         * If customer signs in anywhere,
-         * account.html should not remain open.
-         */
-
-        if (
-            event === "SIGNED_IN" &&
-            session
-        ) {
-
-            goToHomepage();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   START
-========================================================= */
-
-checkCustomerSession();
-
+loadAccount();
 </script>
-
-
 </body>
-
 </html>
