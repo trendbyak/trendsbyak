@@ -7,6 +7,8 @@
 
     const WHATSAPP_URL = "https://wa.me/918433998962";
     const INSTAGRAM_URL = "https://www.instagram.com/trendsbyak/";
+    const SUPABASE_URL = "https://ltxrycmreumoqfpcbwnb.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
     const logoPath = location.pathname.includes("/admin/") ? "../assets/logo.png" : "assets/logo.png";
     const root = document.querySelector(".site-header");
     if (!root) return;
@@ -69,17 +71,18 @@
 
     async function loadProducts() {
         try {
-            let data = null;
-            if (window.supabaseClient) {
-                const response = await window.supabaseClient.from("products").select("*");
-                data = response.data;
-            } else if (window.supabase && typeof window.supabase.createClient === "function" && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-                const client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-                const response = await client.from("products").select("*");
-                data = response.data;
+            let client = window.supabaseClient;
+            if (!client && window.supabase && typeof window.supabase.createClient === "function") {
+                client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
+            if (!client) throw new Error("Supabase client is unavailable");
+            const { data, error } = await client.from("products").select("*");
+            if (error) throw error;
             if (Array.isArray(data)) products = data.map(normaliseProduct);
-        } catch (error) { console.warn("Global product search could not load products.", error); }
+        } catch (error) {
+            console.warn("Global product search could not load products.", error);
+            products = [];
+        }
         productsLoaded = true;
         if (searchInput?.value.trim()) renderResults(searchInput.value);
     }
