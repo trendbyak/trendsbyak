@@ -109,4 +109,85 @@
 
     function syncCartCount(){const badge=document.getElementById("cartCount");if(!badge)return;try{const cart=JSON.parse(localStorage.getItem("cart")||"[]");badge.textContent=Array.isArray(cart)?cart.reduce((sum,item)=>sum+Number(item.quantity||1),0):0;}catch(_){} }
     syncCartCount(); window.addEventListener("storage",syncCartCount); window.addEventListener("cartUpdated",syncCartCount);
+
+    // =========================================================
+    // TRENDS BY AK — WEBSITE ACTIVITY TRACKER
+    // Anonymous by default; links to a customer only when the
+    // storefront already has a customer identity available.
+    // =========================================================
+    (function initActivityTracking(){
+        try {
+            const client = (window.supabaseClient && typeof window.supabaseClient.from === "function")
+                ? window.supabaseClient
+                : (window.supabase && typeof window.supabase.createClient === "function"
+                    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+                    : null);
+            if (!client) return;
+
+            const key = "trendsbyak_visitor_id";
+            const sessionKey = "trendsbyak_session_id";
+            let visitorId = localStorage.getItem(key);
+            if (!visitorId) { visitorId = (crypto.randomUUID ? crypto.randomUUID() : "v_"+Date.now()+"_"+Math.random().toString(36).slice(2)); localStorage.setItem(key, visitorId); }
+            let sessionId = sessionStorage.getItem(sessionKey);
+            if (!sessionId) { sessionId = (crypto.randomUUID ? crypto.randomUUID() : "s_"+Date.now()+"_"+Math.random().toString(36).slice(2)); sessionStorage.setItem(sessionKey, sessionId); }
+
+            const pagePath = location.pathname + location.search;
+            const pageName = document.title || path || "Website";
+            const deviceType = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? "mobile" : "desktop";
+            const params = new URLSearchParams(location.search);
+            const source = params.get("utm_source") || (document.referrer ? (()=>{try{return new URL(document.referrer).hostname}catch(_){return "referral"}})() : "direct");
+            const medium = params.get("utm_medium") || "";
+            const campaign = params.get("utm_campaign") || "";
+            const startedAt = new Date().toISOString();
+
+            function currentCustomerId(){
+                try { return localStorage.getItem("trendsbyak_customer_id") || sessionStorage.getItem("trendsbyak_customer_id") || null; } catch(_){ return null; }
+            }
+            function productContext(){
+                const q = new URLSearchParams(location.search);
+                const id = q.get("id");
+                const name = document.querySelector("h1.title,h1.product-title,h1")?.textContent?.trim() || null;
+                return { id: id && /^\d+$/.test(id) ? Number(id) : null, name };
+            }
+            const pc = productContext();
+
+            async function heartbeat(){
+                const customerId = currentCustomerId();
+                const payload = {
+                    visitor_id: visitorId,
+                    session_id: sessionId,
+                    customer_id: customerId,
+                    page: pageName,
+                    page_url: location.href,
+                    user_agent: navigator.userAgent,
+                    last_seen: new Date().toISOString(),
+                    started_at: startedAt,
+                    product_id: pc.id,
+                    device_type: deviceType,
+                    source: source
+                };
+                const { error } = await client.from("live_visitors").upsert(payload, { onConflict:"visitor_id" });
+                if (error) console.debug("activity heartbeat", error.message);
+            }
+            async function event(eventName, extra={}){
+                const customerId = currentCustomerId();
+                const payload = {
+                    event_name:eventName, session_id:sessionId, visitor_id:visitorId,
+                    customer_id:customerId, page_url:location.href, page_path:pagePath,
+                    referrer:document.referrer||null, source, medium, campaign, device_type:deviceType,
+                    user_agent:navigator.userAgent, product_id:pc.id, product_name:pc.name,
+                    value:extra.value??null, currency:"INR", metadata:extra.metadata||{}
+                };
+                const { error } = await client.from("analytics_events").insert(payload);
+                if (error) console.debug("activity event", error.message);
+            }
+            heartbeat();
+            event("page_view", {metadata:{page_title:pageName}});
+            const timer = setInterval(heartbeat, 30000);
+            let hiddenAt = null;
+            document.addEventListener("visibilitychange",()=>{ if(document.hidden){hiddenAt=Date.now();} else {heartbeat(); event("page_return");} });
+            window.addEventListener("pagehide",()=>{ clearInterval(timer); try{navigator.sendBeacon&&navigator.sendBeacon(SUPABASE_URL+"/rest/v1/analytics_events",JSON.stringify({event_name:"page_exit",session_id:sessionId,visitor_id:visitorId,page_url:location.href,page_path:pagePath,device_type:deviceType,user_agent:navigator.userAgent,created_at:new Date().toISOString()}));}catch(_){} });
+            window.trendsByAkActivity = { visitorId, sessionId, track:event, heartbeat };
+        } catch(error){ console.debug("activity tracker unavailable", error); }
+    })();
 })();
