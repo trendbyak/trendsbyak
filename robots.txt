@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /checkout.html
+Disallow: /account.html
+Disallow: /login.html
+Disallow: /test/
+
+Sitemap: https://trendsbyak.in/sitemap.xml
