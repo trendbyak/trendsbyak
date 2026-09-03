@@ -1,0 +1,55 @@
+name: Add Pinterest domain verification
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify-pinterest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure Pinterest verification meta tag is in homepage head
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("index.html")
+          text = path.read_text(encoding="utf-8-sig")
+          tag = '<meta name="p:domain_verify" content="54f17140de35b2e569cb4b731230e86" />'
+
+          if tag not in text:
+              marker = "<head>"
+              if marker not in text.lower():
+                  raise SystemExit("Could not find <head> in index.html")
+              pos = text.lower().find(marker) + len(marker)
+              text = text[:pos] + "\n" + tag + text[pos:]
+              path.write_text(text, encoding="utf-8")
+              print("Pinterest verification tag added to index.html")
+          else:
+              print("Pinterest verification tag already present")
+          PY
+
+      - name: Commit verification tag
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No change needed."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Add Pinterest domain verification tag"
+          git push
