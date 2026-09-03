@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pinterest Integration | Trends by AK</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f7f4ef;color:#292929}.top{height:64px;background:#1b1b1b;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px}.top a{color:#fff;text-decoration:none;background:#c7a05d;padding:9px 13px;border-radius:7px}.layout{display:flex;min-height:calc(100vh - 64px)}.side{width:220px;background:#1b1b1b;padding:18px 12px;flex-shrink:0}.side a{display:block;color:#ddd;text-decoration:none;padding:11px 13px;border-radius:7px;margin-bottom:4px}.side a:hover,.side a.active{background:#c7a05d;color:#fff}main{flex:1;padding:26px;max-width:1100px}.hero{margin-bottom:18px}.hero h1{margin:0 0 6px}.muted{color:#777;font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:#fff;border:1px solid #e9e4dc;border-radius:14px;padding:20px}.card h2{margin:0 0 10px;font-size:18px}.status{display:inline-flex;padding:6px 10px;border-radius:999px;background:#fff4df;color:#8b641e;font-size:12px;font-weight:700}.code{background:#292929;color:#fff;border-radius:10px;padding:14px;overflow:auto;font-family:monospace;font-size:12px;line-height:1.5}.copy{border:0;background:#c7a05d;color:#fff;padding:10px 13px;border-radius:7px;cursor:pointer;margin-top:10px}.steps{padding-left:20px;line-height:1.7}.notice{background:#fff8eb;border:1px solid #f0dfbb;border-radius:10px;padding:12px;font-size:13px;margin-top:12px}.success{background:#eef9f1;border-color:#cce8d3;color:#245b32}@media(max-width:700px){.layout{display:block}.side{width:100%;padding:10px}.side a{display:inline-block}.grid{grid-template-columns:1fr}main{padding:14px}}
+</style>
+</head>
+<body>
+<header class="top"><strong>TRENDS BY AK — PINTEREST</strong><a href="index.html">Dashboard</a></header>
+<div class="layout">
+<aside class="side">
+<a href="index.html">🏠 Dashboard</a>
+<a href="customers.html">👥 Customers</a>
+<a href="orders.html">📦 Orders</a>
+<a href="analytics.html">📊 Analytics</a>
+<a href="coupons.html">🎟️ Coupons</a>
+<a class="active" href="pinterest.html">📌 Pinterest</a>
+</aside>
+<main>
+<div class="hero"><h1>📌 Pinterest Integration</h1><div class="muted">Claim trendsbyak.in, prepare Pinterest tracking and keep the integration details in one place.</div></div>
+<div class="grid">
+<section class="card">
+<h2>1. Website claim</h2>
+<span class="status">HTML tag ready</span>
+<p class="muted">The Pinterest verification tag from your Pinterest screen has been added to the customer-facing site through the global header.</p>
+<div class="code" id="tag">&lt;meta name="p:domain_verify" content="54f17140de35b2e569cb4b731230e86" /&gt;</div>
+<button class="copy" onclick="copyTag()">Copy verification tag</button>
+<div class="notice success">Once the latest website deployment is live, return to Pinterest and click <strong>Claim your website</strong>.</div>
+</section>
+<section class="card">
+<h2>2. What to do in Pinterest</h2>
+<ol class="steps">
+<li>Keep <strong>Add HTML tag</strong> selected.</li>
+<li>Make sure the website URL is <strong>https://trendsbyak.in</strong>.</li>
+<li>Click <strong>Claim your website</strong>.</li>
+<li>Wait for Pinterest to verify the domain.</li>
+</ol>
+<div class="notice">If Pinterest says it cannot find the tag, wait for the website deployment/cache to update and try again. Do not remove the tag.</div>
+</section>
+<section class="card">
+<h2>3. Pinterest business setup</h2>
+<p>After the website is claimed, the next build step is Pinterest conversion tracking and product/catalog feeds.</p>
+<ul class="steps">
+<li>Connect the Trends by AK Pinterest Business account.</li>
+<li>Install the Pinterest Tag for page visits and conversions.</li>
+<li>Track product views, add-to-cart and checkout/purchase events.</li>
+<li>Prepare a product feed so jewellery, scrunchies and other products can become Pinterest product Pins.</li>
+</ul>
+</section>
+<section class="card">
+<h2>4. Recommended next build</h2>
+<p>After domain verification, I recommend we build the <strong>Marketing & Integrations</strong> area in the admin panel so Pinterest, WhatsApp, email campaigns, Meta/Google tracking and coupons can be managed from one place.</p>
+<div class="notice">This page is the first step. It does not expose any private API keys or credentials.</div>
+</section>
+</div>
+</main></div>
+<script>function copyTag(){navigator.clipboard?.writeText('<meta name="p:domain_verify" content="54f17140de35b2e569cb4b731230e86" />').then(()=>alert('Pinterest verification tag copied.'))}</script>
+</body>
+</html>
