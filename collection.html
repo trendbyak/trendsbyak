@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collection | Trends by AK</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{background:#f8f3eb;color:#29251f}.collection-hero{padding:70px 6% 55px;text-align:center;background:#fffaf3;border-bottom:1px solid #dfd1bd}.collection-hero img{width:110px;height:110px;object-fit:cover;border-radius:50%;border:1px solid #d8c4a5;margin-bottom:18px}.collection-hero h1{margin:0;font-family:"Playfair Display",serif;font-size:clamp(34px,5vw,58px)}.collection-hero p{max-width:650px;margin:12px auto 0;color:#786f64;line-height:1.7}.collection-wrap{max-width:1250px;margin:auto;padding:55px 6% 90px}..collection-toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:28px;color:#786f64;font-size:13px}.collection-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 18px}.product-card{min-width:0}.product-image{position:relative;display:block;aspect-ratio:1;overflow:hidden;background:#eaddca}.product-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}.product-image:hover img{transform:scale(1.04)}.product-info{padding-top:12px}.product-category{font-size:9px;letter-spacing:1.3px;text-transform:uppercase;color:#8f6c3d}.product-info h3{margin:5px 0 7px;font:600 18px/1.3 "Playfair Display",serif}.product-price{color:#8f6c3d;font-weight:700}.old-price{margin-right:7px;color:#9c9286;text-decoration:line-through;font-weight:400}.add-cart{margin-top:11px;width:100%;padding:10px;border:1px solid #29251f;background:transparent;cursor:pointer;font:600 11px "DM Sans",sans-serif}.add-cart:hover{background:#29251f;color:#fff}.message{text-align:center;padding:70px 20px;border:1px solid #dfd1bd;background:#fffaf3;color:#786f64}.message h2{color:#29251f}.back-link{display:inline-block;margin-top:25px;color:#8f6c3d;font-weight:700;font-size:12px}@media(max-width:900px){.collection-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.collection-hero{padding:48px 5% 38px}.collection-wrap{padding:40px 5% 70px}.collection-grid{grid-template-columns:repeat(2,1fr);gap:22px 10px}.product-info h3{font-size:15px}.collection-toolbar{align-items:flex-start}.collection-hero img{width:88px;height:88px}}
+</style>
+</head>
+<body>
+<header class="site-header">
+<a class="brand" href="index.html"><img src="assets/logo.png" alt="Trends by AK" class="site-logo-image"><span class="brand-copy"><strong>Trends by AK</strong><small>Sustainable Luxury · Affordable</small></span></a>
+<nav class="main-nav"><a href="index.html#categories">Categories</a><a href="index.html#collections">Collections</a><a href="shop.html">Shop</a><a href="cart.html" class="nav-cart">Cart (<span id="cartCount">0</span>)</a><a href="https://wa.me/918433998962" target="_blank" rel="noopener" class="nav-whatsapp">WhatsApp</a></nav>
+</header>
+<main>
+<section class="collection-hero"><div id="heroContent"><p>Loading collection…</p></div></section>
+<section class="collection-wrap"><div class="collection-toolbar"><span id="productCount">Loading products…</span><a href="shop.html">View all products →</a></div><div class="collection-grid" id="productGrid"></div></section>
+</main>
+<script>
+"use strict";
+const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
+const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const params=new URLSearchParams(location.search);
+const requestedId=params.get("id");
+const requestedName=params.get("name")||params.get("collection")||"";
+const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
+const norm=v=>String(v??"").trim().replace(/\s+/g," ").toLowerCase();
+const price=v=>`₹${Number(v||0).toLocaleString("en-IN")}`;
+function cart(){try{return JSON.parse(localStorage.getItem("trendsbyak_cart")||"[]")}catch{return[]}}
+function cartCount(){document.getElementById("cartCount").textContent=cart().reduce((s,x)=>s+Number(x.quantity||0),0)}
+function add(product,button){let c=cart(), id=String(product.id), x=c.find(i=>String(i.product_id||i.id)===id);if(x)x.quantity=Number(x.quantity||0)+1;else c.push({product_id:product.id,name:product.name,price:Number(product.sale_price??product.price??0),image_url:product.image_url||"",quantity:1});localStorage.setItem("trendsbyak_cart",JSON.stringify(c));cartCount();button.textContent="Added ✓";setTimeout(()=>button.textContent="Add to Cart",1000)}
+async function load(){
+try{
+ let collection=null;
+ if(requestedId){const r=await db.from("collections").select("id,name,description,image_url").eq("id",requestedId).maybeSingle();if(r.error)throw r.error;collection=r.data}
+ if(!collection&&requestedName){const r=await db.from("collections").select("id,name,description,image_url").ilike("name",requestedName).limit(1).maybeSingle();if(r.error)throw r.error;collection=r.data}
+ const name=collection?.name||requestedName;
+ if(!name){throw new Error("Collection not specified")}
+ document.title=`${name} | Trends by AK`;
+ document.getElementById("heroContent").innerHTML=`${collection?.image_url?`<img src="${esc(collection.image_url)}" alt="${esc(name)}">`:""}<p class="eyebrow">TRENDS BY AK · COLLECTION</p><h1>${esc(name)}</h1><p>${esc(collection?.description||"Thoughtfully curated pieces from this collection.")}</p>`;
+ const r=await db.from("products").select("id,name,price,sale_price,category,image_url,stock,status,collection,collection_name,created_at").order("created_at",{ascending:false});
+ if(r.error)throw r.error;
+ const products=(r.data||[]).filter(p=>{const active=p.status==null||String(p.status).toLowerCase()==="active";return active&&(norm(p.collection)===norm(name)||norm(p.collection_name)===norm(name)||norm(p.category)===norm(name))});
+ document.getElementById("productCount").textContent=`${products.length} ${products.length===1?"product":"products"}`;
+ if(!products.length){document.getElementById("productGrid").innerHTML=`<div class="message" style="grid-column:1/-1"><h2>No products in this collection yet.</h2><p>Products will appear here when they are assigned to “${esc(name)}” in the admin panel.</p><a class="back-link" href="shop.html">Browse all products</a></div>`;return}
+ document.getElementById("productGrid").innerHTML=products.map(p=>{const sale=p.sale_price!=null&&p.sale_price!==""?Number(p.sale_price):0;const mrp=Number(p.price||0);const sold=Number(p.stock||0)<=0;return `<article class="product-card"><a class="product-image" href="product.html?id=${encodeURIComponent(p.id)}">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:""}</a><div class="product-info"><div class="product-category">${esc(p.category||name)}</div><h3><a href="product.html?id=${encodeURIComponent(p.id)}">${esc(p.name||"Beautiful find")}</a></h3><div class="product-price">${sale>0&&mrp>sale?`<span class="old-price">${price(mrp)}</span>${price(sale)}`:price(sale||mrp)}</div><button class="add-cart" type="button" ${sold?"disabled":""}>${sold?"Sold Out":"Add to Cart"}</button></div></article>`}).join("");
+ document.querySelectorAll(".add-cart:not([disabled])").forEach((b,i)=>b.addEventListener("click",()=>add(products[i],b)));
+}catch(e){console.error(e);document.getElementById("heroContent").innerHTML='<p class="eyebrow">TRENDS BY AK</p><h1>Collection unavailable</h1><p>Please return to the collections section and try again.</p>';document.getElementById("productCount").textContent="";document.getElementById("productGrid").innerHTML='<div class="message" style="grid-column:1/-1"><h2>We could not load this collection.</h2><a class="back-link" href="index.html#collections">← Back to collections</a></div>'}}
+cartCount();load();
+</script>
+</body>
+</html>
