@@ -29,28 +29,54 @@ const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
 const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const params=new URLSearchParams(location.search);
-const requestedId=params.get("id");
-const requestedName=params.get("name")||params.get("collection")||"";
+const rawId=params.get("id")||"";
+const rawName=params.get("name")||params.get("collection")||"";
 const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
 const norm=v=>String(v??"").trim().replace(/\s+/g," ").toLowerCase();
+const aliases=v=>{const n=norm(v);return [...new Set([n,n.replace(/ accessories?$/," accessory"),n.replace(/ accessory$/," accessories")])];};
 const price=v=>`₹${Number(v||0).toLocaleString("en-IN")}`;
 function cart(){try{return JSON.parse(localStorage.getItem("trendsbyak_cart")||"[]")}catch{return[]}}
-function cartCount(){document.getElementById("cartCount").textContent=cart().reduce((s,x)=>s+Number(x.quantity||0),0)}
-function add(product,button){let c=cart(), id=String(product.id), x=c.find(i=>String(i.product_id||i.id)===id);if(x)x.quantity=Number(x.quantity||0)+1;else c.push({product_id:product.id,name:product.name,price:Number(product.sale_price??product.price??0),image_url:product.image_url||"",quantity:1});localStorage.setItem("trendsbyak_cart",JSON.stringify(c));cartCount();button.textContent="Added ✓";setTimeout(()=>button.textContent="Add to Cart",1000)}
-async function load(){try{
-let collection=null;
-if(requestedId){const r=await db.from("collections").select("id,name,description,image_url").eq("id",requestedId).maybeSingle();if(r.error)throw r.error;collection=r.data}
-if(!collection&&requestedName){const r=await db.from("collections").select("id,name,description,image_url").ilike("name",requestedName).limit(1).maybeSingle();if(r.error)throw r.error;collection=r.data}
-const name=collection?.name||requestedName;if(!name)throw new Error("Collection not specified");
-document.title=`${name} | Trends by AK`;
-document.getElementById("heroContent").innerHTML=`${collection?.image_url?`<img src="${esc(collection.image_url)}" alt="${esc(name)}">`:""}<p class="eyebrow">TRENDS BY AK · COLLECTION</p><h1>${esc(name)}</h1><p>${esc(collection?.description||"Thoughtfully curated pieces from this collection.")}</p>`;
-const r=await db.from("products").select("id,name,price,sale_price,category,image_url,stock,status,collection,collection_name,created_at").order("created_at",{ascending:false});if(r.error)throw r.error;
-const products=(r.data||[]).filter(p=>{const active=p.status==null||String(p.status).toLowerCase()==="active";return active&&(norm(p.collection)===norm(name)||norm(p.collection_name)===norm(name)||norm(p.category)===norm(name))});
-document.getElementById("productCount").textContent=`${products.length} ${products.length===1?"product":"products"}`;
-if(!products.length){document.getElementById("productGrid").innerHTML=`<div class="message" style="grid-column:1/-1"><h2>No products in this collection yet.</h2><p>Products will appear here when they are assigned to “${esc(name)}” in the admin panel.</p><a class="back-link" href="shop.html">Browse all products</a></div>`;return}
-document.getElementById("productGrid").innerHTML=products.map(p=>{const sale=p.sale_price!=null&&p.sale_price!==""?Number(p.sale_price):0;const mrp=Number(p.price||0);const sold=Number(p.stock||0)<=0;return `<article class="product-card"><a class="product-image" href="product.html?id=${encodeURIComponent(p.id)}">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:""}</a><div class="product-info"><div class="product-category">${esc(p.category||name)}</div><h3><a href="product.html?id=${encodeURIComponent(p.id)}">${esc(p.name||"Beautiful find")}</a></h3><div class="product-price">${sale>0&&mrp>sale?`<span class="old-price">${price(mrp)}</span>${price(sale)}`:price(sale||mrp)}</div><button class="add-cart" type="button" ${sold?"disabled":""}>${sold?"Sold Out":"Add to Cart"}</button></div></article>`}).join("");
-document.querySelectorAll(".add-cart:not([disabled])").forEach((b,i)=>b.addEventListener("click",()=>add(products[i],b)));
-}catch(e){console.error(e);document.getElementById("heroContent").innerHTML='<p class="eyebrow">TRENDS BY AK</p><h1>Collection unavailable</h1><p>Please return to the collections section and try again.</p>';document.getElementById("productCount").textContent="";document.getElementById("productGrid").innerHTML='<div class="message" style="grid-column:1/-1"><h2>We could not load this collection.</h2><a class="back-link" href="index.html#collections">← Back to collections</a></div>'}}
+function cartCount(){const el=document.getElementById("cartCount");if(el)el.textContent=cart().reduce((s,x)=>s+Number(x.quantity||0),0)}
+function add(product,button){let c=cart(),id=String(product.id),x=c.find(i=>String(i.product_id||i.id)===id);if(x)x.quantity=Number(x.quantity||0)+1;else c.push({product_id:product.id,name:product.name,price:Number(product.sale_price??product.price??0),image_url:product.image_url||"",quantity:1});localStorage.setItem("trendsbyak_cart",JSON.stringify(c));cartCount();button.textContent="Added ✓";setTimeout(()=>button.textContent="Add to Cart",1000)}
+async function getCollection(){
+  let collection=null;
+  // A numeric id is a real collection id. A non-numeric id is treated as a name/slug.
+  if(rawId && /^\d+$/.test(rawId)){
+    const r=await db.from("collections").select("id,name,description,image_url").eq("id",Number(rawId)).maybeSingle();
+    if(!r.error) collection=r.data;
+  }
+  const requestedName=collection?.name||rawName||((rawId&&!/^\d+$/.test(rawId))?decodeURIComponent(rawId):"");
+  if(!collection && requestedName){
+    const r=await db.from("collections").select("id,name,description,image_url").ilike("name",requestedName).limit(1).maybeSingle();
+    if(!r.error) collection=r.data;
+  }
+  return {collection,name:collection?.name||requestedName};
+}
+async function load(){
+ try{
+  const {collection,name}=await getCollection();
+  if(!name) throw new Error("Collection not specified");
+  document.title=`${name} | Trends by AK`;
+  document.getElementById("heroContent").innerHTML=`${collection?.image_url?`<img src="${esc(collection.image_url)}" alt="${esc(name)}">`:""}<p class="eyebrow">TRENDS BY AK · COLLECTION</p><h1>${esc(name)}</h1><p>${esc(collection?.description||"Thoughtfully curated pieces from this collection.")}</p>`;
+  const r=await db.from("products").select("id,name,price,sale_price,category,image_url,stock,status,collection,created_at").order("created_at",{ascending:false});
+  if(r.error) throw r.error;
+  const wanted=aliases(name);
+  const products=(r.data||[]).filter(p=>{
+    const active=p.status==null||["active","published","available"].includes(norm(p.status));
+    const values=[p.collection,p.category].filter(Boolean).flatMap(aliases);
+    return active&&values.some(v=>wanted.includes(v));
+  });
+  document.getElementById("productCount").textContent=`${products.length} ${products.length===1?"product":"products"}`;
+  if(!products.length){document.getElementById("productGrid").innerHTML=`<div class="message" style="grid-column:1/-1"><h2>No products in this collection yet.</h2><p>Products will appear here when they are assigned to “${esc(name)}” in the admin panel.</p><a class="back-link" href="shop.html">Browse all products</a></div>`;return;}
+  document.getElementById("productGrid").innerHTML=products.map(p=>{const sale=p.sale_price!=null&&p.sale_price!==""?Number(p.sale_price):0;const mrp=Number(p.price||0);const sold=Number(p.stock||0)<=0;return `<article class="product-card"><a class="product-image" href="product.html?id=${encodeURIComponent(p.id)}">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:""}</a><div class="product-info"><div class="product-category">${esc(p.category||name)}</div><h3><a href="product.html?id=${encodeURIComponent(p.id)}">${esc(p.name||"Beautiful find")}</a></h3><div class="product-price">${sale>0&&mrp>sale?`<span class="old-price">${price(mrp)}</span>${price(sale)}`:price(sale||mrp)}</div><button class="add-cart" type="button" ${sold?"disabled":""}>${sold?"Sold Out":"Add to Cart"}</button></div></article>`}).join("");
+  document.querySelectorAll(".add-cart:not([disabled])").forEach((b,i)=>b.addEventListener("click",()=>add(products[i],b)));
+ }catch(e){
+  console.error("Collection load failed",e);
+  document.getElementById("heroContent").innerHTML='<p class="eyebrow">TRENDS BY AK</p><h1>Collection unavailable</h1><p>Please return to the collections section and try again.</p>';
+  document.getElementById("productCount").textContent="";
+  document.getElementById("productGrid").innerHTML='<div class="message" style="grid-column:1/-1"><h2>We could not load this collection.</h2><p>The collection link was repaired to accept both collection IDs and names.</p><a class="back-link" href="index.html#collections">← Back to collections</a></div>';
+ }
+}
 cartCount();load();
 </script>
 </body>
