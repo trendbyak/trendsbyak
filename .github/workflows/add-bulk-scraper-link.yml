@@ -1,0 +1,36 @@
+name: Add Bulk Scraper Link
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/products.html'
+      - '.github/workflows/add-bulk-scraper-link.yml'
+permissions:
+  contents: write
+jobs:
+  patch-products-page:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add bulk scraper link
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('admin/products.html')
+          s = p.read_text(encoding='utf-8')
+          if 'bulk-scraper.html' not in s:
+              old = '<a class="btn light" href="bulk-products.html">Open Bulk Excel</a>'
+              new = old + '<a class="btn light" href="bulk-scraper.html">Open Bulk Scraper</a>'
+              if old not in s:
+                  raise SystemExit('Expected Products import-tools markup was not found')
+              p.write_text(s.replace(old, new, 1), encoding='utf-8')
+          else:
+              print('Bulk scraper link already present')
+      - name: Commit change
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add admin/products.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Add bulk scraper option to Products'
+          git push

@@ -37,17 +37,12 @@
         <nav class="main-nav" id="globalMainNav" aria-label="Main navigation">
             <a class="icon-link" href="${href("#home", "index.html#home")}" aria-label="Home" title="Home">${icon.home}<span class="sr-only">Home</span></a>
             <a class="icon-link" href="shop.html" aria-label="Shop" title="Shop">${icon.shop}<span class="sr-only">Shop</span></a>
-            <div class="header-search-wrap">
-                <div class="header-search">${icon.search}<input id="globalSearchInput" class="header-search-input" type="search" placeholder="Search products..." autocomplete="off" aria-label="Search products"></div>
-                <div id="globalSearchResults" class="header-search-results"></div>
-            </div>
+            <div class="header-search-wrap"><div class="header-search">${icon.search}<input id="globalSearchInput" class="header-search-input" type="search" placeholder="Search products..." autocomplete="off" aria-label="Search products"></div><div id="globalSearchResults" class="header-search-results"></div></div>
             <a class="icon-link" href="account.html#wishlist" aria-label="Wishlist" title="Wishlist">${icon.wishlist}<span class="sr-only">Wishlist</span></a>
             <a class="icon-link cart-icon-link" href="cart.html" aria-label="Cart" title="Cart">${icon.cart}<span class="cart-badge" id="cartCount">0</span><span class="sr-only">Cart</span></a>
             <a class="icon-link" href="account.html" aria-label="Account" title="Account">${icon.account}<span class="sr-only">Account</span></a>
             <a class="icon-link" href="${INSTAGRAM_URL}" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">${icon.instagram}<span class="sr-only">Instagram</span></a>
-            <div class="more-menu"><button class="more-toggle" id="moreToggle" type="button" aria-expanded="false" aria-haspopup="true">More ${icon.chevron}</button><div class="more-dropdown" id="moreDropdown">
-                <a href="${href("#categories", "index.html#categories")}">Categories</a><a href="${href("#new-launches", "index.html#new-launches")}">New Launches</a><a href="${href("#collections", "collections.html")}">Collections</a><a href="${href("#reviews", "index.html#reviews")}">Reviews</a><a href="bulk-order.html">Bulk Orders</a><a href="track-order.html">Track Order</a><a href="${WHATSAPP_URL}" target="_blank" rel="noopener">WhatsApp</a><a href="policies.html">Policies</a><a href="contact.html">Contact Us</a>
-            </div></div>
+            <div class="more-menu"><button class="more-toggle" id="moreToggle" type="button" aria-expanded="false" aria-haspopup="true">More ${icon.chevron}</button><div class="more-dropdown" id="moreDropdown"><a href="${href("#categories", "index.html#categories")}">Categories</a><a href="${href("#new-launches", "index.html#new-launches")}">New Launches</a><a href="${href("#collections", "collections.html")}">Collections</a><a href="${href("#reviews", "index.html#reviews")}">Reviews</a><a href="bulk-order.html">Bulk Orders</a><a href="track-order.html">Track Order</a><a href="${WHATSAPP_URL}" target="_blank" rel="noopener">WhatsApp</a><a href="policies.html">Policies</a><a href="contact.html">Contact Us</a></div></div>
         </nav>`;
 
     const menu = document.getElementById("globalMainNav");
@@ -56,7 +51,6 @@
     const results = document.getElementById("globalSearchResults");
     const moreToggle = document.getElementById("moreToggle");
     const moreDropdown = document.getElementById("moreDropdown");
-
     menuButton?.addEventListener("click", () => { const open = menu.classList.toggle("is-open"); menuButton.setAttribute("aria-expanded", String(open)); });
     moreToggle?.addEventListener("click", e => { e.stopPropagation(); const open = moreDropdown.classList.toggle("is-open"); moreToggle.setAttribute("aria-expanded", String(open)); });
     document.addEventListener("click", e => { if (!e.target.closest(".more-menu")) { moreDropdown?.classList.remove("is-open"); moreToggle?.setAttribute("aria-expanded", "false"); } });
@@ -64,49 +58,52 @@
 
     let products = [];
     let productsLoaded = false;
-
-    function normaliseProduct(p) {
-        return { id:p.id||p.product_id||"", name:p.name||p.title||"Product", category:p.category||p.categories||"", price:p.sale_price??p.price??p.selling_price??"", image:p.image||p.image_url||p.main_image||p.thumbnail||"", slug:p.slug||p.id||"", description:p.description||"", tags:p.tags||"", collection:p.collection||"" };
-    }
-
-    async function loadProducts() {
-        try {
-            let client = window.supabaseClient;
-            if (!client && window.supabase && typeof window.supabase.createClient === "function") {
-                client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-            if (!client) throw new Error("Supabase client is unavailable");
-            const { data, error } = await client.from("products").select("*");
-            if (error) throw error;
-            if (Array.isArray(data)) products = data.map(normaliseProduct);
-        } catch (error) {
-            console.warn("Global product search could not load products.", error);
-            products = [];
-        }
-        productsLoaded = true;
-        if (searchInput?.value.trim()) renderResults(searchInput.value);
-    }
-
-    function renderResults(query) {
-        const q = query.trim().toLowerCase();
-        if (!q) { results.innerHTML=""; results.classList.remove("is-visible"); return; }
-        if (!productsLoaded) { results.innerHTML='<div class="search-empty">Searching products…</div>'; results.classList.add("is-visible"); return; }
-        const matches = products.filter(p => `${p.name} ${p.category} ${p.description} ${p.tags} ${p.collection}`.toLowerCase().includes(q)).slice(0,8);
-        if (!matches.length) {
-            results.innerHTML=`<div class="search-empty">No results found for “${escapeHtml(query)}”.<div style="margin-top:10px"><a href="shop.html">View all shop products →</a></div></div>`;
-            results.classList.add("is-visible"); return;
-        }
-        results.innerHTML=matches.map(p=>`<a class="search-result" href="product.html?id=${encodeURIComponent(p.id||p.slug)}">${p.image?`<img src="${escapeAttr(p.image)}" alt="${escapeAttr(p.name)}" loading="lazy">`:""}<span class="search-result-info"><span class="search-result-name">${escapeHtml(p.name)}</span><span class="search-result-category">${escapeHtml(p.category)}</span>${p.price!==""?`<span class="search-result-price">₹${escapeHtml(String(p.price))}</span>`:""}</span></a>`).join("");
-        results.classList.add("is-visible");
-    }
+    function normaliseProduct(p){return{id:p.id||p.product_id||"",name:p.name||p.title||"Product",category:p.category||p.categories||"",price:p.sale_price??p.price??p.selling_price??"",image:p.image||p.image_url||p.main_image||p.thumbnail||"",slug:p.slug||p.id||"",description:p.description||"",tags:p.tags||"",collection:p.collection||""};}
+    async function loadProducts(){try{let client=window.supabaseClient;if(!client&&window.supabase?.createClient)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);if(!client)throw new Error("Supabase client is unavailable");const{data,error}=await client.from("products").select("*");if(error)throw error;if(Array.isArray(data))products=data.map(normaliseProduct);}catch(error){console.warn("Global product search could not load products.",error);products=[];}productsLoaded=true;if(searchInput?.value.trim())renderResults(searchInput.value);}
     function escapeHtml(value){return String(value).replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]));}
-    function escapeAttr(value){return escapeHtml(value);}
-
+    function renderResults(query){const q=query.trim().toLowerCase();if(!q){results.innerHTML="";results.classList.remove("is-visible");return;}if(!productsLoaded){results.innerHTML='<div class="search-empty">Searching products…</div>';results.classList.add("is-visible");return;}const matches=products.filter(p=>`${p.name} ${p.category} ${p.description} ${p.tags} ${p.collection}`.toLowerCase().includes(q)).slice(0,8);if(!matches.length){results.innerHTML=`<div class="search-empty">No results found for “${escapeHtml(query)}”.<div style="margin-top:10px"><a href="shop.html">View all shop products →</a></div></div>`;results.classList.add("is-visible");return;}results.innerHTML=matches.map(p=>`<a class="search-result" href="product.html?id=${encodeURIComponent(p.id||p.slug)}">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`:""}<span class="search-result-info"><span class="search-result-name">${escapeHtml(p.name)}</span><span class="search-result-category">${escapeHtml(p.category)}</span>${p.price!==""?`<span class="search-result-price">₹${escapeHtml(String(p.price))}</span>`:""}</span></a>`).join("");results.classList.add("is-visible");}
     searchInput?.addEventListener("input",()=>renderResults(searchInput.value));
-    document.addEventListener("click",e=>{if(!e.target.closest(".header-search-wrap")) results?.classList.remove("is-visible");});
-    renderResults("");
-    loadProducts();
-
+    document.addEventListener("click",e=>{if(!e.target.closest(".header-search-wrap"))results?.classList.remove("is-visible")});
+    renderResults("");loadProducts();
     function syncCartCount(){const badge=document.getElementById("cartCount");if(!badge)return;try{const cart=JSON.parse(localStorage.getItem("cart")||"[]");badge.textContent=Array.isArray(cart)?cart.reduce((sum,item)=>sum+Number(item.quantity||1),0):0;}catch(_){} }
-    syncCartCount(); window.addEventListener("storage",syncCartCount); window.addEventListener("cartUpdated",syncCartCount);
+    syncCartCount();window.addEventListener("storage",syncCartCount);window.addEventListener("cartUpdated",syncCartCount);
+
+    // Reliable anonymous visitor tracking. Uses one heartbeat every 20 seconds,
+    // retries failed writes, and logs the real Supabase error for debugging.
+    (function initActivityTracking(){
+        const client=(window.supabaseClient&&typeof window.supabaseClient.from==="function")?window.supabaseClient:(window.supabase?.createClient?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null);
+        if(!client){console.warn("Trends by AK activity tracker: Supabase client unavailable");return;}
+        try{
+            const getId=(storage,key,prefix)=>{let v=storage.getItem(key);if(!v){v=crypto.randomUUID?crypto.randomUUID():prefix+Date.now()+"_"+Math.random().toString(36).slice(2);storage.setItem(key,v);}return v;};
+            const visitorId=getId(localStorage,"trendsbyak_visitor_id","v_");
+            const sessionId=getId(sessionStorage,"trendsbyak_session_id","s_");
+            const pagePath=location.pathname+location.search;
+            const pageName=document.title||path||"Website";
+            const deviceType=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?"mobile":"desktop";
+            const params=new URLSearchParams(location.search);
+            const source=params.get("utm_source")||(document.referrer?(()=>{try{return new URL(document.referrer).hostname}catch(_){return"referral"}})():"direct");
+            const medium=params.get("utm_medium")||"";
+            const campaign=params.get("utm_campaign")||"";
+            const startedAt=new Date().toISOString();
+            function currentCustomerId(){try{return localStorage.getItem("trendsbyak_customer_id")||sessionStorage.getItem("trendsbyak_customer_id")||null}catch(_){return null}}
+            function productContext(){const q=new URLSearchParams(location.search);const id=q.get("id");const name=document.querySelector("h1.title,h1.product-title,h1")?.textContent?.trim()||null;return{id:id&&/^\d+$/.test(id)?Number(id):null,name};}
+            const pc=productContext();
+            async function heartbeat(){
+                const payload={visitor_id:visitorId,session_id:sessionId,customer_id:currentCustomerId(),page:pageName,page_url:location.href,user_agent:navigator.userAgent,last_seen:new Date().toISOString(),started_at:startedAt,product_id:pc.id,device_type:deviceType,source:source};
+                const result=await client.from("live_visitors").upsert(payload,{onConflict:"visitor_id"});
+                if(result.error)console.warn("Trends by AK live visitor heartbeat failed:",result.error.message,result.error.details||"");
+                else window.dispatchEvent(new CustomEvent("trendsByAkHeartbeat"));
+                return !result.error;
+            }
+            async function event(eventName,extra={}){const payload={event_name:eventName,session_id:sessionId,visitor_id:visitorId,customer_id:currentCustomerId(),page_url:location.href,page_path:pagePath,referrer:document.referrer||null,source,medium,campaign,device_type:deviceType,user_agent:navigator.userAgent,product_id:pc.id,product_name:pc.name,value:extra.value??null,currency:"INR",metadata:extra.metadata||{}};const result=await client.from("analytics_events").insert(payload);if(result.error)console.warn("Trends by AK analytics event failed:",result.error.message);}
+            let stopped=false;
+            async function safeHeartbeat(){if(stopped)return;try{await heartbeat();}catch(error){console.warn("Trends by AK heartbeat error:",error);}}
+            safeHeartbeat();
+            event("page_view",{metadata:{page_title:pageName}});
+            const timer=setInterval(safeHeartbeat,20000);
+            document.addEventListener("visibilitychange",()=>{if(!document.hidden)safeHeartbeat();});
+            window.addEventListener("pagehide",()=>{stopped=true;clearInterval(timer);});
+            window.trendsByAkActivity={visitorId,sessionId,track:event,heartbeat:safeHeartbeat};
+        }catch(error){console.warn("Trends by AK activity tracker unavailable:",error);}
+    })();
 })();
