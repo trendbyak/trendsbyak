@@ -1,14 +1,162 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Trends by AK | Offline Orders</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>body{margin:0;background:#f7f4ef;color:#211f1c;font:14px Arial,sans-serif}.main{max-width:1100px;margin:auto;padding:28px}.card{background:#fff;border:1px solid #e8e0d5;border-radius:12px;padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.two{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}input,select,textarea{width:100%;padding:10px;border:1px solid #e8e0d5;border-radius:8px;font:inherit;box-sizing:border-box}.items{display:grid;gap:9px}.item{display:grid;grid-template-columns:2fr .7fr .8fr .8fr auto;gap:7px;padding:10px;border:1px solid #eee;border-radius:10px}.btn{border:0;border-radius:8px;padding:10px 13px;background:#211f1c;color:#fff;font-weight:700;cursor:pointer}.gold{background:#b28a4b}.white{background:#fff;color:#211f1c;border:1px solid #e8e0d5}.muted{color:#777}.error{color:#b42318;white-space:pre-wrap}.success{color:#287a45;font-weight:700}@media(max-width:800px){.grid,.two{grid-template-columns:1fr}.item{grid-template-columns:1fr 1fr}}</style></head><body><main class="main"><div class="card"><h1>Offline Orders</h1><div class="muted">Record stall, cash, UPI, Instagram, WhatsApp, wholesale and any other sales.</div></div><div class="grid"><div class="card"><small>OFFLINE SALES</small><h2 id="sales">₹0</h2></div><div class="card"><small>PRODUCT COST</small><h2 id="cost">₹0</h2></div><div class="card"><small>EXPENSES</small><h2 id="expenses">₹0</h2></div><div class="card"><small>NET PROFIT</small><h2 id="profit">₹0</h2></div></div><div class="two"><div class="card"><h2>Enter offline order</h2><label>Customer name</label><input id="customer" placeholder="Walk-in customer"><label>Phone</label><input id="phone" placeholder="Optional"><label>Order date</label><input id="date" type="datetime-local"><label>Sales source</label><select id="source"><option>offline</option><option>stall</option><option>cash sale</option><option>UPI sale</option><option>Instagram</option><option>WhatsApp</option><option>wholesale</option><option>other</option></select><label>Payment method</label><select id="payment"><option>Cash</option><option>UPI</option><option>Bank transfer</option><option>Card</option><option>Other</option></select><label>Products</label><div id="items"></div><button class="btn white" id="add" type="button">+ Add product</button><label>Order discount</label><input id="discount" type="number" value="0" min="0"><label>Shipping / other income</label><input id="shipping" type="number" value="0" min="0"><label>Other cost</label><input id="othercost" type="number" value="0" min="0"><label>Notes</label><textarea id="notes"></textarea><button class="btn gold" id="save" type="button">Save offline order</button><div id="msg"></div></div><div class="card"><h2>Recent offline orders</h2><div id="orders">Loading…</div><h2>Recent expenses</h2><div id="elist">Loading…</div><hr><h2>Add business expense</h2><label>Category</label><select id="ecat"><option>Packaging</option><option>Raw material</option><option>Shipping</option><option>Marketing</option><option>Stall/Event</option><option>Platform/Software</option><option>Travel</option><option>Other</option></select><label>Description</label><input id="edesc"><label>Amount</label><input id="eamount" type="number" min="0"><label>Payment method</label><select id="epay"><option>Cash</option><option>UPI</option><option>Bank transfer</option><option>Card</option><option>Other</option></select><button class="btn gold" id="esave" type="button">Save expense</button></div></div></main><script>
-const URL='https://ltxrycmreumoqfpcbwnb.supabase.co',KEY='sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh',db=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trends by AK | Offline Orders</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{margin:0;background:#f7f4ef;color:#211f1c;font:14px Arial,sans-serif}.main{max-width:1100px;margin:auto;padding:28px}.card{background:#fff;border:1px solid #e8e0d5;border-radius:12px;padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.two{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}input,select,textarea{width:100%;padding:10px;border:1px solid #e8e0d5;border-radius:8px;font:inherit;box-sizing:border-box}.items{display:grid;gap:9px}.item{display:grid;grid-template-columns:2fr .7fr .8fr .8fr auto;gap:7px;padding:10px;border:1px solid #eee;border-radius:10px;margin-bottom:8px}.btn{border:0;border-radius:8px;padding:10px 13px;background:#211f1c;color:#fff;font-weight:700;cursor:pointer}.btn:disabled{opacity:.5;cursor:not-allowed}.gold{background:#b28a4b}.white{background:#fff;color:#211f1c;border:1px solid #e8e0d5}.muted{color:#777}.error{color:#b42318;white-space:pre-wrap;margin-top:10px}.success{color:#287a45;font-weight:700;margin-top:10px}.notice{background:#fff8e8;border:1px solid #ead7ad;border-radius:8px;padding:9px;margin:10px 0;color:#6d5525}@media(max-width:800px){.grid,.two{grid-template-columns:1fr}.item{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="main">
+<div class="card"><h1>Offline Orders</h1><div class="muted">Record stall, cash, UPI, Instagram, WhatsApp, wholesale and any other sales.</div></div>
+<div class="grid">
+<div class="card"><small>OFFLINE SALES</small><h2 id="sales">₹0</h2></div>
+<div class="card"><small>PRODUCT COST</small><h2 id="cost">₹0</h2></div>
+<div class="card"><small>EXPENSES</small><h2 id="expenses">₹0</h2></div>
+<div class="card"><small>NET PROFIT</small><h2 id="profit">₹0</h2></div>
+</div>
+<div class="two">
+<div class="card">
+<h2>Enter offline order</h2>
+<div id="productNotice" class="notice">Loading products…</div>
+<label>Customer name</label><input id="customer" placeholder="Walk-in customer">
+<label>Phone</label><input id="phone" placeholder="Optional">
+<label>Order date</label><input id="date" type="datetime-local">
+<label>Sales source</label><select id="source"><option value="offline">offline</option><option value="stall">stall</option><option value="cash sale">cash sale</option><option value="UPI sale">UPI sale</option><option value="Instagram">Instagram</option><option value="WhatsApp">WhatsApp</option><option value="wholesale">wholesale</option><option value="other">other</option></select>
+<label>Payment method</label><select id="payment"><option>Cash</option><option>UPI</option><option>Bank transfer</option><option>Card</option><option>Other</option></select>
+<label>Products</label>
+<div id="items"></div>
+<button class="btn white" id="add" type="button">+ Add product</button>
+<label>Order discount</label><input id="discount" type="number" value="0" min="0">
+<label>Shipping / other income</label><input id="shipping" type="number" value="0" min="0">
+<label>Other cost</label><input id="othercost" type="number" value="0" min="0">
+<label>Notes</label><textarea id="notes"></textarea>
+<button class="btn gold" id="save" type="button">Save offline order</button>
+<div id="msg"></div>
+</div>
+<div class="card">
+<h2>Recent offline orders</h2><div id="orders">Loading…</div>
+<h2>Recent expenses</h2><div id="elist">Loading…</div><hr>
+<h2>Add business expense</h2>
+<label>Category</label><select id="ecat"><option>Packaging</option><option>Raw material</option><option>Shipping</option><option>Marketing</option><option>Stall/Event</option><option>Platform/Software</option><option>Travel</option><option>Other</option></select>
+<label>Description</label><input id="edesc"><label>Amount</label><input id="eamount" type="number" min="0">
+<label>Payment method</label><select id="epay"><option>Cash</option><option>UPI</option><option>Bank transfer</option><option>Card</option><option>Other</option></select>
+<button class="btn gold" id="esave" type="button">Save expense</button>
+</div>
+</div>
+</main>
+<script>
+const SUPABASE_URL='https://ltxrycmreumoqfpcbwnb.supabase.co';
+const SUPABASE_KEY='sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
 let products=[];
-function esc(v){return String(v??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[m]))}
-function msg(t,ok=false){$('msg').textContent=t;$('msg').className=ok?'success':'error'}
-async function auth(){const r=await db.auth.getSession();if(!r.data.session){location.href='login.html';return false}return true}
-async function loadProducts(){const r=await db.from('products').select('id,name,price,sale_price,cost_price,sku,status').eq('status','active').order('name').limit(1000);if(r.error)throw r.error;products=r.data||[]}
-function addItem(){const d=document.createElement('div');d.className='item';d.innerHTML='<div><label>Product</label><select class="prod"><option value="">Select product…</option>'+products.map(p=>`<option value="${p.id}">${esc(p.name)}${p.sku?' · '+esc(p.sku):''}</option>`).join('')+'<option value="custom">Custom item</option></select><input class="pn" placeholder="Custom item" style="display:none"></div><div><label>Qty</label><input class="qty" type="number" min="1" value="1"></div><div><label>Price</label><input class="price" type="number" min="0" value="0"></div><div><label>Cost</label><input class="cost" type="number" min="0" value="0"></div><button class="btn white del" type="button">×</button>';const s=d.querySelector('.prod'),pn=d.querySelector('.pn'),pr=d.querySelector('.price'),co=d.querySelector('.cost');s.onchange=()=>{const p=products.find(x=>String(x.id)===s.value);if(s.value==='custom'){pn.style.display='block';pr.value=0;co.value=0}else if(p){pn.style.display='none';pr.value=Number(p.sale_price||p.price||0);co.value=Number(p.cost_price||0)}};d.querySelector('.del').onclick=()=>{d.remove();if(!document.querySelector('.item'))addItem()};$('items').appendChild(d)}
-async function load(){const [o,e]=await Promise.all([db.from('offline_orders').select('*').order('order_date',{ascending:false}).limit(10),db.from('business_expenses').select('*').order('expense_date',{ascending:false}).limit(10)]);if(o.error||e.error)throw(o.error||e.error);const orders=o.data||[],ex=e.data||[];$('sales').textContent=money(orders.reduce((s,x)=>s+Number(x.total||0),0));$('cost').textContent=money(orders.reduce((s,x)=>s+Number(x.product_cost||0)+Number(x.other_cost||0),0));$('expenses').textContent=money(ex.reduce((s,x)=>s+Number(x.amount||0),0));$('profit').textContent=money(orders.reduce((s,x)=>s+Number(x.total||0)-Number(x.product_cost||0)-Number(x.other_cost||0),0)-ex.reduce((s,x)=>s+Number(x.amount||0),0));$('orders').innerHTML=orders.map(x=>`<div><b>${esc(x.order_number)}</b> · ${esc(x.customer_name||'Walk-in')} — ${money(x.total)}</div>`).join('')||'<span class="muted">No offline orders.</span>';$('elist').innerHTML=ex.map(x=>`<div><b>${esc(x.category)}</b> — ${money(x.amount)}</div>`).join('')||'<span class="muted">No expenses.</span>'}
-async function saveOrder(){const rows=[...document.querySelectorAll('.item')];const items=rows.map(x=>{const s=x.querySelector('.prod'),p=products.find(y=>String(y.id)===s.value),q=Math.max(1,Number(x.querySelector('.qty').value||1)),price=Math.max(0,Number(x.querySelector('.price').value||0)),cost=Math.max(0,Number(x.querySelector('.cost').value||0));return{product_name:s.value==='custom'?x.querySelector('.pn').value.trim()||'Item':p?.name||'Item',sku:p?.sku||null,quantity:q,unit_price:price,unit_cost:cost,discount:0,line_total:q*price,line_cost:q*cost}});if(!items.length){msg('Add at least one product.');return}const sub=items.reduce((s,x)=>s+x.line_total,0),discount=Math.max(0,Number($('discount').value||0)),shipping=Math.max(0,Number($('shipping').value||0)),otherCost=Math.max(0,Number($('othercost').value||0));if(discount>sub){msg('Discount cannot be greater than item total.');return}const total=Math.max(0,sub-discount+shipping),cost=items.reduce((s,x)=>s+x.line_cost,0),num='OFF-'+Date.now().toString().slice(-8);$('save').disabled=true;try{const r=await db.from('offline_orders').insert({order_number:num,customer_name:$('customer').value.trim()||'Walk-in',customer_phone:$('phone').value.trim()||null,order_date:$('date').value?new Date($('date').value).toISOString():new Date().toISOString(),source:$('source').value,payment_method:$('payment').value,payment_status:'paid',subtotal:sub,discount,shipping,total,product_cost:cost,other_cost:otherCost,notes:$('notes').value.trim()||null}).select('id').single();if(r.error)throw r.error;const ir=await db.from('offline_order_items').insert(items.map(x=>({...x,order_id:r.data.id})));if(ir.error){await db.from('offline_orders').delete().eq('id',r.data.id);throw ir.error}msg('✓ Offline order '+num+' saved successfully.',true);$('items').innerHTML='';addItem();$('customer').value='';$('phone').value='';$('notes').value='';$('discount').value='0';$('shipping').value='0';$('othercost').value='0';await load()}catch(e){msg('Could not save offline order. '+(e.message||e))}finally{$('save').disabled=false}}
-async function saveExpense(){const amount=Number($('eamount').value||0);if(amount<=0){msg('Enter an expense amount.');return}const r=await db.from('business_expenses').insert({category:$('ecat').value,description:$('edesc').value.trim()||null,amount,payment_method:$('epay').value});if(r.error){msg(r.error.message);return}$('eamount').value='';$('edesc').value='';msg('✓ Expense saved.',true);load()}
-$('add').onclick=addItem;$('save').onclick=saveOrder;$('esave').onclick=saveExpense;(async()=>{try{if(await auth()){await loadProducts();addItem();await load()}}catch(e){msg(e.message||String(e))}})();
-</script></body></html>
+
+function esc(v){
+ return String(v??'').replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]});
+}
+function showMsg(text,ok){$('msg').textContent=text;$('msg').className=ok?'success':'error'}
+
+function addItem(){
+ const row=document.createElement('div');
+ row.className='item';
+ const options=products.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.name)+(p.sku?' · '+esc(p.sku):'')+'</option>').join('');
+ row.innerHTML='<div><label>Product</label><select class="prod"><option value="">Select product…</option>'+options+'<option value="custom">Custom item</option></select><input class="pn" placeholder="Custom item name" style="display:none;margin-top:6px"></div><div><label>Qty</label><input class="qty" type="number" min="1" value="1"></div><div><label>Price</label><input class="price" type="number" min="0" value="0"></div><div><label>Cost</label><input class="cost" type="number" min="0" value="0"></div><button class="btn white del" type="button">×</button>';
+ const select=row.querySelector('.prod'), name=row.querySelector('.pn'), price=row.querySelector('.price'), cost=row.querySelector('.cost');
+ select.addEventListener('change',function(){
+  const p=products.find(x=>String(x.id)===String(select.value));
+  if(select.value==='custom'){name.style.display='block';price.value=0;cost.value=0;}
+  else if(p){name.style.display='none';price.value=Number(p.sale_price??p.price??0);cost.value=Number(p.cost_price??0);}
+ });
+ row.querySelector('.del').addEventListener('click',function(){row.remove();});
+ $('items').appendChild(row);
+}
+
+async function loadProducts(){
+ const r=await db.from('products').select('id,name,price,sale_price,cost_price,sku,status').eq('status','active').order('name').limit(1000);
+ if(r.error) throw r.error;
+ products=r.data||[];
+ $('productNotice').textContent=products.length+' active products loaded. Click + Add product.';
+}
+
+async function checkAuth(){
+ const r=await db.auth.getSession();
+ if(!r.data.session){location.href='login.html';return false;}
+ return true;
+}
+
+async function loadSummary(){
+ const [o,e]=await Promise.all([
+  db.from('offline_orders').select('*').order('order_date',{ascending:false}).limit(50),
+  db.from('business_expenses').select('*').order('expense_date',{ascending:false}).limit(50)
+ ]);
+ if(o.error) throw o.error;
+ if(e.error) throw e.error;
+ const orders=o.data||[], expenses=e.data||[];
+ $('sales').textContent=money(orders.reduce((s,x)=>s+Number(x.total||0),0));
+ $('cost').textContent=money(orders.reduce((s,x)=>s+Number(x.product_cost||0)+Number(x.other_cost||0),0));
+ $('expenses').textContent=money(expenses.reduce((s,x)=>s+Number(x.amount||0),0));
+ $('profit').textContent=money(orders.reduce((s,x)=>s+Number(x.total||0)-Number(x.product_cost||0)-Number(x.other_cost||0),0)-expenses.reduce((s,x)=>s+Number(x.amount||0),0));
+ $('orders').innerHTML=orders.map(x=>'<div><b>'+esc(x.order_number)+'</b> · '+esc(x.customer_name||'Walk-in')+' — '+money(x.total)+'</div>').join('')||'<span class="muted">No offline orders.</span>';
+ $('elist').innerHTML=expenses.map(x=>'<div><b>'+esc(x.category)+'</b> — '+money(x.amount)+'</div>').join('')||'<span class="muted">No expenses.</span>';
+}
+
+async function saveOrder(){
+ const rows=[...document.querySelectorAll('.item')];
+ if(!rows.length){showMsg('Click + Add product first.');return;}
+ const items=rows.map(row=>{
+  const select=row.querySelector('.prod');
+  const p=products.find(x=>String(x.id)===String(select.value));
+  const q=Math.max(1,Number(row.querySelector('.qty').value||1));
+  const price=Math.max(0,Number(row.querySelector('.price').value||0));
+  const cost=Math.max(0,Number(row.querySelector('.cost').value||0));
+  const custom=(select.value==='custom'?row.querySelector('.pn').value.trim():'');
+  return {product_name:custom||p?.name||'Item',sku:p?.sku||null,quantity:q,unit_price:price,unit_cost:cost,discount:0,line_total:q*price,line_cost:q*cost};
+ });
+ const sub=items.reduce((s,x)=>s+x.line_total,0);
+ const discount=Math.max(0,Number($('discount').value||0));
+ const shipping=Math.max(0,Number($('shipping').value||0));
+ const otherCost=Math.max(0,Number($('othercost').value||0));
+ if(discount>sub){showMsg('Discount cannot be greater than item total.');return;}
+ const total=Math.max(0,sub-discount+shipping), cost=items.reduce((s,x)=>s+x.line_cost,0), num='OFF-'+Date.now().toString().slice(-8);
+ $('save').disabled=true;
+ try{
+  const r=await db.from('offline_orders').insert({order_number:num,customer_name:$('customer').value.trim()||'Walk-in',customer_phone:$('phone').value.trim()||null,order_date:$('date').value?new Date($('date').value).toISOString():new Date().toISOString(),source:$('source').value,payment_method:$('payment').value,payment_status:'paid',subtotal:sub,discount,shipping,total,product_cost:cost,other_cost:otherCost,notes:$('notes').value.trim()||null}).select('id').single();
+  if(r.error) throw r.error;
+  const ir=await db.from('offline_order_items').insert(items.map(x=>({...x,order_id:r.data.id})));
+  if(ir.error){await db.from('offline_orders').delete().eq('id',r.data.id);throw ir.error;}
+  showMsg('✓ Offline order '+num+' saved successfully.',true);
+  $('items').innerHTML='';addItem();$('customer').value='';$('phone').value='';$('notes').value='';$('discount').value='0';$('shipping').value='0';$('othercost').value='0';
+  await loadSummary();
+ }catch(e){showMsg('Could not save offline order. '+(e?.message||String(e)));}
+ finally{$('save').disabled=false;}
+}
+
+async function saveExpense(){
+ const amount=Number($('eamount').value||0);
+ if(amount<=0){showMsg('Enter an expense amount.');return;}
+ const r=await db.from('business_expenses').insert({category:$('ecat').value,description:$('edesc').value.trim()||null,amount,payment_method:$('epay').value});
+ if(r.error){showMsg(r.error.message);return;}
+ $('eamount').value='';$('edesc').value='';showMsg('✓ Expense saved.',true);await loadSummary();
+}
+
+// Wire buttons immediately. Product loading must never disable + Add product.
+$('add').addEventListener('click',addItem);
+$('save').addEventListener('click',saveOrder);
+$('esave').addEventListener('click',saveExpense);
+
+(async function init(){
+ try{
+  if(!(await checkAuth())) return;
+  addItem();
+  try{await loadProducts();$('items').innerHTML='';addItem();}catch(productError){$('productNotice').textContent='Product list could not be loaded. You can still use Custom item. Error: '+(productError.message||productError);}
+  await loadSummary();
+ }catch(e){showMsg(e?.message||String(e));}
+})();
+</script>
+</body>
+</html>
