@@ -1,0 +1,39 @@
+name: Etsy Routing Patch
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/products.html'
+      - '.github/workflows/etsy-routing-once.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch Products page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('admin/products.html')
+          s = p.read_text(encoding='utf-8')
+          old = '''async function scrape(){const url=$("importUrl").value.trim();if(!url){msg("Paste a product URL.",true);return}$("scrapeResult").textContent="Fetching...";const r=await db.functions.invoke("import-product",{body:{url}});if(r.error||r.data?.error){$("scrapeResult").textContent=r.error?.message||r.data.error;return}const p=r.data;$("scrapeResult").textContent=`Fetched: ${p.name||"Product"}. Click Add Product and paste the details.`;openEditor();$("name").value=p.name||"";$("price").value=p.price??"";$("salePrice").value=p.sale_price??"";$("imageUrl").value=p.image_url||"";$("description").value=p.description||""}'''
+          new = '''function isEtsyUrl(url){try{return new URL(url).hostname.toLowerCase().endsWith("etsy.com")}catch{return false}}
+async function scrape(){const url=$("importUrl").value.trim();if(!url){msg("Paste a product URL.",true);return}$("scrapeResult").textContent="Fetching...";const fn=isEtsyUrl(url)?"etsy-import":"import-product";const r=await db.functions.invoke(fn,{body:{url}});if(r.error||r.data?.error){$("scrapeResult").textContent=r.error?.message||r.data.error;return}const p=r.data;const sourcePrice=p.price!=null?`${p.currency||""} ${p.price}`.trim():"not provided";$("scrapeResult").textContent=`Fetched: ${p.name||"Product"}. Source price: ${sourcePrice}. ${isEtsyUrl(url)&&p.currency!=="INR"?"Enter your INR selling price before saving.":""}`;openEditor();$("name").value=p.name||"";$("sku").value=p.sku||"";$("price").value=isEtsyUrl(url)&&p.currency!=="INR"?"":(p.price??"");$("salePrice").value=isEtsyUrl(url)&&p.currency!=="INR"?"":(p.sale_price??"");$("imageUrl").value=p.image_url||"";$("description").value=p.description||""}'''
+          if 'function isEtsyUrl(url)' in s:
+              print('Already patched')
+          elif old in s:
+              p.write_text(s.replace(old, new, 1), encoding='utf-8')
+              print('Patched Products page')
+          else:
+              raise SystemExit('Products scrape function not found')
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add admin/products.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Fix Etsy routing in Products importer'
+          git push
