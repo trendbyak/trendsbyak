@@ -12,3 +12,6 @@ async function load(){const o=await db.from('offline_orders').select('id,order_n
 async function saveExpense(){const amount=Number($('eamount').value||0);if(amount<=0){showMsg('Enter an expense amount.');return}const r=await db.from('business_expenses').insert({category:$('ecat').value,description:$('edesc').value.trim()||null,amount,payment_method:$('epay').value});showMsg(r.error?r.error.message:'✓ Expense saved.',r.error?'error':'success');if(!r.error){$('eamount').value='';$('edesc').value='';load()}}
 $('add').addEventListener('click',addItem);$('save').addEventListener('click',saveOrder);$('esave').addEventListener('click',saveExpense);(async()=>{try{if(await auth()){await loadProducts();addItem();await load()}}catch(e){console.error(e);showMsg(e.message||String(e))}})();
 </script></body></html>
+<!-- deploy-fix-2026-09-25 -->
+
+<!-- deploy-fix-2026-09-25 -->
