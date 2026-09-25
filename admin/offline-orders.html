@@ -4,6 +4,9 @@ const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
 const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'trendsbyak-admin-auth'}}),$=id=>document.getElementById(id);
 let products=[];
+function money(v){
+  return '₹'+Number(v||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+}
 function esc(v){return String(v??'').replace(/[&<>\\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\\"':'&quot;',"'":'&#039;'}[m]))}
 function showMsg(text,type='error'){$('msg').textContent=text;$('msg').className=type==='success'?'success':'error'}
 async function loadProducts(){const r=await db.from('products').select('id,name,price,sale_price,cost_price,sku,status').order('name').limit(5000);if(r.error)throw new Error('Products could not be loaded: '+r.error.message);products=(r.data||[]).filter(p=>p.status==='active');if(!products.length&&r.data?.length)products=r.data;return products}
