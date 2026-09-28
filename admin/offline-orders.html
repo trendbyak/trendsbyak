@@ -12,7 +12,7 @@
 a{color:inherit}.btn{border:1px solid #171411;background:#171411;color:#fff;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:700}.btn.white{background:#fff;color:#171411;border-color:var(--line)}.btn.danger{background:#fff;color:var(--danger);border-color:#e8b9b5}.btn:disabled{opacity:.5;cursor:not-allowed}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}.stat b{display:block;font-size:22px;margin-top:6px}
 .card{margin-bottom:18px}.card h2{font-size:17px;margin:0 0 14px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #d8d0c7;border-radius:8px;background:#fff;font:inherit}.field textarea{min-height:75px;resize:vertical}
-.items{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:12px}.item{display:grid;grid-template-columns:2fr 90px 120px 120px 42px;gap:8px;padding:9px;border-bottom:1px solid var(--line);align-items:center}.item:last-child{border-bottom:0}.item input,.item select{width:100%;padding:9px;border:1px solid #d8d0c7;border-radius:7px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.items{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:12px}.item{display:grid;grid-template-columns:2.2fr 90px 120px 120px 42px;gap:8px;padding:9px;border-bottom:1px solid var(--line);align-items:start}.product-picker{display:flex;flex-direction:column;gap:6px}.product-search{width:100%;padding:9px;border:1px solid #d8d0c7;border-radius:7px;font:inherit}.custom-label{font-size:12px;color:var(--muted)}.item:last-child{border-bottom:0}.item input,.item select{width:100%;padding:9px;border:1px solid #d8d0c7;border-radius:7px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .notice{padding:11px 13px;border-radius:9px;background:#f2ede6;margin-bottom:12px}.notice.error{background:#fff0ef;color:var(--danger)}.notice.ok{background:#edf8f1;color:var(--ok)}
 .order{border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:9px;background:#fff}.orderhead{display:flex;justify-content:space-between;gap:12px}.orderitems{margin:8px 0;color:var(--muted);line-height:1.6}.pill{display:inline-block;padding:3px 7px;border-radius:99px;background:#f2ede6;margin-right:5px;font-size:12px}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr}.item{grid-template-columns:1fr 75px 100px 100px 38px;overflow:auto}.top{align-items:flex-start;flex-direction:column}}
@@ -72,7 +72,7 @@ const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function msg(t,type=''){const e=document.getElementById('message');e.className='notice '+type;e.textContent=t}
 function localDateValue(d=new Date()){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,16)}
-function productOptions(selected=''){return '<option value="">Select product…</option>'+products.map(p=>'<option value="'+esc(p.id)+'" '+(String(p.id)===String(selected)?'selected':'')+'>'+esc(p.name)+(p.sku?' · '+esc(p.sku):'')+'</option>').join('')}
+function productOptions(selected='',filter=''){const q=String(filter||'').trim().toLowerCase();const list=q?products.filter(p=>(p.name+' '+(p.sku||'')).toLowerCase().includes(q)):products;return '<option value="">Select product…</option>'+list.map(p=>'<option value="'+esc(p.id)+'" '+(String(p.id)===String(selected)?'selected':'')+'>'+esc(p.name)+(p.sku?' · '+esc(p.sku):'')+'</option>').join('')+'<option value="__custom__">＋ Custom product</option>'}
 
 async function waitForSession(){
   for(let i=0;i<12;i++){const r=await db.auth.getSession();if(r.data.session)return r.data.session;await new Promise(x=>setTimeout(x,250))}
@@ -80,11 +80,14 @@ async function waitForSession(){
 }
 function addItem(data={}){
  const row=document.createElement('div');row.className='item';
- row.innerHTML='<select class="ip">'+productOptions(data.product_id||'')+'</select><input class="iq" type="number" min="1" value="'+Number(data.quantity||1)+'"><input class="iu" type="number" min="0" step="0.01" value="'+Number(data.unit_price||0)+'" placeholder="Sale price"><input class="ic" type="number" min="0" step="0.01" value="'+Number(data.unit_cost||0)+'" placeholder="Unit cost"><button class="btn danger" type="button">×</button>';
- row.querySelector('.ip').onchange=()=>fillPrice(row);
+ row.innerHTML='<div class="product-picker"><input class="product-search" placeholder="Search products by name or SKU…"><select class="ip">'+productOptions(data.product_id||'')+'</select><span class="custom-label">Choose “＋ Custom product” for an item not in your catalogue.</span><input class="custom-name" style="display:none;width:100%;padding:9px;border:1px solid #d8d0c7;border-radius:7px;font:inherit" placeholder="Custom product name"></div><input class="iq" type="number" min="1" value="'+Number(data.quantity||1)+'"><input class="iu" type="number" min="0" step="0.01" value="'+Number(data.unit_price||0)+'" placeholder="Sale price"><input class="ic" type="number" min="0" step="0.01" value="'+Number(data.unit_cost||0)+'" placeholder="Unit cost"><button class="btn danger" type="button">×</button>';
+ const search=row.querySelector('.product-search'),select=row.querySelector('.ip'),custom=row.querySelector('.custom-name');
+ search.value=data.product_id?'':(data.product_name||'');
+ search.oninput=()=>{const selected=select.value;select.innerHTML=productOptions(selected,search.value);};
+ select.onchange=()=>{if(select.value==='__custom__'){custom.style.display='block';custom.value=data.product_name||'';search.style.display='none';select.style.display='none';row.dataset.custom='1';}else{custom.style.display='none';row.dataset.custom='';fillPrice(row)}};
  row.querySelector('button').onclick=()=>{if(document.querySelectorAll('.item').length>1)row.remove();};
  document.getElementById('items').appendChild(row);
- if(data.product_name&&!data.product_id){const s=row.querySelector('.ip');s.innerHTML='<option value="">'+esc(data.product_name)+'</option>'}
+ if(data.product_name&&!data.product_id){select.value='__custom__';select.dispatchEvent(new Event('change'))}
 }
 function fillPrice(row){const p=products.find(x=>String(x.id)===row.querySelector('.ip').value);if(!p)return;row.querySelector('.iu').value=Number(p.sale_price||p.price||0);row.querySelector('.ic').value=Number(p.cost_price||0)}
 
@@ -118,7 +121,7 @@ async function editOrder(id){
 }
 async function saveOrder(){
  try{const session=await waitForSession();if(!session)throw new Error('Admin session not found. Open Admin Login and sign in again.');
- const rows=[...document.querySelectorAll('.item')].map(r=>{const p=products.find(x=>String(x.id)===r.querySelector('.ip').value);return{product_id:p?.id||null,product_name:p?.name||r.querySelector('.ip').selectedOptions[0]?.textContent||'Item',sku:p?.sku||null,quantity:Math.max(1,Number(r.querySelector('.iq').value||1)),unit_price:Number(r.querySelector('.iu').value||0),unit_cost:Number(r.querySelector('.ic').value||0)}});if(!rows.length||rows.some(x=>!x.product_name))throw new Error('Add at least one item.');
+ const rows=[...document.querySelectorAll('.item')].map(r=>{const p=products.find(x=>String(x.id)===r.querySelector('.ip').value);const customName=r.querySelector('.custom-name')?.value?.trim();return{product_id:p?.id||null,product_name:customName||p?.name||'',sku:p?.sku||null,quantity:Math.max(1,Number(r.querySelector('.iq').value||1)),unit_price:Number(r.querySelector('.iu').value||0),unit_cost:Number(r.querySelector('.ic').value||0)}});if(!rows.length||rows.some(x=>!x.product_name))throw new Error('Select a product or enter a custom product name for every item.');
  const subtotal=rows.reduce((s,x)=>s+x.quantity*x.unit_price,0),discount=Number(document.getElementById('discount').value||0),shipping=Number(document.getElementById('shipping').value||0),other=Number(document.getElementById('otherCost').value||0),total=Math.max(0,subtotal-discount+shipping),productCost=rows.reduce((s,x)=>s+x.quantity*x.unit_cost,0);
  const payload={customer_name:document.getElementById('customer').value||null,customer_phone:document.getElementById('phone').value||null,order_date:new Date(document.getElementById('date').value||Date.now()).toISOString(),source:document.getElementById('source').value,payment_method:document.getElementById('payment').value,payment_status:'paid',notes:document.getElementById('notes').value||null,subtotal,discount,shipping,total,product_cost:productCost,other_cost:other};
  let id=editingId;
