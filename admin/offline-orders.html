@@ -16,14 +16,21 @@ async function loadOrders(){
   const s=await db.auth.getSession();
   if(s.error)throw new Error('Session check failed: '+s.error.message);
   if(!s.data.session)throw new Error('Admin session is missing. Please log in again on this domain.');
-  const o=await db.rpc('admin_offline_orders_with_items');
-  if(o.error)throw new Error('Could not load offline orders from Supabase.\\n'+o.error.message);
-  const bundles=Array.isArray(o.data)?o.data:[];
-  return bundles.map(b=>{
-    const x=b.order||{};
-    const its=Array.isArray(b.items)?b.items:[];
+  // Read the tables directly. This avoids the previous RPC/auth-email mismatch
+  // that could return an empty array even though orders existed.
+  const o=await db.from('offline_orders').select('*').order('order_date',{ascending:false}).limit(100);
+  if(o.error)throw new Error('Could not load offline orders: '+o.error.message);
+  const orders=o.data||[];
+  if(!orders.length)return [];
+  const ids=orders.map(x=>x.id);
+  const ir=await db.from('offline_order_items').select('id,order_id,product_name,sku,quantity,unit_price,unit_cost,discount,line_total,line_cost,created_at').in('order_id',ids).order('created_at');
+  if(ir.error)throw new Error('Could not load offline order items: '+ir.error.message);
+  const byOrder={};
+  for(const i of (ir.data||[])){(byOrder[i.order_id]||(byOrder[i.order_id]=[])).push(i)}
+  return orders.map(x=>{
+    const its=byOrder[x.id]||[];
     const details=its.length?its.map(i=>esc(i.product_name)+' × '+i.quantity+' · '+money(i.line_total)).join('<br>'):'No item details saved for this order.';
-    return '<div class="row" style="display:block"><div style="display:flex;justify-content:space-between;gap:10px"><span><b>'+esc(x.order_number)+'</b> · '+esc(x.customer_name||'Walk-in')+'<br><small class="muted">'+esc(x.source||'offline')+' · '+new Date(x.order_date).toLocaleString('en-IN')+' · '+esc(x.payment_method||'')+'</small></span><b>'+money(x.total)+'</b></div><div class="hint" style="margin-top:7px">'+details+'</div><div class="hint">Subtotal: '+money(x.subtotal)+' · Discount: '+money(x.discount)+' · Cost: '+money(Number(x.product_cost||0)+Number(x.other_cost||0))+' · Profit: '+money(Number(x.total||0)-Number(x.product_cost||0)-Number(x.other_cost||0))+'</div><div style="display:flex;gap:7px;margin-top:9px"><button class="btn white" type="button" onclick="editOrder(\\''+x.id+'\\')">✏️ Edit</button><button class="btn" type="button" onclick="deleteOrder(\\''+x.id+'\\',\\''+esc(x.order_number)+'\\')">🗑️ Delete</button></div></div>'
+    return '<div class="row" style="display:block"><div style="display:flex;justify-content:space-between;gap:10px"><span><b>'+esc(x.order_number)+'</b> · '+esc(x.customer_name||'Walk-in')+'<br><small class="muted">'+esc(x.source||'offline')+' · '+new Date(x.order_date).toLocaleString('en-IN')+' · '+esc(x.payment_method||'')+'</small></span><b>'+money(x.total)+'</b></div><div class="hint" style="margin-top:7px">'+details+'</div><div class="hint">Subtotal: '+money(x.subtotal)+' · Discount: '+money(x.discount)+' · Cost: '+money(Number(x.product_cost||0)+Number(x.other_cost||0))+' · Profit: '+money(Number(x.total||0)-Number(x.product_cost||0)-Number(x.other_cost||0))+'</div><div style="display:flex;gap:7px;margin-top:9px"><button class="btn white" type="button" onclick="editOrder('\\''+x.id+'\\'')">✏️ Edit</button><button class="btn" type="button" onclick="deleteOrder('\\''+x.id+'\\'',\\''+esc(x.order_number)+'\\'')">🗑️ Delete</button></div></div>'
   })
 }
 async function loadExpenses(){const e=await db.from('expenses').select('id,category,title,amount,expense_date').order('expense_date',{ascending:false}).limit(50);if(e.error){$('elist').innerHTML='<div class="error">Expenses could not be loaded.<br>'+esc(e.error.message)+'</div>';return []}return e.data||[]}
