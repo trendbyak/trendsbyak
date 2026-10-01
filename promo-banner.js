@@ -35,8 +35,9 @@
     const css=document.createElement('link');css.rel='stylesheet';css.href='promo-banner.css?v=20261001';document.head.appendChild(css);
     const used=new Set();
     slides.forEach(s=>{
-      let p=products.find(x=>!used.has(x.id)&&s.match(x));
-      if(!p)p=products.find(x=>!used.has(x.id));
+      let p = s.preferred ? products.find(x => String(x.id) === String(s.preferred) && !used.has(x.id)) : null;
+      if (!p && typeof s.match === 'function') p = products.find(x => !used.has(x.id) && s.match(x));
+      if (!p) p = products.find(x => !used.has(x.id));
       if(p)used.add(p.id);
       s.image=p&&p.image_url?p.image_url:FALLBACK_IMAGES[slides.indexOf(s)%FALLBACK_IMAGES.length];
       s.productId=p&&p.id?p.id:'';
