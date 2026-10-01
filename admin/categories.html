@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Categories | Trends by AK Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--black:#171717;--gold:#b28a4b;--cream:#f7f4ef;--line:#e7e1d8;--muted:#777;--danger:#a33}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:#222;font:14px Arial,sans-serif}.topbar{position:sticky;top:0;z-index:10;background:var(--black);color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}.topbar h1{font-size:18px;margin:0}.topbar a{color:#fff;text-decoration:none}.wrap{max-width:1100px;margin:auto;padding:20px 16px 60px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 5px 18px #00000008;margin-bottom:16px}.form{display:grid;grid-template-columns:1fr 1.3fr 130px auto;gap:10px;align-items:end}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:11px;font-weight:700;color:#555}.field input{border:1px solid var(--line);border-radius:8px;padding:11px;font:inherit}.thumb-preview{width:70px;height:70px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:#eee3d3}.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:700;cursor:pointer}.primary{background:var(--gold);color:#fff}.light{background:#fff;border:1px solid var(--line)}.danger{background:#fff;color:var(--danger);border:1px solid #edd5d5}.msg{display:none;padding:10px 12px;border-radius:8px;margin-bottom:12px}.msg.show{display:block}.ok{background:#edf7ed;color:#356b35}.err{background:#fff0f0;color:#a33}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:11px 8px;border-bottom:1px solid #eee;text-align:left;vertical-align:middle}.table th{font-size:11px;color:var(--muted);text-transform:uppercase}.cat-thumb{width:58px;height:58px;border-radius:50%;object-fit:cover;background:#eee3d3;border:1px solid #d8c4a5}.actions{display:flex;gap:7px;flex-wrap:wrap}.meta{font-size:12px;color:var(--muted);line-height:1.5}.editing{background:#fffaf3;border-color:#d8c4a5}.hidden{display:none}@media(max-width:800px){.form{grid-template-columns:1fr 1fr}.form .wide{grid-column:1/-1}.form button{width:100%}}@media(max-width:560px){.form{grid-template-columns:1fr}.form .wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<header class="topbar"><h1>Trends by AK · Categories</h1><a href="index.html">← Dashboard</a></header>
+<main class="wrap">
+<div id="msg" class="msg"></div>
+<section class="card" id="editor">
+  <h2 style="margin:0 0 6px" id="title">Add Category</h2>
+  <p class="meta" style="margin:0 0 15px">Control the round category thumbnails shown on the homepage. Add a thumbnail by image URL or choose an image from your computer.</p>
+  <form id="form" class="form">
+    <input type="hidden" id="id">
+    <div class="field"><label>Category name *</label><input id="name" required placeholder="e.g. Anklets"></div>
+    <div class="field wide"><label>Thumbnail image URL</label><input id="url" type="url" placeholder="Paste image URL"></div>
+    <div class="field"><label>Order</label><input id="order" type="number" min="0" value="0"></div>
+    <button class="btn primary" id="save">Add Category</button>
+    <div class="field wide"><label>Or choose from computer</label><input id="file" type="file" accept="image/*"></div>
+    <div><img id="preview" class="thumb-preview" alt="Preview" style="display:none"></div>
+  </form>
+  <div style="margin-top:12px"><button type="button" class="btn light hidden" id="cancel">Cancel edit</button></div>
+</section>
+<section class="card">
+  <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+    <div><h2 style="margin:0">Categories</h2><div class="meta">Edit names, replace thumbnails, change display order, or delete categories.</div></div>
+    <button class="btn light" onclick="load()">↻ Refresh</button>
+  </div>
+  <div class="table-wrap"><table class="table"><thead><tr><th>Thumbnail</th><th>Category</th><th>Order</th><th>Products</th><th>Actions</th></tr></thead><tbody id="body"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
+</section>
+</main>
+<script>
+const SUPABASE_URL="https://ltxrycmreumoqfpcbwnb.supabase.co";
+const SUPABASE_KEY="sb_publishable_wdc4ImKB1f0Q-v4PoPXHkh";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"trendsbyak-admin-auth"}});
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+let categories=[], productCounts={};
+
+function msg(text,error=false){$("msg").textContent=text;$("msg").className="msg show "+(error?"err":"ok");setTimeout(()=>$("msg").className="msg",3500)}
+async function auth(){const {data,error}=await db.auth.getSession();if(error||!data.session){location.href="login.html";return false}return true}
+async function load(){
+  if(!(await auth())) return;
+  const [c,p]=await Promise.all([
+    db.from("categories").select("id,name,thumbnail_url,display_order,created_at").order("display_order",{ascending:true}).order("name"),
+    db.from("products").select("id,category").not("category","is",null)
+  ]);
+  if(c.error){msg(c.error.message,true);return}
+  if(p.error){msg(p.error.message,true);return}
+  categories=c.data||[];
+  productCounts={};
+  (p.data||[]).forEach(x=>{const k=String(x.category||"").trim().toLowerCase();if(k)productCounts[k]=(productCounts[k]||0)+1});
+  render();
+}
+function render(){
+  $("body").innerHTML=categories.map(c=>{
+    const image=c.thumbnail_url||"";
+    const count=productCounts[String(c.name||"").trim().toLowerCase()]||0;
+    return '<tr><td>'+(image?'<img class="cat-thumb" src="'+esc(image)+'" onerror="this.style.opacity=.25">':'<div class="cat-thumb"></div>')+'</td><td><b>'+esc(c.name)+'</b></td><td>'+Number(c.display_order||0)+'</td><td>'+count+'</td><td><div class="actions"><button class="btn light" onclick="editCategory('+c.id+')">Edit</button><button class="btn danger" onclick="deleteCategory('+c.id+')">Delete</button></div></td></tr>'
+  }).join("")||'<tr><td colspan="5" style="padding:30px;text-align:center;color:#777">No categories yet.</td></tr>';
+}
+function reset(){ $("form").reset();$("id").value="";$("order").value=categories.length+1;$("title").textContent="Add Category";$("save").textContent="Add Category";$("cancel").classList.add("hidden");$("preview").style.display="none";$("preview").src="";$("editor").classList.remove("editing") }
+function editCategory(id){
+  const c=categories.find(x=>Number(x.id)===Number(id));if(!c)return;
+  $("id").value=c.id;$("name").value=c.name||"";$("url").value=c.thumbnail_url||"";$("order").value=c.display_order||0;$("title").textContent="Edit Category";$("save").textContent="Save Changes";$("cancel").classList.remove("hidden");$("editor").classList.add("editing");
+  if(c.thumbnail_url){$("preview").src=c.thumbnail_url;$("preview").style.display="block"}
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$("cancel").onclick=reset;
+$("file").onchange=e=>{const f=e.target.files?.[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{$("url").value=reader.result;$("preview").src=reader.result;$("preview").style.display="block"};reader.readAsDataURL(f)};
+$("url").oninput=()=>{const v=$("url").value.trim();if(v){$("preview").src=v;$("preview").style.display="block"}else $("preview").style.display="none"};
+$("form").onsubmit=async e=>{
+  e.preventDefault();if(!(await auth()))return;
+  const id=$("id").value,name=$("name").value.trim(),thumbnail=$("url").value.trim(),order=Number($("order").value||0);
+  if(!name){msg("Category name is required.",true);return}
+  const duplicate=categories.find(c=>c.name.toLowerCase()===name.toLowerCase()&&String(c.id)!==String(id));
+  if(duplicate){msg("A category with this name already exists.",true);return}
+  $("save").disabled=true;
+  try{
+    if(id){
+      const old=categories.find(c=>String(c.id)===String(id));
+      const r=await db.from("categories").update({name,thumbnail_url:thumbnail||null,display_order:order,updated_at:new Date().toISOString()}).eq("id",id);
+      if(r.error)throw r.error;
+      if(old && old.name!==name){
+        const p=await db.from("products").update({category:name,updated_at:new Date().toISOString()}).eq("category",old.name);
+        if(p.error)throw p.error;
+      }
+      msg("Category updated.");
+    }else{
+      const r=await db.from("categories").insert({name,thumbnail_url:thumbnail||null,display_order:order});
+      if(r.error)throw r.error;
+      msg("Category added.");
+    }
+    reset();await load();
+  }catch(err){msg(err.message||"Could not save category.",true)}finally{$("save").disabled=false}
+};
+async function deleteCategory(id){
+  if(!(await auth()))return;
+  const c=categories.find(x=>Number(x.id)===Number(id));if(!c)return;
+  const count=productCounts[String(c.name).trim().toLowerCase()]||0;
+  const ok=confirm('Delete "'+c.name+'"?'+(count?' '+count+' product(s) currently use this category; their category will be cleared.':'')+' This cannot be undone.');
+  if(!ok)return;
+  try{
+    if(count){const p=await db.from("products").update({category:null,updated_at:new Date().toISOString()}).eq("category",c.name);if(p.error)throw p.error}
+    const r=await db.from("categories").delete().eq("id",id);if(r.error)throw r.error;
+    msg("Category deleted.");await load();
+  }catch(err){msg(err.message||"Could not delete category.",true)}
+}
+reset();load();
+</script>
+</body></html>
