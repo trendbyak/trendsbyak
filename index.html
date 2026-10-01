@@ -1966,7 +1966,7 @@ function addToCart(product) {
                 product.sale_price,
 
             image:
-                product.image_url || "",
+                (Array.isArray(product.image_urls)&&product.image_urls[0]) || product.image_url || "",
 
             image_url:
                 product.image_url || "",
