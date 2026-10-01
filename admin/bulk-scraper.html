@@ -177,7 +177,7 @@ async function importProducts(){
  for(let i=0;i<selected.length;i++){
   const p=selected[i],images=(p.images||[]).slice(0,6),price=Number(p.price);
   if(!Number.isFinite(price)||price<=0){errors.push((p.name||'Product')+': enter a valid INR price');continue}
-  const payload={name:p.name||'Imported Product',price,sale_price:p.sale_price===''?0:(Number(p.sale_price)||0),sku:p.sku||null,description:p.description||null,image_url:images[0]||p.image_url||null,image_urls:images};
+  const payload={name:p.name||'Imported Product',price,sale_price:p.sale_price===''?0:(Number(p.sale_price)||0),sku:p.sku||null,description:p.description||null,image_url:images[0]||p.image_url||null,image_urls:images,status:'inactive',stock:0};
   if(p.collection)payload.collection=p.collection;
   const q=await insertWithSku(payload,i);if(q.error)errors.push((p.name||'Product')+': '+q.error.message);else done++;
  }
