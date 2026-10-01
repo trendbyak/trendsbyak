@@ -2120,9 +2120,10 @@ async function loadNewLaunches() {
             await db
                 .from("products")
                 .select(
-                    "id,name,price,sale_price,category,image_url,status,created_at"
+                    "id,name,price,sale_price,category,image_url,status,stock,created_at"
                 )
                 .eq("status", "active")
+                .gt("stock", 0)
                 .order("created_at", {
                     ascending: false
                 })
@@ -2990,11 +2991,15 @@ async function performProductSearch() {
             await db
                 .from("products")
                 .select(
-                    "id,name,price,sale_price,category,image_url,status"
+                    "id,name,price,sale_price,category,image_url,status,stock"
                 )
                 .eq(
                     "status",
                     "active"
+                )
+                .gt(
+                    "stock",
+                    0
                 )
                 .or(
                     `name.ilike.${safeQuery},category.ilike.${safeQuery}`
