@@ -46,8 +46,8 @@ function msg(text,error=false){$("msg").textContent=text;$("msg").className="msg
 async function auth(){const {data,error}=await db.auth.getSession();if(error||!data.session){location.href="login.html";return false}return true}
 async function load(){
   $("body").innerHTML='<tr><td colspan="5">Loading categories…</td></tr>';
-  const c=await db.from("categories").select("id,name,thumbnail_url,display_order,created_at").order("display_order",{ascending:true}).order("name");
-  if(c.error){msg(c.error.message,true);$("body").innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#a33">Could not load categories. Please refresh.</td></tr>';return}
+  const c=await db.from("categories").select("id,name,thumbnail_url,display_order").order("display_order",{ascending:true});
+  if(c.error){console.error("Categories load error:",c.error);msg(c.error.message||"Could not load categories.",true);$("body").innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#a33">Could not load categories. Please refresh.</td></tr>';return}
   categories=c.data||[];
   productCounts={};
   render();
