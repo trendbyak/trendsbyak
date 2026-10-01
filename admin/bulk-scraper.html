@@ -201,13 +201,31 @@ $('importAll').onclick=importProducts;
 $('retryFailed').onclick=retryFailed;
 $('selectAll').onclick=selectAll;
 $('clear').onclick=()=>{$('urls').value='';rows=[];$('resultCard').hidden=true;$('status').className='status'};
-$('openShopify').onclick=()=>{
- const u=$('shopifyUrl').value.trim();
- try{const x=new URL(u);if(!x.pathname.includes('/products/'))throw Error('not a product URL');const w=window.open(u,'shopifyProduct','width=1200,height=900');if(!w)throw Error('popup blocked');status('browserStatus','✓ Shopify product opened. Wait for it to finish loading, then click the ★ Shopify → Trends by AK bookmark.');}
- catch(e){status('browserStatus','Please enter a valid Shopify product URL and allow pop-ups for trendsbyak.in.',true)}
-};
-$('fetchShopify').onclick=async()=>{const u=$('shopifyUrl').value.trim();try{const x=new URL(u);if(!x.pathname.match(/^\/products\/[^/]+/i))throw Error('Please paste a Shopify product URL.');$('fetchShopify').disabled=true;status('browserStatus','Fetching Shopify product…');const r=await invokeOne(u);if(r?.error)throw Error(r.error);r.source=r.source||'shopify';r.selected=true;rows.push(r);render();status('browserStatus','✓ Product fetched. Review the details below and click Import Ready Products.');setTimeout(()=>$('resultCard').scrollIntoView({behavior:'smooth',block:'start'}),100)}catch(e){status('browserStatus',e.message||'Could not fetch product.',true)}finally{$('fetchShopify').disabled=false}};
-readShopifyImport();
+$('fetchShopify').addEventListener('click', async function(){
+  const btn=this, input=$('shopifyUrl'), u=input.value.trim();
+  if(!u){status('browserStatus','Paste a Shopify product URL first.',true);input.focus();return}
+  let x;
+  try{x=new URL(u)}catch{status('browserStatus','That is not a valid URL.',true);input.focus();return}
+  if(!/^https?:$/i.test(x.protocol)||!x.pathname.match(/^\/products\/[^/]+/i)){status('browserStatus','Please paste a Shopify product URL such as https://www.shumajewellers.com/products/product-name',true);return}
+  btn.disabled=true;
+  btn.textContent='Fetching…';
+  status('browserStatus','Connecting to Shopify importer…');
+  try{
+    const r=await invokeOne(u);
+    if(!r || r.error) throw new Error(r?.error||'No product data was returned.');
+    r.source=r.source||'shopify';
+    r.selected=true;
+    rows.push(r);
+    render();
+    status('browserStatus','✓ Product found: '+(r.name||'Unnamed product')+'. Review it below.');
+    $('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){
+    status('browserStatus','Fetch failed: '+(e.message||String(e)),true);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Fetch Product';
+  }
+});
 (async()=>{await auth()})();
 </script>
 </body>
