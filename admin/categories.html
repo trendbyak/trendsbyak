@@ -45,7 +45,6 @@ let categories=[], productCounts={};
 function msg(text,error=false){$("msg").textContent=text;$("msg").className="msg show "+(error?"err":"ok");setTimeout(()=>$("msg").className="msg",3500)}
 async function auth(){const {data,error}=await db.auth.getSession();if(error||!data.session){location.href="login.html";return false}return true}
 async function load(){
-  if(!(await auth())) return;
   const [c,p]=await Promise.all([
     db.from("categories").select("id,name,thumbnail_url,display_order,created_at").order("display_order",{ascending:true}).order("name"),
     db.from("products").select("id,category").not("category","is",null)
