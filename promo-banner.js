@@ -7,11 +7,11 @@
     'https://fashionalley.co.in/image/cache/catalog/WhatsApp%20Image%202026-06-29%20at%203.53.00%20PM%20(2)-300x300.jpeg'
   ];
   const slides=[
-    {k:'NEW & NOTEWORTHY',t:'Little luxuries. Made for you.',d:'Fresh jewellery, hair accessories, scrunchies & thoughtful gifts.',b:'Shop New Arrivals',h:'shop.html',a:'NEW',match:()=>true},
-    {k:'EVERYDAY JEWELLERY',t:'Pieces you’ll actually wear.',d:'Elegant everyday styles with anti-tarnish options for effortless dressing.',b:'Shop Jewellery',h:'shop.html?category=Jewellery',a:'JEWELLERY',match:p=>/jewellery|jewelry/i.test((p.category||'')+' '+(p.name||''))},
-    {k:'SCRUNCHIES IN BULK',t:'Need scrunchies in bulk?',d:'Made for return gifts, weddings, birthdays, events, boutiques & gifting.',b:'Enquire for Bulk',h:'bulk-order.html',a:'BULK',match:p=>/scrunch|hair accessories|hair accessory/i.test((p.category||'')+' '+(p.name||''))},
-    {k:'THOUGHTFUL GIFTING',t:'A little something, beautifully chosen.',d:'Curated gifting options for celebrations, favours and special moments.',b:'Explore Gifts',h:'shop.html?category=Gifts',a:'GIFTING',match:p=>/gift|hamper|return/i.test((p.category||'')+' '+(p.name||''))},
-    {k:'SHOP DIRECT',t:'Beautiful. Useful. Affordable.',d:'Shop directly from Trends by AK and discover pieces selected with care.',b:'Shop Everything',h:'shop.html',a:'AK',match:()=>true}
+    {k:'NEW & NOTEWORTHY',t:'Little luxuries. Made for you.',d:'Fresh jewellery, hair accessories, scrunchies & thoughtful gifts.',b:'Shop New Arrivals',h:'shop.html',a:'NEW',preferred:788},
+    {k:'EVERYDAY JEWELLERY',t:'Pieces you’ll actually wear.',d:'Elegant everyday styles with anti-tarnish options for effortless dressing.',b:'Shop Jewellery',h:'shop.html?category=Jewellery',a:'JEWELLERY',preferred:529,match:p=>/jewellery|jewelry|necklace|earring|bracelet|kada|ring/i.test((p.category||'')+' '+(p.name||''))},
+    {k:'SCRUNCHIES IN BULK',t:'Need scrunchies in bulk?',d:'Made for return gifts, weddings, birthdays, events, boutiques & gifting.',b:'Enquire for Bulk',h:'bulk-order.html',a:'BULK',preferred:759,match:p=>/scrunch/i.test((p.category||'')+' '+(p.name||''))},
+    {k:'THOUGHTFUL GIFTING',t:'A little something, beautifully chosen.',d:'Curated gifting options for celebrations, favours and special moments.',b:'Explore Gifts',h:'shop.html?category=Gifts',a:'GIFTING',preferred:708,match:p=>/gift|hamper|return/i.test((p.category||'')+' '+(p.name||''))},
+    {k:'SHOP DIRECT',t:'Beautiful. Useful. Affordable.',d:'Shop directly from Trends by AK and discover pieces selected with care.',b:'Shop Everything',h:'shop.html',a:'AK',preferred:533,match:p=>/jewellery|jewelry|necklace|earring|bracelet|kada|ring|hair|scrunch|gift/i.test((p.category||'')+' '+(p.name||''))}
   ];
   async function getProducts(){
     try{
