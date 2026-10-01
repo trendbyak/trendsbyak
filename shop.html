@@ -1872,6 +1872,7 @@ const supabaseClient =
 let allProducts = [];
 
 let selectedCategory = "all";
+let shopFilterType = "all";
 
 let searchTerm = "";
 
@@ -2177,7 +2178,8 @@ async function loadProducts() {
                 {
                     ascending: false
                 }
-            );
+            )
+            .range(0, 9999);
 
 
         if (error) {
@@ -2238,165 +2240,164 @@ function buildCategories() {
             "categoryList"
         );
 
-
     if (!container)
         return;
 
+    /*
+     * Build filters from BOTH the Categories table and the
+     * actual product category/collection values. This prevents
+     * products belonging to collections from disappearing from
+     * the Shop filter.
+     */
+    const categoryMap = new Map();
+    const collectionMap = new Map();
 
-    const categoryMap =
-        new Map();
+    allProducts.forEach(product => {
 
+        const rawCategory = String(product.category || "").trim();
 
-    allProducts.forEach(
-        product => {
-
-            const rawCategory =
-                String(
-                    product.category || ""
-                ).trim();
-
-
-            if (!rawCategory)
-                return;
-
-
-            const key =
-                normalizeCategory(
-                    rawCategory
-                );
-
-
+        if (rawCategory) {
+            const key = normalizeCategory(rawCategory);
             if (!categoryMap.has(key)) {
-
-                categoryMap.set(
-                    key,
-                    rawCategory
-                );
-
+                categoryMap.set(key, rawCategory);
             }
-
         }
-    );
 
+        const rawCollection = String(product.collection || "").trim();
 
-    const categories =
-        [...categoryMap.entries()]
-            .sort(
-                (a, b) =>
-                    a[1].localeCompare(
-                        b[1]
-                    )
-            );
-
-
-    container.innerHTML = "";
-
-
-    const allButton =
-        document.createElement(
-            "button"
-        );
-
-
-    allButton.type =
-        "button";
-
-
-    allButton.className =
-        "category-button";
-
-
-    allButton.dataset.category =
-        "all";
-
-
-    allButton.textContent =
-        "All Products";
-
-
-    container.appendChild(
-        allButton
-    );
-
-
-    categories.forEach(
-        ([key, label]) => {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.type =
-                "button";
-
-
-            button.className =
-                "category-button";
-
-
-            button.dataset.category =
-                key;
-
-
-            button.textContent =
-                label;
-
-
-            container.appendChild(
-                button
-            );
-
-        }
-    );
-
-
-    updateCategoryButtons();
-
-
-    container
-        .querySelectorAll(
-            ".category-button"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        selectedCategory =
-                            button.dataset.category;
-
-
-                        updateCategoryButtons();
-
-                        renderProducts();
-
-
-                        const sidebar =
-                            document.getElementById(
-                                "shopSidebar"
-                            );
-
-
-                        if (sidebar) {
-
-                            sidebar.classList.remove(
-                                "open"
-                            );
-
-                        }
-
-                    }
-                );
-
+        if (rawCollection) {
+            const key = normalizeCategory(rawCollection);
+            if (!collectionMap.has(key)) {
+                collectionMap.set(key, rawCollection);
             }
-        );
+        }
+
+    });
+
+    /* Add configured categories too, when the public table is readable. */
+    supabaseClient
+        .from("categories")
+        .select("name,display_order")
+        .order("display_order", { ascending: true })
+        .then(({ data }) => {
+
+            (data || []).forEach(item => {
+
+                const label = String(item.name || "").trim();
+
+                if (!label)
+                    return;
+
+                const key = normalizeCategory(label);
+
+                if (!categoryMap.has(key)) {
+                    categoryMap.set(key, label);
+                }
+
+            });
+
+            renderCategoryFilters(container, categoryMap, collectionMap);
+
+        })
+        .catch(() => {
+            renderCategoryFilters(container, categoryMap, collectionMap);
+        });
 
 }
 
+function renderCategoryFilters(container, categoryMap, collectionMap) {
+
+    container.innerHTML = "";
+
+    const allButton = document.createElement("button");
+
+    allButton.type = "button";
+    allButton.className = "category-button";
+    allButton.dataset.filterType = "all";
+    allButton.dataset.filterValue = "all";
+    allButton.textContent = "All Products";
+
+    container.appendChild(allButton);
+
+    const categories = [...categoryMap.entries()]
+        .sort((a, b) => a[1].localeCompare(b[1]));
+
+    const collections = [...collectionMap.entries()]
+        .sort((a, b) => a[1].localeCompare(b[1]));
+
+    if (categories.length) {
+
+        const title = document.createElement("div");
+        title.className = "filter-title";
+        title.style.marginTop = "18px";
+        title.textContent = "Categories";
+        container.appendChild(title);
+
+        categories.forEach(([key, label]) => {
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.className = "category-button";
+            button.dataset.filterType = "category";
+            button.dataset.filterValue = key;
+            button.textContent = label;
+
+            container.appendChild(button);
+
+        });
+
+    }
+
+    if (collections.length) {
+
+        const title = document.createElement("div");
+        title.className = "filter-title";
+        title.style.marginTop = "18px";
+        title.textContent = "Collections";
+        container.appendChild(title);
+
+        collections.forEach(([key, label]) => {
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.className = "category-button";
+            button.dataset.filterType = "collection";
+            button.dataset.filterValue = key;
+            button.textContent = label;
+
+            container.appendChild(button);
+
+        });
+
+    }
+
+    updateCategoryButtons();
+
+    container
+        .querySelectorAll(".category-button")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                selectedCategory = button.dataset.filterValue || "all";
+                window.shopFilterType = button.dataset.filterType || "all";
+
+                updateCategoryButtons();
+                renderProducts();
+
+                const sidebar = document.getElementById("shopSidebar");
+
+                if (sidebar) {
+                    sidebar.classList.remove("open");
+                }
+
+            });
+
+        });
+
+}
 
 /* =====================================================
    UPDATE ACTIVE CATEGORY
@@ -2448,16 +2449,21 @@ function renderProducts() {
         selectedCategory !== "all"
     ) {
 
-        products =
-            products.filter(
-                product =>
-                    normalizeCategory(
-                        product.category
-                    ) ===
-                    normalizeCategory(
-                        selectedCategory
-                    )
+        const requested = normalizeCategory(selectedCategory);
+
+        if (shopFilterType === "collection") {
+
+            products = products.filter(product =>
+                normalizeCategory(product.collection) === requested
             );
+
+        } else {
+
+            products = products.filter(product =>
+                normalizeCategory(product.category) === requested
+            );
+
+        }
 
     }
 
@@ -3167,6 +3173,8 @@ function applyCollectionFromUrl() {
         selectedCategory =
             normalizeCategory(requestedCategory);
 
+        shopFilterType = "category";
+
         updateCategoryButtons();
         renderProducts();
 
@@ -3195,6 +3203,9 @@ function applyCollectionFromUrl() {
 
     const requested =
         normalizeCategory(requestedCollection);
+
+    selectedCategory = requested;
+    shopFilterType = "collection";
 
     const matching =
         allProducts.filter(product => {
