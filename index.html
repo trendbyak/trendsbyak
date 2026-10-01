@@ -440,6 +440,47 @@ h2 {
 
 
 /* =========================================================
+   HOMEPAGE PRODUCT BANNER
+========================================================= */
+
+.homepage-banner-section { padding: 18px 5% 28px; background: var(--beige); }
+.homepage-banner { --banner-height: 390px; position: relative; max-width: 1320px; height: var(--banner-height); margin: 0 auto; overflow: hidden; background: #29251f; border-radius: 4px; }
+.homepage-banner.size-compact { --banner-height: 300px; }
+.homepage-banner.size-standard { --banner-height: 390px; }
+.homepage-banner.size-large { --banner-height: 500px; }
+.homepage-banner-track { width: 100%; height: 100%; display: flex; transition: transform .55s ease; }
+.homepage-banner-slide { position: relative; min-width: 100%; height: 100%; display: flex; align-items: center; overflow: hidden; isolation: isolate; }
+.homepage-banner-slide::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(41,37,31,.90) 0%, rgba(41,37,31,.62) 40%, rgba(41,37,31,.08) 76%, rgba(41,37,31,.02) 100%); }
+.homepage-banner-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.homepage-banner-copy { position: relative; z-index: 2; width: min(580px, 65%); padding: 42px 5.5%; color: #fff; }
+.homepage-banner-kicker { margin: 0 0 10px; color: #d0aa72; font-size: 10px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; }
+.homepage-banner-copy h2 { margin: 0 0 12px; font-family: "Playfair Display", serif; font-size: clamp(30px, 4vw, 54px); line-height: 1.04; }
+.homepage-banner-copy p:not(.homepage-banner-kicker) { max-width: 450px; margin: 0 0 22px; color: rgba(255,255,255,.84); font-size: 13px; line-height: 1.65; }
+.homepage-banner-button { display: inline-flex; align-items: center; min-height: 42px; padding: 0 18px; border: 1px solid #fff; border-radius: 3px; background: #fff; color: var(--brown); font-size: 11px; font-weight: 700; }
+.homepage-banner-dots { position: absolute; left: 5.5%; bottom: 20px; z-index: 4; display: flex; gap: 7px; }
+.homepage-banner-dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.45); cursor: pointer; }
+.homepage-banner-dot.active { width: 22px; border-radius: 999px; background: #fff; }
+.homepage-banner-arrow { position: absolute; top: 50%; z-index: 4; width: 38px; height: 38px; transform: translateY(-50%); border: 1px solid rgba(255,255,255,.55); border-radius: 50%; background: rgba(41,37,31,.28); color: #fff; font-size: 24px; line-height: 1; cursor: pointer; backdrop-filter: blur(6px); }
+.homepage-banner-arrow.prev { left: 16px; }
+.homepage-banner-arrow.next { right: 16px; }
+.homepage-banner-loading { width: 100%; height: 100%; display: grid; place-items: center; color: #f5eadb; font-size: 13px; }
+
+@media (max-width: 700px) {
+  .homepage-banner-section { padding: 10px 4% 22px; }
+  .homepage-banner { --banner-height: 330px; }
+  .homepage-banner.size-compact { --banner-height: 260px; }
+  .homepage-banner.size-standard { --banner-height: 330px; }
+  .homepage-banner.size-large { --banner-height: 410px; }
+  .homepage-banner-copy { width: 82%; padding: 30px 8% 48px; align-self: flex-end; }
+  .homepage-banner-slide::after { background: linear-gradient(0deg, rgba(41,37,31,.90) 0%, rgba(41,37,31,.56) 55%, rgba(41,37,31,.08) 100%); }
+  .homepage-banner-copy h2 { font-size: clamp(27px, 8vw, 38px); }
+  .homepage-banner-copy p:not(.homepage-banner-kicker) { font-size: 12px; line-height: 1.5; margin-bottom: 14px; }
+  .homepage-banner-arrow { width: 32px; height: 32px; font-size: 20px; }
+  .homepage-banner-arrow.prev { left: 10px; }
+  .homepage-banner-arrow.next { right: 10px; }
+}
+
+/* =========================================================
    TRUST
 ========================================================= */
 
@@ -1427,50 +1468,19 @@ h2 {
 
 
 <!-- =====================================================
-     HERO
+     HOMEPAGE PRODUCT BANNER
 ===================================================== -->
 
-<section class="hero">
-
-    <div class="hero-content">
-
-        <p class="eyebrow">
-            TRENDS BY AK · CURATED WITH LOVE
-        </p>
-
-        <h1>
-            Little luxuries.<br>
-            <em>Made for you.</em>
-        </h1>
-
-        <p class="hero-text">
-            Beautiful jewellery, scrunchies, hair accessories and gifts,
-            thoughtfully chosen to add a little more elegance to everyday moments.
-        </p>
-
-        <div class="hero-actions">
-            <a href="shop.html" class="btn btn-dark">
-                Shop the collection
-            </a>
-
-            <a href="https://wa.me/918433998962"
-               target="_blank"
-               rel="noopener"
-               class="btn btn-light">
-                Chat on WhatsApp
-            </a>
+<section class="homepage-banner-section" aria-label="Featured Trends by AK products">
+    <div class="homepage-banner" id="homepageBanner">
+        <div class="homepage-banner-track" id="homepageBannerTrack">
+            <div class="homepage-banner-loading">Loading featured products…</div>
         </div>
-
-        <div class="hero-note">
-            <span>Premium quality</span>
-            <span>Gift-ready options</span>
-            <span>Bulk orders welcome</span>
-        </div>
-
+        <div class="homepage-banner-dots" id="homepageBannerDots" aria-label="Featured products"></div>
+        <button class="homepage-banner-arrow prev" id="homepageBannerPrev" type="button" aria-label="Previous product">‹</button>
+        <button class="homepage-banner-arrow next" id="homepageBannerNext" type="button" aria-label="Next product">›</button>
     </div>
-
 </section>
-
 
 <!-- =====================================================
      TRUST
@@ -3384,6 +3394,98 @@ async function performProductSearch() {
     }
 }
 /* =========================================================
+   HOMEPAGE PRODUCT BANNER
+========================================================= */
+
+let homepageBannerIndex = 0;
+let homepageBannerTimer = null;
+let homepageBannerRotationSeconds = 5;
+let homepageBannerSlides = [];
+
+function bannerCategoryLabel(value) {
+    const text = String(value || "Trends by AK").trim();
+    return text ? text.toUpperCase() : "TRENDS BY AK";
+}
+
+function bannerDescription(product) {
+    const description = String(product.description || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+    if (description) return description.slice(0, 145) + (description.length > 145 ? "…" : "");
+    return "A thoughtfully chosen piece from Trends by AK — made to be worn, used or gifted with ease.";
+}
+
+function chooseHomepageBannerProducts(products) {
+    const selected = [];
+    const seenCategories = new Set();
+    for (const product of products) {
+        const category = String(product.category || "").trim().toLowerCase();
+        if (category && !seenCategories.has(category)) { selected.push(product); seenCategories.add(category); }
+        if (selected.length === 3) return selected;
+    }
+    for (const product of products) {
+        if (!selected.some(x => Number(x.id) === Number(product.id))) selected.push(product);
+        if (selected.length === 3) break;
+    }
+    return selected;
+}
+
+function renderHomepageBanner(products, settings) {
+    const banner = document.getElementById("homepageBanner");
+    const track = document.getElementById("homepageBannerTrack");
+    const dots = document.getElementById("homepageBannerDots");
+    if (!banner || !track || !dots) return;
+    const size = ["compact", "standard", "large"].includes(settings.banner_size) ? settings.banner_size : "standard";
+    banner.classList.remove("size-compact", "size-standard", "size-large");
+    banner.classList.add("size-" + size);
+    homepageBannerRotationSeconds = Math.min(15, Math.max(3, Number(settings.rotation_seconds || 5)));
+    homepageBannerSlides = chooseHomepageBannerProducts(products.filter(p => p.image_url));
+    if (!homepageBannerSlides.length) { track.innerHTML = '<div class="homepage-banner-loading">Products will appear here soon.</div>'; dots.innerHTML = ""; return; }
+    track.innerHTML = homepageBannerSlides.map((product, index) => {
+        const name = escapeHtml(product.name || "Featured product");
+        const image = escapeHtml(product.image_url || "");
+        const category = escapeHtml(bannerCategoryLabel(product.category));
+        const description = escapeHtml(bannerDescription(product));
+        const id = encodeURIComponent(product.id);
+        return '<article class="homepage-banner-slide"><img class="homepage-banner-image" src="' + image + '" alt="' + name + '" loading="' + (index === 0 ? "eager" : "lazy") + '"><div class="homepage-banner-copy"><p class="homepage-banner-kicker">' + category + '</p><h2>' + name + '</h2><p>' + description + '</p><a class="homepage-banner-button" href="product.html?id=' + id + '">Shop this piece →</a></div></article>';
+    }).join("");
+    dots.innerHTML = homepageBannerSlides.map((_, index) => '<button class="homepage-banner-dot' + (index === 0 ? " active" : "") + '" type="button" data-banner-slide="' + index + '" aria-label="Show featured product ' + (index + 1) + '"></button>').join("");
+    homepageBannerIndex = 0;
+    updateHomepageBannerPosition();
+    dots.querySelectorAll("[data-banner-slide]").forEach(button => { button.addEventListener("click", () => { homepageBannerIndex = Number(button.dataset.bannerSlide || 0); updateHomepageBannerPosition(); restartHomepageBannerTimer(); }); });
+    document.getElementById("homepageBannerPrev")?.addEventListener("click", () => { homepageBannerIndex = (homepageBannerIndex - 1 + homepageBannerSlides.length) % homepageBannerSlides.length; updateHomepageBannerPosition(); restartHomepageBannerTimer(); });
+    document.getElementById("homepageBannerNext")?.addEventListener("click", () => { homepageBannerIndex = (homepageBannerIndex + 1) % homepageBannerSlides.length; updateHomepageBannerPosition(); restartHomepageBannerTimer(); });
+    restartHomepageBannerTimer();
+}
+
+function updateHomepageBannerPosition() {
+    const track = document.getElementById("homepageBannerTrack");
+    const dots = document.getElementById("homepageBannerDots");
+    if (!track) return;
+    track.style.transform = "translateX(-" + (homepageBannerIndex * 100) + "%)";
+    dots?.querySelectorAll(".homepage-banner-dot").forEach((dot, index) => dot.classList.toggle("active", index === homepageBannerIndex));
+}
+
+function restartHomepageBannerTimer() {
+    clearInterval(homepageBannerTimer);
+    if (homepageBannerSlides.length < 2) return;
+    homepageBannerTimer = setInterval(() => { homepageBannerIndex = (homepageBannerIndex + 1) % homepageBannerSlides.length; updateHomepageBannerPosition(); }, homepageBannerRotationSeconds * 1000);
+}
+
+async function loadHomepageBanner() {
+    try {
+        const [settingsResult, productsResult] = await Promise.all([
+            db.from("homepage_banner_settings").select("banner_size,rotation_seconds").eq("id", 1).maybeSingle(),
+            db.from("products").select("id,name,category,image_url,description,created_at").eq("status", "active").not("image_url", "is", null).order("created_at", { ascending: false }).limit(12)
+        ]);
+        if (productsResult.error) throw productsResult.error;
+        renderHomepageBanner(productsResult.data || [], settingsResult.data || { banner_size: "standard", rotation_seconds: 5 });
+    } catch (error) {
+        console.error("Homepage banner error:", error);
+        const track = document.getElementById("homepageBannerTrack");
+        if (track) track.innerHTML = '<div class="homepage-banner-loading">Featured products are temporarily unavailable.</div>';
+    }
+}
+
+/* =========================================================
    MOBILE MENU
 ========================================================= */
 
@@ -3455,6 +3557,8 @@ document.addEventListener(
     () => {
 
         updateCartCount();
+
+        loadHomepageBanner();
 
         loadCategories();
 
