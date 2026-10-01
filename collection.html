@@ -37,7 +37,7 @@ const aliases=v=>{const n=norm(v);return [...new Set([n,n.replace(/ accessories?
 const price=v=>`₹${Number(v||0).toLocaleString("en-IN")}`;
 function cart(){try{return JSON.parse(localStorage.getItem("trendsbyak_cart")||"[]")}catch{return[]}}
 function cartCount(){const el=document.getElementById("cartCount");if(el)el.textContent=cart().reduce((s,x)=>s+Number(x.quantity||0),0)}
-function add(product,button){let c=cart(),id=String(product.id),x=c.find(i=>String(i.product_id||i.id)===id);if(x)x.quantity=Number(x.quantity||0)+1;else c.push({product_id:product.id,name:product.name,price:Number(product.sale_price??product.price??0),image_url:product.image_url||"",quantity:1});localStorage.setItem("trendsbyak_cart",JSON.stringify(c));cartCount();button.textContent="Added ✓";setTimeout(()=>button.textContent="Add to Cart",1000)}
+function add(product,button){let c=cart(),id=String(product.id),x=c.find(i=>String(i.product_id||i.id)===id);if(x)x.quantity=Number(x.quantity||0)+1;else c.push({product_id:product.id,name:product.name,price:Number(product.sale_price??product.price??0),image_url:(Array.isArray(product.image_urls)&&product.image_urls[0])||product.image_url||"",quantity:1});localStorage.setItem("trendsbyak_cart",JSON.stringify(c));cartCount();button.textContent="Added ✓";setTimeout(()=>button.textContent="Add to Cart",1000)}
 async function getCollection(){
   let collection=null;
   // A numeric id is a real collection id. A non-numeric id is treated as a name/slug.
