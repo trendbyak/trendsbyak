@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketplace Center · Trends by AK</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f7f3ee;color:#222;margin:0}.wrap{max-width:1250px;margin:auto;padding:28px}.card{background:#fff;border:1px solid #e5ded5;border-radius:14px;padding:20px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.metric{font-size:28px;font-weight:700}.muted{color:#777}input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}button{padding:10px 16px;border:0;border-radius:8px;background:#222;color:#fff;cursor:pointer;margin:4px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #eee;text-align:left}.ok{color:#16753c}.warn{color:#a25a00}.danger{color:#a22}.pill{padding:4px 8px;border-radius:99px;background:#eee}
+</style></head>
+<body><div class="wrap">
+<h1>Marketplace Center</h1><p class="muted">Product master · GST · true cost · marketplace pricing readiness</p>
+<div class="grid">
+<div class="card"><div class="muted">Products</div><div id="products" class="metric">—</div></div>
+<div class="card"><div class="muted">Marketplace profiles</div><div id="profiles" class="metric">—</div></div>
+<div class="card"><div class="muted">GSTIN</div><div id="gst" class="metric">Not added</div></div>
+<div class="card"><div class="muted">Ready products</div><div id="ready" class="metric">—</div></div>
+</div>
+<div class="card"><h2>Business & GST</h2><div class="grid">
+<label>Legal name<input id="legal_name"></label><label>GSTIN<input id="gstin"></label><label>Address<input id="address_line1"></label><label>City<input id="city"></label><label>State<input id="state" value="Maharashtra"></label><label>State code<input id="state_code" value="27"></label><label>Pincode<input id="pincode"></label><label>Invoice prefix<input id="invoice_prefix" value="TAK"></label>
+</div><button onclick="saveGST()">Save GST settings</button><span id="gstmsg"></span></div>
+<div class="card"><h2>Marketplace profiles</h2><table><thead><tr><th>Channel</th><th>Referral %</th><th>Closing ₹</th><th>Shipping ₹</th><th>Payment %</th><th>Target margin %</th></tr></thead><tbody id="profileRows"></tbody></table><p class="muted">Enter the actual fees from each marketplace before relying on calculated prices.</p></div>
+<div class="card"><h2>Product readiness</h2><button onclick="load()">Refresh</button><table><thead><tr><th>Product</th><th>SKU</th><th>Cost</th><th>HSN</th><th>GST</th><th>Weight</th><th>Dimensions</th><th>Ready</th></tr></thead><tbody id="rows"></tbody></table></div>
+</div>
+<script>
+const URL='https://ltxrycmreumoqfpcbwnb.supabase.co';
+const KEY='sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh';
+const h={'apikey':KEY,'Content-Type':'application/json'};
+async function api(path,opt={}){const r=await fetch(URL+'/rest/v1/'+path,{...opt,headers:{...h,...(opt.headers||{})}});if(!r.ok)throw new Error(await r.text());return r.json()}
+async function load(){
+ const [p,pr,g]=await Promise.all([
+ api('products?select=id,name,sku,cost_price,packaging_cost,shipping_cost,inbound_shipping_cost,hsn_code,gst_rate,product_weight_g,length_cm,width_cm,height_cm,marketplace_ready&order=id.desc&limit=876'),
+ api('marketplace_profiles?select=id,name,referral_fee_pct,closing_fee,shipping_fee,payment_fee_pct,target_margin_pct&order=id'),
+ api('business_gst_settings?id=eq.1&select=*')
+ ]);
+ document.getElementById('products').textContent=p.length;document.getElementById('profiles').textContent=pr.length;document.getElementById('gst').textContent=g[0]?.gstin?'Added':'Not added';
+ document.getElementById('ready').textContent=p.filter(x=>x.marketplace_ready).length;
+ const gs=g[0]||{};for(const k of ['legal_name','gstin','address_line1','city','state','state_code','pincode','invoice_prefix'])document.getElementById(k).value=gs[k]||document.getElementById(k).value||'';
+ document.getElementById('profileRows').innerHTML=pr.map(x=>'<tr><td>'+x.name+'</td><td><input id="r'+x.id+'" value="'+x.referral_fee_pct+'"></td><td><input id="c'+x.id+'" value="'+x.closing_fee+'"></td><td><input id="s'+x.id+'" value="'+x.shipping_fee+'"></td><td><input id="pm'+x.id+'" value="'+x.payment_fee_pct+'"></td><td><input id="m'+x.id+'" value="'+x.target_margin_pct+'"></td></tr>').join('');
+ document.getElementById('rows').innerHTML=p.map(x=>{const cost=Number(x.cost_price||0)+Number(x.packaging_cost||0)+Number(x.shipping_cost||0)+Number(x.inbound_shipping_cost||0);const dims=[x.length_cm,x.width_cm,x.height_cm].every(v=>v!=null&&v!=='');const ready=x.sku&&x.hsn_code&&x.gst_rate!=null&&x.product_weight_g!=null&&dims;return '<tr><td>'+esc(x.name)+'</td><td>'+esc(x.sku||'—')+'</td><td>₹'+cost.toFixed(2)+'</td><td>'+esc(x.hsn_code||'—')+'</td><td>'+(x.gst_rate==null?'—':x.gst_rate+'%')+'</td><td>'+(x.product_weight_g==null?'—':x.product_weight_g+' g')+'</td><td>'+ (dims?x.length_cm+'×'+x.width_cm+'×'+x.height_cm+' cm':'—')+'</td><td class="'+(ready?'ok':'warn')+'">'+(ready?'Ready':'Needs data')+'</td></tr>'}).join('');
+}
+async function saveGST(){const body={legal_name:v('legal_name'),gstin:v('gstin'),address_line1:v('address_line1'),city:v('city'),state:v('state'),state_code:v('state_code'),pincode:v('pincode'),invoice_prefix:v('invoice_prefix'),updated_at:new Date().toISOString()};await api('business_gst_settings?id=eq.1',{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(body)});document.getElementById('gstmsg').textContent=' Saved';load()}
+function v(id){return document.getElementById(id).value.trim()}function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+load().catch(e=>alert(e.message));
+</script></body></html>
