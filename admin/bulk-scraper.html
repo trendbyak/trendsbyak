@@ -45,18 +45,11 @@ h2,h3{margin:0 0 8px}.note{background:#faf8f4;border-radius:10px;padding:12px;co
 </section>
 
 <section class="card">
-<h2>Shopify Browser Import</h2>
-<div class="note"><b>This is the reliable Shopify method.</b> It does not ask our server to scrape the store. Instead, the bookmark runs on the Shopify product page itself, reads Shopify's own product JSON, extracts the real product title, price, SKU, description and images, and sends the finished product back here.</div>
+<h2>Shopify Product Import</h2>
+<div class="note">Paste a Shopify product link and click <b>Fetch Product</b>. The importer will try Shopify's product data automatically and put the product details and images below for review.</div>
 <div class="actions">
 <input id="shopifyUrl" class="shopify-url" placeholder="https://www.shumajewellers.com/products/product-handle">
-<button id="openShopify" class="btn primary">Open Shopify Product</button>
-<a id="shopifyBookmarklet" class="btn light bookmark" href="#">★ Shopify → Trends by AK</a>
-</div>
-<div class="helper-steps">
-<div class="step"><b>1. Save bookmark</b><span>Drag the ★ link to your Chrome bookmarks bar once.</span></div>
-<div class="step"><b>2. Open product</b><span>Enter a Shopify product URL and click Open.</span></div>
-<div class="step"><b>3. Run bookmark</b><span>Wait for the product to load, then click the bookmark.</span></div>
-<div class="step"><b>4. Review & import</b><span>You return here with the actual product data and images.</span></div>
+<button id="fetchShopify" class="btn primary">Fetch Product</button>
 </div>
 <div id="browserStatus" class="status"></div>
 </section>
@@ -191,12 +184,7 @@ async function retryFailed(){
 }
 function selectAll(){document.querySelectorAll('.pick').forEach(x=>x.checked=!x.checked)}
 
-function buildShopifyBookmarklet(){
- const code="javascript:(()=>{const q=s=>document.querySelector(s)?.content||'';const add=(a,u)=>{if(!u)return;try{u=new URL(u,location.href).href}catch(e){}if(u&&a.indexOf(u)<0)a.push(u)};const findProduct=x=>{if(!x)return null;if(Array.isArray(x)){for(const y of x){const z=findProduct(y);if(z)return z}return null}if(typeof x!=='object')return null;const t=x['@type'];if((Array.isArray(t)?t:[t]).some(v=>String(v).toLowerCase()==='product'))return x;if(x['@graph']){const z=findProduct(x['@graph']);if(z)return z}return null};const done=p=>{if(!p.name){alert('Product name was not found. Wait for the page to finish loading and click the bookmark again.');return}location.href='https://trendsbyak.in/admin/bulk-scraper.html#shopifyImport='+encodeURIComponent(JSON.stringify(p))};(async()=>{try{const parts=location.pathname.split('/').filter(Boolean),handle=parts[0]==='products'?parts[1]:'';let p=null;if(handle){try{const r=await fetch('/products/'+handle+'.js',{credentials:'same-origin'});if(r.ok){const j=await r.json();p={source_url:location.href,name:j.title||'',description:j.description||'',sku:j.variants?.[0]?.sku||'',price:Number(j.price||j.variants?.[0]?.price||0)/100,currency:'INR',images:(j.images||[]).slice(0,6),image_url:j.images?.[0]||''}}}catch(e){}}if(!p){let product=null;for(const s of document.querySelectorAll('script[type="application/ld+json"]')){try{product=findProduct(JSON.parse(s.textContent));if(product)break}catch(e){}}const offer=Array.isArray(product?.offers)?product.offers[0]:product?.offers||{};const imgs=[];const pi=product?.image;if(Array.isArray(pi))pi.forEach(u=>add(imgs,u));else add(imgs,pi);add(imgs,q('meta[property="og:image"]'));add(imgs,q('meta[name="twitter:image"]'));document.querySelectorAll('img').forEach(x=>add(imgs,x.currentSrc||x.src||x.getAttribute('data-src')));p={source_url:location.href,name:product?.name||q('meta[property="og:title"]')||document.querySelector('h1')?.textContent?.trim()||document.title||'',description:product?.description||q('meta[name="description"]')||'',sku:product?.sku||'',price:Number(String(offer?.price||q('meta[property="product:price:amount"]')||'').replace(/[^0-9.]/g,''))||0,currency:offer?.priceCurrency||'INR',images:imgs.slice(0,6),image_url:imgs[0]||''}}done(p)}catch(e){alert('Shopify import failed: '+e.message)}})()})();";
- $('shopifyBookmarklet').href=code;
-}
-
-function readShopifyImport(){
+function buildShopifyBookmarklet(){}\n\nfunction readShopifyImport(){
  const prefix='#shopifyImport=';if(!location.hash.startsWith(prefix))return;
  try{
   const p=JSON.parse(decodeURIComponent(location.hash.slice(prefix.length)));
@@ -218,7 +206,7 @@ $('openShopify').onclick=()=>{
  try{const x=new URL(u);if(!x.pathname.includes('/products/'))throw Error('not a product URL');const w=window.open(u,'shopifyProduct','width=1200,height=900');if(!w)throw Error('popup blocked');status('browserStatus','✓ Shopify product opened. Wait for it to finish loading, then click the ★ Shopify → Trends by AK bookmark.');}
  catch(e){status('browserStatus','Please enter a valid Shopify product URL and allow pop-ups for trendsbyak.in.',true)}
 };
-buildShopifyBookmarklet();
+$('fetchShopify').onclick=async()=>{const u=$('shopifyUrl').value.trim();try{const x=new URL(u);if(!x.pathname.match(/^\/products\/[^/]+/i))throw Error('Please paste a Shopify product URL.');$('fetchShopify').disabled=true;status('browserStatus','Fetching Shopify product…');const r=await invokeOne(u);if(r?.error)throw Error(r.error);r.source=r.source||'shopify';r.selected=true;rows.push(r);render();status('browserStatus','✓ Product fetched. Review the details below and click Import Ready Products.');setTimeout(()=>$('resultCard').scrollIntoView({behavior:'smooth',block:'start'}),100)}catch(e){status('browserStatus',e.message||'Could not fetch product.',true)}finally{$('fetchShopify').disabled=false}};
 readShopifyImport();
 (async()=>{await auth()})();
 </script>
