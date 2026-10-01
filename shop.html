@@ -325,25 +325,6 @@
             background: #fff;
         }
 
-        .shop-static-banner {
-            position: relative;
-            display: grid;
-            grid-template-columns: minmax(0, 1.05fr) minmax(260px, .95fr);
-            min-height: 230px;
-            margin-top: 24px;
-            overflow: hidden;
-            border: 1px solid #e5ddd1;
-            border-radius: 22px;
-            background: #f4eee4;
-        }
-
-        .shop-static-copy {
-            padding: 34px 38px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
         .shop-static-copy .shop-banner-kicker {
             color: #8b6b42;
             margin-bottom: 8px;
@@ -363,37 +344,6 @@
             font-size: 13px;
             line-height: 1.55;
             max-width: 500px;
-        }
-
-        .shop-static-link {
-            width: fit-content;
-            display: inline-flex;
-            align-items: center;
-            min-height: 40px;
-            padding: 0 16px;
-            border-radius: 999px;
-            background: #1d1b19;
-            color: #fff;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .shop-static-images {
-            position: relative;
-            min-height: 230px;
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5px;
-        }
-
-        .shop-static-images img {
-            width: 100%;
-            height: 100%;
-            min-height: 230px;
-            object-fit: cover;
-            display: block;
         }
 
         .shop-static-images img:first-child {
@@ -1203,24 +1153,6 @@
                 bottom: 19px;
             }
 
-            .shop-static-banner {
-                grid-template-columns: 1fr;
-                min-height: 0;
-                border-radius: 18px;
-            }
-
-            .shop-static-copy {
-                padding: 28px 24px;
-            }
-
-            .shop-static-images {
-                min-height: 180px;
-            }
-
-            .shop-static-images img {
-                min-height: 180px;
-            }
-
 
 
             body {
@@ -1634,55 +1566,6 @@
             <button class="shop-banner-dot active" type="button" data-slide="0" aria-label="Show banner 1"></button>
             <button class="shop-banner-dot" type="button" data-slide="1" aria-label="Show banner 2"></button>
             <button class="shop-banner-dot" type="button" data-slide="2" aria-label="Show banner 3"></button>
-
-        </div>
-
-    </div>
-
-
-    <div class="shop-static-banner">
-
-        <div class="shop-static-copy">
-
-            <p class="shop-banner-kicker">
-                MADE FOR EVERYDAY
-            </p>
-
-            <h2>
-                Wear it. Gift it.<br>
-                Love it longer.
-            </h2>
-
-            <p>
-                From handmade favourites to everyday jewellery,
-                discover pieces that bring a little luxury to ordinary days.
-            </p>
-
-            <a
-                class="shop-static-link"
-                href="shop.html"
-            >
-                Explore the collection →
-            </a>
-
-        </div>
-
-
-        <div class="shop-static-images">
-
-            <img
-                id="shopStaticImage1"
-                src="assets/logo.png"
-                alt="Trends by AK accessories"
-                loading="lazy"
-            >
-
-            <img
-                id="shopStaticImage2"
-                src="assets/logo.png"
-                alt="Trends by AK curated accessories"
-                loading="lazy"
-            >
 
         </div>
 
@@ -3152,24 +3035,7 @@ function setupShopBanners() {
             1
         )
     );
-
-    setImage(
-        "shopStaticImage1",
-        pickImage(
-            ["jewellery", "jewelry", "earring", "necklace"],
-            1
-        )
-    );
-
-    setImage(
-        "shopStaticImage2",
-        pickImage(
-            ["scrunch", "bow", "clip", "headband"],
-            1
-        )
-    );
-
-    let currentSlide = 0;
+let currentSlide = 0;
     let timer = null;
 
     const showSlide = (index) => {
