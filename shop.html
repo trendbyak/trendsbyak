@@ -2681,6 +2681,37 @@ function applyCollectionFromUrl() {
         window.location.search
     );
 
+    /*
+     * Homepage Shop by Category cards use ?category=.
+     * Category pages must filter only products.category.
+     */
+    const requestedCategory =
+        params.get("category");
+
+    if (requestedCategory) {
+
+        selectedCategory =
+            normalizeCategory(requestedCategory);
+
+        updateCategoryButtons();
+        renderProducts();
+
+        const heading =
+            document.querySelector("h1");
+
+        if (heading) {
+            heading.textContent = requestedCategory;
+        }
+
+        document.title =
+            requestedCategory + " | Trends by AK";
+
+        return;
+    }
+
+    /*
+     * Preserve existing ?collection= links.
+     */
     const requestedCollection =
         params.get("collection");
 
@@ -2691,35 +2722,17 @@ function applyCollectionFromUrl() {
     const requested =
         normalizeCategory(requestedCollection);
 
-    console.log(
-        "Requested collection:",
-        requestedCollection
-    );
-
-    /*
-     * Match ONLY the requested collection.
-     *
-     * We check collection first, then category,
-     * because your homepage collections may be
-     * stored in either field.
-     */
     const matching =
         allProducts.filter(product => {
 
             const productCollection =
-                normalizeCategory(
-                    product.collection
-                );
+                normalizeCategory(product.collection);
 
             const productCategory =
-                normalizeCategory(
-                    product.category
-                );
+                normalizeCategory(product.category);
 
             const productCollectionName =
-                normalizeCategory(
-                    product.collection_name
-                );
+                normalizeCategory(product.collection_name);
 
             return (
                 productCollection === requested ||
@@ -2728,72 +2741,40 @@ function applyCollectionFromUrl() {
             );
         });
 
-    console.log(
-        "Matching products:",
-        matching
-    );
-
     const grid =
-        document.getElementById(
-            "shopProductGrid"
-        );
+        document.getElementById("shopProductGrid");
 
     const count =
-        document.getElementById(
-            "shopCount"
-        );
+        document.getElementById("shopCount");
 
     if (!grid) {
         return;
     }
 
-    /*
-     * COLLECTION FOUND
-     */
-    if (matching.length > 0) {
+    if (count) {
+        count.textContent =
+            `${matching.length} ${matching.length === 1 ? "product" : "products"}`;
+    }
 
-        if (count) {
-            count.textContent =
-                `${matching.length} ${
-                    matching.length === 1
-                        ? "product"
-                        : "products"
-                }`;
-        }
+    if (matching.length > 0) {
 
         grid.innerHTML =
             matching
-                .map(product =>
-                    productCard(product)
-                )
+                .map(product => productCard(product))
                 .join("");
 
         attachCartButtons();
-
         return;
     }
 
-    /*
-     * COLLECTION NOT FOUND
-     *
-     * IMPORTANT:
-     * Do NOT show all products.
-     */
     if (count) {
-        count.textContent =
-            "0 products";
+        count.textContent = "0 products";
     }
 
     grid.innerHTML = `
         <div class="shop-message">
-            <h3>
-                ${escapeHtml(requestedCollection)}
-            </h3>
-
-            <p>
-                No products are currently available
-                in this collection.
-            </p>
+            <h3>${escapeHtml(requestedCollection)}</h3>
+            <p>No products are currently available in this collection.</p>
         </div>
     `;
 }
