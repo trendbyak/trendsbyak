@@ -2019,153 +2019,78 @@ function addToCart(product) {
 
 async function loadCategories() {
 
-    const grid =
-        document.getElementById("categoryGrid");
-
+    const grid = document.getElementById("categoryGrid");
     if (!grid) return;
 
     try {
 
-        const { data, error } =
-            await db
-                .from("products")
-                .select(
-                    "id,name,category,image_url,status,created_at"
-                )
-                .eq("status", "active")
-                .not("category", "is", null)
-                .order("created_at", {
-                    ascending: false
-                });
+        const { data, error } = await db
+            .from("categories")
+            .select("id,name,thumbnail_url,display_order")
+            .order("display_order", { ascending: true })
+            .order("name", { ascending: true });
 
         if (error) throw error;
 
-        const products = data || [];
-
-        const categories = [];
-
-        const seen =
-            new Set();
-
-        products.forEach(product => {
-
-            const name =
-                String(
-                    product.category || ""
-                ).trim();
-
-            if (!name) return;
-
-            const key =
-                name.toLowerCase();
-
-            if (seen.has(key)) return;
-
-            seen.add(key);
-
-            categories.push({
-
-                name: name,
-
-                image:
-                    product.image_url || ""
-
-            });
-
-        });
-
+        const categories = data || [];
 
         if (!categories.length) {
-
             grid.innerHTML = `
                 <div class="loading">
                     Categories will appear here once products are available.
                 </div>
             `;
-
             return;
         }
 
+        grid.innerHTML = categories.map(category => {
 
-        grid.innerHTML =
-            categories
-                .map(category => {
+            const name = escapeHtml(category.name || "Category");
+            const rawImage = String(category.thumbnail_url || "").trim();
 
-                    const name =
-                        escapeHtml(
-                            category.name
-                        );
+            // Older product images were sometimes saved as http:// URLs.
+            // The homepage is HTTPS, so upgrade those URLs to HTTPS to avoid
+            // browser mixed-content blocking.
+            const image = escapeHtml(
+                rawImage.replace(/^http:\/\//i, "https://")
+            );
 
-                    const image =
-                        escapeHtml(
-                            category.image
-                        );
+            const url =
+                "shop.html?category=" +
+                encodeURIComponent(category.name || "");
 
-                    const url =
-                        "shop.html?category=" +
-                        encodeURIComponent(
-                            category.name
-                        );
+            return `
+                <a class="category-card" href="${url}">
+                    <div class="category-image">
+                        ${image ? `
+                            <img
+                                src="${image}"
+                                alt="${name}"
+                                loading="lazy"
+                                onerror="
+                                    this.style.display='none';
+                                    this.nextElementSibling.style.display='flex';
+                                ">
+                        ` : ""}
 
-                    return `
+                        <div
+                            class="category-fallback"
+                            style="${image ? "display:none;" : "display:flex;"}">
+                            ${escapeHtml(
+                                String(category.name || "A").charAt(0).toUpperCase()
+                            )}
+                        </div>
+                    </div>
 
-                        <a
-                            class="category-card"
-                            href="${url}">
+                    <h3>${name}</h3>
+                </a>
+            `;
 
-                            <div class="category-image">
-
-                                ${
-                                    image
-                                    ?
-                                    `
-                                    <img
-                                        src="${image}"
-                                        alt="${name}"
-                                        loading="lazy"
-                                        onerror="
-                                            this.style.display='none';
-                                            this.nextElementSibling.style.display='flex';
-                                        ">
-                                    `
-                                    :
-                                    ""
-                                }
-
-                                <div
-                                    class="category-fallback"
-                                    style="${
-                                        image
-                                        ? "display:none;"
-                                        : "display:flex;"
-                                    }">
-
-                                    ${escapeHtml(
-                                        category.name
-                                            .charAt(0)
-                                            .toUpperCase()
-                                    )}
-
-                                </div>
-
-                            </div>
-
-                            <h3>
-                                ${name}
-                            </h3>
-
-                        </a>
-                    `;
-
-                })
-                .join("");
+        }).join("");
 
     } catch (error) {
 
-        console.error(
-            "Category loading error:",
-            error
-        );
+        console.error("Category loading error:", error);
 
         grid.innerHTML = `
             <div class="loading">
