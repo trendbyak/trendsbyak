@@ -20,10 +20,10 @@
   }
   async function getProducts(){
     try{
-      const r=await fetch(SUPABASE_URL+'/rest/v1/products?select=id,name,category,image_url,status,created_at&status=eq.active&image_url=not.is.null&order=created_at.desc&limit=80',{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY}});
+      const r=await fetch(SUPABASE_URL+'/rest/v1/products?select=id,name,category,image_url,status,stock,created_at&status=eq.active&stock=gt.0&image_url=not.is.null&order=created_at.desc&limit=80',{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY}});
       if(!r.ok) return [];
       const data=await r.json();
-      return Array.isArray(data)?data.filter(p=>p.status==='active'&&isUsableProductImage(p.image_url)):[]; 
+      return Array.isArray(data)?data.filter(p=>p.status==='active'&&Number(p.stock)>0&&isUsableProductImage(p.image_url)):[]; 
     }catch(e){return []}
   }
   async function getSettings(){
