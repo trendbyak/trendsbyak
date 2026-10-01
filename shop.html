@@ -200,6 +200,210 @@
         }
 
 
+
+        /* =====================================================
+           SHOP BANNERS
+        ===================================================== */
+
+        .shop-banners {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 8px;
+        }
+
+        .shop-banner-slider {
+            position: relative;
+            overflow: hidden;
+            min-height: 330px;
+            border-radius: 24px;
+            background: #1d1b19;
+            box-shadow: 0 18px 45px rgba(29,27,25,.14);
+        }
+
+        .shop-banner-track {
+            display: flex;
+            height: 100%;
+            transition: transform .55s ease;
+        }
+
+        .shop-banner-slide {
+            position: relative;
+            min-width: 100%;
+            min-height: 330px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            isolation: isolate;
+        }
+
+        .shop-banner-slide::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(29,27,25,.94) 0%, rgba(29,27,25,.72) 42%, rgba(29,27,25,.12) 100%);
+            z-index: 1;
+        }
+
+        .shop-banner-slide-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .shop-banner-copy {
+            position: relative;
+            z-index: 2;
+            width: min(560px, 62%);
+            padding: 45px;
+            color: #fff;
+        }
+
+        .shop-banner-kicker {
+            margin: 0 0 10px;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #d8b77b;
+            font-weight: 700;
+        }
+
+        .shop-banner-copy h2 {
+            margin: 0 0 12px;
+            font-family: "Playfair Display", serif;
+            font-size: clamp(32px, 4vw, 52px);
+            line-height: 1.05;
+        }
+
+        .shop-banner-copy p {
+            margin: 0 0 22px;
+            max-width: 430px;
+            color: rgba(255,255,255,.82);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .shop-banner-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 18px;
+            border-radius: 999px;
+            background: #fff;
+            color: #1d1b19;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .shop-banner-dots {
+            position: absolute;
+            left: 45px;
+            bottom: 22px;
+            z-index: 4;
+            display: flex;
+            gap: 7px;
+        }
+
+        .shop-banner-dot {
+            width: 7px;
+            height: 7px;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,.45);
+            cursor: pointer;
+        }
+
+        .shop-banner-dot.active {
+            width: 22px;
+            border-radius: 999px;
+            background: #fff;
+        }
+
+        .shop-static-banner {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(260px, .95fr);
+            min-height: 230px;
+            margin-top: 24px;
+            overflow: hidden;
+            border: 1px solid #e5ddd1;
+            border-radius: 22px;
+            background: #f4eee4;
+        }
+
+        .shop-static-copy {
+            padding: 34px 38px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .shop-static-copy .shop-banner-kicker {
+            color: #8b6b42;
+            margin-bottom: 8px;
+        }
+
+        .shop-static-copy h2 {
+            margin: 0 0 8px;
+            font-family: "Playfair Display", serif;
+            font-size: clamp(25px, 3vw, 38px);
+            line-height: 1.1;
+            color: #1d1b19;
+        }
+
+        .shop-static-copy p {
+            margin: 0 0 18px;
+            color: #68615a;
+            font-size: 13px;
+            line-height: 1.55;
+            max-width: 500px;
+        }
+
+        .shop-static-link {
+            width: fit-content;
+            display: inline-flex;
+            align-items: center;
+            min-height: 40px;
+            padding: 0 16px;
+            border-radius: 999px;
+            background: #1d1b19;
+            color: #fff;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .shop-static-images {
+            position: relative;
+            min-height: 230px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .shop-static-images img {
+            width: 100%;
+            height: 100%;
+            min-height: 230px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .shop-static-images img:first-child {
+            border-radius: 0;
+        }
+
+        .shop-static-images img:last-child {
+            border-radius: 0;
+        }
+
         /* =====================================================
            SHOP LAYOUT
         ===================================================== */
@@ -965,6 +1169,60 @@
 
         @media (max-width: 700px) {
 
+            .shop-banners {
+                padding: 0 12px 4px;
+            }
+
+            .shop-banner-slider,
+            .shop-banner-slide {
+                min-height: 410px;
+                border-radius: 18px;
+            }
+
+            .shop-banner-slide::before {
+                background:
+                    linear-gradient(180deg, rgba(29,27,25,.12) 0%, rgba(29,27,25,.84) 56%, rgba(29,27,25,.96) 100%);
+            }
+
+            .shop-banner-copy {
+                width: 100%;
+                padding: 28px 24px 50px;
+                align-self: flex-end;
+            }
+
+            .shop-banner-copy h2 {
+                font-size: 34px;
+            }
+
+            .shop-banner-copy p {
+                font-size: 12px;
+            }
+
+            .shop-banner-dots {
+                left: 24px;
+                bottom: 19px;
+            }
+
+            .shop-static-banner {
+                grid-template-columns: 1fr;
+                min-height: 0;
+                border-radius: 18px;
+            }
+
+            .shop-static-copy {
+                padding: 28px 24px;
+            }
+
+            .shop-static-images {
+                min-height: 180px;
+            }
+
+            .shop-static-images img {
+                min-height: 180px;
+            }
+
+
+
             body {
                 padding-bottom:
                     82px;
@@ -1242,6 +1500,193 @@
         Thoughtfully curated accessories,
         jewellery, hair accessories and gifts.
     </p>
+
+</section>
+
+
+<!-- =====================================================
+     SHOP BANNER AREA
+===================================================== -->
+
+<section class="shop-banners" aria-label="Trends by AK featured collections">
+
+    <div class="shop-banner-slider" id="shopBannerSlider">
+
+        <div class="shop-banner-track" id="shopBannerTrack">
+
+            <article class="shop-banner-slide">
+
+                <img
+                    class="shop-banner-slide-image"
+                    id="shopBannerImage1"
+                    src="assets/logo.png"
+                    alt="Trends by AK jewellery"
+                >
+
+                <div class="shop-banner-copy">
+
+                    <p class="shop-banner-kicker">
+                        EVERYDAY JEWELLERY
+                    </p>
+
+                    <h2>
+                        Little luxuries.<br>
+                        Made for you.
+                    </h2>
+
+                    <p>
+                        Minimal pieces made to slip into your everyday wardrobe —
+                        easy, elegant and made to wear on repeat.
+                    </p>
+
+                    <a
+                        class="shop-banner-button"
+                        href="shop.html?category=Earrings"
+                        id="shopBannerLink1"
+                    >
+                        Shop Jewellery →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="shop-banner-slide">
+
+                <img
+                    class="shop-banner-slide-image"
+                    id="shopBannerImage2"
+                    src="assets/logo.png"
+                    alt="Trends by AK hair accessories"
+                >
+
+                <div class="shop-banner-copy">
+
+                    <p class="shop-banner-kicker">
+                        HAIR ACCESSORIES
+                    </p>
+
+                    <h2>
+                        Small details.<br>
+                        Big difference.
+                    </h2>
+
+                    <p>
+                        Scrunchies, bows, clips and headbands for those little
+                        finishing touches that make an outfit feel yours.
+                    </p>
+
+                    <a
+                        class="shop-banner-button"
+                        href="shop.html?category=Scrunchies"
+                        id="shopBannerLink2"
+                    >
+                        Shop Hair Accessories →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="shop-banner-slide">
+
+                <img
+                    class="shop-banner-slide-image"
+                    id="shopBannerImage3"
+                    src="assets/logo.png"
+                    alt="Trends by AK gifting"
+                >
+
+                <div class="shop-banner-copy">
+
+                    <p class="shop-banner-kicker">
+                        GIFTING & FAVOURS
+                    </p>
+
+                    <h2>
+                        Thoughtful gifting,<br>
+                        without the fuss.
+                    </h2>
+
+                    <p>
+                        Curated little luxuries for birthdays, return gifts,
+                        celebrations and special moments.
+                    </p>
+
+                    <a
+                        class="shop-banner-button"
+                        href="index.html#bulk-orders"
+                    >
+                        Explore Gifting →
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="shop-banner-dots" aria-label="Banner slides">
+
+            <button class="shop-banner-dot active" type="button" data-slide="0" aria-label="Show banner 1"></button>
+            <button class="shop-banner-dot" type="button" data-slide="1" aria-label="Show banner 2"></button>
+            <button class="shop-banner-dot" type="button" data-slide="2" aria-label="Show banner 3"></button>
+
+        </div>
+
+    </div>
+
+
+    <div class="shop-static-banner">
+
+        <div class="shop-static-copy">
+
+            <p class="shop-banner-kicker">
+                MADE FOR EVERYDAY
+            </p>
+
+            <h2>
+                Wear it. Gift it.<br>
+                Love it longer.
+            </h2>
+
+            <p>
+                From handmade favourites to everyday jewellery,
+                discover pieces that bring a little luxury to ordinary days.
+            </p>
+
+            <a
+                class="shop-static-link"
+                href="shop.html"
+            >
+                Explore the collection →
+            </a>
+
+        </div>
+
+
+        <div class="shop-static-images">
+
+            <img
+                id="shopStaticImage1"
+                src="assets/logo.png"
+                alt="Trends by AK accessories"
+                loading="lazy"
+            >
+
+            <img
+                id="shopStaticImage2"
+                src="assets/logo.png"
+                alt="Trends by AK curated accessories"
+                loading="lazy"
+            >
+
+        </div>
+
+    </div>
 
 </section>
 
@@ -2620,6 +3065,169 @@ function attachCartButtons() {
 
 
 /* =====================================================
+   SHOP BANNERS
+===================================================== */
+
+function setupShopBanners() {
+
+    const track =
+        document.getElementById("shopBannerTrack");
+
+    const dots =
+        document.querySelectorAll(".shop-banner-dot");
+
+    if (!track || !dots.length) {
+        return;
+    }
+
+    const pickImage = (terms, offset = 0) => {
+
+        const matches =
+            allProducts.filter(product => {
+
+                const text =
+                    [
+                        product.name,
+                        product.category,
+                        product.description
+                    ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase();
+
+                return terms.some(term =>
+                    text.includes(term)
+                ) && (
+                    product.image_url ||
+                    product.image
+                );
+
+            });
+
+        const fallback =
+            allProducts.filter(product =>
+                product.image_url ||
+                product.image
+            );
+
+        const chosen =
+            matches[offset] ||
+            fallback[offset] ||
+            fallback[0];
+
+        return chosen
+            ? (chosen.image_url || chosen.image || "")
+            : "";
+    };
+
+    const setImage = (id, src) => {
+
+        const image =
+            document.getElementById(id);
+
+        if (image && src) {
+            image.src = src;
+        }
+
+    };
+
+    setImage(
+        "shopBannerImage1",
+        pickImage(
+            ["earring", "necklace", "bracelet", "ring", "jewellery", "jewelry"]
+        )
+    );
+
+    setImage(
+        "shopBannerImage2",
+        pickImage(
+            ["scrunch", "bow", "clip", "headband", "claw"]
+        )
+    );
+
+    setImage(
+        "shopBannerImage3",
+        pickImage(
+            ["gift", "hamper", "brooch", "keychain", "utility"],
+            1
+        )
+    );
+
+    setImage(
+        "shopStaticImage1",
+        pickImage(
+            ["jewellery", "jewelry", "earring", "necklace"],
+            1
+        )
+    );
+
+    setImage(
+        "shopStaticImage2",
+        pickImage(
+            ["scrunch", "bow", "clip", "headband"],
+            1
+        )
+    );
+
+    let currentSlide = 0;
+    let timer = null;
+
+    const showSlide = (index) => {
+
+        currentSlide =
+            (index + 3) % 3;
+
+        track.style.transform =
+            "translateX(-" +
+            (currentSlide * 100) +
+            "%)";
+
+        dots.forEach((dot, dotIndex) => {
+
+            dot.classList.toggle(
+                "active",
+                dotIndex === currentSlide
+            );
+
+        });
+
+    };
+
+    dots.forEach(dot => {
+
+        dot.addEventListener("click", () => {
+
+            showSlide(
+                Number(dot.dataset.slide || 0)
+            );
+
+            startTimer();
+
+        });
+
+    });
+
+    const startTimer = () => {
+
+        if (timer) {
+            clearInterval(timer);
+        }
+
+        timer = setInterval(() => {
+
+            showSlide(currentSlide + 1);
+
+        }, 5000);
+
+    };
+
+    showSlide(0);
+    startTimer();
+
+}
+
+
+/* =====================================================
    SEARCH
 ===================================================== */
 
@@ -2862,6 +3470,8 @@ document.addEventListener(
         setupMenu();
 
         await loadProducts();
+
+        setupShopBanners();
 
         applyCollectionFromUrl();
 
