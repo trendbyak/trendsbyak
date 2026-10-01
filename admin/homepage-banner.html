@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trends by AK | Homepage Banner</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.min.js"></script>
+<style>
+:root{--ink:#211f1c;--gold:#b28a4b;--cream:#f7f4ef;--line:#e7dfd4;--muted:#7b756e}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:14px Arial,sans-serif}
+.wrap{max-width:900px;margin:auto;padding:28px 20px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
+h1{margin:0;font-size:28px}.muted{color:var(--muted);line-height:1.5}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:15px}
+.field{display:grid;gap:7px;margin-bottom:18px}.field label{font-weight:700;font-size:13px}.field select{width:100%;max-width:420px;padding:12px;border:1px solid #d8d0c6;border-radius:9px;background:#fff;font:inherit}
+.actions{display:flex;gap:10px;align-items:center}.btn{border:1px solid var(--ink);border-radius:9px;padding:11px 15px;background:var(--ink);color:#fff;font-weight:700;cursor:pointer;text-decoration:none}.btn.light{background:#fff;color:var(--ink);border-color:var(--line)}
+.msg{display:none;padding:11px 13px;border-radius:9px;margin-bottom:14px}.msg.show{display:block}.ok{background:#edf7ed;color:#356b35}.err{background:#fff0f0;color:#a33}
+.preview{margin-top:20px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#29251f;color:#fff}.preview-box{height:260px;display:flex;align-items:center;padding:30px;background:linear-gradient(90deg,rgba(41,37,31,.92),rgba(41,37,31,.25)),url('../assets/logo.png') center/cover}.preview-copy{max-width:450px}.preview-copy small{color:#d0aa72;letter-spacing:2px}.preview-copy h2{font-family:Georgia,serif;font-size:34px;margin:8px 0}.preview-box.compact{height:190px}.preview-box.standard{height:260px}.preview-box.large{height:340px}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="top"><div><div class="muted">TRENDS BY AK · ADMIN</div><h1>Homepage Banner</h1></div><a class="btn light" href="command-center.html">← Command Center</a></div>
+<div id="msg" class="msg"></div>
+<section class="card">
+<p class="muted">The homepage banner automatically uses active product images from your website. Here you can change the banner height and rotation speed without editing the homepage code.</p>
+<div class="field"><label for="size">Banner size</label><select id="size"><option value="compact">Compact · less vertical space</option><option value="standard">Standard · recommended</option><option value="large">Large · more visual impact</option></select></div>
+<div class="field"><label for="rotation">Rotation speed</label><select id="rotation"><option value="3">Every 3 seconds</option><option value="5">Every 5 seconds</option><option value="7">Every 7 seconds</option><option value="10">Every 10 seconds</option><option value="15">Every 15 seconds</option></select></div>
+<div class="actions"><button class="btn" id="save">Save Banner Settings</button><a class="btn light" href="../index.html" target="_blank" rel="noopener">View Homepage</a></div>
+</section>
+<section class="card"><strong>Preview</strong><div class="preview"><div id="preview" class="preview-box standard"><div class="preview-copy"><small>FEATURED PRODUCT</small><h2>Product image banner</h2><div>Real products from your catalogue rotate here.</div></div></div></div></section>
+</main>
+<script>
+const db=window.supabase.createClient("https://ltxrycmreumoqfpcbwnb.supabase.co","sb_publishable_wdc4ImKB1f0Q-v4Po9DOwA_xIpPXHkh");
+const $=id=>document.getElementById(id);
+function show(t,error=false){$("msg").textContent=t;$("msg").className="msg show "+(error?"err":"ok");setTimeout(()=>$("msg").className="msg",4000)}
+function preview(){const s=$("size").value;$("preview").className="preview-box "+s}
+$("size").addEventListener("change",preview);
+async function boot(){
+ const {data,error}=await db.auth.getSession();
+ if(error||!data.session){location.href="login.html";return}
+ const r=await db.from("homepage_banner_settings").select("banner_size,rotation_seconds").eq("id",1).maybeSingle();
+ if(r.error){show(r.error.message,true);return}
+ if(r.data){$("size").value=r.data.banner_size||"standard";$("rotation").value=String(r.data.rotation_seconds||5);preview()}
+}
+$("save").onclick=async()=>{
+ $("save").disabled=true;
+ const size=$("size").value,rotation=Number($("rotation").value);
+ const {error}=await db.from("homepage_banner_settings").update({banner_size:size,rotation_seconds:rotation,updated_at:new Date().toISOString()}).eq("id",1);
+ $("save").disabled=false;
+ if(error){show(error.message,true);return}
+ show("Homepage banner settings saved.");
+};
+boot();
+</script>
+</body>
+</html>
