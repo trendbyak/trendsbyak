@@ -193,7 +193,9 @@ async function retryFailed(){
 }
 function selectAll(){document.querySelectorAll('.pick').forEach(x=>x.checked=!x.checked)}
 
-function buildShopifyBookmarklet(){}\n\nfunction readShopifyImport(){
+function buildShopifyBookmarklet(){}
+
+function readShopifyImport(){
  const prefix='#shopifyImport=';if(!location.hash.startsWith(prefix))return;
  try{
   const p=JSON.parse(decodeURIComponent(location.hash.slice(prefix.length)));
