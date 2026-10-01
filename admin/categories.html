@@ -45,14 +45,14 @@ let categories=[], productCounts={};
 function msg(text,error=false){$("msg").textContent=text;$("msg").className="msg show "+(error?"err":"ok");setTimeout(()=>$("msg").className="msg",3500)}
 async function auth(){const {data,error}=await db.auth.getSession();if(error||!data.session){location.href="login.html";return false}return true}
 async function load(){
-  const [c,p]=await Promise.all([
-    db.from("categories").select("id,name,thumbnail_url,display_order,created_at").order("display_order",{ascending:true}).order("name"),
-    db.from("products").select("id,category").not("category","is",null)
-  ]);
-  if(c.error){msg(c.error.message,true);return}
-  if(p.error){msg(p.error.message,true);return}
+  $("body").innerHTML='<tr><td colspan="5">Loading categories…</td></tr>';
+  const c=await db.from("categories").select("id,name,thumbnail_url,display_order,created_at").order("display_order",{ascending:true}).order("name");
+  if(c.error){msg(c.error.message,true);$("body").innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#a33">Could not load categories. Please refresh.</td></tr>';return}
   categories=c.data||[];
   productCounts={};
+  render();
+  const p=await db.from("products").select("id,category").not("category","is",null);
+  if(p.error){console.warn("Product counts unavailable:",p.error);return}
   (p.data||[]).forEach(x=>{const k=String(x.category||"").trim().toLowerCase();if(k)productCounts[k]=(productCounts[k]||0)+1});
   render();
 }
