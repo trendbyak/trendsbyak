@@ -2636,206 +2636,72 @@ async function loadReviews() {
 
 async function loadInstagram(){
 
-    const grid =
-        document.getElementById(
-            "instagramGrid"
-        );
-
+    const grid = document.getElementById("instagramGrid");
     if (!grid) return;
 
     try {
+        const { data: posts, error } = await db
+            .from("instagram_reels")
+            .select("id,reel_url,title,caption,thumbnail_url,is_active,display_order")
+            .eq("is_active", true)
+            .order("display_order", { ascending: true })
+            .limit(6);
 
-        /* -------------------------------------------------
-           Get Instagram posts
-        ------------------------------------------------- */
+        if (error) throw error;
 
-        const { data: posts, error: postsError } =
-            await db
-                .from("instagram_reels")
-                .select(
-                    "id,reel_url,title,caption,thumbnail_url,is_active,display_order"
-                )
-                .eq(
-                    "is_active",
-                    true
-                )
-                .order(
-                    "display_order",
-                    {
-                        ascending: true
-                    }
-                )
-                .limit(6);
-
-        if (postsError) throw postsError;
-
-
-        const instagramPosts =
-            posts || [];
-
+        const instagramPosts = posts || [];
 
         if (!instagramPosts.length) {
-
             renderInstagramFallback();
-
             return;
         }
 
+        /*
+           Instagram thumbnails are managed manually from Admin.
+           Do NOT replace a missing thumbnail with a product image.
+           This keeps this section independent from the product catalogue.
+        */
 
-        /* -------------------------------------------------
-           Get product images
+        grid.innerHTML = instagramPosts.map(post => {
+            const url = escapeHtml(post.reel_url || "https://www.instagram.com/trendsbyak/");
+            const title = escapeHtml(post.title || "Trends by AK");
+            const thumb = escapeHtml(post.thumbnail_url || "");
 
-           These are used as beautiful temporary
-           thumbnails until Meta/Instagram API is connected.
-        ------------------------------------------------- */
+            return `
+                <a
+                    class="instagram-card"
+                    href="${url}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="View Trends by AK reel on Instagram">
 
-        const { data: products } =
-            await db
-                .from("products")
-                .select(
-                    "id,name,image_url,status,created_at"
-                )
-                .eq(
-                    "status",
-                    "active"
-                )
-                .not(
-                    "image_url",
-                    "is",
-                    null
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
+                    ${
+                        thumb
+                        ? `
+                            <img
+                                src="${thumb}"
+                                alt="${title}"
+                                loading="lazy"
+                                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+
+                            <div class="instagram-placeholder" style="display:none;">
+                                <strong>@trendsbyak</strong>
+                                <span>View Instagram</span>
+                            </div>
+                        `
+                        : `
+                            <div class="instagram-placeholder">
+                                <strong>@trendsbyak</strong>
+                                <span>View Instagram</span>
+                            </div>
+                        `
                     }
-                )
-                .limit(12);
-
-
-        const productImages =
-            (products || [])
-                .map(
-                    product =>
-                        product.image_url
-                )
-                .filter(Boolean);
-
-
-        /* -------------------------------------------------
-           Build Instagram grid
-        ------------------------------------------------- */
-
-        grid.innerHTML =
-            instagramPosts
-                .map((post, index) => {
-
-                    const url =
-                        escapeHtml(
-                            post.reel_url ||
-                            "https://www.instagram.com/trendsbyak/"
-                        );
-
-                    const title =
-                        escapeHtml(
-                            post.title ||
-                            "Trends by AK"
-                        );
-
-                    /*
-                       Priority:
-
-                       1. Real Instagram thumbnail
-                       2. Existing product image
-                       3. Elegant fallback
-                    */
-
-                    const thumbnail =
-                        post.thumbnail_url ||
-                        productImages[
-                            index %
-                            Math.max(
-                                productImages.length,
-                                1
-                            )
-                        ] ||
-                        "";
-
-
-                    const thumb =
-                        escapeHtml(
-                            thumbnail
-                        );
-
-
-                    return `
-
-                        <a
-                            class="instagram-card"
-                            href="${url}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="View Trends by AK on Instagram">
-
-                            ${
-                                thumb
-                                ?
-                                `
-                                <img
-                                    src="${thumb}"
-                                    alt="${title}"
-                                    loading="lazy"
-                                    onerror="
-                                        this.style.display='none';
-                                        this.nextElementSibling.style.display='flex';
-                                    "
-                                >
-
-                                <div
-                                    class="instagram-placeholder"
-                                    style="display:none;">
-
-                                    <strong>
-                                        @trendsbyak
-                                    </strong>
-
-                                    <span>
-                                        View Instagram
-                                    </span>
-
-                                </div>
-                                `
-                                :
-                                `
-                                <div class="instagram-placeholder">
-
-                                    <strong>
-                                        @trendsbyak
-                                    </strong>
-
-                                    <span>
-                                        View Instagram
-                                    </span>
-
-                                </div>
-                                `
-                            }
-
-                        </a>
-
-                    `;
-
-                })
-                .join("");
-
+                </a>
+            `;
+        }).join("");
 
     } catch (error) {
-
-        console.warn(
-            "Instagram loading:",
-            error
-        );
-
+        console.warn("Instagram loading:", error);
         renderInstagramFallback();
     }
 }
