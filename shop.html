@@ -2414,8 +2414,10 @@ function updateCategoryButtons() {
 
                 button.classList.toggle(
                     "active",
-                    button.dataset.category ===
-                    selectedCategory
+                    (button.dataset.filterValue || "all") ===
+                    selectedCategory &&
+                    (button.dataset.filterType || "all") ===
+                    shopFilterType
                 );
 
             }
