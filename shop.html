@@ -2582,7 +2582,10 @@ function productCard(product) {
         );
 
 
-    const imageUrls = [...(Array.isArray(product.image_urls) ? product.image_urls : []), ...(product.image_url ? [product.image_url] : []), ...(product.image ? [product.image] : [])].filter(Boolean);\n\n    const image = imageUrls[0] || "";\n    const fallbacks = escapeHtml(JSON.stringify(imageUrls.slice(1)));
+    const imageUrls = [...(Array.isArray(product.image_urls) ? product.image_urls : []), ...(product.image_url ? [product.image_url] : []), ...(product.image ? [product.image] : [])].filter(Boolean);
+
+    const image = imageUrls[0] || "";
+    const fallbacks = escapeHtml(JSON.stringify(imageUrls.slice(1)));
 
 
     const mrp =
