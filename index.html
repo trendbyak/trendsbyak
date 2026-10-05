@@ -2120,7 +2120,7 @@ async function loadNewLaunches() {
             await db
                 .from("products")
                 .select(
-                    "id,name,price,sale_price,category,image_url,status,stock,created_at"
+                    "id,name,price,sale_price,category,image_url,image_urls,status,stock,created_at"
                 )
                 .eq("status", "active")
                 .gt("stock", 0)
@@ -2176,10 +2176,10 @@ async function loadNewLaunches() {
                             "Trends by AK"
                         );
 
-                    const image =
-                        escapeHtml(
-                            product.image_url || ""
-                        );
+                    const imageUrls = [...(Array.isArray(product.image_urls) ? product.image_urls : []), ...(product.image_url ? [product.image_url] : [])].filter(Boolean);
+
+                    const image = escapeHtml(imageUrls[0] || "");
+                    const fallbacks = escapeHtml(JSON.stringify(imageUrls.slice(1)));
 
                     const mrp =
                         Number(
@@ -2227,6 +2227,7 @@ async function loadNewLaunches() {
                                     `
                                     <img
                                         src="${image}"
+                                        data-fallbacks="${fallbacks}"
                                         alt="${name}"
                                         loading="lazy"
                                         onerror="
@@ -3220,5 +3221,6 @@ document.addEventListener(
 </script>
 <script src="promo-banner.js"></script>
 <script src="header-loader.js"></script>
+<script src="image-fallback.js"></script>
 </body>
 </html>
