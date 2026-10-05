@@ -82,11 +82,9 @@ h1{
 
   <div class="icon">🎉</div>
 
-  <h1>Payment submitted successfully</h1>
+  <h1>Thank you for your order!</h1>
 
-  <p class="text">
-    Thank you for shopping with Trends by AK.
-  </p>
+  <p class="text">Your order has been received by <strong>Trends by AK</strong>. We’ll keep you updated as it moves through each stage.</p>
 
   <div class="order" id="orderNumber">
     Order received
@@ -97,9 +95,7 @@ h1{
     We are verifying the transaction and will update your order shortly.
   </p>
 
-  <div class="status">
-    Please keep your order number for reference.
-  </div>
+  <div class="status">Check your order anytime using your <strong>order number and phone number</strong>.</div><div style="margin-top:24px"><a id="trackBtn" class="btn" href="/track-order.html">Track My Order</a></div>
 
   <a class="btn" href="/">
     Continue Shopping
@@ -116,10 +112,7 @@ const order =
   params.get("order_number") ||
   "";
 
-if(order){
-  document.getElementById("orderNumber").textContent =
-    "Order " + order;
-}
+if(order){document.getElementById("orderNumber").textContent="Order "+order;document.getElementById("trackBtn").href="/track-order.html?order="+encodeURIComponent(order);}
 
 localStorage.removeItem("trendsbyak_cart");
 
