@@ -2582,8 +2582,7 @@ function productCard(product) {
         );
 
 
-    const image = (Array.isArray(product.image_urls)&&product.image_urls[0]) || product.image_url || product.image ||
-        "";
+    const imageUrls = [...(Array.isArray(product.image_urls) ? product.image_urls : []), ...(product.image_url ? [product.image_url] : []), ...(product.image ? [product.image] : [])].filter(Boolean);\n\n    const image = imageUrls[0] || "";\n    const fallbacks = escapeHtml(JSON.stringify(imageUrls.slice(1)));
 
 
     const mrp =
@@ -2654,6 +2653,7 @@ function productCard(product) {
                     `
                         <img
                             src="${escapeHtml(image)}"
+                            data-fallbacks="${fallbacks}"
                             alt="${name}"
                             loading="lazy"
                         >
