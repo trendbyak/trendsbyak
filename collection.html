@@ -58,7 +58,7 @@ async function load(){
   if(!name) throw new Error("Collection not specified");
   document.title=`${name} | Trends by AK`;
   document.getElementById("heroContent").innerHTML=`${collection?.image_url?`<img src="${esc(collection.image_url)}" alt="${esc(name)}">`:""}<p class="eyebrow">TRENDS BY AK · COLLECTION</p><h1>${esc(name)}</h1><p>${esc(collection?.description||"Thoughtfully curated pieces from this collection.")}</p>`;
-  const r=await db.from("products").select("id,name,price,sale_price,category,image_url,stock,status,collection,created_at").order("created_at",{ascending:false});
+  const r=await db.from("products").select("id,name,price,sale_price,category,image_url,image_urls,stock,status,collection,created_at").order("created_at",{ascending:false});
   if(r.error) throw r.error;
   const wanted=aliases(name);
   const products=(r.data||[]).filter(p=>{
